@@ -158,8 +158,13 @@ def build_demo_payload() -> dict:
             row["demo_archetype"] = kind
             rows.append(row)
 
+    from build import attach_backtest
+    bt = attach_backtest(rows)               # 先掛歷史勝率，排序才有依據
     rows.sort(key=scoring.sort_key)
-    top = [r for r in rows if r["score"] >= C.MIN_SCORE_TO_SHOW][: C.TOP_N_DISPLAY]
+    for i, r in enumerate(rows, 1):
+        r["rank"] = i                        # 完整名次，之後不論怎麼篩選都用這個
+    strong = sum(1 for r in rows if r["score"] >= C.WEAK_SCORE)
+    top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows
 
     return {
         "meta": {
@@ -167,9 +172,12 @@ def build_demo_payload() -> dict:
             "generated_iso": now.isoformat(timespec="seconds"),
             "trade_date": now.strftime("%Y-%m-%d"),
             "scanned_count": len(rows),
+            "qualified_count": len(rows),
             "universe_count": len(DEMO_STOCKS),
+            "has_backtest": bt is not None,
             "top_n": C.TOP_N_BY_TURNOVER,
-            "min_score": C.MIN_SCORE_TO_SHOW,
+            "weak_score": C.WEAK_SCORE,
+            "strong_count": strong,
             "source_note": "示範模式（模擬資料，非真實行情）",
             "mode": "demo",
         },
@@ -180,5 +188,23 @@ def build_demo_payload() -> dict:
             "chg_pct": -0.56,
             "source": "示範資料",
         },
+        "us": {
+            "last_night": [
+                {"label": "那斯達克", "chg_pct": 0.82, "date": now.strftime("%Y-%m-%d")},
+                {"label": "費城半導體", "chg_pct": 1.54, "date": now.strftime("%Y-%m-%d")},
+                {"label": "S&P 500", "chg_pct": 0.41, "date": now.strftime("%Y-%m-%d")},
+                {"label": "道瓊", "chg_pct": -0.12, "date": now.strftime("%Y-%m-%d")},
+            ],
+            "futures": [
+                {"label": "那斯達克期貨", "chg_pct": 0.35},
+                {"label": "S&P 500 期貨", "chg_pct": 0.21},
+            ],
+            "forecast": {"available": True, "point": 0.46, "low": -0.53, "high": 1.45,
+                         "basis": "以那斯達克期貨 +0.35% 代入（示範數字）",
+                         "r2": 0.38, "samples": 240},
+            "model": {"samples": 240, "r2": 0.38, "beta_nasdaq": 0.41,
+                      "beta_sox": 0.19, "resid_sd": 0.99},
+        },
+        "backtest": None,
         "rows": top,
     }

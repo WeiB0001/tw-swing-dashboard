@@ -157,9 +157,20 @@ body{
   background:#16222B;border:1px solid #243542;color:#7FA8BE;
   font-size:10.5px;font-weight:700;vertical-align:1px;
 }
+.weak{
+  display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;
+  background:#241C0D;border:1px solid #4A3A18;color:#C9A85C;
+  font-size:10.5px;font-weight:700;vertical-align:1px;
+}
+.more{
+  display:block;width:100%;font:inherit;font-size:13.5px;font-weight:700;
+  padding:12px;margin:2px 0 14px;border-radius:var(--radius);cursor:pointer;
+  background:var(--panel);border:1px solid var(--line);color:#AEBAC7;
+}
+.more:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 /* 一張成本 */
 .lot{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px}
-/* 配置金額：緊接在獲利可能性分數下方 */
+/* 配置金額 */
 .alloc{
   flex:1 1 200px;padding:8px 11px;border-radius:9px;
   background:#1B2733;border:1px solid #2A3A4A;
@@ -240,6 +251,30 @@ header{padding:20px 0 14px}
   letter-spacing:-.02em;line-height:1;text-align:right}
 .score em{display:block;font-size:9.5px;font-style:normal;color:var(--muted);
   font-weight:700;letter-spacing:.04em;margin-top:2px}
+.score .pct{font-size:13px;font-weight:700;margin-left:1px}
+.score.nodata{color:#6E7A88}
+.wr.nodata{color:#6E7A88}
+
+/* ---------- 美股連動 ---------- */
+.us{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 14px;margin-top:10px;
+}
+.us h3{
+  margin:0 0 9px;font-size:12px;font-weight:800;color:var(--muted);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.us-grid{display:flex;flex-wrap:wrap;gap:5px 16px;font-size:13px}
+.us-grid div{display:flex;gap:6px;align-items:baseline}
+.us-grid span{color:var(--muted);font-size:12px}
+.us-grid b{font-weight:700;font-family:ui-monospace,Menlo,monospace}
+.us-sub{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
+.us-fc{
+  margin-top:10px;padding:10px 12px;border-radius:10px;
+  background:#12181F;border-left:3px solid #7FD1E8;font-size:13px;line-height:1.65;color:#C3CEDA;
+}
+.us-fc b{color:#7FD1E8;font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.us-note{margin:7px 0 0;font-size:11.5px;color:#6E7A88;line-height:1.6}
 
 /* 型態標籤 / 星等 / 預期空間 */
 .kind{
@@ -349,7 +384,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">今日獲利可能性排行</h1>
+    <h1 class="title">今日勝率排行</h1>
 
     {% if index %}
     <div class="market">
@@ -370,6 +405,44 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <div class="market-meta">指數資料本次取得失敗</div></div>
     {% endif %}
 
+    {% if us %}
+    <section class="us">
+      <h3>美股連動</h3>
+      {% if us.last_night %}
+      <div class="us-grid">
+        {% for m in us.last_night %}
+        <div><span>{{ m.label }}</span>
+          <b class="{{ 'up' if m.chg_pct > 0 else ('down' if m.chg_pct < 0 else 'flat') }}">{{ '%+.2f'|format(m.chg_pct) }}%</b></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if us.futures %}
+      <div class="us-grid us-sub">
+        {% for m in us.futures %}
+        <div><span>{{ m.label }}（此刻）</span>
+          <b class="{{ 'up' if m.chg_pct > 0 else ('down' if m.chg_pct < 0 else 'flat') }}">{{ '%+.2f'|format(m.chg_pct) }}%</b></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if us.forecast and us.forecast.available %}
+      <div class="us-fc">
+        隔日加權指數推估 <b>{{ '%+.2f'|format(us.forecast.point) }}%</b>
+        <span class="muted">（區間 {{ '%+.2f'|format(us.forecast.low) }}% ～ {{ '%+.2f'|format(us.forecast.high) }}%）</span><br>
+        {{ us.forecast.basis }}，模型 R² {{ us.forecast.r2 }}、樣本 {{ us.forecast.samples }} 日
+      </div>
+      <p class="us-note">
+        這是「台股當日漲跌 ≈ a + b×前夜那斯達克 + c×前夜費半」的迴歸外推，
+        用現在的美股期貨代替今晚尚未發生的美股。R² {{ us.forecast.r2 }} 代表美股只能解釋台股約
+        {{ (us.forecast.r2 * 100)|round|int }}% 的波動，其餘來自台股自身的籌碼與消息面。
+        <b>這是統計相關性，不是預測，更不是投資建議。</b>
+      </p>
+      {% elif us.forecast %}
+      <p class="us-note">{{ us.forecast.reason }}</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
     {% if meta.mode == 'demo' %}
     <div class="demo-flag">示範模式：以下價格與訊號皆為模擬資料，用來預覽版面，非真實行情。</div>
     {% endif %}
@@ -384,8 +457,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   <!-- ===================== 排名 ===================== -->
   <div class="section-head">
-    <h2>獲利可能性排名</h2>
-    <span>點卡片看細節</span>
+    <h2>勝率排名</h2>
+    <span>名次為全部標的的總排名</span>
   </div>
 
   <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
@@ -441,12 +514,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   {% if rows %}
     {% for r in rows %}
-    <details class="card" data-code="{{ r.code }}" data-lot="{{ r.lot_cost }}" data-price="{{ r.close }}" data-score="{{ r.score }}" data-type="{{ r.asset_type }}">
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.rank }}" data-lot="{{ r.lot_cost }}" data-price="{{ r.close }}" data-score="{{ r.score }}" data-type="{{ r.asset_type }}">
       <summary>
         <div class="row1">
-          <div class="rank {{ 'top' if loop.index <= 3 }}">{{ loop.index }}</div>
+          <div class="rank {{ 'top' if r.rank <= 3 }}">{{ r.rank }}</div>
           <div class="ident">
-            <div class="code mono">{{ r.code }}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span></div>
+            <div class="code mono">{{ r.code }}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}</div>
             <div class="name">{{ r.name }}</div>
           </div>
           <div class="px">
@@ -475,7 +548,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         <div class="row3">
           <div class="headline">{{ r.headline }}</div>
-          <div class="score mono">{{ '%.0f'|format(r.score) }}<em>獲利可能性</em></div>
+          {% if r.hist_calibrated is not none %}
+          <div class="score mono">{{ '%.0f'|format(r.hist_calibrated) }}<span class="pct">%</span><em>歷史勝率</em></div>
+          {% else %}
+          <div class="score mono nodata">{{ '%.0f'|format(r.score) }}<em>技術分數</em></div>
+          {% endif %}
         </div>
 
         <div class="pickrow">
@@ -495,8 +572,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         <div class="swing">
           <span>預期 Swing 空間 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
-          {% if r.hist_winrate is not none %}
-          <span class="wr">歷史相似訊號勝率 <b class="mono">{{ r.hist_winrate }}%</b>（{{ r.hist_samples }} 筆）</span>
+          {% if r.hist_calibrated is not none %}
+          <span class="wr">同型態歷史 <b class="mono">{{ r.hist_samples }}</b> 筆，平均淨報酬
+            <b class="mono">{{ '%+.2f'|format(r.hist_avg_return) }}%</b>
+            {% if r.hist_pf %}· PF <b class="mono">{{ r.hist_pf }}</b>{% endif %}</span>
+          {% else %}
+          <span class="wr nodata">歷史樣本不足，僅供型態參考</span>
           {% endif %}
         </div>
         <div class="mainrisk">主要風險：{{ r.main_risk }}</div>
@@ -505,15 +586,23 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </summary>
 
       <div class="detail">
-        <div class="why"><b>為什麼排第 {{ loop.index }}？</b>{{ r.why }}</div>
+        <div class="why"><b>為什麼排第 {{ r.rank }}？</b>{{ r.why }}</div>
 
         <div class="scoreline">
           機會分數 <b class="mono">{{ '%.0f'|format(r.opportunity) }}</b>
           × 風險調整 <b class="mono">{{ '%.2f'|format(1 - (thresholds.risk_cut/100) * r.risk/100) }}</b>
-          ＝ 獲利可能性 <b class="mono sig">{{ '%.0f'|format(r.score) }}</b>
+          ＝ 技術分數 <b class="mono sig">{{ '%.0f'|format(r.score) }}</b>
           <span class="muted">（風險分數 {{ '%.0f'|format(r.risk) }}／100）</span>
-          <br><span class="muted">分數相近（1.5 分內）時，依風險報酬比 → 下檔風險 → 進場位置 → 趨勢決定先後，
-          所以名次未必與四捨五入後的分數完全同序。</span>
+          <br><span class="muted">
+          {% if r.hist_calibrated is not none %}
+            名次依<b>歷史平滑勝率 {{ '%.1f'|format(r.hist_calibrated) }}%</b> 決定（來源：{{ '型態＋分數級距' if r.hist_source == 'pattern' else '分數級距' }}，
+            {{ r.hist_samples }} 筆樣本，未平滑勝率 {{ r.hist_raw }}%）。
+            技術分數只用來分層，不直接決定名次；勝率相同時才比技術分數。
+          {% else %}
+            這個型態與分數級距的歷史樣本不足 {{ pattern_min_samples }} 筆，<b>沒有可信的勝率可用</b>，
+            因此暫以先驗 50% 計入排名，並改用技術分數決定先後。
+          {% endif %}
+          </span>
         </div>
 
         <dl class="grid">
@@ -564,6 +653,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
     </details>
     {% endfor %}
+
+    <button type="button" class="more" id="show-more" hidden></button>
   {% else %}
     <div class="empty">
       <b>今天沒有達標的標的</b>
@@ -573,8 +664,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
 
   <div class="empty" id="band-empty" style="display:none">
-    <b>這個預算買不到今天入選的標的</b>
-    今天排進來的每一檔，一張都超過你的預算。可以提高預算、換個類別看看，或明天再來。
+    <b>這個條件下沒有符合的標的</b>
+    掃描到的標的裡，沒有一檔同時符合你選的類別與預算。可以提高預算、換個類別看看，或明天再來。
     若想從源頭就只掃低價股，把 <code>scripts/config.py</code> 的 <code>MAX_CLOSE_PRICE</code>
     設成你的每股上限即可。
   </div>
@@ -582,46 +673,51 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 方法說明 ===================== -->
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
-    <h3>排的不是「技術指標最漂亮」，是「現在買賺錢的可能性」</h3>
-    先算<b>機會分數</b>（五項加權，正規化成 0～100），再乘上<b>風險調整</b>，
-    得到最終的<b>獲利可能性分數</b>。趨勢強度與進場位置是分開的兩件事——
-    一檔 RSI 90、貼著前高的股票，趨勢分數會很高，但位置分數低、風險分數高，不會自動排第一。<br><br>
+    <h3>排名依據：歷史勝率優先，技術分數只是分層特徵</h3>
+    首頁名次的第一順位是<b>歷史平滑勝率</b>，不是技術分數。做法是：
+    先用技術面把每檔標的歸類成「型態 ＋ 分數級距」（例如「帶量突破 ＋ 65–75 分」），
+    再去查回測資料裡同一類訊號歷史上贏過幾次。<br><br>
 
-    <b>位置 {{ weights.entry }}分</b>：20 日區間位置、距 20／60 日高點的空間、距 MA20 乖離、RSI 所在區帶。權重最高。<br>
-    <b>趨勢 {{ weights.trend }}分</b>：MA5/10/20/60 排列、MA20 與 MA60 斜率、是否站穩季線。只代表「強不強」。<br>
-    <b>轉強 {{ weights.reversal }}分</b>：RSI 自低檔回升、站回 MA5、MA5 上彎或金叉、MACD 柱改善、帶量收紅、低點未再破。<br>
-    <b>量價 {{ weights.volume }}分</b>：量能倍數再乘上「品質係數」——上漲收高檔加分，長上影、爆量收黑、高檔爆量大幅打折。<br>
-    <b>風報 {{ weights.rr }}分</b>：以 20／60 日高點與 ATR 推估上檔目標，以 MA20、近期低點與 ATR 推估下檔支撐，算出風險報酬比。<br><br>
+    <b>排序順位</b>：歷史平滑勝率 → 平均淨報酬 → Profit Factor → 平均最大回撤 → 技術分數。<br>
+    <b>勝率平滑</b>：(勝場 + {{ smooth_wins }}) / (樣本 + {{ smooth_n }})，避免「3 戰 3 勝 = 100%」這種假訊號。<br>
+    <b>樣本門檻</b>：型態層需 {{ pattern_min_samples }} 筆，不足退回只看分數級距；再不足就標示
+    <b>樣本不足</b>，以先驗 50% 計入排名並改用技術分數決定先後——不會生一個假勝率出來。<br><br>
 
-    <b>風險調整</b>：RSI &gt; {{ thresholds.rsi_hot }}、距前高 &lt; {{ thresholds.near_high }}%、乖離過大、
-    連續大漲、假突破、跌深未止跌等項目，最多讓分數打 {{ 100 - thresholds.risk_cut }} 折。
-    有效突破（帶量、收在高檔、無長上影、未過熱）不套用追高懲罰。<br><br>
+    <h3>技術分數怎麼算（0～100）</h3>
+    機會分數（五項加權正規化）× 風險調整。趨勢強度與進場位置是分開的兩件事——
+    RSI 90、貼著前高的股票趨勢分數會很高，但位置分數低、風險分數高。<br>
+    <b>位置 {{ weights.entry }}</b>：20 日區間位置、距 20／60 日高點空間、MA20 乖離、RSI 區帶。<br>
+    <b>趨勢 {{ weights.trend }}</b>：MA5/10/20/60 排列與斜率、是否站穩季線。<br>
+    <b>轉強 {{ weights.reversal }}</b>：RSI 自低檔回升、站回 MA5、金叉、MACD 柱改善、帶量收紅。<br>
+    <b>量價 {{ weights.volume }}</b>：量能倍數 × 品質係數（長上影、爆量收黑、高檔爆量大幅打折）。<br>
+    <b>風報 {{ weights.rr }}</b>：以高點與 ATR 推估上檔，以 MA20、近期低點與 ATR 推估下檔。<br>
+    <b>風險調整</b>：過熱、追高、乖離、連漲、假突破、未止跌，最多打 {{ 100 - thresholds.risk_cut }} 折。<br><br>
 
     {% if backtest %}
-    <b>歷史回測</b>：{{ backtest.period }}，共 {{ backtest.samples }} 筆訊號。
-    卡片上的「歷史相似訊號勝率」來自同分數級距的歷史統計，與模型分數是兩件事。
-    歷史結果不代表未來績效。<br><br>
+    <h3>回測條件</h3>
+    期間 {{ backtest.period }}，共 {{ backtest.samples }} 筆有效樣本。
+    {{ backtest.entry_rule }}；淨報酬已扣 {{ backtest.cost_pct }}% 來回交易成本，
+    <b>淨報酬 &gt; 0 才算贏</b>；同一檔出訊號後 {{ backtest.cooldown_days }} 個交易日內不重複採樣。
+    以持有 {{ backtest.hold_days }} 日為主。歷史結果不代表未來績效。<br><br>
     {% else %}
-    <b>⚠️ 目前只是模型分數，不是真實獲利機率。</b>
-    尚未跑過歷史回測，所以頁面上不會出現任何勝率數字。
+    <b>⚠️ 尚未跑過歷史回測</b>，所有標的都會顯示「樣本不足」，名次暫時只能由技術分數決定。
     跑 <code>python scripts/backtest.py</code> 產生 <code>data/backtest.json</code> 之後，
-    卡片才會顯示「歷史相似訊號勝率」。<br><br>
+    排名才會改用實際勝率。<br><br>
     {% endif %}
 
-    掃描池為當日成交金額前 {{ meta.top_n }} 名加主要權值股，股價低於 {{ thresholds.min_price }} 元或成交金額低於
-    {{ thresholds.min_turnover }} 的個股不納入{% if thresholds.max_price %}，股價高於 {{ thresholds.max_price }} 元的也不納入{% endif %}。
-    電子／科技類上市公司（半導體、IC 設計、封測、PCB、網通、光電、電腦週邊等 85 檔）一律納入掃描，
-    不必等它們擠進成交金額前 {{ meta.top_n }} 名。<br>
-    台股 ETF（市值型、高股息、科技主題等）也一併掃描，槓桿型（L）、反向型（R）、債券型（B）除外——
-    這類商品的技術訊號跟一般股票不是同一回事。<br>
-    本週預算與類別只影響顯示與配置試算，<b>不影響排名與分數</b>，設定過會記住。資料來源：{{ meta.source_note }}。<br>
-    要調整訊號邏輯，改 <code>scripts/config.py</code> 的權重與門檻即可。
+    共掃描 {{ meta.scanned_count }} 檔，全部列出並保留完整名次，
+    切換類別時看到的名次是<b>總排名</b>——ETF 的第一名如果是總排名第 47 名，顯示的就是 47。<br>
+    掃描池為當日成交金額前 {{ meta.top_n }} 名 + 主要權值股 + 電子科技股 + 台股 ETF；
+    股價低於 {{ thresholds.min_price }} 元或成交金額低於 {{ thresholds.min_turnover }} 的不納入。
+    槓桿型（L）、反向型（R）、債券型（B）ETF 排除。<br>
+    本週預算與類別只影響顯示與配置試算，<b>不影響排名</b>。<br>
+    要調整邏輯，改 <code>scripts/config.py</code>。
   </div>
 
   <!-- ===================== 底部免責聲明 ===================== -->
   <div class="disclaimer-bottom">
     ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
-    獲利可能性分數是模型推估，不是統計上的獲利機率。<br>
+    歷史勝率是過去相似訊號的統計結果，不是未來的成功機率；技術分數更只是型態描述。<br>
     分數高不代表會上漲，技術指標只描述過去的價量行為。<br>
     資料可能因來源延遲或錯誤而失真，下單前請自行以券商報價複核。
   </div>
@@ -726,7 +822,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
   var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
 
-  var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all", picks: [] };
+  var INITIAL_VISIBLE = {{ initial_visible }};
+  var moreBtn = document.getElementById("show-more");
+  var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all",
+             picks: [], limit: INITIAL_VISIBLE };
 
   function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
   function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -738,19 +837,34 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     });
   }
 
-  /* ---- 決定哪些卡片看得到：類別 + 買不買得起 ---- */
+  /* ---- 決定哪些卡片看得到：類別 + 買不買得起 ------------------------------
+     重點：篩選只決定「看不看得到」，不會重新編號。
+     卡片上的名次是掃描池的完整排名，所以切到 ETF 時第一筆可能是第 47 名，
+     那就顯示 47。清單一次先出 INITIAL_VISIBLE 筆，其餘按「顯示更多」展開。
+  ------------------------------------------------------------------------- */
   function visible() {
-    var out = [];
+    var matched = [], shown = [];
     cards.forEach(function (c) {
       var okType = st.type === "all" || c.dataset.type === st.type;
       var lot = parseInt(c.dataset.lot, 10) || 0;
       var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
-      var ok = okType && okBudget;
-      c.style.display = ok ? "" : "none";
-      if (!ok) c.open = false;
-      if (ok) out.push(c);
+      if (okType && okBudget) matched.push(c);
+      else { c.style.display = "none"; c.open = false; }
     });
-    return out;
+    matched.forEach(function (c, i) {
+      var on = i < st.limit;
+      c.style.display = on ? "" : "none";
+      if (!on) c.open = false;
+      if (on) shown.push(c);
+    });
+
+    if (moreBtn) {
+      var rest = matched.length - shown.length;
+      moreBtn.hidden = rest <= 0;
+      moreBtn.textContent = "顯示更多（還有 " + rest + " 檔）";
+    }
+    // 配置一律以符合條件的完整清單為準，不受「顯示更多」影響
+    return { matched: matched, shown: shown };
   }
 
   /* ---- 計算每檔要投入多少 ---- */
@@ -862,20 +976,21 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       b.textContent = on ? "✓ 已選入" : "＋ 選入";
     });
 
-    var shown = visible();
+    var v = visible();
     if (countEl) {
       var bits = [];
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") {
         bits.push({ tech: "電子科技", etf: "ETF", other: "其他" }[st.type]);
       }
-      countEl.textContent = bits.length
-        ? bits.join("、") + "：" + shown.length + " 檔（共 " + cards.length + " 檔）"
-        : "顯示全部 " + cards.length + " 檔";
+      var head = bits.length ? bits.join("、") + "：" : "全部：";
+      var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
+      var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
+      countEl.textContent = head + tail + best;
     }
-    if (emptyEl) emptyEl.style.display = shown.length ? "none" : "block";
+    if (emptyEl) emptyEl.style.display = v.matched.length ? "none" : "block";
 
-    allocate(shown);
+    allocate(v.matched);
 
     save("budget", String(st.budget || ""));
     save("splits", String(st.splits));
@@ -887,15 +1002,17 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   /* ---- 事件 ---- */
   budgetInput.addEventListener("input", function () {
     st.budget = parseFloat(budgetInput.value) || 0;
+    st.limit = INITIAL_VISIBLE;
     render();
   });
   clearBtn.addEventListener("click", function () {
-    budgetInput.value = ""; st.budget = 0; render();
+    budgetInput.value = ""; st.budget = 0; st.limit = INITIAL_VISIBLE; render();
   });
   presets.forEach(function (b) {
     b.addEventListener("click", function () {
       st.budget = parseInt(b.dataset.amt, 10) || 0;
       budgetInput.value = st.budget;
+      st.limit = INITIAL_VISIBLE;
       render();
     });
   });
@@ -910,7 +1027,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     b.addEventListener("click", function () { st.mode = b.dataset.mode; render(); });
   });
   typeBtns.forEach(function (b) {
-    b.addEventListener("click", function () { st.type = b.dataset.type; render(); });
+    b.addEventListener("click", function () {
+      st.type = b.dataset.type; st.limit = INITIAL_VISIBLE; render();
+    });
   });
   pickClearBtn.addEventListener("click", function () {
     st.picks = []; st.mode = "auto"; render();
@@ -926,6 +1045,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       render();
     });
   });
+
+  if (moreBtn) {
+    moreBtn.addEventListener("click", function () {
+      st.limit += INITIAL_VISIBLE;
+      render();
+      moreBtn.scrollIntoView({ block: "center", behavior: "smooth" });
+    });
+  }
 
   /* ---- 還原上次的設定 ---- */
   var savedBudget = load("budget");

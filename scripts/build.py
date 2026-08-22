@@ -1,142 +1,296 @@
 # -*- coding: utf-8 -*-
 """
-build.py — V3 live ranking
-- 保留 V2 rule_score
-- 加入美股 context
-- 若 data/model_v3.json 存在，用 walk-forward 訓練出的 Logistic + Platt calibration
-  產生 ml_win_prob，並作為主要 ranking score。
+build.py — 主流程（GitHub Actions 每天執行的就是這支）
+
+流程：
+  1. 抓證交所當日全市場快照 → 決定掃描池
+  2. 用 yfinance 抓掃描池的歷史日線（缺的用 FinMind 備援，需 token）
+  3. 用證交所當日資料校正最後一根 K 棒
+  4. 算技術指標 → 算獲利可能性分數 → 依 tie-breaker 排序取前 N
+  5. 若 data/backtest.json 存在，掛上「歷史相似訊號勝率」
+  6. 渲染 index.html + data/latest.json
+
+用法：
+  python scripts/build.py           # 正式跑（需要網路）
+  python scripts/build.py --demo    # 離線示範，用模擬資料產生版面預覽
 """
 
 from __future__ import annotations
-import argparse, json, logging, sys
+
+import argparse
+import json
+import logging
+import sys
 from datetime import datetime
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import pandas as pd
+
 import config as C
-import fetch, indicators, render, scoring
-import market_context as MC
-import ml_model as MM
+import fetch
+import indicators
+import render
+import scoring
 
-ROOT=Path(__file__).resolve().parent.parent
-log=logging.getLogger("build_v3")
-logging.basicConfig(level=logging.INFO,format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%H:%M:%S",
+)
+log = logging.getLogger("build")
 
-def _row_feature_dict(code,f,res,ctx):
-    sector=C.sector_of(code)
-    c=MC.sector_adjusted_context(ctx,sector)
+ROOT = Path(__file__).resolve().parent.parent
+
+
+# ---------------------------------------------------------------------------
+# 組裝單一個股的輸出列
+# ---------------------------------------------------------------------------
+def build_row(code: str, name: str, f: dict, result: dict) -> dict:
+    """
+    原有的指標欄位全部保留（RSI、量能、均線、20 日高低…），
+    只是排名改用 result["score"]（獲利可能性分數）。
+    """
     return {
-        "rule_score":float(res.get("rule_score",res["score"])),
-        "risk":float(res["risk"]),
-        "confirmation":float(res.get("confirmation",0)),
-        "rsi":float(f["rsi"]),"vol_ratio":float(f["vol_ratio"]),
-        "bias20":float(f["bias20"]),"pos20":float(f["pos20"]),
-        "ma20_slope":float(f["ma20_slope"]),"ma60_slope":float(f["ma60_slope"]),
-        "atr_pct":float(f["atr_pct"]),"rr_ratio":float(res["rr_ratio"]),
-        "ret5":float(f["ret5"]),"macd_hist":float(f["macd_hist"]),
-        **{k:float(c.get(k,0.0)) for k in MM.MODEL_FEATURES if k in c},
+        "code": code,
+        "name": name,
+        "sector": C.sector_of(code),        # 產業分類（卡片上顯示）
+        "asset_type": C.asset_type(code),   # etf / tech / other，供網頁篩選
+        # --- 原始指標（UI 展開後顯示，一個都沒刪） ---
+        "close": f["close"],
+        "lot_cost": round(f["close"] * 1000),   # 一張（1000 股）要多少錢
+        "chg_pct": f["chg_pct"],
+        "rsi": f["rsi"],
+        "vol_ratio": f["vol_ratio"],
+        "volume": f["volume"],
+        "vol_ma20": f["vol_ma20"],
+        "ma5": f["ma5"],
+        "ma10": f["ma10"],
+        "ma20": f["ma20"],
+        "ma60": f["ma60"],
+        "ma20_slope": f["ma20_slope"],
+        "ma60_slope": f["ma60_slope"],
+        "bias20": f["bias20"],
+        "pos20": f["pos20"],
+        "pct_above_low20": f["pct_above_low20"],
+        "pct_below_high20": f["pct_below_high20"],
+        "pct_below_high5": f["pct_below_high5"],
+        "pct_below_high60": f["pct_below_high60"],
+        "atr": f["atr"],
+        "atr_pct": f["atr_pct"],
+        "macd_hist": f["macd_hist"],
+        "target": f["target"],
+        "support": f["support"],
+        # --- 新的排名結果 ---
+        "score": result["score"],              # 獲利可能性分數（排名主鍵）
+        "opportunity": result["opportunity"],
+        "risk": result["risk"],
+        "breakdown": result["breakdown"],
+        "risk_items": result["risk_items"],
+        "stars": result["stars"],
+        "risk_level": result["risk_level"],
+        "kind": result["kind"],
+        "headline": result["headline"],
+        "why": result["why"],
+        "main_risk": result["main_risk"],
+        "swing_low": result["swing_low"],
+        "swing_high": result["swing_high"],
+        "upside_pct": result["upside_pct"],
+        "downside_pct": result["downside_pct"],
+        "rr_ratio": result["rr_ratio"],
+        "reasons": result["reasons"],
+        "flags": result["flags"],
+        # --- 歷史勝率（跑過 backtest.py 才有；沒有就是「樣本不足」） ---
+        "hist_calibrated": None,    # 平滑後勝率 (wins+10)/(samples+20)
+        "hist_raw": None,           # 未平滑勝率
+        "hist_samples": None,
+        "hist_avg_return": None,    # 平均淨報酬（已扣交易成本）
+        "hist_pf": None,            # Profit Factor
+        "hist_mdd": None,           # 平均最大回撤
+        "hist_source": None,        # pattern / bucket / None
     }
 
-def build_row(code,name,f,res,ctx,model):
-    feat=_row_feature_dict(code,f,res,ctx)
-    rule=float(res.get("rule_score",res["score"]))
-    if model:
-        p=MM.predict_probability(model,feat)*100
-        # 保留少量規則分數避免模型在極端 extrapolation 時失控
-        final=0.85*p+0.15*rule
-        calibrated=True
-    else:
-        p=None; final=rule; calibrated=False
-    return {
-        "code":code,"name":name,"sector":C.sector_of(code),"asset_type":C.asset_type(code),
-        "close":f["close"],"lot_cost":round(f["close"]*1000),"chg_pct":f["chg_pct"],
-        "rsi":f["rsi"],"vol_ratio":f["vol_ratio"],"volume":f["volume"],"vol_ma20":f["vol_ma20"],
-        "ma5":f["ma5"],"ma10":f["ma10"],"ma20":f["ma20"],"ma60":f["ma60"],
-        "ma20_slope":f["ma20_slope"],"ma60_slope":f["ma60_slope"],"bias20":f["bias20"],
-        "pos20":f["pos20"],"pct_above_low20":f["pct_above_low20"],"pct_below_high20":f["pct_below_high20"],
-        "pct_below_high5":f["pct_below_high5"],"pct_below_high60":f["pct_below_high60"],
-        "atr":f["atr"],"atr_pct":f["atr_pct"],"macd_hist":f["macd_hist"],"target":f["target"],"support":f["support"],
-        "score":round(final,1),"rule_score":round(rule,1),"ml_win_prob":round(p,1) if p is not None else None,
-        "calibrated":calibrated,"confirmation":res.get("confirmation",0),"opportunity":res["opportunity"],
-        "risk":res["risk"],"breakdown":res["breakdown"],"risk_items":res["risk_items"],"stars":res["stars"],
-        "risk_level":res["risk_level"],"kind":res["kind"],"headline":res["headline"],"why":res["why"],
-        "main_risk":res["main_risk"],"swing_low":res["swing_low"],"swing_high":res["swing_high"],
-        "upside_pct":res["upside_pct"],"downside_pct":res["downside_pct"],"rr_ratio":res["rr_ratio"],
-        "reasons":res["reasons"],"flags":res["flags"],
-        "hist_winrate":None,"hist_samples":None,"hist_avg_return":None,
-        "us_context":{k:round(float(ctx.get(k,0)),3) for k in ["sox_ret1","nasdaq_ret1","tsm_ret1","nvda_ret1","vix","risk_on"]},
-    }
 
-def attach_backtest(rows):
-    path=ROOT/C.BACKTEST_JSON
-    if not path.exists(): return None
-    try: bt=json.loads(path.read_text(encoding="utf-8"))
-    except Exception: return None
-    buckets=bt.get("score_buckets",[])
+# ---------------------------------------------------------------------------
+# 掛上回測結果（有跑過 scripts/backtest.py 才會有）
+# ---------------------------------------------------------------------------
+def attach_backtest(rows: list[dict]) -> dict | None:
+    """
+    掛上歷史勝率。查找順序：
+
+      1. 「型態 + 分數級距」──同樣 65 分，帶量突破跟低檔轉強的歷史勝率可能差很多，
+         所以優先用這一層。樣本需達 config.PATTERN_MIN_SAMPLES（30 筆）。
+      2. 「分數級距」──型態樣本不足時退回這一層，樣本需達 BACKTEST_MIN_SAMPLES。
+      3. 都不足 → 全部留空，UI 顯示「樣本不足」。**絕不生一個假勝率出來。**
+    """
+    path = ROOT / C.BACKTEST_JSON
+    if not path.exists():
+        log.info("沒有 %s，本次排名只能用技術分數（頁面會標示樣本不足）", C.BACKTEST_JSON)
+        return None
+    try:
+        bt = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        log.warning("回測檔讀取失敗：%s", e)
+        return None
+
+    pat_buckets = bt.get("pattern_buckets", [])
+    buckets = bt.get("score_buckets", [])
+
+    def fill(r: dict, d: dict, source: str) -> None:
+        r["hist_calibrated"] = d.get("calibrated_win_rate")
+        r["hist_raw"] = d.get("win_rate")
+        r["hist_samples"] = d.get("samples")
+        r["hist_avg_return"] = d.get("avg_return")
+        r["hist_pf"] = d.get("profit_factor")
+        r["hist_mdd"] = d.get("avg_mdd")
+        r["hist_source"] = source
+
+    n_pat = n_bucket = 0
     for r in rows:
-        raw=r.get("rule_score",r["score"])
-        for b in buckets:
-            if b["lo"]<=raw<b["hi"] and b.get("samples",0)>=C.BACKTEST_MIN_SAMPLES:
-                r["hist_winrate"]=b.get("win_rate");r["hist_samples"]=b.get("samples");r["hist_avg_return"]=b.get("avg_return");break
+        hit = None
+        for b in pat_buckets:
+            if (b.get("pattern") == r["kind"]
+                    and b["lo"] <= r["score"] < b["hi"]
+                    and b.get("samples", 0) >= C.PATTERN_MIN_SAMPLES):
+                hit = (b, "pattern")
+                break
+        if hit is None:
+            for b in buckets:
+                if (b["lo"] <= r["score"] < b["hi"]
+                        and b.get("samples", 0) >= C.BACKTEST_MIN_SAMPLES):
+                    hit = (b, "bucket")
+                    break
+        if hit:
+            fill(r, hit[0], hit[1])
+            if hit[1] == "pattern":
+                n_pat += 1
+            else:
+                n_bucket += 1
+
+    log.info("歷史勝率掛載：型態層 %d 檔、級距層 %d 檔、樣本不足 %d 檔（回測日期 %s）",
+             n_pat, n_bucket, len(rows) - n_pat - n_bucket, bt.get("generated_at", "?"))
     return bt
 
-def _backtest_summary(bt):
-    if not bt:return None
-    return {"version":bt.get("version",1),"generated_at":bt.get("generated_at"),"period":bt.get("period"),
-            "hold_days":bt.get("primary_hold_days"),"topk":bt.get("topk",{}),"samples":bt.get("total_signals")}
 
-def run_live(context_mode="after_tw_close"):
-    now=datetime.now(C.TZ)
-    snapshot=fetch.fetch_twse_snapshot()
-    if snapshot.empty: raise RuntimeError("證交所當日行情取得失敗。")
-    universe=fetch.build_universe(snapshot)
-    codes=universe["code"].tolist(); name_map=dict(zip(universe["code"],universe["name"]))
-    hist_map=fetch.fetch_history_yf(codes)
-    missing=[c for c in codes if c not in hist_map]
-    if missing: hist_map.update(fetch.fetch_history_finmind(missing[:40]))
-    us=MC.fetch_us_history(period="3mo")
-    ctx=MC.context_for_tw_date(us,pd.Timestamp(now.date()),mode=context_mode)
-    model=MM.load_model(ROOT/"data"/"model_v3.json")
-    rows=[]
-    trade_date=pd.Timestamp(now.date())
-    for _,srow in universe.iterrows():
-        code=srow["code"]; hist=hist_map.get(code)
-        if hist is None: continue
+# ---------------------------------------------------------------------------
+# 正式模式
+# ---------------------------------------------------------------------------
+def run_live() -> dict:
+    now = datetime.now(C.TZ)
+
+    snapshot = fetch.fetch_twse_snapshot()
+    if snapshot.empty:
+        raise RuntimeError("證交所當日行情取得失敗，無法決定掃描池。可能是非交易日或 API 暫時異常。")
+
+    universe = fetch.build_universe(snapshot)
+    codes = universe["code"].tolist()
+    name_map = dict(zip(universe["code"], universe["name"]))
+
+    hist_map = fetch.fetch_history_yf(codes)
+    missing = [c for c in codes if c not in hist_map]
+    if missing:
+        log.warning("yfinance 缺 %d 檔，嘗試 FinMind 備援", len(missing))
+        hist_map.update(fetch.fetch_history_finmind(missing[:40]))
+    if not hist_map:
+        raise RuntimeError("歷史日線全部取得失敗，無法計算指標。")
+
+    trade_date = pd.Timestamp(now.date())
+    rows = []
+    for _, srow in universe.iterrows():
+        code = srow["code"]
+        hist = hist_map.get(code)
+        if hist is None:
+            continue
         try:
-            hist=fetch.merge_today_bar(hist,srow,trade_date)
-            f=indicators.compute_features(hist)
-            if not f: continue
-            res=scoring.score_stock(f)
-            rows.append(build_row(code,name_map.get(code,code),f,res,ctx,model))
+            hist = fetch.merge_today_bar(hist, srow, trade_date)
+            feats = indicators.compute_features(hist)
+            if not feats:
+                continue
+            rows.append(build_row(code, name_map.get(code, code), feats, scoring.score_stock(feats)))
         except Exception as e:
-            log.warning("%s failed: %s",code,e)
-    bt=attach_backtest(rows)
-    rows.sort(key=lambda r:(-r["score"],-float(r.get("hist_avg_return") or -999),r["risk"],-r.get("confirmation",0)))
-    top=[r for r in rows if r["score"]>=C.MIN_SCORE_TO_SHOW][:C.TOP_N_DISPLAY]
+            log.warning("%s 計算失敗：%s", code, e)
+
+    scanned = len(rows)
+    bt = attach_backtest(rows)
+    rows.sort(key=scoring.sort_key)          # 主鍵分數，接近時用 tie-breaker
+    for i, r in enumerate(rows, 1):
+        r["rank"] = i                        # 完整名次，之後不論怎麼篩選都用這個
+    strong = sum(1 for r in rows if r["score"] >= C.WEAK_SCORE)
+    top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows
+    log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d", scanned, strong, C.WEAK_SCORE)
+
     return {
-        "meta":{"generated_at":now.strftime("%Y-%m-%d %H:%M"),"generated_iso":now.isoformat(timespec="seconds"),
-                "trade_date":now.strftime("%Y-%m-%d"),"scanned_count":len(rows),"universe_count":len(universe),
-                "top_n":C.TOP_N_BY_TURNOVER,"min_score":C.MIN_SCORE_TO_SHOW,
-                "source_note":"TWSE + yfinance 台股 + 美股市場 context","mode":"live",
-                "ranking_version":"v3-us-context-ml","context_mode":context_mode,
-                "model_loaded":bool(model),"model_metrics":model.get("metrics") if model else None},
-        "index":fetch.fetch_market_index(),"backtest":_backtest_summary(bt),"rows":top
+        "meta": {
+            "generated_at": now.strftime("%Y-%m-%d %H:%M"),
+            "generated_iso": now.isoformat(timespec="seconds"),
+            "trade_date": now.strftime("%Y-%m-%d"),
+            "scanned_count": scanned,
+            "qualified_count": len(rows),
+            "universe_count": len(universe),
+            "has_backtest": bt is not None,
+            "top_n": C.TOP_N_BY_TURNOVER,
+            "weak_score": C.WEAK_SCORE,
+            "strong_count": strong,
+            "source_note": "證交所 OpenAPI（當日行情）＋ yfinance（歷史日線）",
+            "mode": "live",
+        },
+        "index": fetch.fetch_market_index(),
+        "us": _us_snapshot(),
+        "backtest": _backtest_summary(bt),
+        "rows": top,
     }
 
-def run_demo():
+
+def _us_snapshot() -> dict | None:
+    """美股連動區塊。抓不到就回 None，不影響主流程。"""
+    try:
+        import us_market
+        return us_market.build_us_snapshot()
+    except Exception as e:
+        log.warning("美股區塊建立失敗：%s", e)
+        return None
+
+
+def _backtest_summary(bt: dict | None) -> dict | None:
+    """把回測結果濃縮成 UI 要顯示的幾個數字。"""
+    if not bt:
+        return None
+    return {
+        "generated_at": bt.get("generated_at"),
+        "period": bt.get("period"),
+        "hold_days": bt.get("primary_hold_days"),
+        "cost_pct": bt.get("cost_pct"),
+        "cooldown_days": bt.get("cooldown_days"),
+        "entry_rule": bt.get("entry_rule"),
+        "samples": bt.get("total_signals"),
+    }
+
+
+# ---------------------------------------------------------------------------
+# 示範模式（不連網）
+# ---------------------------------------------------------------------------
+def run_demo() -> dict:
     import demo_data
     return demo_data.build_demo_payload()
 
-def main():
-    ap=argparse.ArgumentParser()
-    ap.add_argument("--demo",action="store_true")
-    ap.add_argument("--preopen",action="store_true",help="隔日台股開盤前刷新，可使用最新完成的美股交易日")
-    args=ap.parse_args()
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="台股價差機會儀表板")
+    ap.add_argument("--demo", action="store_true", help="用模擬資料產生版面預覽（不連網）")
+    args = ap.parse_args()
+
     try:
-        payload=run_demo() if args.demo else run_live("preopen" if args.preopen else "after_tw_close")
+        payload = run_demo() if args.demo else run_live()
     except Exception as e:
-        log.error("建置失敗：%s",e);return 1
-    render.write_outputs(payload);return 0
-if __name__=="__main__":
+        log.error("建置失敗：%s", e)
+        # 失敗時不覆蓋昨天的 index.html，讓使用者仍看得到上一版
+        return 1
+
+    render.write_outputs(payload)
+    log.info("完成。")
+    return 0
+
+
+if __name__ == "__main__":
     raise SystemExit(main())
