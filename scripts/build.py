@@ -55,6 +55,8 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
     return {
         "code": code,
         "name": name,
+        "sector": C.sector_of(code),        # 產業分類（卡片上顯示）
+        "is_tech": C.is_tech(code),         # 是否為電子／科技股（供篩選用）
         # --- 原始指標（UI 展開後顯示，一個都沒刪） ---
         "close": f["close"],
         "lot_cost": round(f["close"] * 1000),   # 一張（1000 股）要多少錢

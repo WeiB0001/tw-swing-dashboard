@@ -179,14 +179,17 @@ def build_universe(snapshot: pd.DataFrame) -> pd.DataFrame:
         log.info("股價上限 %.0f 元，濾掉 %d 檔", C.MAX_CLOSE_PRICE, before - len(liquid))
 
     top = liquid.sort_values("turnover", ascending=False).head(C.TOP_N_BY_TURNOVER)
-    core = snapshot[snapshot["code"].isin(C.CORE_WEIGHTED_STOCKS)]
-    if C.MAX_CLOSE_PRICE and C.MAX_CLOSE_PRICE > 0:
-        # 權值股白名單也要受上限約束，否則台積電這種高價股還是會被放進來
-        core = core[core["close"] <= C.MAX_CLOSE_PRICE]
+    # 白名單（權值股 + 電子科技股）：一定納入，但仍要通過股價與流動性門檻，
+    # 否則會掃到根本沒人交易、掛單掛不掉的冷門股。
+    watchlist = set(C.CORE_WEIGHTED_STOCKS) | set(C.TECH_STOCKS)
+    listed = liquid[liquid["code"].isin(watchlist)]
 
-    uni = pd.concat([top, core]).drop_duplicates(subset="code")
+    uni = pd.concat([top, listed]).drop_duplicates(subset="code")
     uni = uni.sort_values("turnover", ascending=False).head(C.MAX_UNIVERSE)
-    log.info("掃描池：%d 檔（成交金額前 %d + 權值股）", len(uni), C.TOP_N_BY_TURNOVER)
+
+    n_tech = sum(1 for c in uni["code"] if C.is_tech(c))
+    log.info("掃描池：%d 檔（成交金額前 %d + 權值股 + 電子科技股；其中電子科技 %d 檔）",
+             len(uni), C.TOP_N_BY_TURNOVER, n_tech)
     return uni.reset_index(drop=True)
 
 
