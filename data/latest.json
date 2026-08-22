@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-08-22 16:41",
-    "generated_iso": "2026-08-22T16:41:17+08:00",
+    "generated_at": "2026-08-22 16:58",
+    "generated_iso": "2026-08-22T16:58:40+08:00",
     "trade_date": "2026-08-22",
-    "scanned_count": 124,
-    "universe_count": 124,
+    "scanned_count": 142,
+    "universe_count": 142,
     "top_n": 100,
     "min_score": 30,
     "source_note": "證交所 OpenAPI（當日行情）＋ yfinance（歷史日線）",
@@ -22,6 +22,8 @@
     {
       "code": "2359",
       "name": "所羅門",
+      "sector": "其他",
+      "is_tech": false,
       "close": 150.0,
       "lot_cost": 150000,
       "chg_pct": 0.0,
@@ -109,6 +111,8 @@
     {
       "code": "3665",
       "name": "貿聯-KY",
+      "sector": "其他",
+      "is_tech": false,
       "close": 2275.0,
       "lot_cost": 2275000,
       "chg_pct": 0.0,
@@ -196,6 +200,8 @@
     {
       "code": "2912",
       "name": "統一超",
+      "sector": "零售",
+      "is_tech": false,
       "close": 223.5,
       "lot_cost": 223500,
       "chg_pct": 0.0,
@@ -283,6 +289,8 @@
     {
       "code": "2207",
       "name": "和泰車",
+      "sector": "汽車",
+      "is_tech": false,
       "close": 518.0,
       "lot_cost": 518000,
       "chg_pct": 0.0,
@@ -370,6 +378,8 @@
     {
       "code": "2610",
       "name": "華航",
+      "sector": "航空",
+      "is_tech": false,
       "close": 20.4,
       "lot_cost": 20400,
       "chg_pct": 1.8699496617813338e-06,
@@ -457,6 +467,8 @@
     {
       "code": "2880",
       "name": "華南金",
+      "sector": "金融",
+      "is_tech": false,
       "close": 39.6,
       "lot_cost": 39600,
       "chg_pct": 3.8532297130799975e-06,
@@ -544,6 +556,8 @@
     {
       "code": "4938",
       "name": "和碩",
+      "sector": "電腦週邊",
+      "is_tech": true,
       "close": 88.6,
       "lot_cost": 88600,
       "chg_pct": 1.7222109738312952e-06,
@@ -631,6 +645,8 @@
     {
       "code": "2324",
       "name": "仁寶",
+      "sector": "電腦週邊",
+      "is_tech": true,
       "close": 38.95,
       "lot_cost": 38950,
       "chg_pct": -1.9587662047904075e-06,
@@ -718,6 +734,8 @@
     {
       "code": "3034",
       "name": "聯詠",
+      "sector": "IC設計",
+      "is_tech": true,
       "close": 530.0,
       "lot_cost": 530000,
       "chg_pct": 0.0,
@@ -805,6 +823,8 @@
     {
       "code": "2892",
       "name": "第一金",
+      "sector": "金融",
+      "is_tech": false,
       "close": 33.65,
       "lot_cost": 33650,
       "chg_pct": -4.534558217805795e-06,
@@ -892,6 +912,8 @@
     {
       "code": "2801",
       "name": "彰銀",
+      "sector": "金融",
+      "is_tech": false,
       "close": 24.1,
       "lot_cost": 24100,
       "chg_pct": -1.5828619082114415e-06,
@@ -979,6 +1001,8 @@
     {
       "code": "2634",
       "name": "漢翔",
+      "sector": "其他",
+      "is_tech": false,
       "close": 69.3,
       "lot_cost": 69300,
       "chg_pct": -4.403690734289256e-06,
@@ -1066,6 +1090,8 @@
     {
       "code": "2357",
       "name": "華碩",
+      "sector": "電腦週邊",
+      "is_tech": true,
       "close": 921.0,
       "lot_cost": 921000,
       "chg_pct": 0.0,
@@ -1153,6 +1179,8 @@
     {
       "code": "2426",
       "name": "鼎元",
+      "sector": "其他",
+      "is_tech": false,
       "close": 82.2,
       "lot_cost": 82200,
       "chg_pct": 3.7126008933796584e-06,
@@ -1268,6 +1296,8 @@
     {
       "code": "6770",
       "name": "力積電",
+      "sector": "其他",
+      "is_tech": false,
       "close": 68.4,
       "lot_cost": 68400,
       "chg_pct": -2.2308170533058558e-06,
@@ -1362,6 +1392,8 @@
     {
       "code": "2356",
       "name": "英業達",
+      "sector": "電腦週邊",
+      "is_tech": true,
       "close": 65.7,
       "lot_cost": 65700,
       "chg_pct": 4.644989282098777e-06,
@@ -1449,6 +1481,8 @@
     {
       "code": "3017",
       "name": "奇鋐",
+      "sector": "散熱機構",
+      "is_tech": true,
       "close": 2865.0,
       "lot_cost": 2865000,
       "chg_pct": 0.0,
@@ -1543,6 +1577,8 @@
     {
       "code": "3661",
       "name": "世芯-KY",
+      "sector": "IC設計",
+      "is_tech": true,
       "close": 3700.0,
       "lot_cost": 3700000,
       "chg_pct": 0.0,
@@ -1637,6 +1673,8 @@
     {
       "code": "8046",
       "name": "南電",
+      "sector": "PCB載板",
+      "is_tech": true,
       "close": 1135.0,
       "lot_cost": 1135000,
       "chg_pct": 0.0,
@@ -1731,6 +1769,8 @@
     {
       "code": "2886",
       "name": "兆豐金",
+      "sector": "金融",
+      "is_tech": false,
       "close": 46.95,
       "lot_cost": 46950,
       "chg_pct": -1.6250041312559915e-06,
@@ -1818,6 +1858,8 @@
     {
       "code": "8996",
       "name": "高力",
+      "sector": "其他",
+      "is_tech": false,
       "close": 1090.0,
       "lot_cost": 1090000,
       "chg_pct": 0.0,
@@ -1910,8 +1952,106 @@
       "hist_avg_return": null
     },
     {
+      "code": "6269",
+      "name": "台郡",
+      "sector": "PCB載板",
+      "is_tech": true,
+      "close": 62.4,
+      "lot_cost": 62400,
+      "chg_pct": -2.4453187030815116e-06,
+      "rsi": 50.429752579492224,
+      "vol_ratio": 0.266091871915554,
+      "volume": 1373512.0,
+      "vol_ma20": 5161796.15,
+      "ma5": 63.10000045776367,
+      "ma10": 64.70000022888183,
+      "ma20": 60.57000000000001,
+      "ma60": 65.08666684468588,
+      "ma20_slope": 3.194480139870026,
+      "ma60_slope": 1.0374894443691884,
+      "bias20": 3.0212976721148976,
+      "pos20": 0.6612902412057394,
+      "pct_above_low20": 35.65217391304347,
+      "pct_below_high20": 13.461543352175976,
+      "pct_below_high5": 6.570512820512819,
+      "pct_below_high60": 47.11538950602214,
+      "atr": 3.2388777979561194,
+      "atr_pct": 5.190509291596345,
+      "macd_hist": 0.18731780198816805,
+      "target": 70.80000305175781,
+      "support": 59.16112220204388,
+      "score": 54.9,
+      "opportunity": 55.2,
+      "risk": 1.3,
+      "breakdown": {
+        "entry": {
+          "points": 22.7,
+          "max": 25,
+          "ratio": 0.907
+        },
+        "trend": {
+          "points": 10.2,
+          "max": 20,
+          "ratio": 0.51
+        },
+        "reversal": {
+          "points": 1.8,
+          "max": 15,
+          "ratio": 0.12
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 15.0,
+          "max": 15,
+          "ratio": 1.0
+        }
+      },
+      "risk_items": [
+        {
+          "key": "far_from_low",
+          "level": 0.141,
+          "weight": 0.1,
+          "label": "已自 20 日低點上漲 36%"
+        }
+      ],
+      "stars": {
+        "trend": "★★★☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 13.5% 空間；風險項目輕微。",
+      "main_risk": "已自 20 日低點上漲 36%",
+      "swing_low": 6.1,
+      "swing_high": 13.5,
+      "upside_pct": 13.46,
+      "downside_pct": 5.19,
+      "rr_ratio": 2.59,
+      "reasons": [
+        "位於近 20 日區間 66% 位置，距前高還有 13.5% 空間，距 MA20 乖離 +3.0%",
+        "中期趨勢中性偏多，MA20 斜率 +3.2%",
+        "近期低點未再破",
+        "量能 0.3 倍，低於 20 日均量，買盤不足",
+        "上檔至 70.8 約 +13.5%，下檔支撐 59.2 約 −5.2%，風險報酬比 2.6:1"
+      ],
+      "flags": [],
+      "hist_winrate": null,
+      "hist_samples": null,
+      "hist_avg_return": null
+    },
+    {
       "code": "2383",
       "name": "台光電",
+      "sector": "其他",
+      "is_tech": false,
       "close": 5680.0,
       "lot_cost": 5680000,
       "chg_pct": 0.0,
@@ -2004,8 +2144,108 @@
       "hist_avg_return": null
     },
     {
+      "code": "2464",
+      "name": "盟立",
+      "sector": "工業電腦",
+      "is_tech": true,
+      "close": 179.0,
+      "lot_cost": 179000,
+      "chg_pct": 0.0,
+      "rsi": 55.85155523754823,
+      "vol_ratio": 0.38992365998779593,
+      "volume": 5601206.0,
+      "vol_ma20": 14364878.5,
+      "ma5": 179.6,
+      "ma10": 185.6,
+      "ma20": 168.9,
+      "ma60": 164.55,
+      "ma20_slope": 5.282842449742864,
+      "ma60_slope": 3.311881965154617,
+      "bias20": 5.979869745411492,
+      "pos20": 0.6777777777777778,
+      "pct_above_low20": 51.69491525423729,
+      "pct_below_high20": 16.201117318435763,
+      "pct_below_high5": 11.452513966480439,
+      "pct_below_high60": 16.201117318435763,
+      "atr": 13.663646341307045,
+      "atr_pct": 7.633321978383824,
+      "macd_hist": 0.01829385171862441,
+      "target": 208.0,
+      "support": 165.33635365869296,
+      "score": 55.1,
+      "opportunity": 56.1,
+      "risk": 4.9,
+      "breakdown": {
+        "entry": {
+          "points": 21.4,
+          "max": 25,
+          "ratio": 0.856
+        },
+        "trend": {
+          "points": 14.9,
+          "max": 20,
+          "ratio": 0.746
+        },
+        "reversal": {
+          "points": 1.8,
+          "max": 15,
+          "ratio": 0.12
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 12.4,
+          "max": 15,
+          "ratio": 0.824
+        }
+      },
+      "risk_items": [
+        {
+          "key": "far_from_low",
+          "level": 0.542,
+          "weight": 0.1,
+          "label": "已自 20 日低點上漲 52%"
+        }
+      ],
+      "stars": {
+        "trend": "★★★★☆",
+        "entry": "★★★★☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "多頭回檔",
+      "headline": "多頭回檔至支撐（乖離 +6.0%）",
+      "why": "進場位置好、趨勢結構強；距前高仍有 16.2% 空間；但已自 20 日低點上漲 52%。",
+      "main_risk": "已自 20 日低點上漲 52%",
+      "swing_low": 7.3,
+      "swing_high": 16.2,
+      "upside_pct": 16.2,
+      "downside_pct": 7.63,
+      "rr_ratio": 2.12,
+      "reasons": [
+        "位於近 20 日區間 68% 位置，距前高還有 16.2% 空間，距 MA20 乖離 +6.0%",
+        "中期趨勢中性偏多，MA20 斜率 +5.3%",
+        "近期低點未再破",
+        "量能 0.4 倍，低於 20 日均量，買盤不足",
+        "上檔至 208.0 約 +16.2%，下檔支撐 165.3 約 −7.6%，風險報酬比 2.1:1"
+      ],
+      "flags": [
+        "已自 20 日低點上漲 52%"
+      ],
+      "hist_winrate": null,
+      "hist_samples": null,
+      "hist_avg_return": null
+    },
+    {
       "code": "5880",
       "name": "合庫金",
+      "sector": "金融",
+      "is_tech": false,
       "close": 25.05,
       "lot_cost": 25050,
       "chg_pct": 3.0456665855993492e-06,
@@ -2086,189 +2326,6 @@
         "上檔至 27.0 約 +7.7%，下檔支撐 24.0 約 −4.1%，風險報酬比 1.9:1"
       ],
       "flags": [],
-      "hist_winrate": null,
-      "hist_samples": null,
-      "hist_avg_return": null
-    },
-    {
-      "code": "6669",
-      "name": "緯穎",
-      "close": 6255.0,
-      "lot_cost": 6255000,
-      "chg_pct": 0.0,
-      "rsi": 58.98966588020122,
-      "vol_ratio": 0.46876841262198315,
-      "volume": 762579.0,
-      "vol_ma20": 1626771.3,
-      "ma5": 6322.0,
-      "ma10": 6269.0,
-      "ma20": 6005.5,
-      "ma60": 5383.166666666667,
-      "ma20_slope": 3.5922204493509913,
-      "ma60_slope": 3.3832661161257382,
-      "bias20": 4.154525018732835,
-      "pos20": 0.7413333333333333,
-      "pct_above_low20": 28.57142857142858,
-      "pct_below_high20": 7.75379696243006,
-      "pct_below_high5": 6.314948041566737,
-      "pct_below_high60": 7.75379696243006,
-      "atr": 303.1124543271675,
-      "atr_pct": 4.8459225312097125,
-      "macd_hist": -11.439894261540985,
-      "target": 6740.0,
-      "support": 5951.887545672833,
-      "score": 56.2,
-      "opportunity": 56.2,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 20.9,
-          "max": 25,
-          "ratio": 0.836
-        },
-        "trend": {
-          "points": 19.2,
-          "max": 20,
-          "ratio": 0.958
-        },
-        "reversal": {
-          "points": 1.8,
-          "max": 15,
-          "ratio": 0.12
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 8.7,
-          "max": 15,
-          "ratio": 0.58
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★★★",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +4.2%）",
-      "why": "進場位置好、趨勢結構強；距前高仍有 7.8% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 3.5,
-      "swing_high": 7.8,
-      "upside_pct": 7.75,
-      "downside_pct": 4.85,
-      "rr_ratio": 1.6,
-      "reasons": [
-        "位置 74%、距前高 7.8%、乖離 +4.2%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +3.6%）",
-        "近期低點未再破",
-        "量能 0.5 倍，低於 20 日均量，買盤不足",
-        "上檔至 6740.0 約 +7.8%，下檔支撐 5951.9 約 −4.8%，風險報酬比 1.6:1"
-      ],
-      "flags": [],
-      "hist_winrate": null,
-      "hist_samples": null,
-      "hist_avg_return": null
-    },
-    {
-      "code": "2451",
-      "name": "創見",
-      "close": 312.5,
-      "lot_cost": 312500,
-      "chg_pct": 0.0,
-      "rsi": 63.08739644646792,
-      "vol_ratio": 1.9999937301397064,
-      "volume": 18341659.0,
-      "vol_ma20": 9170858.25,
-      "ma5": 294.1,
-      "ma10": 293.55,
-      "ma20": 287.925,
-      "ma60": 283.65,
-      "ma20_slope": 3.850315599639309,
-      "ma60_slope": -1.4334115194162056,
-      "bias20": 8.535208821741769,
-      "pos20": 1.0,
-      "pct_above_low20": 25.0,
-      "pct_below_high20": 0.0,
-      "pct_below_high5": 0.0,
-      "pct_below_high60": 22.560000000000002,
-      "atr": 15.434297785551498,
-      "atr_pct": 4.9389752913764795,
-      "macd_hist": 1.9259334916882649,
-      "target": 383.0,
-      "support": 287.925,
-      "score": 53.7,
-      "opportunity": 56.2,
-      "risk": 12.7,
-      "breakdown": {
-        "entry": {
-          "points": 8.3,
-          "max": 25,
-          "ratio": 0.332
-        },
-        "trend": {
-          "points": 16.1,
-          "max": 20,
-          "ratio": 0.803
-        },
-        "reversal": {
-          "points": 8.1,
-          "max": 15,
-          "ratio": 0.54
-        },
-        "volume": {
-          "points": 3.1,
-          "max": 15,
-          "ratio": 0.208
-        },
-        "rr": {
-          "points": 15.0,
-          "max": 15,
-          "ratio": 1.0
-        }
-      },
-      "risk_items": [
-        {
-          "key": "near_high",
-          "level": 1.0,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 0.0%，追高空間有限"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★☆",
-        "entry": "★★☆☆☆",
-        "volume": "★☆☆☆☆",
-        "reversal": "★★★☆☆",
-        "risk": "★☆☆☆☆"
-      },
-      "risk_level": "中低",
-      "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 63）",
-      "why": "趨勢結構強、風險報酬比佳；距前高僅剩 0.0%；但距 20 日高點僅 0.0%，追高空間有限。",
-      "main_risk": "距 20 日高點僅 0.0%，追高空間有限",
-      "swing_low": 10.2,
-      "swing_high": 22.6,
-      "upside_pct": 22.56,
-      "downside_pct": 7.86,
-      "rr_ratio": 2.87,
-      "reasons": [
-        "收盤已在近 20 日區間頂端（位置 100%），距前高僅 0.0%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +3.9%）",
-        "MA5 開始上彎、MA5 金叉 MA10、MACD 柱狀體改善、近期低點未再破",
-        "量能 2.0 倍；爆量收黑，量增價跌是賣壓訊號",
-        "上檔至 383.0 約 +22.6%，下檔支撐 287.9 約 −7.9%，風險報酬比 2.9:1"
-      ],
-      "flags": [
-        "距 20 日高點僅 0.0%，追高空間有限"
-      ],
       "hist_winrate": null,
       "hist_samples": null,
       "hist_avg_return": null
