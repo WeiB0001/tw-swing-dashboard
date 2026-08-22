@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0E1116">
 <meta name="description" content="台股短線價差機會掃描：每日收盤後自動更新，僅供技術分析參考。">
-<title>台股價差機會 · {{ meta.trade_date }}</title>
+<title>台股{{ "勝率" if meta.has_winrate else "機會" }}排行 · {{ meta.trade_date }}</title>
 
 <!-- ===== PWA：讓這頁可以「加到主畫面」，開起來像一個 app ===== -->
 <link rel="manifest" href="manifest.webmanifest">
@@ -430,7 +430,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">今日勝率排行
+    <h1 class="title">{{ "今日勝率排行" if meta.has_winrate else "今日機會排行" }}
       {% if meta.regime == 'bull' %}<span class="regime bull">🟢 多頭</span>
       {% elif meta.regime == 'bear' %}<span class="regime bear">🔴 空頭</span>
       {% else %}<span class="regime side">🟡 震盪</span>{% endif %}
@@ -511,7 +511,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   <!-- ===================== 排名 ===================== -->
   <div class="section-head">
-    <h2>勝率排名</h2>
+    <h2>{{ "勝率排名" if meta.has_winrate else "機會排名" }}</h2>
     <span>名次為全部標的的總排名</span>
   </div>
 
@@ -844,9 +844,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <b>淨報酬 &gt; 0 才算贏</b>；同一檔出訊號後 {{ backtest.cooldown_days }} 個交易日內不重複採樣。
     以持有 {{ backtest.hold_days }} 日為主。歷史結果不代表未來績效。<br><br>
     {% else %}
-    <b>⚠️ 尚未跑過歷史回測</b>，所有標的都會顯示「樣本不足」，名次暫時只能由技術分數決定。
-    跑 <code>python scripts/backtest.py</code> 產生 <code>data/backtest.json</code> 之後，
-    排名才會改用實際勝率。<br><br>
+    <b>⚠️ 目前沒有可用的回測資料</b>（找不到 <code>data/backtest.json</code>，或各分層樣本都不足
+    {{ pattern_min_samples }} 筆）。因此所有標的顯示「樣本不足」，名次暫由技術分數決定，
+    標題也改為「機會排行」而非「勝率排行」。<br>
+    每日更新的流程會在缺少回測檔時自動補跑一次；也可以到 repo 的 Actions 手動執行
+    <b>每週回測</b>。<br><br>
     {% endif %}
 
     共掃描 {{ meta.scanned_count }} 檔，全部列出並保留完整名次，

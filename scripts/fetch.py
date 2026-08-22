@@ -12,11 +12,12 @@ fetch.py — 資料抓取層
 
 from __future__ import annotations
 
-import io
 import os
+import random
 import time
 import logging
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import pandas as pd
 import requests
@@ -233,105 +234,213 @@ def build_universe(snapshot: pd.DataFrame) -> pd.DataFrame:
 
 
 # ===========================================================================
-# 3) yfinance：歷史日線
+# 3) 台股歷史日線：FinMind + 本機 CSV 快取
+#    build.py（掃描）與 backtest.py（回測、walk-forward）共用同一份快取，
+#    不會各自重抓。
 # ===========================================================================
-def fetch_history_yf(codes: list[str]) -> dict[str, pd.DataFrame]:
-    """
-    批次抓歷史日線。分批（chunk）避免被限流，每批失敗會重試。
-    回傳 {股票代號: DataFrame(open/high/low/close/volume)}。
-    """
+ROOT = Path(__file__).resolve().parent.parent
+_CACHE_DIR = ROOT / C.HISTORY_CACHE_DIR
+
+_FINMIND_COLS = {"max": "high", "min": "low", "Trading_Volume": "volume"}
+_NEEDED = ["open", "high", "low", "close", "volume"]
+
+
+def _cache_path(code: str) -> Path:
+    return _CACHE_DIR / f"{code}.csv"
+
+
+def load_cache(code: str) -> pd.DataFrame | None:
+    """讀本機快取。檔案不存在或壞掉都回 None，不拋例外。"""
+    p = _cache_path(code)
+    if not p.exists():
+        return None
     try:
-        import yfinance as yf
-    except ImportError:
-        log.error("找不到 yfinance，請先 pip install yfinance")
-        return {}
+        df = pd.read_csv(p)
+        if "date" not in df.columns:
+            return None
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        df = df.dropna(subset=["date", "close"])
+        for c in _NEEDED:
+            if c not in df.columns:
+                return None
+        df = (df.drop_duplicates(subset="date", keep="last")
+                .sort_values("date")
+                .set_index("date")[_NEEDED]
+                .astype(float))
+        return df if len(df) else None
+    except Exception as e:
+        log.warning("%s 快取讀取失敗，將重新抓取：%s", code, e)
+        return None
+
+
+def save_cache(code: str, df: pd.DataFrame) -> None:
+    try:
+        _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        out = df.copy()
+        out.index.name = "date"
+        out.reset_index().to_csv(_cache_path(code), index=False)
+    except Exception as e:
+        log.warning("%s 快取寫入失敗：%s", code, e)
+
+
+def _finmind_get(params: dict) -> list | None:
+    """
+    呼叫 FinMind。回傳 list（可能是空的）代表成功，回傳 None 代表失敗。
+    429 與 5xx 用指數退避重試；沒有 token 也能用免費額度。
+    """
+    q = dict(params)
+    token = os.environ.get("FINMIND_TOKEN", "").strip()
+    if token:
+        q["token"] = token
+
+    delay = C.FINMIND_BACKOFF_START
+    for attempt in range(1, C.FINMIND_MAX_RETRY + 1):
+        try:
+            r = requests.get(C.FINMIND_API, params=q, timeout=C.HTTP_TIMEOUT)
+            if r.status_code == 200:
+                try:
+                    return r.json().get("data", []) or []
+                except ValueError:
+                    return None
+            if r.status_code == 429 or r.status_code >= 500:
+                log.warning("FinMind %s（第 %d 次），%.0f 秒後重試",
+                            r.status_code, attempt, delay)
+                time.sleep(delay)
+                delay = min(delay * 2, C.FINMIND_BACKOFF_MAX)
+                continue
+            log.warning("FinMind 回應 %s：%s", r.status_code, r.text[:120])
+            return None
+        except requests.RequestException as e:
+            log.warning("FinMind 連線失敗（第 %d 次）：%s", attempt, e)
+            time.sleep(delay)
+            delay = min(delay * 2, C.FINMIND_BACKOFF_MAX)
+    return None
+
+
+def _finmind_to_frame(rows: list) -> pd.DataFrame | None:
+    """FinMind 欄位轉成程式內部格式：max→high、min→low、Trading_Volume→volume。"""
+    if not rows:
+        return None
+    try:
+        df = pd.DataFrame(rows).rename(columns=_FINMIND_COLS)
+        if "date" not in df.columns:
+            return None
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        df = df.dropna(subset=["date"])
+        for c in _NEEDED:
+            if c not in df.columns:
+                return None
+        df = (df.drop_duplicates(subset="date", keep="last")
+                .sort_values("date")
+                .set_index("date")[_NEEDED]
+                .astype(float))
+        # 成交量為 0 的通常是停牌，留著會讓均量失真
+        df = df[(df["close"] > 0)]
+        return df if len(df) else None
+    except Exception as e:
+        log.warning("FinMind 資料轉換失敗：%s", e)
+        return None
+
+
+def _last_expected_trading_day(now: datetime) -> pd.Timestamp:
+    """
+    快取要不要更新的判斷基準。收盤（15:00）前就以前一個工作日為準，
+    免得每次都為了「今天還沒收盤」而多打一次 API。
+    """
+    d = now.date()
+    if now.hour < 15:
+        d = d - timedelta(days=1)
+    ts = pd.Timestamp(d)
+    while ts.weekday() >= 5:          # 週六日往前退
+        ts -= pd.Timedelta(days=1)
+    return ts.normalize()
+
+
+def fetch_history(codes: list[str]) -> dict[str, pd.DataFrame]:
+    """
+    取得台股歷史日線（掃描與回測共用的唯一入口）。
+
+    流程：
+      - 有快取 → 只抓「快取最後一天之後」的新資料，合併、去重、排序
+      - 沒快取 → 抓最近 HISTORY_MONTHS 個月
+      - FinMind 失敗 → 用既有快取頂著，不中斷流程
+      - FinMind 查無資料 → 記下代號後跳過，不影響其他股票
+    """
+    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    now = datetime.now(C.TZ)
+    expected = _last_expected_trading_day(now)
+    full_start = (now.date() - timedelta(days=int(C.HISTORY_MONTHS * 30.5))).strftime("%Y-%m-%d")
 
     out: dict[str, pd.DataFrame] = {}
-    chunks = [codes[i:i + C.YF_CHUNK_SIZE] for i in range(0, len(codes), C.YF_CHUNK_SIZE)]
+    n_cached = n_updated = n_full = 0
+    failed, empty, short = [], [], []
 
-    for idx, chunk in enumerate(chunks, 1):
-        tickers = [f"{c}.TW" for c in chunk]
-        data = None
-        for attempt in range(1, C.YF_RETRY + 1):
-            try:
-                data = yf.download(
-                    tickers=" ".join(tickers),
-                    period=C.HISTORY_PERIOD,
-                    interval="1d",
-                    group_by="ticker",
-                    auto_adjust=False,
-                    actions=False,
-                    threads=True,
-                    progress=False,
-                )
-                break
-            except Exception as e:
-                log.warning("yfinance 第 %d 批第 %d 次失敗：%s", idx, attempt, e)
-                time.sleep(3 * attempt)
+    for i, code in enumerate(codes, 1):
+        cached = load_cache(code)
 
-        if data is None or len(data) == 0:
+        if cached is not None and len(cached) and cached.index[-1] >= expected:
+            out[code] = cached                       # 已是最新，完全不打 API
+            n_cached += 1
             continue
 
-        for code, tk in zip(chunk, tickers):
-            try:
-                sub = data[tk] if isinstance(data.columns, pd.MultiIndex) else data
-                sub = sub.rename(columns=str.lower)[["open", "high", "low", "close", "volume"]]
-                sub = sub.dropna(subset=["close"])
-                if len(sub) >= C.MIN_BARS:
-                    out[code] = sub
-            except Exception:
-                continue
+        if cached is not None and len(cached):
+            start = (cached.index[-1] + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+            incremental = True
+        else:
+            start = full_start
+            incremental = False
 
-        log.info("yfinance 進度 %d/%d，累積 %d 檔", idx, len(chunks), len(out))
-        time.sleep(1)   # 對免費服務客氣一點
+        rows = _finmind_get({"dataset": "TaiwanStockPrice", "data_id": code,
+                             "start_date": start})
+        time.sleep(random.uniform(C.FINMIND_MIN_INTERVAL, C.FINMIND_MAX_INTERVAL))
 
-    return out
+        if rows is None:                             # API 掛了 → 用舊快取
+            failed.append(code)
+            if cached is not None and len(cached):
+                out[code] = cached
+            continue
 
+        new = _finmind_to_frame(rows)
+        if new is None and cached is None:
+            empty.append(code)                       # 查無資料，記錄後跳過
+            continue
 
-# ===========================================================================
-# 4) FinMind：選用備援（需要 FINMIND_TOKEN 才會啟用）
-# ===========================================================================
-def fetch_history_finmind(codes: list[str]) -> dict[str, pd.DataFrame]:
-    """
-    只有設定了環境變數 FINMIND_TOKEN 才會運作，用來補 yfinance 抓不到的個股。
-    沒設 token 就直接回傳空 dict，不會影響主流程。
-    """
-    token = os.environ.get("FINMIND_TOKEN", "").strip()
-    if not token or not codes:
-        return {}
+        if new is None:
+            merged = cached
+        elif cached is None:
+            merged = new
+        else:
+            merged = pd.concat([cached, new])
+            merged = (merged[~merged.index.duplicated(keep="last")].sort_index())
 
-    start = (datetime.now(C.TZ) - timedelta(days=400)).strftime("%Y-%m-%d")
-    out: dict[str, pd.DataFrame] = {}
+        if merged is None or merged.empty:
+            empty.append(code)
+            continue
 
-    for code in codes:
-        try:
-            r = requests.get(
-                C.FINMIND_API,
-                params={
-                    "dataset": "TaiwanStockPrice",
-                    "data_id": code,
-                    "start_date": start,
-                    "token": token,
-                },
-                timeout=C.HTTP_TIMEOUT,
-            )
-            j = r.json()
-            rows = j.get("data", [])
-            if not rows:
-                continue
-            df = pd.DataFrame(rows)
-            df["date"] = pd.to_datetime(df["date"])
-            df = df.set_index("date").rename(columns={
-                "open": "open", "max": "high", "min": "low",
-                "close": "close", "Trading_Volume": "volume",
-            })[["open", "high", "low", "close", "volume"]]
-            if len(df) >= C.MIN_BARS:
-                out[code] = df
-            time.sleep(0.4)     # FinMind 免費版有頻率限制
-        except Exception as e:
-            log.warning("FinMind %s 失敗：%s", code, e)
+        save_cache(code, merged)
+        if incremental:
+            n_updated += 1
+        else:
+            n_full += 1
 
-    log.info("FinMind 備援補回 %d 檔", len(out))
+        if len(merged) >= C.MIN_BARS:
+            out[code] = merged
+        else:
+            short.append(code)
+
+        if i % 40 == 0:
+            log.info("歷史資料進度 %d/%d", i, len(codes))
+
+    log.info("歷史日線：可用 %d 檔（快取命中 %d、增量更新 %d、首次抓取 %d）",
+             len(out), n_cached, n_updated, n_full)
+    if failed:
+        log.warning("FinMind 取得失敗 %d 檔，已改用既有快取：%s",
+                    len(failed), ",".join(failed[:12]))
+    if empty:
+        log.warning("FinMind 查無資料 %d 檔，已跳過：%s", len(empty), ",".join(empty[:12]))
+    if short:
+        log.warning("資料長度不足 %d 檔（少於 %d 根），本次不計算：%s",
+                    len(short), C.MIN_BARS, ",".join(short[:12]))
     return out
 
 

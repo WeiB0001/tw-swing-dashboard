@@ -213,11 +213,8 @@ def run_live() -> dict:
     codes = universe["code"].tolist()
     name_map = dict(zip(universe["code"], universe["name"]))
 
-    hist_map = fetch.fetch_history_yf(codes)
-    missing = [c for c in codes if c not in hist_map]
-    if missing:
-        log.warning("yfinance 缺 %d 檔，嘗試 FinMind 備援", len(missing))
-        hist_map.update(fetch.fetch_history_finmind(missing[:40]))
+    # 台股歷史日線一律走 FinMind + data/history 快取（與回測共用同一份）
+    hist_map = fetch.fetch_history(codes)
     if not hist_map:
         raise RuntimeError("歷史日線全部取得失敗，無法計算指標。")
 
@@ -267,11 +264,13 @@ def run_live() -> dict:
             "qualified_count": len(rows),
             "universe_count": len(universe),
             "has_backtest": bt is not None,
+            # 只要有任何一檔查到可信勝率，標題才叫「勝率排行」；否則叫「機會排行」
+            "has_winrate": any(r.get("hist_calibrated") is not None for r in rows),
             "regime": regime,
             "top_n": C.TOP_N_BY_TURNOVER,
             "weak_score": C.WEAK_SCORE,
             "strong_count": strong,
-            "source_note": "證交所 OpenAPI（當日行情）＋ yfinance（歷史日線）",
+            "source_note": "證交所 OpenAPI（當日行情）＋ FinMind（歷史日線）",
             "mode": "live",
         },
         "index": index_info,

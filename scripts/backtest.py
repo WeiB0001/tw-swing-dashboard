@@ -68,7 +68,8 @@ def load_universe_history(demo: bool) -> dict[str, pd.DataFrame]:
     if snapshot.empty:
         raise RuntimeError("證交所行情取得失敗，無法決定回測範圍。")
     universe = fetch.build_universe(snapshot)
-    return fetch.fetch_history_yf(universe["code"].tolist())
+    # 與 build.py 共用同一份 data/history 快取，不重抓
+    return fetch.fetch_history(universe["code"].tolist())
 
 
 # ---------------------------------------------------------------------------

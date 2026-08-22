@@ -305,8 +305,23 @@ ETF 的槓桿型（00631L）、反向型（00632R）、債券型（00679B）**�
 要增減關注的標的：個股改 `TECH_SECTORS`、ETF 改 `TW_ETFS`，各加一行 `"代號": "分類"` 就好。
 
 1. **證交所 OpenAPI**（`openapi.twse.com.tw`）— 當日全市場行情，決定掃描池與當日價量。免費、免金鑰。
-2. **yfinance** — 歷史日線（代號加 `.TW`），用來算指標。
-3. **FinMind**（選用）— 只有在 repo Secrets 設了 `FINMIND_TOKEN` 才啟用，用來補 yfinance 抓不到的個股。不設也能正常運作。
+2. **FinMind**（`TaiwanStockPrice`）— **台股歷史日線的唯一來源**。欄位對應：`max→high`、`min→low`、`Trading_Volume→volume`。
+3. **yfinance** — 只留給美股指數、美股期貨與加權指數，不再負責台股個股歷史。
+
+### 歷史資料快取
+
+每檔股票存成 `data/history/{股票代號}.csv`，掃描（`build.py`）與回測（`backtest.py`）**共用同一份**，不會各自重抓：
+
+- 第一次抓最近 14 個月日線
+- 之後只抓「快取最後一天之後」的新資料，合併後依日期去重、排序
+- 快取已是最新就完全不打 API
+- 請求間隔 0.2～0.5 秒；遇 429／5xx 指數退避重試（1→2→4→8→16 秒，最多 5 次）
+- FinMind 失敗 → 用既有快取頂著，不讓 Actions 失敗
+- FinMind 查無資料 → 記下代號跳過，不影響其他股票
+
+`FINMIND_TOKEN` 從環境變數讀取，**沒有 token 也能用免費額度**（只是比較慢）。要加的話到 repo Settings → Secrets → Actions 新增 `FINMIND_TOKEN`。
+
+CSV 不進版控（`.gitignore` 已排除），改由 GitHub Actions 的 `actions/cache` 在每次 workflow 之間保存與還原，所以不會每天重抓 14 個月。
 
 yfinance 收盤後偶爾延遲一天更新，程式會用證交所的當日資料覆寫最後一根 K 棒，確保訊號用的是今天的價量。
 

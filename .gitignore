@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .venv/
 .DS_Store
+
+# 歷史日線快取由 GitHub Actions cache 保存，不進版控
+data/history/*.csv

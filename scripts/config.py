@@ -304,8 +304,8 @@ WF_TOP_N = 3                  # 每日取前幾名進行 out-of-sample 檢驗
 # ---------------------------------------------------------------------------
 BACKTEST_HOLD_DAYS = [3, 5, 10, 20]    # 持有天數
 BACKTEST_TOP_K = [1, 3, 5, 10]         # 檢查前幾名
-BACKTEST_MIN_SCORE = WEAK_SCORE      # 回測時分數低於此值的訊號不列入統計
-BACKTEST_SCORE_BUCKETS = [(30, 45), (45, 55), (55, 65), (65, 75), (75, 101)]
+BACKTEST_MIN_SCORE = 0               # 回測統計全部級距（含低分區），否則低分標的查不到表
+BACKTEST_SCORE_BUCKETS = [(0, 30), (30, 45), (45, 55), (55, 65), (65, 75), (75, 101)]
 # --- 交易假設 ---
 TRADE_COST_PCT = 0.3          # 來回交易成本（手續費＋證交稅），單位 %
                               # 台股實務約 0.4～0.6%，想更保守就調高
@@ -346,5 +346,15 @@ TWSE_MARKET_INDEX = "https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX"
 FINMIND_API = "https://api.finmindtrade.com/api/v4/data"
 
 HTTP_TIMEOUT = 25
-YF_CHUNK_SIZE = 40
+
+# --- 台股歷史日線：FinMind + 本機 CSV 快取（不再使用 yfinance）---
+HISTORY_CACHE_DIR = "data/history"   # 每檔一個 {股票代號}.csv
+HISTORY_MONTHS = 14                  # 第一次抓多久的日線
+FINMIND_MIN_INTERVAL = 0.2           # 每次請求之間至少間隔幾秒
+FINMIND_MAX_INTERVAL = 0.5
+FINMIND_MAX_RETRY = 5                # 遇 429／5xx 的重試次數（指數退避）
+FINMIND_BACKOFF_START = 1.0          # 第一次退避秒數，之後每次乘 2
+FINMIND_BACKOFF_MAX = 30.0
+
+# yfinance 只留給美股指數與美股期貨，不再負責台股個股歷史
 YF_RETRY = 3

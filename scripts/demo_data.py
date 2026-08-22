@@ -158,7 +158,7 @@ def build_demo_payload() -> dict:
             row["demo_archetype"] = kind
             rows.append(row)
 
-    from build import attach_backtest
+    from build import attach_backtest, _backtest_summary
     import tracking
     regime = "sideways"
     for r in rows:
@@ -184,6 +184,7 @@ def build_demo_payload() -> dict:
             "qualified_count": len(rows),
             "universe_count": len(DEMO_STOCKS),
             "has_backtest": bt is not None,
+            "has_winrate": any(r.get("hist_calibrated") is not None for r in rows),
             "regime": regime,
             "top_n": C.TOP_N_BY_TURNOVER,
             "weak_score": C.WEAK_SCORE,
@@ -215,7 +216,7 @@ def build_demo_payload() -> dict:
             "model": {"samples": 240, "r2": 0.38, "beta_nasdaq": 0.41,
                       "beta_sox": 0.19, "resid_sd": 0.99},
         },
-        "backtest": None,
+        "backtest": _backtest_summary(bt),
         "signals": signals,
         "portfolio": portfolio,
         "rows": top,
