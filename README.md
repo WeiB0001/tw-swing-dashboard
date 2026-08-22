@@ -267,6 +267,7 @@ tw-swing-dashboard/
 │
 ├── index.html                     # 排行榜首頁（Actions 每天覆寫）
 ├── portfolio.html                 # 我的交易記帳（獨立頁）
+├── radar.html / radar.js          # 雷達與搜尋（掃 Extended）
 ├── journal.js / journal.css       # 記帳邏輯與樣式，兩頁共用
 ├── manifest.webmanifest           # 讓它能加到主畫面、像 app 一樣開
 ├── sw.js                          # 離線快取：沒訊號也打得開
@@ -280,6 +281,8 @@ tw-swing-dashboard/
 │   ├── render.py                  # 套版產生 HTML
 │   ├── build.py                   # 主流程（Actions 執行這支）
 │   ├── backtest.py                # 歷史回測：排名的資料來源
+│   ├── universe.py                # Core / Extended 雙層股票池
+│   ├── radar.py                   # 雷達標記（不參與排名）
 │   ├── us_market.py               # 美股連動與隔日方向推估
 │   ├── plan.py                    # 明日交易計畫（純規則）
 │   ├── tracking.py                # 訊號生命週期 + 模擬投資組合
@@ -297,6 +300,29 @@ tw-swing-dashboard/
 ```
 
 ---
+
+## 股票池：Core / Extended 雙層
+
+只收**科技電子、金融、ETF** 三類，其他產業（食品、航運、生技、傳產）一律不掃。
+
+| | 用途 | 門檻 | 規模 |
+|---|---|---|---|
+| **Core** | 首頁「今日機會排行」 | 股價 ≥ 10、**當日**成交金額 ≥ 5,000 萬、歷史 ≥ 80 根 | ~150–220 檔 |
+| **Extended** | `radar.html`、搜尋 | 股價 ≥ 10、**20 日平均**成交金額 ≥ 2,000 萬、歷史 ≥ 80 根 | ~250–400 檔 |
+
+產業判定優先用 FinMind `TaiwanStockInfo` 的 `industry_category`（含上市與上櫃），快取在 `data/stock_info.csv`，**7 天才更新一次**。抓不到才退回 `config.py` 的手動清單（`TECH_SECTORS` / `FINANCE_STOCKS` / `TW_ETFS`，一律保留不刪）。
+
+槓桿（L）、反向（R）、債券（B）ETF 預設排除。歷史資料 Core 與 Extended **共用 `data/history/`**，同一檔不會重抓；Extended 只在第一次補齊缺少的股票，之後每天只增量更新。
+
+輸出 `data/universe.json`（core / extended 清單與統計）與 `data/radar.json`（雷達結果）。
+
+## 雷達（radar.html）
+
+掃 Extended，只做**狀況標記**，不算分數也不排名：🚀 突破、🔥 冷門放量、🚀 冷門突破、📉 探底、↗ 跌深反彈、🔎 Extended（非 Core）。
+
+篩選可以組合：**產業 × 市場 × 訊號 × 關鍵字**，例如「科技 + 上櫃」就能專門找小型上櫃科技股。搜尋也走 Extended，所以沒進首頁排行的股票照樣搜得到。資料只讀 `data/radar.json`，**不呼叫任何股票 API**。
+
+52 週高低只有在資料 ≥ 250 根時才計算，不足就顯示「資料未滿 52 週」，不偽造。
 
 ## 我的交易記帳（獨立頁面）
 

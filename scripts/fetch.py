@@ -179,6 +179,49 @@ def _fmt_roc_or_iso(d) -> str:
     return s
 
 
+def fetch_stock_info() -> pd.DataFrame | None:
+    """
+    上市＋上櫃的股票基本資料（代號、名稱、產業分類、市場別）。
+    來源 FinMind TaiwanStockInfo，快取在 data/stock_info.csv。
+
+    產業分類幾乎不會變，所以預設 7 天才更新一次，不會每天多打 API。
+    抓不到就用舊快取；連快取都沒有回 None，呼叫端會退回手動清單。
+    """
+    path = ROOT / C.STOCK_INFO_CSV
+    if path.exists():
+        try:
+            age = (datetime.now().timestamp() - path.stat().st_mtime) / 86400
+            cached = pd.read_csv(path, dtype={"stock_id": str})
+            if age < C.STOCK_INFO_MAX_AGE_DAYS and len(cached):
+                log.info("股票基本資料使用快取（%d 檔，%.1f 天前更新）", len(cached), age)
+                return cached
+        except Exception:
+            cached = None
+    else:
+        cached = None
+
+    rows = _finmind_get({"dataset": "TaiwanStockInfo"})
+    if not rows:
+        if cached is not None and len(cached):
+            log.warning("股票基本資料取得失敗，改用既有快取")
+            return cached
+        log.warning("股票基本資料取得失敗且無快取，將退回手動清單")
+        return None
+
+    try:
+        df = pd.DataFrame(rows)
+        keep = [c for c in ["stock_id", "stock_name", "industry_category", "type"] if c in df.columns]
+        df = df[keep].dropna(subset=["stock_id"]).drop_duplicates(subset="stock_id", keep="last")
+        df["stock_id"] = df["stock_id"].astype(str)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(path, index=False)
+        log.info("股票基本資料已更新：%d 檔", len(df))
+        return df
+    except Exception as e:
+        log.warning("股票基本資料解析失敗：%s", e)
+        return cached
+
+
 def fetch_twii_history(period: str = "3y") -> pd.DataFrame | None:
     """
     加權指數日線，供大盤狀態（regime）判定與回測分層使用。

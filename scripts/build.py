@@ -32,7 +32,9 @@ import config as C
 import fetch
 import indicators
 import plan
+import radar as radar_mod
 import tracking
+import universe as universe_mod
 import render
 import scoring
 
@@ -210,9 +212,16 @@ def run_live() -> dict:
     if snapshot.empty:
         raise RuntimeError("證交所當日行情取得失敗，無法決定掃描池。可能是非交易日或 API 暫時異常。")
 
-    universe = fetch.build_universe(snapshot)
+    # --- 雙層股票池：Core 給首頁排行，Extended 給雷達與搜尋 ---
+    info = fetch.fetch_stock_info()                 # 產業分類（7 天更新一次）
+    universe = universe_mod.build_core(snapshot, info)
+    if universe.empty:                              # 分類資料異常時的保險
+        log.warning("Core 股票池是空的，退回原本的掃描池邏輯")
+        universe = fetch.build_universe(snapshot)
     codes = universe["code"].tolist()
     name_map = dict(zip(universe["code"], universe["name"]))
+    core_codes = set(codes)
+    extended = universe_mod.build_extended(snapshot, info, core_codes)
 
     # 台股歷史日線一律走 FinMind + data/history 快取（與回測共用同一份）
     hist_map = fetch.fetch_history(codes)
@@ -256,6 +265,23 @@ def run_live() -> dict:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), idx_close)
 
+    # --- 雷達：只掃 Extended，與首頁共用同一份 history 快取 ---
+    radar_rows, uni_stats = [], {}
+    try:
+        ext_codes = [c["symbol"] for c in extended][: C.EXTENDED_MAX]
+        missing = [c for c in ext_codes if c not in hist_map]
+        if missing:
+            # 只補 cache 缺的那些；已有的完全不重抓
+            log.info("雷達：補抓 %d 檔缺少的歷史資料", len(missing))
+            hist_map.update(fetch.fetch_history(missing))
+        radar_rows = radar_mod.scan([c for c in extended if c["symbol"] in hist_map],
+                                    hist_map, core_codes)
+        uni_stats = universe_mod.stats(universe, extended)
+        _write_universe(universe, extended, radar_rows, uni_stats,
+                        now.strftime("%Y-%m-%d"))
+    except Exception as e:
+        log.warning("雷達掃描失敗（不影響首頁）：%s", e)
+
     return {
         "meta": {
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
@@ -281,6 +307,30 @@ def run_live() -> dict:
         "backtest": _backtest_summary(bt),
         "rows": top,
     }
+
+
+def _write_universe(core, extended: list, radar_rows: list,
+                    stats: dict, trade_date: str) -> None:
+    """輸出 data/universe.json 與 data/radar.json 給雷達頁與搜尋用。"""
+    try:
+        core_list = [{"symbol": r["code"], "name": r.get("name", ""),
+                      "sector": r.get("sector", ""), "kind": r.get("kind", ""),
+                      "market": r.get("market", "TWSE"), "is_core": True}
+                     for _, r in core.iterrows()]
+        (ROOT / C.UNIVERSE_JSON).parent.mkdir(parents=True, exist_ok=True)
+        (ROOT / C.UNIVERSE_JSON).write_text(json.dumps(
+            {"date": trade_date, "stats": stats,
+             "core": core_list, "extended": extended},
+            ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        (ROOT / C.RADAR_JSON).write_text(json.dumps(
+            {"date": trade_date, "stats": stats, "rows": radar_rows},
+            ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        log.info("已寫出 %s 與 %s（Core %d／Extended %d／雷達 %d）",
+                 C.UNIVERSE_JSON, C.RADAR_JSON,
+                 stats.get("core_total", 0), stats.get("extended_total", 0),
+                 len(radar_rows))
+    except Exception as e:
+        log.warning("universe/radar 輸出失敗：%s", e)
 
 
 def _us_snapshot() -> dict | None:

@@ -19,6 +19,8 @@ const SHELL = [
   "./",
   "./index.html",
   "./portfolio.html",
+  "./radar.html",
+  "./radar.js",
   "./journal.js",
   "./journal.css",
   "./manifest.webmanifest",

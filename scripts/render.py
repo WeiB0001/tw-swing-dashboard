@@ -107,15 +107,12 @@ def render_html(payload: dict) -> str:
     )
 
 
-def render_portfolio() -> str:
-    """
-    我的交易記帳頁。純靜態，不需要任何 payload——
-    交易資料在使用者的 LocalStorage，最新價由首頁寫進 LocalStorage 共用。
-    """
+def render_static(name: str) -> str:
+    """雷達頁等純靜態頁：資料從 data/*.json 動態載入，樣板不需要 payload。"""
     env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)),
                       autoescape=select_autoescape(["html"]),
                       trim_blocks=True, lstrip_blocks=True)
-    return env.get_template("portfolio.html.j2").render()
+    return env.get_template(name).render()
 
 
 def write_outputs(payload: dict) -> None:
@@ -125,12 +122,14 @@ def write_outputs(payload: dict) -> None:
     (ROOT / C.OUTPUT_HTML).write_text(html, encoding="utf-8")
     log.info("已寫出 %s（%d bytes）", C.OUTPUT_HTML, len(html.encode()))
 
-    try:
-        pf = render_portfolio()
-        (ROOT / "portfolio.html").write_text(pf, encoding="utf-8")
-        log.info("已寫出 portfolio.html（%d bytes）", len(pf.encode()))
-    except Exception as e:
-        log.warning("portfolio.html 產生失敗（不影響首頁）：%s", e)
+    for tpl, out in [("portfolio.html.j2", "portfolio.html"),
+                     ("radar.html.j2", "radar.html")]:
+        try:
+            page = render_static(tpl)
+            (ROOT / out).write_text(page, encoding="utf-8")
+            log.info("已寫出 %s（%d bytes）", out, len(page.encode()))
+        except Exception as e:
+            log.warning("%s 產生失敗（不影響首頁）：%s", out, e)
 
     json_path = ROOT / C.OUTPUT_JSON
     json_path.parent.mkdir(parents=True, exist_ok=True)

@@ -170,6 +170,29 @@ def build_demo_payload() -> dict:
     strong = sum(1 for r in rows if r["score"] >= C.WEAK_SCORE)
     top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows
 
+    # 示範模式也產生一份雷達資料，方便預覽 radar.html
+    try:
+        import radar as radar_mod, universe as universe_mod
+        from build import _write_universe
+        hist_map = {code: hist for code, _, _, hist in build_dataset()}
+        core_codes = set(list(hist_map)[:20])          # 前 20 檔當作 Core
+        cand = []
+        for code in hist_map:
+            kind = "etf" if C.is_etf(code) else ("tech" if code in C.TECH_SECTORS
+                                                 else ("finance" if code in C.FINANCE_STOCKS else "tech"))
+            cand.append({"symbol": code, "name": dict(DEMO_STOCKS).get(code, ""),
+                         "sector": C.sector_of(code), "kind": kind,
+                         "market": "ETF" if kind == "etf" else ("TPEx" if code[0] in "5678" else "TWSE"),
+                         "is_core": code in core_codes})
+        rd = radar_mod.scan(cand, hist_map, core_codes)
+        core_df = pd.DataFrame([{"code": c, "name": dict(DEMO_STOCKS).get(c, ""),
+                                 "sector": C.sector_of(c), "kind": "tech", "market": "TWSE"}
+                                for c in core_codes])
+        _write_universe(core_df, cand, rd, universe_mod.stats(core_df, cand),
+                        now.strftime("%Y-%m-%d"))
+    except Exception as e:
+        import logging; logging.getLogger("demo").warning("示範雷達產生失敗：%s", e)
+
     signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})

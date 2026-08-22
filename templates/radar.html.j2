@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0E1116">
+<meta name="description" content="雷達：掃描科技、金融與 ETF 的擴充股票池，找突破、冷門放量與跌深反彈。">
+<title>雷達 · 台股 Swing</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="雷達">
+<link rel="stylesheet" href="journal.css">
+<style>
+.rd-search{
+  display:flex;align-items:center;gap:8px;background:var(--panel-2);
+  border:1px solid #2E3846;border-radius:10px;padding:9px 12px;margin-bottom:10px;
+}
+.rd-search:focus-within{border-color:var(--signal)}
+.rd-search input{
+  flex:1 1 auto;min-width:0;background:none;border:0;color:var(--text);
+  font:inherit;font-size:15px;outline:none;
+}
+.rd-search span{font-size:14px;color:var(--muted)}
+.rd-row-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.rd-row-filters .lbl{font-size:12px;color:var(--muted);font-weight:700;align-self:center;margin-right:2px}
+.rd-btn{
+  font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;white-space:nowrap;
+}
+.rd-btn[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#161105}
+.rd-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.rd-count{font-size:12.5px;color:var(--muted);margin:9px 0 4px;line-height:1.6}
+.rd-count b{color:#B9C4D0}
+.rd-tag{
+  display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
+  margin:0 5px 0 0;background:#1E2530;border:1px solid #2E3846;color:#93A1B1;
+}
+.rd-tag.hot{background:#2A1A12;border-color:#4A2E1B;color:#FFC98A}
+.rd-tag.up{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.rd-tag.low{background:#12212B;border-color:#1E3A4A;color:#7FD1E8}
+.rd-tag.core{background:#241C0D;border-color:#4A3A18;color:#F2C14E}
+.rd-more{width:100%;margin-top:10px;padding:11px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="disclaimer-top">⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險</div>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="./">首頁</a>
+    <a href="radar.html" class="on">雷達</a>
+    <a href="portfolio.html">我的交易</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">RADAR</div>
+    <h1 class="title">雷達掃描 <span id="rd-total">--</span> 檔</h1>
+    <div class="jn-warn" id="rd-stats">
+      這一頁掃的是<b>擴充股票池</b>：科技電子、金融、ETF，含上櫃小型股，範圍比首頁排行大得多。
+      這裡只做<b>狀況標記</b>，不算分數也不排名——冷門本身不是買進理由，看到標記請自己回首頁或看券商軟體確認。
+    </div>
+  </header>
+
+  <div class="jn">
+    <div class="rd-search">
+      <span>🔍</span>
+      <input id="rd-q" type="search" placeholder="搜尋代號或名稱（例如 2330、聯發科、半導體）"
+             autocomplete="off" enterkeyhint="search">
+    </div>
+
+    <div class="rd-row-filters" role="group" aria-label="產業">
+      <span class="lbl">產業</span>
+      <button type="button" class="rd-btn" data-kind="all" aria-pressed="true">全部</button>
+      <button type="button" class="rd-btn" data-kind="tech" aria-pressed="false">科技</button>
+      <button type="button" class="rd-btn" data-kind="finance" aria-pressed="false">金融</button>
+      <button type="button" class="rd-btn" data-kind="etf" aria-pressed="false">ETF</button>
+    </div>
+
+    <div class="rd-row-filters" role="group" aria-label="市場">
+      <span class="lbl">市場</span>
+      <button type="button" class="rd-btn" data-market="all" aria-pressed="true">全部</button>
+      <button type="button" class="rd-btn" data-market="TWSE" aria-pressed="false">上市</button>
+      <button type="button" class="rd-btn" data-market="TPEx" aria-pressed="false">上櫃</button>
+    </div>
+
+    <div class="rd-row-filters" role="group" aria-label="訊號">
+      <span class="lbl">訊號</span>
+      <button type="button" class="rd-btn" data-sig="all" aria-pressed="true">全部</button>
+      <button type="button" class="rd-btn" data-sig="quiet_volume" aria-pressed="false">🔥 冷門放量</button>
+      <button type="button" class="rd-btn" data-sig="quiet_breakout" aria-pressed="false">🚀 冷門突破</button>
+      <button type="button" class="rd-btn" data-sig="breakout" aria-pressed="false">突破</button>
+      <button type="button" class="rd-btn" data-sig="oversold" aria-pressed="false">📉 探底</button>
+      <button type="button" class="rd-btn" data-sig="rebound" aria-pressed="false">↗ 跌深反彈</button>
+      <button type="button" class="rd-btn" data-sig="extended" aria-pressed="false">🔎 非 Core</button>
+    </div>
+
+    <div class="rd-count" id="rd-count"></div>
+    <div id="rd-list"></div>
+    <button type="button" class="btn-j rd-more" id="rd-more" hidden>顯示更多</button>
+  </div>
+
+  <div class="disclaimer-bottom">
+    ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
+    雷達只是把價量狀況標記出來，沒有經過首頁的勝率統計與風險評估。<br>
+    成交量小的個股滑價與流動性風險都比較高，下單前請自行評估。
+  </div>
+
+  <footer>
+    雷達 · 擴充股票池（科技／金融／ETF）<br>
+    <a href="./">回排行榜首頁</a>
+  </footer>
+</div>
+
+<script>
+if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+  navigator.serviceWorker.register("./sw.js").catch(function () {});
+}
+</script>
+<script src="radar.js" defer></script>
+
+</body>
+</html>
