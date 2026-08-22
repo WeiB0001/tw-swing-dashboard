@@ -1,17 +1,17 @@
 {
   "meta": {
-    "generated_at": "2026-08-23 02:10",
-    "generated_iso": "2026-08-23T02:10:06+08:00",
+    "generated_at": "2026-08-23 03:21",
+    "generated_iso": "2026-08-23T03:21:16+08:00",
     "trade_date": "2026-08-23",
-    "scanned_count": 162,
-    "qualified_count": 162,
-    "universe_count": 163,
+    "scanned_count": 154,
+    "qualified_count": 154,
+    "universe_count": 155,
     "has_backtest": true,
     "has_winrate": true,
     "regime": "sideways",
     "top_n": 100,
     "weak_score": 30,
-    "strong_count": 160,
+    "strong_count": 152,
     "source_note": "證交所 OpenAPI（當日行情）＋ FinMind（歷史日線）",
     "mode": "live"
   },
@@ -88,121 +88,142 @@
         "rank_delta": 0,
         "prev_rank": 2
       },
-      "2207": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 3
-      },
       "3034": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 4
       },
       "2324": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 5
       },
       "4938": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 6
       },
       "2801": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 7
       },
       "2357": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 8
-      },
-      "2634": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 9
       },
       "3017": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 10
       },
       "8046": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 11
       },
       "6669": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 12
       },
       "2383": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 13
       },
       "2464": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 14
       },
       "2484": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 15
       },
       "3167": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 16
       },
-      "1301": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 17
+      "6426": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
       },
-      "1216": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 18
+      "2059": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2890": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2486": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
       }
     },
-    "dropped": [],
-    "new_count": 0,
+    "dropped": [
+      {
+        "symbol": "2207",
+        "prev_rank": 3,
+        "pattern": "多頭回檔"
+      },
+      {
+        "symbol": "2634",
+        "prev_rank": 9,
+        "pattern": "多頭回檔"
+      },
+      {
+        "symbol": "1301",
+        "prev_rank": 17,
+        "pattern": "多頭回檔"
+      },
+      {
+        "symbol": "1216",
+        "prev_rank": 18,
+        "pattern": "多頭回檔"
+      }
+    ],
+    "new_count": 4,
     "hot_count": 0,
     "history_days": 2
   },
@@ -520,127 +541,6 @@
       }
     },
     {
-      "code": "2207",
-      "name": "和泰車",
-      "sector": "汽車",
-      "asset_type": "other",
-      "close": 518.0,
-      "prev_close": 518.0,
-      "day_open": 505.0,
-      "day_high": 519.0,
-      "day_low": 505.0,
-      "lot_cost": 518000,
-      "chg_pct": 0.0,
-      "rsi": 55.46851477894947,
-      "vol_ratio": 0.3703138044346777,
-      "volume": 181001.0,
-      "vol_ma20": 488777.35,
-      "ma5": 512.4,
-      "ma10": 513.0,
-      "ma20": 517.6,
-      "ma60": 492.35833333333335,
-      "ma20_slope": 0.9212771143066067,
-      "ma60_slope": 1.697161643458367,
-      "bias20": 0.07727975270479526,
-      "pos20": 0.27631578947368424,
-      "pct_above_low20": 4.225352112676051,
-      "pct_below_high20": 10.617760617760608,
-      "pct_below_high5": 0.19305019305020377,
-      "pct_below_high60": 10.617760617760608,
-      "atr": 13.596961100785597,
-      "atr_pct": 2.624895965402625,
-      "macd_hist": -1.4500273128344103,
-      "target": 573.0,
-      "support": 504.0,
-      "score": 63.0,
-      "opportunity": 63.0,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 25.0,
-          "max": 25,
-          "ratio": 1.0
-        },
-        "trend": {
-          "points": 12.5,
-          "max": 20,
-          "ratio": 0.624
-        },
-        "reversal": {
-          "points": 4.2,
-          "max": 15,
-          "ratio": 0.28
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 15.0,
-          "max": 15,
-          "ratio": 1.0
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★☆☆",
-        "entry": "★★★★★",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +0.1%）",
-      "why": "進場位置好、風險報酬比佳；距前高仍有 10.6% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 4.8,
-      "swing_high": 10.6,
-      "upside_pct": 10.62,
-      "downside_pct": 2.7,
-      "rr_ratio": 3.93,
-      "reasons": [
-        "位於近 20 日區間 28% 位置，距前高還有 10.6% 空間，距 MA20 乖離 +0.1%",
-        "中期趨勢中性偏多，MA20 斜率 +0.9%",
-        "MA5 開始上彎、MACD 柱狀體改善",
-        "量能 0.4 倍，低於 20 日均量，買盤不足",
-        "上檔至 573.0 約 +10.6%，下檔支撐 504.0 約 −2.7%，風險報酬比 3.9:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 56.5,
-      "hist_raw": 57.1,
-      "hist_samples": 203,
-      "hist_avg_return": 2.95,
-      "hist_pf": 2.07,
-      "hist_mdd": -5.0,
-      "hist_source": "regime",
-      "hist_expectancy": 2.948,
-      "hist_confidence": 4,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 519.68,
-        "invalidation": 504.32,
-        "stop": 501.6,
-        "target1": 540.08,
-        "target2": 573.0,
-        "rr": 1.13,
-        "risk_pct": 3.5,
-        "atr_pct": 2.6
-      },
-      "regime": "sideways",
-      "rank": 3,
-      "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 3
-      }
-    },
-    {
       "code": "3034",
       "name": "聯詠",
       "sector": "IC設計",
@@ -752,12 +652,12 @@
         "atr_pct": 3.7
       },
       "regime": "sideways",
-      "rank": 4,
+      "rank": 3,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 4
       }
     },
@@ -873,12 +773,12 @@
         "atr_pct": 5.1
       },
       "regime": "sideways",
-      "rank": 5,
+      "rank": 4,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 5
       }
     },
@@ -994,12 +894,12 @@
         "atr_pct": 3.8
       },
       "regime": "sideways",
-      "rank": 6,
+      "rank": 5,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 6
       }
     },
@@ -1115,12 +1015,12 @@
         "atr_pct": 1.9
       },
       "regime": "sideways",
-      "rank": 7,
+      "rank": 6,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 7
       }
     },
@@ -1236,134 +1136,13 @@
         "atr_pct": 4.1
       },
       "regime": "sideways",
-      "rank": 8,
+      "rank": 7,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 1,
         "prev_rank": 8
-      }
-    },
-    {
-      "code": "2634",
-      "name": "漢翔",
-      "sector": "其他",
-      "asset_type": "other",
-      "close": 69.3,
-      "prev_close": 69.3,
-      "day_open": 73.0,
-      "day_high": 73.5,
-      "day_low": 69.0,
-      "lot_cost": 69300,
-      "chg_pct": 0.0,
-      "rsi": 57.46424450524404,
-      "vol_ratio": 1.2586863389854872,
-      "volume": 59948602.0,
-      "vol_ma20": 47627911.85,
-      "ma5": 70.55999999999999,
-      "ma10": 68.31,
-      "ma20": 64.74,
-      "ma60": 57.903333333333336,
-      "ma20_slope": 2.194159431728493,
-      "ma60_slope": 6.8557192507612275,
-      "bias20": 7.043558850787779,
-      "pos20": 0.6108108108108107,
-      "pct_above_low20": 19.482758620689644,
-      "pct_below_high20": 10.389610389610393,
-      "pct_below_high5": 10.389610389610393,
-      "pct_below_high60": 10.389610389610393,
-      "atr": 4.463703306189334,
-      "atr_pct": 6.441130311961521,
-      "macd_hist": 0.37247536397620795,
-      "target": 76.5,
-      "support": 64.74,
-      "score": 59.5,
-      "opportunity": 59.5,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 22.3,
-          "max": 25,
-          "ratio": 0.892
-        },
-        "trend": {
-          "points": 20.0,
-          "max": 20,
-          "ratio": 1.0
-        },
-        "reversal": {
-          "points": 1.8,
-          "max": 15,
-          "ratio": 0.12
-        },
-        "volume": {
-          "points": 0.9,
-          "max": 15,
-          "ratio": 0.059
-        },
-        "rr": {
-          "points": 8.6,
-          "max": 15,
-          "ratio": 0.57
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★★★",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +7.0%）",
-      "why": "進場位置好、趨勢結構強；距前高仍有 10.4% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 4.7,
-      "swing_high": 10.4,
-      "upside_pct": 10.39,
-      "downside_pct": 6.58,
-      "rr_ratio": 1.58,
-      "reasons": [
-        "位於近 20 日區間 61% 位置，距前高還有 10.4% 空間，距 MA20 乖離 +7.0%",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +2.2%）",
-        "近期低點未再破",
-        "量能 1.3 倍；爆量收黑，量增價跌是賣壓訊號，近月上漲日均量為下跌日的 2.0 倍",
-        "上檔至 76.5 約 +10.4%，下檔支撐 64.7 約 −6.6%，風險報酬比 1.6:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 56.5,
-      "hist_raw": 57.1,
-      "hist_samples": 203,
-      "hist_avg_return": 2.95,
-      "hist_pf": 2.07,
-      "hist_mdd": -5.0,
-      "hist_source": "regime",
-      "hist_expectancy": 2.948,
-      "hist_confidence": 4,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 73.72,
-        "invalidation": 68.78,
-        "stop": 64.74,
-        "target1": 77.29,
-        "target2": 84.88,
-        "rr": 0.4,
-        "risk_pct": 12.2,
-        "atr_pct": 6.4
-      },
-      "regime": "sideways",
-      "rank": 9,
-      "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 9
       }
     },
     {
@@ -1485,12 +1264,12 @@
         "atr_pct": 6.6
       },
       "regime": "sideways",
-      "rank": 10,
+      "rank": 8,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 10
       }
     },
@@ -1613,12 +1392,12 @@
         "atr_pct": 8.9
       },
       "regime": "sideways",
-      "rank": 11,
+      "rank": 9,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 11
       }
     },
@@ -1734,12 +1513,12 @@
         "atr_pct": 4.9
       },
       "regime": "sideways",
-      "rank": 12,
+      "rank": 10,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 12
       }
     },
@@ -1862,12 +1641,12 @@
         "atr_pct": 6.2
       },
       "regime": "sideways",
-      "rank": 13,
+      "rank": 11,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 13
       }
     },
@@ -1992,12 +1771,12 @@
         "atr_pct": 7.7
       },
       "regime": "sideways",
-      "rank": 14,
+      "rank": 12,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 14
       }
     },
@@ -2120,12 +1899,12 @@
         "atr_pct": 7.7
       },
       "regime": "sideways",
-      "rank": 15,
+      "rank": 13,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 15
       }
     },
@@ -2256,61 +2035,61 @@
         "atr_pct": 8.6
       },
       "regime": "sideways",
-      "rank": 16,
+      "rank": 14,
       "mark": {
         "badge": "",
         "label": "",
         "streak": 2,
-        "rank_delta": 0,
+        "rank_delta": 2,
         "prev_rank": 16
       }
     },
     {
-      "code": "1301",
-      "name": "台塑",
-      "sector": "塑化",
+      "code": "6426",
+      "name": "統新",
+      "sector": "其他",
       "asset_type": "other",
-      "close": 59.4,
-      "prev_close": 59.4,
-      "day_open": 57.8,
-      "day_high": 59.5,
-      "day_low": 57.8,
-      "lot_cost": 59400,
+      "close": 241.0,
+      "prev_close": 241.0,
+      "day_open": 251.0,
+      "day_high": 260.5,
+      "day_low": 240.0,
+      "lot_cost": 241000,
       "chg_pct": 0.0,
-      "rsi": 54.99113003856899,
-      "vol_ratio": 0.740923193456203,
-      "volume": 20206463.0,
-      "vol_ma20": 27272007.65,
-      "ma5": 58.459999999999994,
-      "ma10": 58.07000000000001,
-      "ma20": 56.75,
-      "ma60": 55.501666666666665,
-      "ma20_slope": -2.138299706846025,
-      "ma60_slope": 3.9551726290816047,
-      "bias20": 4.669603524229071,
-      "pos20": 0.7303370786516855,
-      "pct_above_low20": 12.287334593572785,
-      "pct_below_high20": 4.040404040404044,
-      "pct_below_high5": 1.5151515151515138,
-      "pct_below_high60": 17.508417508417516,
-      "atr": 2.5317733567566005,
-      "atr_pct": 4.262244708344445,
-      "macd_hist": 0.20565753933296782,
-      "target": 61.8,
-      "support": 56.75,
-      "score": 43.2,
-      "opportunity": 43.2,
-      "risk": 0.0,
+      "rsi": 64.10664092737076,
+      "vol_ratio": 2.454032831560526,
+      "volume": 4260441.0,
+      "vol_ma20": 1736097.8,
+      "ma5": 241.4,
+      "ma10": 232.15,
+      "ma20": 201.625,
+      "ma60": 200.01666666666668,
+      "ma20_slope": 10.55517477724468,
+      "ma60_slope": -2.6643416196926006,
+      "bias20": 19.528828270303777,
+      "pos20": 0.844,
+      "pct_above_low20": 77.85977859778596,
+      "pct_below_high20": 8.091286307053934,
+      "pct_below_high5": 8.091286307053934,
+      "pct_below_high60": 16.597510373443992,
+      "atr": 17.186080910366638,
+      "atr_pct": 7.131153904716447,
+      "macd_hist": 5.192346876361006,
+      "target": 260.5,
+      "support": 208.0,
+      "score": 43.4,
+      "opportunity": 46.4,
+      "risk": 18.3,
       "breakdown": {
         "entry": {
-          "points": 18.1,
+          "points": 13.3,
           "max": 25,
-          "ratio": 0.723
+          "ratio": 0.533
         },
         "trend": {
-          "points": 15.8,
+          "points": 16.8,
           "max": 20,
-          "ratio": 0.792
+          "ratio": 0.84
         },
         "reversal": {
           "points": 3.9,
@@ -2318,171 +2097,57 @@
           "ratio": 0.26
         },
         "volume": {
-          "points": 0.0,
+          "points": 3.2,
           "max": 15,
-          "ratio": 0.0
+          "ratio": 0.212
         },
         "rr": {
-          "points": 1.0,
+          "points": 4.5,
           "max": 15,
-          "ratio": 0.069
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★★☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +4.7%）",
-      "why": "進場位置好、趨勢結構強；距前高仍有 4.0% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 1.8,
-      "swing_high": 4.0,
-      "upside_pct": 4.04,
-      "downside_pct": 4.46,
-      "rr_ratio": 0.91,
-      "reasons": [
-        "位置 73%、距前高 4.0%、乖離 +4.7%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 -2.1%）",
-        "MACD 柱狀體改善、近期低點未再破",
-        "量能 0.7 倍，低於 20 日均量，買盤不足",
-        "上檔至 61.8 約 +4.0%，下檔支撐 56.8 約 −4.5%，風險報酬比 0.9:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 62.5,
-      "hist_raw": 64.7,
-      "hist_samples": 116,
-      "hist_avg_return": 2.67,
-      "hist_pf": 2.72,
-      "hist_mdd": -3.28,
-      "hist_source": "regime",
-      "hist_expectancy": 2.668,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 59.63,
-        "invalidation": 57.67,
-        "stop": 56.75,
-        "target1": 61.8,
-        "target2": 65.96,
-        "rr": 0.76,
-        "risk_pct": 4.8,
-        "atr_pct": 4.3
-      },
-      "regime": "sideways",
-      "rank": 17,
-      "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 17
-      }
-    },
-    {
-      "code": "1216",
-      "name": "統一",
-      "sector": "食品",
-      "asset_type": "other",
-      "close": 77.5,
-      "prev_close": 77.5,
-      "day_open": 78.1,
-      "day_high": 78.6,
-      "day_low": 77.0,
-      "lot_cost": 77500,
-      "chg_pct": 0.0,
-      "rsi": 56.19898770613715,
-      "vol_ratio": 0.8554433725595519,
-      "volume": 15352876.0,
-      "vol_ma20": 17947273.3,
-      "ma5": 77.38,
-      "ma10": 76.64,
-      "ma20": 75.785,
-      "ma60": 75.97,
-      "ma20_slope": -0.06593261686558272,
-      "ma60_slope": 0.8897742363877859,
-      "bias20": 2.262980800950065,
-      "pos20": 0.8225806451612909,
-      "pct_above_low20": 7.044198895027609,
-      "pct_below_high20": 1.4193548387096744,
-      "pct_below_high5": 1.4193548387096744,
-      "pct_below_high60": 4.129032258064513,
-      "atr": 1.5459059086609677,
-      "atr_pct": 1.9947173014980228,
-      "macd_hist": 0.29417325927408766,
-      "target": 80.7,
-      "support": 75.785,
-      "score": 42.8,
-      "opportunity": 43.9,
-      "risk": 6.7,
-      "breakdown": {
-        "entry": {
-          "points": 12.8,
-          "max": 25,
-          "ratio": 0.511
-        },
-        "trend": {
-          "points": 15.6,
-          "max": 20,
-          "ratio": 0.78
-        },
-        "reversal": {
-          "points": 3.9,
-          "max": 15,
-          "ratio": 0.26
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 7.2,
-          "max": 15,
-          "ratio": 0.479
+          "ratio": 0.3
         }
       },
       "risk_items": [
         {
-          "key": "near_high",
-          "level": 0.527,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 1.4%，追高空間有限"
+          "key": "ma20_bias",
+          "level": 0.635,
+          "weight": 0.16,
+          "label": "距 MA20 正乖離 19.5%，回測均線的空間大"
+        },
+        {
+          "key": "far_from_low",
+          "level": 1.0,
+          "weight": 0.1,
+          "label": "已自 20 日低點上漲 78%"
         }
       ],
       "stars": {
         "trend": "★★★★☆",
         "entry": "★★★☆☆",
-        "volume": "☆☆☆☆☆",
+        "volume": "★☆☆☆☆",
         "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
+        "risk": "★☆☆☆☆"
       },
-      "risk_level": "低",
+      "risk_level": "中低",
       "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +2.3%）",
-      "why": "趨勢結構強、進場位置好；距前高僅剩 1.4%；但距 20 日高點僅 1.4%，追高空間有限。",
-      "main_risk": "距 20 日高點僅 1.4%，追高空間有限",
-      "swing_low": 1.9,
-      "swing_high": 4.1,
-      "upside_pct": 4.13,
-      "downside_pct": 2.21,
-      "rr_ratio": 1.87,
+      "headline": "多頭回檔至支撐（乖離 +19.5%）",
+      "why": "趨勢結構強、進場位置好；距前高仍有 8.1% 空間；但距 MA20 正乖離 19.5%，回測均線的空間大。",
+      "main_risk": "距 MA20 正乖離 19.5%，回測均線的空間大",
+      "swing_low": 3.6,
+      "swing_high": 8.1,
+      "upside_pct": 8.09,
+      "downside_pct": 13.69,
+      "rr_ratio": 0.59,
       "reasons": [
-        "位置 82%、距前高 1.4%、乖離 +2.3%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 -0.1%）",
+        "位置 84%、距前高 8.1%、乖離 +19.5%，進場點普通",
+        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +10.6%）",
         "MA5 開始上彎、近期低點未再破",
-        "量能 0.9 倍，低於 20 日均量，買盤不足",
-        "上檔至 80.7 約 +4.1%，下檔支撐 75.8 約 −2.2%，風險報酬比 1.9:1"
+        "量能 2.5 倍；爆量收黑，量增價跌是賣壓訊號，近月下跌日的量比上漲日大",
+        "上檔至 260.5 約 +8.1%，下檔支撐 208.0 約 −13.7%，風險報酬比 0.6:1"
       ],
       "flags": [
-        "距 20 日高點僅 1.4%，追高空間有限"
+        "距 MA20 正乖離 19.5%，回測均線的空間大",
+        "已自 20 日低點上漲 78%"
       ],
       "hist_calibrated": 62.5,
       "hist_raw": 64.7,
@@ -2495,25 +2160,25 @@
       "hist_confidence": 3,
       "plan": {
         "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 78.68,
-        "invalidation": 76.92,
-        "stop": 75.78,
-        "target1": 80.7,
-        "target2": 82.54,
-        "rr": 0.7,
-        "risk_pct": 3.7,
-        "atr_pct": 2.0
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 261.36,
+        "invalidation": 239.14,
+        "stop": 208.0,
+        "target1": 275.11,
+        "target2": 304.32,
+        "rr": 0.26,
+        "risk_pct": 20.4,
+        "atr_pct": 7.1
       },
       "regime": "sideways",
-      "rank": 18,
+      "rank": 15,
       "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
-        "rank_delta": 0,
-        "prev_rank": 18
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
       }
     },
     {
@@ -2644,8 +2309,135 @@
         "atr_pct": 5.5
       },
       "regime": "sideways",
-      "rank": 19,
-      "mark": {}
+      "rank": 16,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
+    },
+    {
+      "code": "2890",
+      "name": "永豐金",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 39.6,
+      "prev_close": 39.6,
+      "day_open": 39.3,
+      "day_high": 39.8,
+      "day_low": 39.15,
+      "lot_cost": 39600,
+      "chg_pct": 0.0,
+      "rsi": 52.473730577744504,
+      "vol_ratio": 0.47672267405232843,
+      "volume": 12337566.0,
+      "vol_ma20": 25879964.75,
+      "ma5": 39.510000000000005,
+      "ma10": 39.655,
+      "ma20": 39.45,
+      "ma60": 38.16833333333333,
+      "ma20_slope": 0.07610350076103778,
+      "ma60_slope": 4.566001552440491,
+      "bias20": 0.3802281368821214,
+      "pos20": 0.5245901639344271,
+      "pct_above_low20": 4.210526315789487,
+      "pct_below_high20": 3.6616161616161547,
+      "pct_below_high5": 2.2727272727272707,
+      "pct_below_high60": 6.818181818181812,
+      "atr": 1.013304290043753,
+      "atr_pct": 2.5588492172822046,
+      "macd_hist": -0.0658879583664928,
+      "target": 41.05,
+      "support": 38.4,
+      "score": 42.6,
+      "opportunity": 42.6,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 21.6,
+          "max": 25,
+          "ratio": 0.865
+        },
+        "trend": {
+          "points": 12.8,
+          "max": 20,
+          "ratio": 0.64
+        },
+        "reversal": {
+          "points": 1.8,
+          "max": 15,
+          "ratio": 0.12
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 2.1,
+          "max": 15,
+          "ratio": 0.141
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★★★☆☆",
+        "entry": "★★★★☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "多頭回檔",
+      "headline": "多頭回檔至支撐（乖離 +0.4%）",
+      "why": "進場位置好、趨勢結構強；距前高仍有 3.7% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 1.6,
+      "swing_high": 3.7,
+      "upside_pct": 3.66,
+      "downside_pct": 3.03,
+      "rr_ratio": 1.21,
+      "reasons": [
+        "位置 52%、距前高 3.7%、乖離 +0.4%，進場點普通",
+        "中期趨勢中性偏多，MA20 斜率 +0.1%",
+        "近期低點未再破",
+        "量能 0.5 倍，低於 20 日均量，買盤不足",
+        "上檔至 41.0 約 +3.7%，下檔支撐 38.4 約 −3.0%，風險報酬比 1.2:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 62.5,
+      "hist_raw": 64.7,
+      "hist_samples": 116,
+      "hist_avg_return": 2.67,
+      "hist_pf": 2.72,
+      "hist_mdd": -3.28,
+      "hist_source": "regime",
+      "hist_expectancy": 2.668,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 39.85,
+        "invalidation": 39.1,
+        "stop": 38.4,
+        "target1": 41.05,
+        "target2": 42.38,
+        "rr": 0.83,
+        "risk_pct": 3.6,
+        "atr_pct": 2.6
+      },
+      "regime": "sideways",
+      "rank": 17,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2486",
@@ -2766,8 +2558,14 @@
         "atr_pct": 7.1
       },
       "regime": "sideways",
-      "rank": 20,
-      "mark": {}
+      "rank": 18,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "00922",
@@ -2881,7 +2679,7 @@
         "atr_pct": 2.2
       },
       "regime": "sideways",
-      "rank": 21,
+      "rank": 19,
       "mark": {}
     },
     {
@@ -3012,7 +2810,7 @@
         "atr_pct": 6.6
       },
       "regime": "sideways",
-      "rank": 22,
+      "rank": 20,
       "mark": {}
     },
     {
@@ -3136,7 +2934,7 @@
         "atr_pct": 6.8
       },
       "regime": "sideways",
-      "rank": 23,
+      "rank": 21,
       "mark": {}
     },
     {
@@ -3251,7 +3049,7 @@
         "atr_pct": 2.1
       },
       "regime": "sideways",
-      "rank": 24,
+      "rank": 22,
       "mark": {}
     },
     {
@@ -3373,253 +3171,7 @@
         "atr_pct": 4.5
       },
       "regime": "sideways",
-      "rank": 25,
-      "mark": {}
-    },
-    {
-      "code": "6505",
-      "name": "台塑化",
-      "sector": "塑化",
-      "asset_type": "other",
-      "close": 75.8,
-      "prev_close": 75.8,
-      "day_open": 72.9,
-      "day_high": 76.5,
-      "day_low": 72.5,
-      "lot_cost": 75800,
-      "chg_pct": 0.0,
-      "rsi": 59.26477080286855,
-      "vol_ratio": 0.7514357370676268,
-      "volume": 20465693.0,
-      "vol_ma20": 27235453.4,
-      "ma5": 73.35999999999999,
-      "ma10": 71.99,
-      "ma20": 71.115,
-      "ma60": 64.63166666666666,
-      "ma20_slope": -4.086587092858607,
-      "ma60_slope": 5.834993586419568,
-      "bias20": 6.5879209730717925,
-      "pos20": 0.8253968253968251,
-      "pct_above_low20": 15.90214067278286,
-      "pct_below_high20": 2.902374670184704,
-      "pct_below_high5": 0.923482849604218,
-      "pct_below_high60": 29.155672823219003,
-      "atr": 4.148969838214349,
-      "atr_pct": 5.4735749844516475,
-      "macd_hist": 0.12429785195431786,
-      "target": 78.0,
-      "support": 71.115,
-      "score": 39.4,
-      "opportunity": 39.5,
-      "risk": 0.4,
-      "breakdown": {
-        "entry": {
-          "points": 13.5,
-          "max": 25,
-          "ratio": 0.541
-        },
-        "trend": {
-          "points": 16.0,
-          "max": 20,
-          "ratio": 0.8
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        }
-      },
-      "risk_items": [
-        {
-          "key": "near_high",
-          "level": 0.033,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 2.9%，追高空間有限"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★☆",
-        "entry": "★★★☆☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +6.6%）",
-      "why": "趨勢結構強、進場位置好；距前高僅剩 2.9%；風險項目輕微。",
-      "main_risk": "距 20 日高點僅 2.9%，追高空間有限",
-      "swing_low": 1.3,
-      "swing_high": 2.9,
-      "upside_pct": 2.9,
-      "downside_pct": 6.18,
-      "rr_ratio": 0.47,
-      "reasons": [
-        "位置 83%、距前高 2.9%、乖離 +6.6%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 -4.1%）",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 0.8 倍，低於 20 日均量，買盤不足",
-        "上檔至 78.0 約 +2.9%，下檔支撐 71.1 約 −6.2%，風險報酬比 0.5:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 62.5,
-      "hist_raw": 64.7,
-      "hist_samples": 116,
-      "hist_avg_return": 2.67,
-      "hist_pf": 2.72,
-      "hist_mdd": -3.28,
-      "hist_source": "regime",
-      "hist_expectancy": 2.668,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 76.71,
-        "invalidation": 72.29,
-        "stop": 71.11,
-        "target1": 80.03,
-        "target2": 87.08,
-        "rr": 0.59,
-        "risk_pct": 7.3,
-        "atr_pct": 5.5
-      },
-      "regime": "sideways",
-      "rank": 26,
-      "mark": {}
-    },
-    {
-      "code": "1101",
-      "name": "台泥",
-      "sector": "水泥",
-      "asset_type": "other",
-      "close": 24.85,
-      "prev_close": 24.85,
-      "day_open": 24.75,
-      "day_high": 24.95,
-      "day_low": 24.55,
-      "lot_cost": 24850,
-      "chg_pct": 0.0,
-      "rsi": 59.48730760428764,
-      "vol_ratio": 1.2511338595681416,
-      "volume": 35370288.0,
-      "vol_ma20": 28270586.5,
-      "ma5": 24.53,
-      "ma10": 24.425,
-      "ma20": 24.32,
-      "ma60": 24.089166666666667,
-      "ma20_slope": 0.5270228376563102,
-      "ma60_slope": 0.25665036590019064,
-      "bias20": 2.179276315789469,
-      "pos20": 0.8750000000000006,
-      "pct_above_low20": 5.9701492537313605,
-      "pct_below_high20": 0.8048289738430636,
-      "pct_below_high5": 0.6036217303822866,
-      "pct_below_high60": 2.2132796780683917,
-      "atr": 0.5284501957619102,
-      "atr_pct": 2.126560143911107,
-      "macd_hist": 0.05472545500865439,
-      "target": 25.4,
-      "support": 24.32,
-      "score": 36.7,
-      "opportunity": 37.9,
-      "risk": 9.3,
-      "breakdown": {
-        "entry": {
-          "points": 11.7,
-          "max": 25,
-          "ratio": 0.467
-        },
-        "trend": {
-          "points": 15.4,
-          "max": 20,
-          "ratio": 0.769
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 0.8,
-          "max": 15,
-          "ratio": 0.052
-        },
-        "rr": {
-          "points": 0.3,
-          "max": 15,
-          "ratio": 0.018
-        }
-      },
-      "risk_items": [
-        {
-          "key": "near_high",
-          "level": 0.732,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 0.8%，追高空間有限"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★☆",
-        "entry": "★★☆☆☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +2.2%）",
-      "why": "趨勢結構強；距前高僅剩 0.8%；但距 20 日高點僅 0.8%，追高空間有限。",
-      "main_risk": "距 20 日高點僅 0.8%，追高空間有限",
-      "swing_low": 1.0,
-      "swing_high": 2.2,
-      "upside_pct": 2.21,
-      "downside_pct": 2.13,
-      "rr_ratio": 1.04,
-      "reasons": [
-        "位置 88%、距前高 0.8%、乖離 +2.2%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +0.5%）",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 1.3 倍；爆量收黑，量增價跌是賣壓訊號",
-        "上檔至 25.4 約 +2.2%，下檔支撐 24.3 約 −2.1%，風險報酬比 1.0:1"
-      ],
-      "flags": [
-        "距 20 日高點僅 0.8%，追高空間有限"
-      ],
-      "hist_calibrated": 62.5,
-      "hist_raw": 64.7,
-      "hist_samples": 116,
-      "hist_avg_return": 2.67,
-      "hist_pf": 2.72,
-      "hist_mdd": -3.28,
-      "hist_source": "regime",
-      "hist_expectancy": 2.668,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 24.98,
-        "invalidation": 24.52,
-        "stop": 24.32,
-        "target1": 25.4,
-        "target2": 26.3,
-        "rr": 0.65,
-        "risk_pct": 2.6,
-        "atr_pct": 2.1
-      },
-      "regime": "sideways",
-      "rank": 27,
+      "rank": 23,
       "mark": {}
     },
     {
@@ -3741,7 +3293,7 @@
         "atr_pct": 3.0
       },
       "regime": "sideways",
-      "rank": 28,
+      "rank": 24,
       "mark": {}
     },
     {
@@ -3863,7 +3415,7 @@
         "atr_pct": 2.3
       },
       "regime": "sideways",
-      "rank": 29,
+      "rank": 25,
       "mark": {}
     },
     {
@@ -3985,7 +3537,7 @@
         "atr_pct": 3.3
       },
       "regime": "sideways",
-      "rank": 30,
+      "rank": 26,
       "mark": {}
     },
     {
@@ -4107,122 +3659,7 @@
         "atr_pct": 1.6
       },
       "regime": "sideways",
-      "rank": 31,
-      "mark": {}
-    },
-    {
-      "code": "2912",
-      "name": "統一超",
-      "sector": "零售",
-      "asset_type": "other",
-      "close": 223.5,
-      "prev_close": 223.5,
-      "day_open": 219.0,
-      "day_high": 225.5,
-      "day_low": 219.0,
-      "lot_cost": 223500,
-      "chg_pct": 0.0,
-      "rsi": 48.92513369719147,
-      "vol_ratio": 1.627399859569531,
-      "volume": 5515619.0,
-      "vol_ma20": 3389221.75,
-      "ma5": 220.1,
-      "ma10": 218.35,
-      "ma20": 222.0,
-      "ma60": 229.075,
-      "ma20_slope": -2.1918713514704202,
-      "ma60_slope": 0.03275109170304269,
-      "bias20": 0.6756756756756799,
-      "pos20": 0.38333333333333336,
-      "pct_above_low20": 5.4245283018868,
-      "pct_below_high20": 8.277404921700215,
-      "pct_below_high5": 0.8948545861297452,
-      "pct_below_high60": 11.85682326621924,
-      "atr": 4.688957883647661,
-      "atr_pct": 2.0979677331756874,
-      "macd_hist": 0.6541160634217791,
-      "target": 242.0,
-      "support": 218.81104211635233,
-      "score": 62.2,
-      "opportunity": 62.2,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 25.0,
-          "max": 25,
-          "ratio": 1.0
-        },
-        "trend": {
-          "points": 8.4,
-          "max": 20,
-          "ratio": 0.418
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 1.7,
-          "max": 15,
-          "ratio": 0.111
-        },
-        "rr": {
-          "points": 15.0,
-          "max": 15,
-          "ratio": 1.0
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★☆☆☆",
-        "entry": "★★★★★",
-        "volume": "★☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好、風險報酬比佳；距前高仍有 8.3% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 3.7,
-      "swing_high": 8.3,
-      "upside_pct": 8.28,
-      "downside_pct": 2.1,
-      "rr_ratio": 3.95,
-      "reasons": [
-        "位於近 20 日區間 38% 位置，距前高還有 8.3% 空間，距 MA20 乖離 +0.7%",
-        "均線仍偏空排列，MA20 斜率 -2.2%",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 1.6 倍；爆量收黑，量增價跌是賣壓訊號，近月下跌日的量比上漲日大",
-        "上檔至 242.0 約 +8.3%，下檔支撐 218.8 約 −2.1%，風險報酬比 3.9:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 57.5,
-      "hist_raw": 58.6,
-      "hist_samples": 140,
-      "hist_avg_return": 2.56,
-      "hist_pf": 2.19,
-      "hist_mdd": -4.23,
-      "hist_source": "regime",
-      "hist_expectancy": 2.565,
-      "hist_confidence": 4,
-      "plan": {
-        "available": true,
-        "status": "等待確認",
-        "note": "型態尚未完成，先觀察",
-        "trigger": 225.73,
-        "invalidation": 218.77,
-        "stop": 217.83,
-        "target1": 232.77,
-        "target2": 242.0,
-        "rr": 0.89,
-        "risk_pct": 3.5,
-        "atr_pct": 2.1
-      },
-      "regime": "sideways",
-      "rank": 32,
+      "rank": 27,
       "mark": {}
     },
     {
@@ -4337,7 +3774,7 @@
         "atr_pct": 2.5
       },
       "regime": "sideways",
-      "rank": 33,
+      "rank": 28,
       "mark": {}
     },
     {
@@ -4459,7 +3896,7 @@
         "atr_pct": 6.5
       },
       "regime": "sideways",
-      "rank": 34,
+      "rank": 29,
       "mark": {}
     },
     {
@@ -4574,7 +4011,7 @@
         "atr_pct": 2.2
       },
       "regime": "sideways",
-      "rank": 35,
+      "rank": 30,
       "mark": {}
     },
     {
@@ -4689,7 +4126,7 @@
         "atr_pct": 4.8
       },
       "regime": "sideways",
-      "rank": 36,
+      "rank": 31,
       "mark": {}
     },
     {
@@ -4804,7 +4241,7 @@
         "atr_pct": 3.6
       },
       "regime": "sideways",
-      "rank": 37,
+      "rank": 32,
       "mark": {}
     },
     {
@@ -4926,7 +4363,7 @@
         "atr_pct": 6.6
       },
       "regime": "sideways",
-      "rank": 38,
+      "rank": 33,
       "mark": {}
     },
     {
@@ -5048,7 +4485,122 @@
         "atr_pct": 7.8
       },
       "regime": "sideways",
-      "rank": 39,
+      "rank": 34,
+      "mark": {}
+    },
+    {
+      "code": "2834",
+      "name": "臺企銀",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 16.55,
+      "prev_close": 16.55,
+      "day_open": 16.5,
+      "day_high": 16.55,
+      "day_low": 16.45,
+      "lot_cost": 16550,
+      "chg_pct": 0.0,
+      "rsi": 38.22351451102484,
+      "vol_ratio": 0.6889760984978567,
+      "volume": 27697246.0,
+      "vol_ma20": 40200590.5,
+      "ma5": 16.509999999999998,
+      "ma10": 16.45,
+      "ma20": 16.9125,
+      "ma60": 17.334166666666665,
+      "ma20_slope": -2.2116218560277345,
+      "ma60_slope": 0.4442512917089081,
+      "bias20": -2.143385070214343,
+      "pos20": 0.13953488372093065,
+      "pct_above_low20": 1.846153846153853,
+      "pct_below_high20": 11.178247734138957,
+      "pct_below_high5": 0.30211480362538623,
+      "pct_below_high60": 11.178247734138957,
+      "atr": 0.258021090380802,
+      "atr_pct": 1.5590398210320362,
+      "macd_hist": -0.0057948360659046405,
+      "target": 18.4,
+      "support": 16.25,
+      "score": 55.7,
+      "opportunity": 55.7,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 25.0,
+          "max": 25,
+          "ratio": 1.0
+        },
+        "trend": {
+          "points": 4.1,
+          "max": 20,
+          "ratio": 0.204
+        },
+        "reversal": {
+          "points": 6.0,
+          "max": 15,
+          "ratio": 0.4
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 15.0,
+          "max": 15,
+          "ratio": 1.0
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★☆☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★★☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 11.2% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 5.0,
+      "swing_high": 11.2,
+      "upside_pct": 11.18,
+      "downside_pct": 1.81,
+      "rr_ratio": 6.17,
+      "reasons": [
+        "位於近 20 日區間 14% 位置，距前高還有 11.2% 空間，距 MA20 乖離 -2.1%",
+        "均線仍偏空排列，MA20 斜率 -2.2%",
+        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
+        "量能 0.7 倍，低於 20 日均量，買盤不足",
+        "上檔至 18.4 約 +11.2%，下檔支撐 16.2 約 −1.8%，風險報酬比 6.2:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 57.5,
+      "hist_raw": 58.6,
+      "hist_samples": 140,
+      "hist_avg_return": 2.56,
+      "hist_pf": 2.19,
+      "hist_mdd": -4.23,
+      "hist_source": "regime",
+      "hist_expectancy": 2.565,
+      "hist_confidence": 4,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 16.56,
+        "invalidation": 16.44,
+        "stop": 16.25,
+        "target1": 16.95,
+        "target2": 18.4,
+        "rr": 1.24,
+        "risk_pct": 1.9,
+        "atr_pct": 1.6
+      },
+      "regime": "sideways",
+      "rank": 35,
       "mark": {}
     },
     {
@@ -5163,7 +4715,122 @@
         "atr_pct": 2.9
       },
       "regime": "sideways",
-      "rank": 40,
+      "rank": 36,
+      "mark": {}
+    },
+    {
+      "code": "2812",
+      "name": "台中銀",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 18.85,
+      "prev_close": 18.85,
+      "day_open": 18.8,
+      "day_high": 18.95,
+      "day_low": 18.7,
+      "lot_cost": 18850,
+      "chg_pct": 0.0,
+      "rsi": 38.454801111225166,
+      "vol_ratio": 0.46115655644012177,
+      "volume": 8506180.0,
+      "vol_ma20": 18445319.45,
+      "ma5": 18.9,
+      "ma10": 18.775,
+      "ma20": 19.225,
+      "ma60": 19.686666666666667,
+      "ma20_slope": -2.050694179085444,
+      "ma60_slope": -0.06345446084858875,
+      "bias20": -1.950585175552666,
+      "pos20": 0.18367346938775606,
+      "pct_above_low20": 2.44565217391306,
+      "pct_below_high20": 10.61007957559681,
+      "pct_below_high5": 1.0610079575596787,
+      "pct_below_high60": 10.61007957559681,
+      "atr": 0.3342159245224817,
+      "atr_pct": 1.7730287773075952,
+      "macd_hist": 0.011425889941499456,
+      "target": 20.85,
+      "support": 18.45,
+      "score": 55.5,
+      "opportunity": 55.5,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 25.0,
+          "max": 25,
+          "ratio": 1.0
+        },
+        "trend": {
+          "points": 3.9,
+          "max": 20,
+          "ratio": 0.196
+        },
+        "reversal": {
+          "points": 6.0,
+          "max": 15,
+          "ratio": 0.4
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 15.0,
+          "max": 15,
+          "ratio": 1.0
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★☆☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★★☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 10.6% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 4.8,
+      "swing_high": 10.6,
+      "upside_pct": 10.61,
+      "downside_pct": 2.12,
+      "rr_ratio": 5.0,
+      "reasons": [
+        "位於近 20 日區間 18% 位置，距前高還有 10.6% 空間，距 MA20 乖離 -2.0%",
+        "均線仍偏空排列，MA20 斜率 -2.1%",
+        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
+        "量能 0.5 倍，低於 20 日均量，買盤不足",
+        "上檔至 20.9 約 +10.6%，下檔支撐 18.4 約 −2.1%，風險報酬比 5.0:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 57.5,
+      "hist_raw": 58.6,
+      "hist_samples": 140,
+      "hist_avg_return": 2.56,
+      "hist_pf": 2.19,
+      "hist_mdd": -4.23,
+      "hist_source": "regime",
+      "hist_expectancy": 2.565,
+      "hist_confidence": 4,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 18.97,
+        "invalidation": 18.68,
+        "stop": 18.45,
+        "target1": 19.47,
+        "target2": 20.85,
+        "rr": 0.97,
+        "risk_pct": 2.7,
+        "atr_pct": 1.8
+      },
+      "regime": "sideways",
+      "rank": 37,
       "mark": {}
     },
     {
@@ -5285,7 +4952,7 @@
         "atr_pct": 5.2
       },
       "regime": "sideways",
-      "rank": 41,
+      "rank": 38,
       "mark": {}
     },
     {
@@ -5409,7 +5076,7 @@
         "atr_pct": 1.0
       },
       "regime": "sideways",
-      "rank": 42,
+      "rank": 39,
       "mark": {}
     },
     {
@@ -5533,7 +5200,7 @@
         "atr_pct": 1.4
       },
       "regime": "sideways",
-      "rank": 43,
+      "rank": 40,
       "mark": {}
     },
     {
@@ -5657,7 +5324,7 @@
         "atr_pct": 3.2
       },
       "regime": "sideways",
-      "rank": 44,
+      "rank": 41,
       "mark": {}
     },
     {
@@ -5781,7 +5448,7 @@
         "atr_pct": 3.3
       },
       "regime": "sideways",
-      "rank": 45,
+      "rank": 42,
       "mark": {}
     },
     {
@@ -5918,7 +5585,7 @@
         "atr_pct": 6.6
       },
       "regime": "sideways",
-      "rank": 46,
+      "rank": 43,
       "mark": {}
     },
     {
@@ -6042,7 +5709,7 @@
         "atr_pct": 2.9
       },
       "regime": "sideways",
-      "rank": 47,
+      "rank": 44,
       "mark": {}
     },
     {
@@ -6166,177 +5833,55 @@
         "atr_pct": 1.7
       },
       "regime": "sideways",
-      "rank": 48,
+      "rank": 45,
       "mark": {}
     },
     {
-      "code": "6472",
-      "name": "保瑞",
+      "code": "2845",
+      "name": "遠東銀",
       "sector": "其他",
       "asset_type": "other",
-      "close": 455.0,
-      "prev_close": 455.0,
-      "day_open": 438.5,
-      "day_high": 462.0,
-      "day_low": 432.0,
-      "lot_cost": 455000,
+      "close": 13.65,
+      "prev_close": 13.65,
+      "day_open": 13.55,
+      "day_high": 13.7,
+      "day_low": 13.45,
+      "lot_cost": 13650,
       "chg_pct": 0.0,
-      "rsi": 64.2448574683444,
-      "vol_ratio": 2.893779988178117,
-      "volume": 3077150.0,
-      "vol_ma20": 1063366.95,
-      "ma5": 433.0,
-      "ma10": 425.95,
-      "ma20": 413.125,
-      "ma60": 408.01666666666665,
-      "ma20_slope": 1.8615545829994584,
-      "ma60_slope": 2.490998911496267,
-      "bias20": 10.136157337367635,
-      "pos20": 0.9259259259259259,
-      "pct_above_low20": 23.809523809523814,
-      "pct_below_high20": 1.538461538461533,
-      "pct_below_high5": 1.538461538461533,
-      "pct_below_high60": 1.538461538461533,
-      "atr": 19.337669188766466,
-      "atr_pct": 4.250037184344278,
-      "macd_hist": 4.7016391786612495,
-      "target": 462.0,
-      "support": 416.3246616224671,
-      "score": 40.4,
-      "opportunity": 41.3,
-      "risk": 6.2,
-      "breakdown": {
-        "entry": {
-          "points": 7.6,
-          "max": 25,
-          "ratio": 0.304
-        },
-        "trend": {
-          "points": 19.5,
-          "max": 20,
-          "ratio": 0.974
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 4.1,
-          "max": 15,
-          "ratio": 0.275
-        },
-        "rr": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        }
-      },
-      "risk_items": [
-        {
-          "key": "near_high",
-          "level": 0.487,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 1.5%，追高空間有限"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★★",
-        "entry": "★★☆☆☆",
-        "volume": "★☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 64）",
-      "why": "趨勢結構強；距前高僅剩 1.5%；風險項目輕微。",
-      "main_risk": "距 20 日高點僅 1.5%，追高空間有限",
-      "swing_low": 0.7,
-      "swing_high": 1.5,
-      "upside_pct": 1.54,
-      "downside_pct": 8.5,
-      "rr_ratio": 0.18,
-      "reasons": [
-        "收盤已在近 20 日區間頂端（位置 93%），距前高僅 1.5%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +1.9%）",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 2.9 倍；爆量收黑，量增價跌是賣壓訊號，近月上漲日均量為下跌日的 1.5 倍",
-        "上檔至 462.0 約 +1.5%，下檔支撐 416.3 約 −8.5%，風險報酬比 0.2:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 57.7,
-      "hist_raw": 59.3,
-      "hist_samples": 91,
-      "hist_avg_return": 2.15,
-      "hist_pf": 1.93,
-      "hist_mdd": -4.48,
-      "hist_source": "regime",
-      "hist_expectancy": 2.151,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "禁止追價",
-        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
-        "trigger": 462.97,
-        "invalidation": 431.03,
-        "stop": 416.32,
-        "target1": 478.44,
-        "target2": 511.31,
-        "rr": 0.33,
-        "risk_pct": 10.1,
-        "atr_pct": 4.3
-      },
-      "regime": "sideways",
-      "rank": 49,
-      "mark": {}
-    },
-    {
-      "code": "2605",
-      "name": "新興",
-      "sector": "其他",
-      "asset_type": "other",
-      "close": 37.8,
-      "prev_close": 37.8,
-      "day_open": 36.25,
-      "day_high": 38.3,
-      "day_low": 36.25,
-      "lot_cost": 37800,
-      "chg_pct": 0.0,
-      "rsi": 76.56212695088317,
-      "vol_ratio": 2.7071793458132207,
-      "volume": 37504751.0,
-      "vol_ma20": 13853811.0,
-      "ma5": 36.79,
-      "ma10": 34.67999999999999,
-      "ma20": 33.07,
-      "ma60": 31.779166666666665,
-      "ma20_slope": 3.9365129252769693,
-      "ma60_slope": 2.1564425395124376,
-      "bias20": 14.302993649833674,
-      "pos20": 0.9421965317919075,
-      "pct_above_low20": 27.487352445193935,
-      "pct_below_high20": 1.3227513227513255,
-      "pct_below_high5": 1.3227513227513255,
-      "pct_below_high60": 1.3227513227513255,
-      "atr": 1.520508777526996,
-      "atr_pct": 4.022509993457661,
-      "macd_hist": 0.6030209184598647,
-      "target": 40.84101755505399,
-      "support": 34.75898244494601,
+      "rsi": 63.338601562677546,
+      "vol_ratio": 1.2799935003813228,
+      "volume": 12696705.0,
+      "vol_ma20": 9919351.15,
+      "ma5": 13.569999999999999,
+      "ma10": 13.405000000000001,
+      "ma20": 13.352500000000001,
+      "ma60": 13.106666666666666,
+      "ma20_slope": 0.43249341857842794,
+      "ma60_slope": 1.8257153955716587,
+      "bias20": 2.2280471821756187,
+      "pos20": 0.9166666666666684,
+      "pct_above_low20": 4.198473282442761,
+      "pct_below_high20": 0.366300366300365,
+      "pct_below_high5": 0.366300366300365,
+      "pct_below_high60": 0.366300366300365,
+      "atr": 0.20634911245609242,
+      "atr_pct": 1.5117151095684427,
+      "macd_hist": 0.03535451090944526,
+      "target": 14.062698224912186,
+      "support": 13.352500000000001,
       "score": 39.4,
-      "opportunity": 41.6,
-      "risk": 15.1,
+      "opportunity": 41.0,
+      "risk": 11.2,
       "breakdown": {
         "entry": {
-          "points": 3.5,
+          "points": 10.4,
           "max": 25,
-          "ratio": 0.138
+          "ratio": 0.417
         },
         "trend": {
-          "points": 19.4,
+          "points": 16.7,
           "max": 20,
-          "ratio": 0.97
+          "ratio": 0.837
         },
         "reversal": {
           "points": 6.0,
@@ -6344,192 +5889,50 @@
           "ratio": 0.4
         },
         "volume": {
-          "points": 4.1,
+          "points": 1.0,
           "max": 15,
-          "ratio": 0.275
+          "ratio": 0.064
         },
         "rr": {
-          "points": 4.5,
+          "points": 2.7,
           "max": 15,
-          "ratio": 0.3
+          "ratio": 0.182
         }
       },
       "risk_items": [
         {
           "key": "near_high",
-          "level": 0.559,
+          "level": 0.878,
           "weight": 0.14,
-          "label": "距 20 日高點僅 1.3%，追高空間有限"
-        },
-        {
-          "key": "ma20_bias",
-          "level": 0.287,
-          "weight": 0.16,
-          "label": "距 MA20 正乖離 14.3%，回測均線的空間大"
-        },
-        {
-          "key": "run_up",
-          "level": 0.181,
-          "weight": 0.12,
-          "label": "近 5 日已漲 +14.9%（連 0 日紅）"
-        },
-        {
-          "key": "rsi_hot",
-          "level": 0.092,
-          "weight": 0.22,
-          "label": "RSI 77 已進入過熱區"
+          "label": "距 20 日高點僅 0.4%，追高空間有限"
         }
       ],
       "stars": {
-        "trend": "★★★★★",
-        "entry": "★☆☆☆☆",
-        "volume": "★☆☆☆☆",
+        "trend": "★★★★☆",
+        "entry": "★★☆☆☆",
+        "volume": "☆☆☆☆☆",
         "reversal": "★★☆☆☆",
         "risk": "★☆☆☆☆"
       },
-      "risk_level": "中低",
-      "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 77）",
-      "why": "趨勢結構強；距前高僅剩 1.3%；但距 20 日高點僅 1.3%，追高空間有限。",
-      "main_risk": "距 20 日高點僅 1.3%，追高空間有限",
-      "swing_low": 3.6,
-      "swing_high": 8.0,
-      "upside_pct": 8.05,
-      "downside_pct": 8.05,
-      "rr_ratio": 1.0,
-      "reasons": [
-        "收盤已在近 20 日區間頂端（位置 94%），距前高僅 1.3%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +3.9%）",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 2.7 倍；爆量收黑，量增價跌是賣壓訊號，近月上漲日均量為下跌日的 1.4 倍",
-        "上檔至 40.8 約 +8.0%，下檔支撐 34.8 約 −8.0%，風險報酬比 1.0:1"
-      ],
-      "flags": [
-        "距 20 日高點僅 1.3%，追高空間有限"
-      ],
-      "hist_calibrated": 57.7,
-      "hist_raw": 59.3,
-      "hist_samples": 91,
-      "hist_avg_return": 2.15,
-      "hist_pf": 1.93,
-      "hist_mdd": -4.48,
-      "hist_source": "regime",
-      "hist_expectancy": 2.151,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "禁止追價",
-        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
-        "trigger": 38.38,
-        "invalidation": 36.17,
-        "stop": 34.76,
-        "target1": 40.66,
-        "target2": 42.18,
-        "rr": 0.63,
-        "risk_pct": 9.4,
-        "atr_pct": 4.0
-      },
-      "regime": "sideways",
-      "rank": 50,
-      "mark": {}
-    },
-    {
-      "code": "1402",
-      "name": "遠東新",
-      "sector": "紡織",
-      "asset_type": "other",
-      "close": 30.35,
-      "prev_close": 30.35,
-      "day_open": 29.25,
-      "day_high": 30.6,
-      "day_low": 29.05,
-      "lot_cost": 30350,
-      "chg_pct": 0.0,
-      "rsi": 74.52935122802447,
-      "vol_ratio": 2.004794737498223,
-      "volume": 40320281.0,
-      "vol_ma20": 20111924.8,
-      "ma5": 29.139999999999997,
-      "ma10": 28.214999999999996,
-      "ma20": 27.679999999999996,
-      "ma60": 27.706666666666667,
-      "ma20_slope": 1.6805950959683846,
-      "ma60_slope": 1.282480884637649,
-      "bias20": 9.645953757225456,
-      "pos20": 0.9375,
-      "pct_above_low20": 14.097744360902254,
-      "pct_below_high20": 0.8237232289950658,
-      "pct_below_high5": 0.8237232289950658,
-      "pct_below_high60": 0.8237232289950658,
-      "atr": 0.8140722513693553,
-      "atr_pct": 2.6822808941329663,
-      "macd_hist": 0.37010621102816554,
-      "target": 31.97814450273871,
-      "support": 28.72185549726129,
-      "score": 38.7,
-      "opportunity": 40.0,
-      "risk": 9.2,
-      "breakdown": {
-        "entry": {
-          "points": 6.1,
-          "max": 25,
-          "ratio": 0.242
-        },
-        "trend": {
-          "points": 18.4,
-          "max": 20,
-          "ratio": 0.921
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 3.1,
-          "max": 15,
-          "ratio": 0.209
-        },
-        "rr": {
-          "points": 2.4,
-          "max": 15,
-          "ratio": 0.158
-        }
-      },
-      "risk_items": [
-        {
-          "key": "near_high",
-          "level": 0.725,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 0.8%，追高空間有限"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★★",
-        "entry": "★☆☆☆☆",
-        "volume": "★☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
       "risk_level": "低",
       "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 75）",
-      "why": "趨勢結構強；距前高僅剩 0.8%；但距 20 日高點僅 0.8%，追高空間有限。",
-      "main_risk": "距 20 日高點僅 0.8%，追高空間有限",
-      "swing_low": 2.4,
-      "swing_high": 5.4,
-      "upside_pct": 5.36,
-      "downside_pct": 5.36,
-      "rr_ratio": 1.0,
+      "headline": "趨勢強但位置偏高（RSI 63）",
+      "why": "趨勢結構強；距前高僅剩 0.4%；但距 20 日高點僅 0.4%，追高空間有限。",
+      "main_risk": "距 20 日高點僅 0.4%，追高空間有限",
+      "swing_low": 1.4,
+      "swing_high": 3.0,
+      "upside_pct": 3.02,
+      "downside_pct": 2.18,
+      "rr_ratio": 1.39,
       "reasons": [
-        "收盤已在近 20 日區間頂端（位置 94%），距前高僅 0.8%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +1.7%）",
+        "收盤已在近 20 日區間頂端（位置 92%），距前高僅 0.4%，現在進場等於追高",
+        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +0.4%）",
         "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 2.0 倍；爆量收黑，量增價跌是賣壓訊號",
-        "上檔至 32.0 約 +5.4%，下檔支撐 28.7 約 −5.4%，風險報酬比 1.0:1"
+        "量能 1.3 倍；爆量收黑，量增價跌是賣壓訊號，近月上漲日均量為下跌日的 1.7 倍",
+        "上檔至 14.1 約 +3.0%，下檔支撐 13.4 約 −2.2%，風險報酬比 1.4:1"
       ],
       "flags": [
-        "距 20 日高點僅 0.8%，追高空間有限"
+        "距 20 日高點僅 0.4%，追高空間有限"
       ],
       "hist_calibrated": 57.7,
       "hist_raw": 59.3,
@@ -6544,17 +5947,17 @@
         "available": true,
         "status": "禁止追價",
         "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
-        "trigger": 30.64,
-        "invalidation": 29.01,
-        "stop": 28.72,
-        "target1": 31.86,
-        "target2": 32.68,
-        "rr": 0.64,
-        "risk_pct": 6.3,
-        "atr_pct": 2.7
+        "trigger": 13.71,
+        "invalidation": 13.44,
+        "stop": 13.35,
+        "target1": 14.02,
+        "target2": 14.23,
+        "rr": 0.87,
+        "risk_pct": 2.6,
+        "atr_pct": 1.5
       },
       "regime": "sideways",
-      "rank": 51,
+      "rank": 46,
       "mark": {}
     },
     {
@@ -6684,7 +6087,7 @@
         "atr_pct": 6.5
       },
       "regime": "sideways",
-      "rank": 52,
+      "rank": 47,
       "mark": {}
     },
     {
@@ -6808,7 +6211,7 @@
         "atr_pct": 1.6
       },
       "regime": "sideways",
-      "rank": 53,
+      "rank": 48,
       "mark": {}
     },
     {
@@ -6945,7 +6348,131 @@
         "atr_pct": 6.7
       },
       "regime": "sideways",
-      "rank": 54,
+      "rank": 49,
+      "mark": {}
+    },
+    {
+      "code": "2889",
+      "name": "國票金",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 15.75,
+      "prev_close": 15.75,
+      "day_open": 15.65,
+      "day_high": 15.8,
+      "day_low": 15.6,
+      "lot_cost": 15750,
+      "chg_pct": 0.0,
+      "rsi": 59.20807373180152,
+      "vol_ratio": 0.9240035424391996,
+      "volume": 6242589.0,
+      "vol_ma20": 6756022.8,
+      "ma5": 15.66,
+      "ma10": 15.564999999999998,
+      "ma20": 15.507500000000002,
+      "ma60": 15.321666666666665,
+      "ma20_slope": -0.09663391850537328,
+      "ma60_slope": 1.0441855352824714,
+      "bias20": 1.5637594712235803,
+      "pos20": 0.923076923076922,
+      "pct_above_low20": 3.960396039603964,
+      "pct_below_high20": 0.31746031746031633,
+      "pct_below_high5": 0.31746031746031633,
+      "pct_below_high60": 2.2222222222222365,
+      "atr": 0.21607599422302007,
+      "atr_pct": 1.3719110744318734,
+      "macd_hist": 0.024576523314695294,
+      "target": 16.1,
+      "support": 15.507500000000002,
+      "score": 37.3,
+      "opportunity": 38.8,
+      "risk": 11.4,
+      "breakdown": {
+        "entry": {
+          "points": 10.4,
+          "max": 25,
+          "ratio": 0.417
+        },
+        "trend": {
+          "points": 15.4,
+          "max": 20,
+          "ratio": 0.77
+        },
+        "reversal": {
+          "points": 6.0,
+          "max": 15,
+          "ratio": 0.4
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 3.1,
+          "max": 15,
+          "ratio": 0.207
+        }
+      },
+      "risk_items": [
+        {
+          "key": "near_high",
+          "level": 0.894,
+          "weight": 0.14,
+          "label": "距 20 日高點僅 0.3%，追高空間有限"
+        }
+      ],
+      "stars": {
+        "trend": "★★★★☆",
+        "entry": "★★☆☆☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★★☆☆☆",
+        "risk": "★☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "強勢但已漲多",
+      "headline": "趨勢強但位置偏高（RSI 59）",
+      "why": "趨勢結構強；距前高僅剩 0.3%；但距 20 日高點僅 0.3%，追高空間有限。",
+      "main_risk": "距 20 日高點僅 0.3%，追高空間有限",
+      "swing_low": 1.0,
+      "swing_high": 2.2,
+      "upside_pct": 2.22,
+      "downside_pct": 1.54,
+      "rr_ratio": 1.44,
+      "reasons": [
+        "收盤已在近 20 日區間頂端（位置 92%），距前高僅 0.3%，現在進場等於追高",
+        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 -0.1%）",
+        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
+        "量能 0.9 倍，低於 20 日均量，買盤不足",
+        "上檔至 16.1 約 +2.2%，下檔支撐 15.5 約 −1.5%，風險報酬比 1.4:1"
+      ],
+      "flags": [
+        "距 20 日高點僅 0.3%，追高空間有限"
+      ],
+      "hist_calibrated": 57.7,
+      "hist_raw": 59.3,
+      "hist_samples": 91,
+      "hist_avg_return": 2.15,
+      "hist_pf": 1.93,
+      "hist_mdd": -4.48,
+      "hist_source": "regime",
+      "hist_expectancy": 2.151,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 15.81,
+        "invalidation": 15.59,
+        "stop": 15.51,
+        "target1": 16.1,
+        "target2": 16.35,
+        "rr": 0.95,
+        "risk_pct": 1.9,
+        "atr_pct": 1.4
+      },
+      "regime": "sideways",
+      "rank": 50,
       "mark": {}
     },
     {
@@ -7079,7 +6606,7 @@
         "atr_pct": 5.9
       },
       "regime": "sideways",
-      "rank": 55,
+      "rank": 51,
       "mark": {}
     },
     {
@@ -7210,432 +6737,7 @@
         "atr_pct": 5.9
       },
       "regime": "sideways",
-      "rank": 56,
-      "mark": {}
-    },
-    {
-      "code": "2603",
-      "name": "長榮",
-      "sector": "航運",
-      "asset_type": "other",
-      "close": 251.5,
-      "prev_close": 251.5,
-      "day_open": 246.5,
-      "day_high": 254.0,
-      "day_low": 246.0,
-      "lot_cost": 251500,
-      "chg_pct": 0.0,
-      "rsi": 82.65760273084635,
-      "vol_ratio": 2.1683978692198353,
-      "volume": 33249355.0,
-      "vol_ma20": 15333604.35,
-      "ma5": 245.5,
-      "ma10": 232.6,
-      "ma20": 218.825,
-      "ma60": 209.20833333333334,
-      "ma20_slope": 4.926876048909112,
-      "ma60_slope": 1.9450986761959,
-      "bias20": 14.932023306294994,
-      "pos20": 0.9553571428571429,
-      "pct_above_low20": 27.02020202020201,
-      "pct_below_high20": 0.994035785288272,
-      "pct_below_high5": 0.994035785288272,
-      "pct_below_high60": 0.994035785288272,
-      "atr": 6.652957236094628,
-      "atr_pct": 2.645311028268242,
-      "macd_hist": 4.107718994445538,
-      "target": 264.8059144721893,
-      "support": 238.19408552781076,
-      "score": 32.2,
-      "opportunity": 34.9,
-      "risk": 22.3,
-      "breakdown": {
-        "entry": {
-          "points": 1.9,
-          "max": 25,
-          "ratio": 0.078
-        },
-        "trend": {
-          "points": 19.2,
-          "max": 20,
-          "ratio": 0.962
-        },
-        "reversal": {
-          "points": 3.9,
-          "max": 15,
-          "ratio": 0.26
-        },
-        "volume": {
-          "points": 4.0,
-          "max": 15,
-          "ratio": 0.268
-        },
-        "rr": {
-          "points": 2.3,
-          "max": 15,
-          "ratio": 0.153
-        }
-      },
-      "risk_items": [
-        {
-          "key": "rsi_hot",
-          "level": 0.45,
-          "weight": 0.22,
-          "label": "RSI 83 已進入過熱區"
-        },
-        {
-          "key": "near_high",
-          "level": 0.669,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 1.0%，追高空間有限"
-        },
-        {
-          "key": "ma20_bias",
-          "level": 0.329,
-          "weight": 0.16,
-          "label": "距 MA20 正乖離 14.9%，回測均線的空間大"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★★",
-        "entry": "☆☆☆☆☆",
-        "volume": "★☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "★☆☆☆☆"
-      },
-      "risk_level": "中低",
-      "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 83）",
-      "why": "趨勢結構強；距前高僅剩 1.0%；風險項目輕微。",
-      "main_risk": "RSI 83 已進入過熱區",
-      "swing_low": 2.4,
-      "swing_high": 5.3,
-      "upside_pct": 5.29,
-      "downside_pct": 5.29,
-      "rr_ratio": 1.0,
-      "reasons": [
-        "收盤已在近 20 日區間頂端（位置 96%），距前高僅 1.0%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +4.9%）",
-        "MA5 開始上彎、近期低點未再破",
-        "量能 2.2 倍；爆量收黑，量增價跌是賣壓訊號，近月上漲日均量為下跌日的 1.8 倍",
-        "上檔至 264.8 約 +5.3%，下檔支撐 238.2 約 −5.3%，風險報酬比 1.0:1"
-      ],
-      "flags": [
-        "距 20 日高點僅 1.0%，追高空間有限"
-      ],
-      "hist_calibrated": 57.7,
-      "hist_raw": 59.3,
-      "hist_samples": 91,
-      "hist_avg_return": 2.15,
-      "hist_pf": 1.93,
-      "hist_mdd": -4.48,
-      "hist_source": "regime",
-      "hist_expectancy": 2.151,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "禁止追價",
-        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
-        "trigger": 254.33,
-        "invalidation": 245.67,
-        "stop": 238.19,
-        "target1": 264.31,
-        "target2": 270.97,
-        "rr": 0.62,
-        "risk_pct": 6.3,
-        "atr_pct": 2.6
-      },
-      "regime": "sideways",
-      "rank": 57,
-      "mark": {}
-    },
-    {
-      "code": "2637",
-      "name": "慧洋-KY",
-      "sector": "其他",
-      "asset_type": "other",
-      "close": 102.0,
-      "prev_close": 102.0,
-      "day_open": 93.5,
-      "day_high": 104.0,
-      "day_low": 93.4,
-      "lot_cost": 102000,
-      "chg_pct": 0.0,
-      "rsi": 79.41340058081025,
-      "vol_ratio": 3.76637179876641,
-      "volume": 17870989.0,
-      "vol_ma20": 4744881.8,
-      "ma5": 95.84,
-      "ma10": 91.24,
-      "ma20": 87.245,
-      "ma60": 81.36999999999999,
-      "ma20_slope": 3.999284777685075,
-      "ma60_slope": 3.7970915894208535,
-      "bias20": 16.912143962404723,
-      "pos20": 0.9239543726235742,
-      "pct_above_low20": 31.27413127413128,
-      "pct_below_high20": 1.9607843137254832,
-      "pct_below_high5": 1.9607843137254832,
-      "pct_below_high60": 1.9607843137254832,
-      "atr": 4.08387851547499,
-      "atr_pct": 4.003802466151951,
-      "macd_hist": 1.5272553515665428,
-      "target": 104.0,
-      "support": 93.83224296905001,
-      "score": 31.6,
-      "opportunity": 34.0,
-      "risk": 20.2,
-      "breakdown": {
-        "entry": {
-          "points": 2.9,
-          "max": 25,
-          "ratio": 0.116
-        },
-        "trend": {
-          "points": 20.0,
-          "max": 20,
-          "ratio": 1.0
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 1.7,
-          "max": 15,
-          "ratio": 0.113
-        },
-        "rr": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        }
-      },
-      "risk_items": [
-        {
-          "key": "ma20_bias",
-          "level": 0.461,
-          "weight": 0.16,
-          "label": "距 MA20 正乖離 16.9%，回測均線的空間大"
-        },
-        {
-          "key": "rsi_hot",
-          "level": 0.26,
-          "weight": 0.22,
-          "label": "RSI 79 已進入過熱區"
-        },
-        {
-          "key": "near_high",
-          "level": 0.346,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 2.0%，追高空間有限"
-        },
-        {
-          "key": "run_up",
-          "level": 0.328,
-          "weight": 0.12,
-          "label": "近 5 日已漲 +17.2%（連 0 日紅）"
-        },
-        {
-          "key": "far_from_low",
-          "level": 0.032,
-          "weight": 0.1,
-          "label": "已自 20 日低點上漲 31%"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★★",
-        "entry": "★☆☆☆☆",
-        "volume": "★☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "★☆☆☆☆"
-      },
-      "risk_level": "中低",
-      "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 79）",
-      "why": "趨勢結構強；距前高僅剩 2.0%；風險項目輕微。",
-      "main_risk": "距 MA20 正乖離 16.9%，回測均線的空間大",
-      "swing_low": 0.9,
-      "swing_high": 2.0,
-      "upside_pct": 1.96,
-      "downside_pct": 8.01,
-      "rr_ratio": 0.24,
-      "reasons": [
-        "收盤已在近 20 日區間頂端（位置 92%），距前高僅 2.0%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +4.0%）",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 3.8 倍；爆量收黑，量增價跌是賣壓訊號，高檔爆量，需留意出貨",
-        "上檔至 104.0 約 +2.0%，下檔支撐 93.8 約 −8.0%，風險報酬比 0.2:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 57.7,
-      "hist_raw": 59.3,
-      "hist_samples": 91,
-      "hist_avg_return": 2.15,
-      "hist_pf": 1.93,
-      "hist_mdd": -4.48,
-      "hist_source": "regime",
-      "hist_expectancy": 2.151,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "禁止追價",
-        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
-        "trigger": 104.2,
-        "invalidation": 93.2,
-        "stop": 92.38,
-        "target1": 107.47,
-        "target2": 114.41,
-        "rr": 0.28,
-        "risk_pct": 11.3,
-        "atr_pct": 4.0
-      },
-      "regime": "sideways",
-      "rank": 58,
-      "mark": {}
-    },
-    {
-      "code": "2609",
-      "name": "陽明",
-      "sector": "航運",
-      "asset_type": "other",
-      "close": 64.0,
-      "prev_close": 64.0,
-      "day_open": 60.7,
-      "day_high": 64.6,
-      "day_low": 60.1,
-      "lot_cost": 64000,
-      "chg_pct": 0.0,
-      "rsi": 84.45210049578826,
-      "vol_ratio": 3.710190964783534,
-      "volume": 198985656.0,
-      "vol_ma20": 53632187.1,
-      "ma5": 60.7,
-      "ma10": 56.489999999999995,
-      "ma20": 53.57000000000001,
-      "ma60": 52.18,
-      "ma20_slope": 4.700478842959077,
-      "ma60_slope": 1.8113232090013254,
-      "bias20": 19.469852529400768,
-      "pos20": 0.960264900662252,
-      "pct_above_low20": 29.292929292929305,
-      "pct_below_high20": 0.9374999999999911,
-      "pct_below_high5": 0.9374999999999911,
-      "pct_below_high60": 0.9374999999999911,
-      "atr": 2.080610582251372,
-      "atr_pct": 3.250954034767769,
-      "macd_hist": 1.4246346956749552,
-      "target": 68.16122116450275,
-      "support": 59.83877883549726,
-      "score": 31.3,
-      "opportunity": 35.3,
-      "risk": 32.5,
-      "breakdown": {
-        "entry": {
-          "points": 1.2,
-          "max": 25,
-          "ratio": 0.049
-        },
-        "trend": {
-          "points": 19.2,
-          "max": 20,
-          "ratio": 0.958
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 1.9,
-          "max": 15,
-          "ratio": 0.124
-        },
-        "rr": {
-          "points": 3.5,
-          "max": 15,
-          "ratio": 0.233
-        }
-      },
-      "risk_items": [
-        {
-          "key": "rsi_hot",
-          "level": 0.556,
-          "weight": 0.22,
-          "label": "RSI 84 已進入過熱區"
-        },
-        {
-          "key": "ma20_bias",
-          "level": 0.631,
-          "weight": 0.16,
-          "label": "距 MA20 正乖離 19.5%，回測均線的空間大"
-        },
-        {
-          "key": "near_high",
-          "level": 0.688,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 0.9%，追高空間有限"
-        },
-        {
-          "key": "run_up",
-          "level": 0.313,
-          "weight": 0.12,
-          "label": "近 5 日已漲 +17.0%（連 0 日紅）"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★★",
-        "entry": "☆☆☆☆☆",
-        "volume": "★☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "★★☆☆☆"
-      },
-      "risk_level": "中",
-      "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 84）",
-      "why": "趨勢結構強；距前高僅剩 0.9%；但RSI 84 已進入過熱區。",
-      "main_risk": "RSI 84 已進入過熱區",
-      "swing_low": 2.9,
-      "swing_high": 6.5,
-      "upside_pct": 6.5,
-      "downside_pct": 6.5,
-      "rr_ratio": 1.0,
-      "reasons": [
-        "收盤已在近 20 日區間頂端（位置 96%），距前高僅 0.9%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +4.7%）",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 3.7 倍；爆量收黑，量增價跌是賣壓訊號，高檔爆量，需留意出貨，近月上漲日均量為下跌日的 2.0 倍",
-        "上檔至 68.2 約 +6.5%，下檔支撐 59.8 約 −6.5%，風險報酬比 1.0:1"
-      ],
-      "flags": [
-        "RSI 84 已進入過熱區",
-        "距 MA20 正乖離 19.5%，回測均線的空間大"
-      ],
-      "hist_calibrated": 57.7,
-      "hist_raw": 59.3,
-      "hist_samples": 91,
-      "hist_avg_return": 2.15,
-      "hist_pf": 1.93,
-      "hist_mdd": -4.48,
-      "hist_source": "regime",
-      "hist_expectancy": 2.151,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "禁止追價",
-        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
-        "trigger": 64.7,
-        "invalidation": 60.0,
-        "stop": 59.58,
-        "target1": 67.82,
-        "target2": 69.91,
-        "rr": 0.61,
-        "risk_pct": 7.9,
-        "atr_pct": 3.3
-      },
-      "regime": "sideways",
-      "rank": 59,
+      "rank": 52,
       "mark": {}
     },
     {
@@ -7772,7 +6874,7 @@
         "atr_pct": 6.0
       },
       "regime": "sideways",
-      "rank": 60,
+      "rank": 53,
       "mark": {}
     },
     {
@@ -7896,7 +6998,143 @@
         "atr_pct": 5.0
       },
       "regime": "sideways",
-      "rank": 61,
+      "rank": 54,
+      "mark": {}
+    },
+    {
+      "code": "2489",
+      "name": "瑞軒",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 35.65,
+      "prev_close": 35.65,
+      "day_open": 33.0,
+      "day_high": 35.65,
+      "day_low": 33.0,
+      "lot_cost": 35650,
+      "chg_pct": 0.0,
+      "rsi": 57.96152667437099,
+      "vol_ratio": 2.6056432783412578,
+      "volume": 35363872.0,
+      "vol_ma20": 13572031.25,
+      "ma5": 33.23,
+      "ma10": 32.760000000000005,
+      "ma20": 30.970000000000006,
+      "ma60": 37.919999999999995,
+      "ma20_slope": 1.9756338491932812,
+      "ma60_slope": -5.8609346877133595,
+      "bias20": 15.111398127219866,
+      "pos20": 1.0,
+      "pct_above_low20": 48.23284823284821,
+      "pct_below_high20": 0.0,
+      "pct_below_high5": 0.0,
+      "pct_below_high60": 47.26507713884993,
+      "atr": 2.164614067572483,
+      "atr_pct": 6.071848716893361,
+      "macd_hist": 0.8717336367238595,
+      "target": 52.5,
+      "support": 31.320771864855033,
+      "score": 45.5,
+      "opportunity": 49.2,
+      "risk": 21.8,
+      "breakdown": {
+        "entry": {
+          "points": 5.2,
+          "max": 25,
+          "ratio": 0.208
+        },
+        "trend": {
+          "points": 14.4,
+          "max": 20,
+          "ratio": 0.719
+        },
+        "reversal": {
+          "points": 6.0,
+          "max": 15,
+          "ratio": 0.4
+        },
+        "volume": {
+          "points": 3.8,
+          "max": 15,
+          "ratio": 0.25
+        },
+        "rr": {
+          "points": 15.0,
+          "max": 15,
+          "ratio": 1.0
+        }
+      },
+      "risk_items": [
+        {
+          "key": "near_high",
+          "level": 1.0,
+          "weight": 0.14,
+          "label": "距 20 日高點僅 0.0%，追高空間有限"
+        },
+        {
+          "key": "ma20_bias",
+          "level": 0.341,
+          "weight": 0.16,
+          "label": "距 MA20 正乖離 15.1%，回測均線的空間大"
+        },
+        {
+          "key": "far_from_low",
+          "level": 0.456,
+          "weight": 0.1,
+          "label": "已自 20 日低點上漲 48%"
+        }
+      ],
+      "stars": {
+        "trend": "★★★★☆",
+        "entry": "★☆☆☆☆",
+        "volume": "★☆☆☆☆",
+        "reversal": "★★☆☆☆",
+        "risk": "★☆☆☆☆"
+      },
+      "risk_level": "中低",
+      "kind": "強勢但已漲多",
+      "headline": "趨勢強但位置偏高（RSI 58）",
+      "why": "風險報酬比佳、趨勢結構強；距前高僅剩 0.0%；但距 20 日高點僅 0.0%，追高空間有限。",
+      "main_risk": "距 20 日高點僅 0.0%，追高空間有限",
+      "swing_low": 21.3,
+      "swing_high": 47.3,
+      "upside_pct": 47.27,
+      "downside_pct": 12.14,
+      "rr_ratio": 3.89,
+      "reasons": [
+        "收盤已在近 20 日區間頂端（位置 100%），距前高僅 0.0%，現在進場等於追高",
+        "中期趨勢中性偏多，MA20 斜率 +2.0%",
+        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
+        "量能 2.6 倍；爆量收黑，量增價跌是賣壓訊號",
+        "上檔至 52.5 約 +47.3%，下檔支撐 31.3 約 −12.1%，風險報酬比 3.9:1"
+      ],
+      "flags": [
+        "距 20 日高點僅 0.0%，追高空間有限"
+      ],
+      "hist_calibrated": 57.5,
+      "hist_raw": 58.9,
+      "hist_samples": 107,
+      "hist_avg_return": 2.02,
+      "hist_pf": 1.81,
+      "hist_mdd": -4.93,
+      "hist_source": "pattern",
+      "hist_expectancy": 2.025,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 35.76,
+        "invalidation": 32.89,
+        "stop": 31.32,
+        "target1": 39.01,
+        "target2": 52.5,
+        "rr": 0.73,
+        "risk_pct": 12.4,
+        "atr_pct": 6.1
+      },
+      "regime": "sideways",
+      "rank": 55,
       "mark": {}
     },
     {
@@ -8033,7 +7271,7 @@
         "atr_pct": 7.0
       },
       "regime": "sideways",
-      "rank": 62,
+      "rank": 56,
       "mark": {}
     },
     {
@@ -8148,55 +7386,55 @@
         "atr_pct": 1.2
       },
       "regime": "sideways",
-      "rank": 63,
+      "rank": 57,
       "mark": {}
     },
     {
-      "code": "2615",
-      "name": "萬海",
-      "sector": "航運",
+      "code": "2851",
+      "name": "中再保",
+      "sector": "其他",
       "asset_type": "other",
-      "close": 124.5,
-      "prev_close": 124.5,
-      "day_open": 113.0,
-      "day_high": 124.5,
-      "day_low": 111.5,
-      "lot_cost": 124500,
+      "close": 47.1,
+      "prev_close": 47.1,
+      "day_open": 48.5,
+      "day_high": 48.5,
+      "day_low": 44.25,
+      "lot_cost": 47100,
       "chg_pct": 0.0,
-      "rsi": 90.99237389430627,
-      "vol_ratio": 3.088915329338062,
-      "volume": 87111618.0,
-      "vol_ma20": 28201361.55,
-      "ma5": 114.8,
-      "ma10": 102.58999999999999,
-      "ma20": 93.895,
-      "ma60": 85.72000000000001,
-      "ma20_slope": 8.56795976180842,
-      "ma60_slope": 4.479249192516321,
-      "bias20": 32.594919857287394,
-      "pos20": 1.0,
-      "pct_above_low20": 51.829268292682926,
-      "pct_below_high20": 0.0,
-      "pct_below_high5": 0.0,
-      "pct_below_high60": 0.0,
-      "atr": 5.259597182702316,
-      "atr_pct": 4.224576050363306,
-      "macd_hist": 3.9074082122514193,
-      "target": 135.01919436540464,
-      "support": 113.98080563459537,
+      "rsi": 87.58972767293024,
+      "vol_ratio": 5.323226309479829,
+      "volume": 23729409.0,
+      "vol_ma20": 4457711.85,
+      "ma5": 43.58,
+      "ma10": 40.605000000000004,
+      "ma20": 37.697500000000005,
+      "ma60": 37.33083333333333,
+      "ma20_slope": 5.595238095238098,
+      "ma60_slope": 2.6653527066049287,
+      "bias20": 24.941972279328862,
+      "pos20": 0.9099678456591641,
+      "pct_above_low20": 42.943854324734446,
+      "pct_below_high20": 2.972399150743099,
+      "pct_below_high5": 2.972399150743099,
+      "pct_below_high60": 2.972399150743099,
+      "atr": 1.6702377322429642,
+      "atr_pct": 3.546152297755763,
+      "macd_hist": 1.2693170534024762,
+      "target": 48.5,
+      "support": 43.759524535514075,
       "score": 28.8,
-      "opportunity": 36.4,
-      "risk": 59.9,
+      "opportunity": 33.2,
+      "risk": 38.3,
       "breakdown": {
         "entry": {
-          "points": 0.4,
+          "points": 2.7,
           "max": 25,
-          "ratio": 0.017
+          "ratio": 0.109
         },
         "trend": {
-          "points": 20.0,
+          "points": 19.8,
           "max": 20,
-          "ratio": 1.0
+          "ratio": 0.988
         },
         "reversal": {
           "points": 6.0,
@@ -8204,75 +7442,69 @@
           "ratio": 0.4
         },
         "volume": {
-          "points": 1.9,
+          "points": 1.4,
           "max": 15,
-          "ratio": 0.124
+          "ratio": 0.096
         },
         "rr": {
-          "points": 4.5,
+          "points": 0.0,
           "max": 15,
-          "ratio": 0.3
+          "ratio": 0.0
         }
       },
       "risk_items": [
         {
           "key": "rsi_hot",
-          "level": 0.941,
+          "level": 0.741,
           "weight": 0.22,
-          "label": "RSI 91 已進入過熱區"
+          "label": "RSI 88 已進入過熱區"
         },
         {
           "key": "ma20_bias",
-          "level": 1.0,
+          "level": 0.996,
           "weight": 0.16,
-          "label": "距 MA20 正乖離 32.6%，回測均線的空間大"
-        },
-        {
-          "key": "near_high",
-          "level": 1.0,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 0.0%，追高空間有限"
+          "label": "距 MA20 正乖離 24.9%，回測均線的空間大"
         },
         {
           "key": "run_up",
-          "level": 0.812,
+          "level": 0.558,
           "weight": 0.12,
-          "label": "近 5 日已漲 +25.0%（連 0 日紅）"
+          "label": "近 5 日已漲 +20.9%（連 0 日紅）"
         },
         {
           "key": "far_from_low",
-          "level": 0.546,
+          "level": 0.324,
           "weight": 0.1,
-          "label": "已自 20 日低點上漲 52%"
+          "label": "已自 20 日低點上漲 43%"
         }
       ],
       "stars": {
         "trend": "★★★★★",
-        "entry": "☆☆☆☆☆",
-        "volume": "★☆☆☆☆",
+        "entry": "★☆☆☆☆",
+        "volume": "☆☆☆☆☆",
         "reversal": "★★☆☆☆",
-        "risk": "★★★☆☆"
+        "risk": "★★☆☆☆"
       },
-      "risk_level": "偏高",
+      "risk_level": "中",
       "kind": "強勢但已漲多",
-      "headline": "趨勢強但位置偏高（RSI 91）",
-      "why": "趨勢結構強；距前高僅剩 0.0%；但RSI 91 已進入過熱區。",
-      "main_risk": "RSI 91 已進入過熱區",
-      "swing_low": 3.8,
-      "swing_high": 8.4,
-      "upside_pct": 8.45,
-      "downside_pct": 8.45,
-      "rr_ratio": 1.0,
+      "headline": "趨勢強但位置偏高（RSI 88）",
+      "why": "趨勢結構強；距前高僅剩 3.0%；但RSI 88 已進入過熱區。",
+      "main_risk": "RSI 88 已進入過熱區",
+      "swing_low": 1.3,
+      "swing_high": 3.0,
+      "upside_pct": 2.97,
+      "downside_pct": 7.09,
+      "rr_ratio": 0.42,
       "reasons": [
-        "收盤已在近 20 日區間頂端（位置 100%），距前高僅 0.0%，現在進場等於追高",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +8.6%）",
+        "收盤已在近 20 日區間頂端（位置 91%），距前高僅 3.0%，現在進場等於追高",
+        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +5.6%）",
         "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 3.1 倍；爆量收黑，量增價跌是賣壓訊號，高檔爆量，需留意出貨，近月上漲日均量為下跌日的 2.1 倍",
-        "上檔至 135.0 約 +8.4%，下檔支撐 114.0 約 −8.4%，風險報酬比 1.0:1"
+        "量能 5.3 倍；爆量收黑，量增價跌是賣壓訊號，高檔爆量，需留意出貨，近月下跌日的量比上漲日大",
+        "上檔至 48.5 約 +3.0%，下檔支撐 43.8 約 −7.1%，風險報酬比 0.4:1"
       ],
       "flags": [
-        "RSI 91 已進入過熱區",
-        "距 MA20 正乖離 32.6%，回測均線的空間大"
+        "RSI 88 已進入過熱區",
+        "距 MA20 正乖離 24.9%，回測均線的空間大"
       ],
       "hist_calibrated": 43.6,
       "hist_raw": 41.9,
@@ -8287,17 +7519,17 @@
         "available": true,
         "status": "禁止追價",
         "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
-        "trigger": 124.76,
-        "invalidation": 111.24,
-        "stop": 110.19,
-        "target1": 132.65,
-        "target2": 137.91,
-        "rr": 0.54,
-        "risk_pct": 11.7,
-        "atr_pct": 4.2
+        "trigger": 48.58,
+        "invalidation": 44.17,
+        "stop": 43.76,
+        "target1": 49.92,
+        "target2": 52.76,
+        "rr": 0.28,
+        "risk_pct": 9.9,
+        "atr_pct": 3.5
       },
       "regime": "sideways",
-      "rank": 64,
+      "rank": 58,
       "mark": {}
     },
     {
@@ -8419,7 +7651,7 @@
         "atr_pct": 1.6
       },
       "regime": "sideways",
-      "rank": 65,
+      "rank": 59,
       "mark": {}
     },
     {
@@ -8534,7 +7766,7 @@
         "atr_pct": 3.4
       },
       "regime": "sideways",
-      "rank": 66,
+      "rank": 60,
       "mark": {}
     },
     {
@@ -8656,122 +7888,7 @@
         "atr_pct": 7.1
       },
       "regime": "sideways",
-      "rank": 67,
-      "mark": {}
-    },
-    {
-      "code": "5871",
-      "name": "中租-KY",
-      "sector": "金融",
-      "asset_type": "other",
-      "close": 115.5,
-      "prev_close": 115.5,
-      "day_open": 111.5,
-      "day_high": 115.5,
-      "day_low": 111.5,
-      "lot_cost": 115500,
-      "chg_pct": 0.0,
-      "rsi": 54.43686003559891,
-      "vol_ratio": 1.298377861787032,
-      "volume": 9432964.0,
-      "vol_ma20": 7265191.65,
-      "ma5": 112.3,
-      "ma10": 112.45,
-      "ma20": 112.125,
-      "ma60": 115.45833333333333,
-      "ma20_slope": -1.9886363636363646,
-      "ma60_slope": 0.5005077614971709,
-      "bias20": 3.0100334448160515,
-      "pos20": 0.5555555555555556,
-      "pct_above_low20": 6.944444444444442,
-      "pct_below_high20": 5.1948051948051965,
-      "pct_below_high5": 0.0,
-      "pct_below_high60": 7.792207792207795,
-      "atr": 3.0198062555646454,
-      "atr_pct": 2.6145508706187406,
-      "macd_hist": 0.4769467971246042,
-      "target": 121.5,
-      "support": 112.125,
-      "score": 53.3,
-      "opportunity": 53.3,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 23.7,
-          "max": 25,
-          "ratio": 0.949
-        },
-        "trend": {
-          "points": 9.8,
-          "max": 20,
-          "ratio": 0.491
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 0.8,
-          "max": 15,
-          "ratio": 0.053
-        },
-        "rr": {
-          "points": 7.6,
-          "max": 15,
-          "ratio": 0.509
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★☆☆☆",
-        "entry": "★★★★★",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好；距前高仍有 5.2% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 2.3,
-      "swing_high": 5.2,
-      "upside_pct": 5.19,
-      "downside_pct": 2.92,
-      "rr_ratio": 1.78,
-      "reasons": [
-        "位於近 20 日區間 56% 位置，距前高還有 5.2% 空間，距 MA20 乖離 +3.0%",
-        "中期趨勢中性偏多，MA20 斜率 -2.0%",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 1.3 倍；爆量收黑，量增價跌是賣壓訊號，近月下跌日的量比上漲日大",
-        "上檔至 121.5 約 +5.2%，下檔支撐 112.1 約 −2.9%，風險報酬比 1.8:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 48.6,
-      "hist_raw": 48.4,
-      "hist_samples": 258,
-      "hist_avg_return": 1.17,
-      "hist_pf": 1.61,
-      "hist_mdd": -3.09,
-      "hist_source": "regime",
-      "hist_expectancy": 1.174,
-      "hist_confidence": 5,
-      "plan": {
-        "available": true,
-        "status": "等待確認",
-        "note": "型態尚未完成，先觀察",
-        "trigger": 115.65,
-        "invalidation": 111.35,
-        "stop": 110.75,
-        "target1": 120.18,
-        "target2": 123.2,
-        "rr": 0.92,
-        "risk_pct": 4.2,
-        "atr_pct": 2.6
-      },
-      "regime": "sideways",
-      "rank": 68,
+      "rank": 61,
       "mark": {}
     },
     {
@@ -8886,7 +8003,7 @@
         "atr_pct": 5.6
       },
       "regime": "sideways",
-      "rank": 69,
+      "rank": 62,
       "mark": {}
     },
     {
@@ -9001,7 +8118,7 @@
         "atr_pct": 4.0
       },
       "regime": "sideways",
-      "rank": 70,
+      "rank": 63,
       "mark": {}
     },
     {
@@ -9116,7 +8233,7 @@
         "atr_pct": 6.5
       },
       "regime": "sideways",
-      "rank": 71,
+      "rank": 64,
       "mark": {}
     },
     {
@@ -9231,7 +8348,7 @@
         "atr_pct": 3.5
       },
       "regime": "sideways",
-      "rank": 72,
+      "rank": 65,
       "mark": {}
     },
     {
@@ -9346,7 +8463,7 @@
         "atr_pct": 7.2
       },
       "regime": "sideways",
-      "rank": 73,
+      "rank": 66,
       "mark": {}
     },
     {
@@ -9461,7 +8578,7 @@
         "atr_pct": 3.3
       },
       "regime": "sideways",
-      "rank": 74,
+      "rank": 67,
       "mark": {}
     },
     {
@@ -9576,7 +8693,7 @@
         "atr_pct": 3.1
       },
       "regime": "sideways",
-      "rank": 75,
+      "rank": 68,
       "mark": {}
     },
     {
@@ -9691,7 +8808,7 @@
         "atr_pct": 2.9
       },
       "regime": "sideways",
-      "rank": 76,
+      "rank": 69,
       "mark": {}
     },
     {
@@ -9806,7 +8923,7 @@
         "atr_pct": 1.9
       },
       "regime": "sideways",
-      "rank": 77,
+      "rank": 70,
       "mark": {}
     },
     {
@@ -9921,7 +9038,7 @@
         "atr_pct": 2.3
       },
       "regime": "sideways",
-      "rank": 78,
+      "rank": 71,
       "mark": {}
     },
     {
@@ -10036,7 +9153,7 @@
         "atr_pct": 3.3
       },
       "regime": "sideways",
-      "rank": 79,
+      "rank": 72,
       "mark": {}
     },
     {
@@ -10158,7 +9275,7 @@
         "atr_pct": 6.4
       },
       "regime": "sideways",
-      "rank": 80,
+      "rank": 73,
       "mark": {}
     },
     {
@@ -10273,7 +9390,7 @@
         "atr_pct": 5.0
       },
       "regime": "sideways",
-      "rank": 81,
+      "rank": 74,
       "mark": {}
     },
     {
@@ -10388,7 +9505,7 @@
         "atr_pct": 5.5
       },
       "regime": "sideways",
-      "rank": 82,
+      "rank": 75,
       "mark": {}
     },
     {
@@ -10503,7 +9620,7 @@
         "atr_pct": 5.5
       },
       "regime": "sideways",
-      "rank": 83,
+      "rank": 76,
       "mark": {}
     },
     {
@@ -10618,7 +9735,7 @@
         "atr_pct": 5.4
       },
       "regime": "sideways",
-      "rank": 84,
+      "rank": 77,
       "mark": {}
     },
     {
@@ -10740,7 +9857,7 @@
         "atr_pct": 10.0
       },
       "regime": "sideways",
-      "rank": 85,
+      "rank": 78,
       "mark": {}
     },
     {
@@ -10855,7 +9972,7 @@
         "atr_pct": 3.2
       },
       "regime": "sideways",
-      "rank": 86,
+      "rank": 79,
       "mark": {}
     },
     {
@@ -10970,7 +10087,7 @@
         "atr_pct": 5.8
       },
       "regime": "sideways",
-      "rank": 87,
+      "rank": 80,
       "mark": {}
     },
     {
@@ -11085,7 +10202,122 @@
         "atr_pct": 3.3
       },
       "regime": "sideways",
-      "rank": 88,
+      "rank": 81,
+      "mark": {}
+    },
+    {
+      "code": "6005",
+      "name": "群益證",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 30.65,
+      "prev_close": 30.65,
+      "day_open": 30.35,
+      "day_high": 30.9,
+      "day_low": 30.2,
+      "lot_cost": 30650,
+      "chg_pct": 0.0,
+      "rsi": 36.00594860062838,
+      "vol_ratio": 0.4453639649983041,
+      "volume": 3692690.0,
+      "vol_ma20": 8291398.25,
+      "ma5": 30.47,
+      "ma10": 30.5,
+      "ma20": 32.247499999999995,
+      "ma60": 36.030833333333334,
+      "ma20_slope": -3.044197233914625,
+      "ma60_slope": -0.8393917849689014,
+      "bias20": -4.953872393208769,
+      "pos20": 0.1666666666666663,
+      "pct_above_low20": 3.5472972972972805,
+      "pct_below_high20": 17.128874388254477,
+      "pct_below_high5": 0.815660685154973,
+      "pct_below_high60": 48.613376835236544,
+      "atr": 1.0391469174689543,
+      "atr_pct": 3.3903651467176323,
+      "macd_hist": -0.061524593917670956,
+      "target": 35.9,
+      "support": 29.6,
+      "score": 48.9,
+      "opportunity": 48.9,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 24.6,
+          "max": 25,
+          "ratio": 0.984
+        },
+        "trend": {
+          "points": 0.5,
+          "max": 20,
+          "ratio": 0.023
+        },
+        "reversal": {
+          "points": 3.9,
+          "max": 15,
+          "ratio": 0.26
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 15.0,
+          "max": 15,
+          "ratio": 1.0
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "☆☆☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 17.1% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 7.7,
+      "swing_high": 17.1,
+      "upside_pct": 17.13,
+      "downside_pct": 3.43,
+      "rr_ratio": 5.0,
+      "reasons": [
+        "位於近 20 日區間 17% 位置，距前高還有 17.1% 空間，距 MA20 乖離 -5.0%",
+        "均線仍偏空排列，MA20 斜率 -3.0%",
+        "MACD 柱狀體改善、近期低點未再破",
+        "量能 0.4 倍，低於 20 日均量，買盤不足",
+        "上檔至 35.9 約 +17.1%，下檔支撐 29.6 約 −3.4%，風險報酬比 5.0:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 48.6,
+      "hist_raw": 48.4,
+      "hist_samples": 258,
+      "hist_avg_return": 1.17,
+      "hist_pf": 1.61,
+      "hist_mdd": -3.09,
+      "hist_source": "regime",
+      "hist_expectancy": 1.174,
+      "hist_confidence": 5,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 30.95,
+        "invalidation": 30.15,
+        "stop": 29.6,
+        "target1": 32.51,
+        "target2": 35.9,
+        "rr": 1.15,
+        "risk_pct": 4.4,
+        "atr_pct": 3.4
+      },
+      "regime": "sideways",
+      "rank": 82,
       "mark": {}
     },
     {
@@ -11200,7 +10432,129 @@
         "atr_pct": 4.9
       },
       "regime": "sideways",
-      "rank": 89,
+      "rank": 83,
+      "mark": {}
+    },
+    {
+      "code": "8150",
+      "name": "南茂",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 86.7,
+      "prev_close": 86.7,
+      "day_open": 88.0,
+      "day_high": 88.0,
+      "day_low": 86.3,
+      "lot_cost": 86700,
+      "chg_pct": 0.0,
+      "rsi": 45.56214000164257,
+      "vol_ratio": 0.2725390893502088,
+      "volume": 10194701.0,
+      "vol_ma20": 37406380.95,
+      "ma5": 87.53999999999999,
+      "ma10": 90.52000000000001,
+      "ma20": 85.52,
+      "ma60": 96.70833333333333,
+      "ma20_slope": -2.5746183640920517,
+      "ma60_slope": 1.1487640762821272,
+      "bias20": 1.379794200187101,
+      "pos20": 0.6231454005934718,
+      "pct_above_low20": 31.963470319634713,
+      "pct_below_high20": 14.648212226066892,
+      "pct_below_high5": 6.574394463667832,
+      "pct_below_high60": 44.17531718569781,
+      "atr": 6.155431758382962,
+      "atr_pct": 7.099690609438249,
+      "macd_hist": 0.30639438927065044,
+      "target": 99.4,
+      "support": 80.54456824161704,
+      "score": 48.6,
+      "opportunity": 48.7,
+      "risk": 0.4,
+      "breakdown": {
+        "entry": {
+          "points": 23.5,
+          "max": 25,
+          "ratio": 0.939
+        },
+        "trend": {
+          "points": 6.6,
+          "max": 20,
+          "ratio": 0.33
+        },
+        "reversal": {
+          "points": 1.8,
+          "max": 15,
+          "ratio": 0.12
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 11.9,
+          "max": 15,
+          "ratio": 0.796
+        }
+      },
+      "risk_items": [
+        {
+          "key": "far_from_low",
+          "level": 0.049,
+          "weight": 0.1,
+          "label": "已自 20 日低點上漲 32%"
+        }
+      ],
+      "stars": {
+        "trend": "★★☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 14.6% 空間；風險項目輕微。",
+      "main_risk": "已自 20 日低點上漲 32%",
+      "swing_low": 6.6,
+      "swing_high": 14.6,
+      "upside_pct": 14.65,
+      "downside_pct": 7.1,
+      "rr_ratio": 2.06,
+      "reasons": [
+        "位於近 20 日區間 62% 位置，距前高還有 14.6% 空間，距 MA20 乖離 +1.4%",
+        "均線仍偏空排列，MA20 斜率 -2.6%",
+        "近期低點未再破",
+        "量能 0.3 倍，低於 20 日均量，買盤不足",
+        "上檔至 99.4 約 +14.6%，下檔支撐 80.5 約 −7.1%，風險報酬比 2.1:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 48.6,
+      "hist_raw": 48.4,
+      "hist_samples": 258,
+      "hist_avg_return": 1.17,
+      "hist_pf": 1.61,
+      "hist_mdd": -3.09,
+      "hist_source": "regime",
+      "hist_expectancy": 1.174,
+      "hist_confidence": 5,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 88.31,
+        "invalidation": 85.99,
+        "stop": 80.54,
+        "target1": 97.54,
+        "target2": 103.7,
+        "rr": 1.19,
+        "risk_pct": 8.8,
+        "atr_pct": 7.1
+      },
+      "regime": "sideways",
+      "rank": 84,
       "mark": {}
     },
     {
@@ -11315,7 +10669,7 @@
         "atr_pct": 8.3
       },
       "regime": "sideways",
-      "rank": 90,
+      "rank": 85,
       "mark": {}
     },
     {
@@ -11430,7 +10784,7 @@
         "atr_pct": 2.4
       },
       "regime": "sideways",
-      "rank": 91,
+      "rank": 86,
       "mark": {}
     },
     {
@@ -11545,7 +10899,7 @@
         "atr_pct": 4.3
       },
       "regime": "sideways",
-      "rank": 92,
+      "rank": 87,
       "mark": {}
     },
     {
@@ -11660,7 +11014,7 @@
         "atr_pct": 5.9
       },
       "regime": "sideways",
-      "rank": 93,
+      "rank": 88,
       "mark": {}
     },
     {
@@ -11775,7 +11129,7 @@
         "atr_pct": 4.9
       },
       "regime": "sideways",
-      "rank": 94,
+      "rank": 89,
       "mark": {}
     },
     {
@@ -11890,7 +11244,7 @@
         "atr_pct": 7.1
       },
       "regime": "sideways",
-      "rank": 95,
+      "rank": 90,
       "mark": {}
     },
     {
@@ -12012,7 +11366,7 @@
         "atr_pct": 7.9
       },
       "regime": "sideways",
-      "rank": 96,
+      "rank": 91,
       "mark": {}
     },
     {
@@ -12127,7 +11481,7 @@
         "atr_pct": 5.9
       },
       "regime": "sideways",
-      "rank": 97,
+      "rank": 92,
       "mark": {}
     },
     {
@@ -12242,7 +11596,7 @@
         "atr_pct": 3.0
       },
       "regime": "sideways",
-      "rank": 98,
+      "rank": 93,
       "mark": {}
     },
     {
@@ -12357,7 +11711,7 @@
         "atr_pct": 4.9
       },
       "regime": "sideways",
-      "rank": 99,
+      "rank": 94,
       "mark": {}
     },
     {
@@ -12472,122 +11826,7 @@
         "atr_pct": 6.2
       },
       "regime": "sideways",
-      "rank": 100,
-      "mark": {}
-    },
-    {
-      "code": "9910",
-      "name": "豐泰",
-      "sector": "紡織",
-      "asset_type": "other",
-      "close": 70.4,
-      "prev_close": 70.4,
-      "day_open": 70.4,
-      "day_high": 70.8,
-      "day_low": 69.6,
-      "lot_cost": 70400,
-      "chg_pct": 0.0,
-      "rsi": 53.296646380385056,
-      "vol_ratio": 0.5884404164221295,
-      "volume": 841719.0,
-      "vol_ma20": 1430423.5,
-      "ma5": 69.82000000000001,
-      "ma10": 70.09,
-      "ma20": 69.55,
-      "ma60": 71.99833333333332,
-      "ma20_slope": 0.44771808203349917,
-      "ma60_slope": 0.28554183303926006,
-      "bias20": 1.2221423436376888,
-      "pos20": 0.5820895522388065,
-      "pct_above_low20": 5.86466165413535,
-      "pct_below_high20": 3.9772727272727293,
-      "pct_below_high5": 0.5681818181818121,
-      "pct_below_high60": 40.62499999999998,
-      "atr": 1.8512870523852576,
-      "atr_pct": 2.629669108501786,
-      "macd_hist": 0.17785574898365125,
-      "target": 73.2,
-      "support": 68.54871294761475,
-      "score": 45.2,
-      "opportunity": 45.2,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 21.4,
-          "max": 25,
-          "ratio": 0.856
-        },
-        "trend": {
-          "points": 8.7,
-          "max": 20,
-          "ratio": 0.437
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 4.6,
-          "max": 15,
-          "ratio": 0.304
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★☆☆☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好；距前高仍有 4.0% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 1.8,
-      "swing_high": 4.0,
-      "upside_pct": 3.98,
-      "downside_pct": 2.63,
-      "rr_ratio": 1.51,
-      "reasons": [
-        "位於近 20 日區間 58% 位置，距前高還有 4.0% 空間，距 MA20 乖離 +1.2%",
-        "均線仍偏空排列，MA20 斜率 +0.4%",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 0.6 倍，低於 20 日均量，買盤不足",
-        "上檔至 73.2 約 +4.0%，下檔支撐 68.5 約 −2.6%，風險報酬比 1.5:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 48.6,
-      "hist_raw": 48.4,
-      "hist_samples": 258,
-      "hist_avg_return": 1.17,
-      "hist_pf": 1.61,
-      "hist_mdd": -3.09,
-      "hist_source": "regime",
-      "hist_expectancy": 1.174,
-      "hist_confidence": 5,
-      "plan": {
-        "available": true,
-        "status": "等待確認",
-        "note": "型態尚未完成，先觀察",
-        "trigger": 70.89,
-        "invalidation": 69.51,
-        "stop": 68.55,
-        "target1": 73.2,
-        "target2": 75.52,
-        "rr": 0.98,
-        "risk_pct": 3.3,
-        "atr_pct": 2.6
-      },
-      "regime": "sideways",
-      "rank": 101,
+      "rank": 95,
       "mark": {}
     },
     {
@@ -12709,7 +11948,7 @@
         "atr_pct": 9.1
       },
       "regime": "sideways",
-      "rank": 102,
+      "rank": 96,
       "mark": {}
     },
     {
@@ -12824,7 +12063,7 @@
         "atr_pct": 4.9
       },
       "regime": "sideways",
-      "rank": 103,
+      "rank": 97,
       "mark": {}
     },
     {
@@ -12946,7 +12185,7 @@
         "atr_pct": 7.3
       },
       "regime": "sideways",
-      "rank": 104,
+      "rank": 98,
       "mark": {}
     },
     {
@@ -13061,7 +12300,7 @@
         "atr_pct": 5.0
       },
       "regime": "sideways",
-      "rank": 105,
+      "rank": 99,
       "mark": {}
     },
     {
@@ -13183,7 +12422,7 @@
         "atr_pct": 7.7
       },
       "regime": "sideways",
-      "rank": 106,
+      "rank": 100,
       "mark": {}
     },
     {
@@ -13298,129 +12537,7 @@
         "atr_pct": 4.3
       },
       "regime": "sideways",
-      "rank": 107,
-      "mark": {}
-    },
-    {
-      "code": "6446",
-      "name": "藥華藥",
-      "sector": "其他",
-      "asset_type": "other",
-      "close": 1400.0,
-      "prev_close": 1400.0,
-      "day_open": 1375.0,
-      "day_high": 1410.0,
-      "day_low": 1360.0,
-      "lot_cost": 1400000,
-      "chg_pct": 0.0,
-      "rsi": 57.7533339588518,
-      "vol_ratio": 0.43332816224371695,
-      "volume": 1610602.0,
-      "vol_ma20": 3716818.2,
-      "ma5": 1395.0,
-      "ma10": 1423.0,
-      "ma20": 1304.25,
-      "ma60": 1198.35,
-      "ma20_slope": 4.570054119061928,
-      "ma60_slope": 9.01854350825586,
-      "bias20": 7.3413839371286205,
-      "pos20": 0.719626168224299,
-      "pct_above_low20": 37.93103448275863,
-      "pct_below_high20": 10.71428571428572,
-      "pct_below_high5": 3.571428571428581,
-      "pct_below_high60": 12.142857142857144,
-      "atr": 88.04718737142805,
-      "atr_pct": 6.289084812244861,
-      "macd_hist": 1.598007614928818,
-      "target": 1550.0,
-      "support": 1311.952812628572,
-      "score": 52.0,
-      "opportunity": 52.3,
-      "risk": 1.8,
-      "breakdown": {
-        "entry": {
-          "points": 19.9,
-          "max": 25,
-          "ratio": 0.795
-        },
-        "trend": {
-          "points": 16.0,
-          "max": 20,
-          "ratio": 0.8
-        },
-        "reversal": {
-          "points": 1.8,
-          "max": 15,
-          "ratio": 0.12
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 9.4,
-          "max": 15,
-          "ratio": 0.628
-        }
-      },
-      "risk_items": [
-        {
-          "key": "far_from_low",
-          "level": 0.198,
-          "weight": 0.1,
-          "label": "已自 20 日低點上漲 38%"
-        }
-      ],
-      "stars": {
-        "trend": "★★★★☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +7.3%）",
-      "why": "進場位置好、趨勢結構強；距前高仍有 10.7% 空間；風險項目輕微。",
-      "main_risk": "已自 20 日低點上漲 38%",
-      "swing_low": 4.8,
-      "swing_high": 10.7,
-      "upside_pct": 10.71,
-      "downside_pct": 6.29,
-      "rr_ratio": 1.7,
-      "reasons": [
-        "位置 72%、距前高 10.7%、乖離 +7.3%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +4.6%）",
-        "近期低點未再破",
-        "量能 0.4 倍，低於 20 日均量，買盤不足",
-        "上檔至 1550.0 約 +10.7%，下檔支撐 1312.0 約 −6.3%，風險報酬比 1.7:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 51.9,
-      "hist_raw": 52.1,
-      "hist_samples": 167,
-      "hist_avg_return": 0.86,
-      "hist_pf": 1.25,
-      "hist_mdd": -5.14,
-      "hist_source": "regime",
-      "hist_expectancy": 0.861,
-      "hist_confidence": 4,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 1414.4,
-        "invalidation": 1355.6,
-        "stop": 1311.95,
-        "target1": 1546.47,
-        "target2": 1634.52,
-        "rr": 1.29,
-        "risk_pct": 7.2,
-        "atr_pct": 6.3
-      },
-      "regime": "sideways",
-      "rank": 108,
+      "rank": 101,
       "mark": {}
     },
     {
@@ -13542,122 +12659,7 @@
         "atr_pct": 7.0
       },
       "regime": "sideways",
-      "rank": 109,
-      "mark": {}
-    },
-    {
-      "code": "6919",
-      "name": "康霈*",
-      "sector": "其他",
-      "asset_type": "other",
-      "close": 113.5,
-      "prev_close": 113.5,
-      "day_open": 108.5,
-      "day_high": 118.0,
-      "day_low": 107.5,
-      "lot_cost": 113500,
-      "chg_pct": 0.0,
-      "rsi": 59.813439948213905,
-      "vol_ratio": 1.9692979599917964,
-      "volume": 11255400.0,
-      "vol_ma20": 5715437.8,
-      "ma5": 108.6,
-      "ma10": 107.2,
-      "ma20": 106.65,
-      "ma60": 102.86833333333333,
-      "ma20_slope": 1.6052970037631509,
-      "ma60_slope": 1.0395180565105022,
-      "bias20": 6.422878574777302,
-      "pos20": 0.770408163265306,
-      "pct_above_low20": 15.34552845528454,
-      "pct_below_high20": 3.96475770925111,
-      "pct_below_high5": 3.96475770925111,
-      "pct_below_high60": 5.726872246696035,
-      "atr": 6.235679034480894,
-      "atr_pct": 5.493990338749686,
-      "macd_hist": 0.5840228626695887,
-      "target": 118.0,
-      "support": 106.65,
-      "score": 51.1,
-      "opportunity": 51.1,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 16.3,
-          "max": 25,
-          "ratio": 0.652
-        },
-        "trend": {
-          "points": 17.6,
-          "max": 20,
-          "ratio": 0.88
-        },
-        "reversal": {
-          "points": 8.1,
-          "max": 15,
-          "ratio": 0.54
-        },
-        "volume": {
-          "points": 3.0,
-          "max": 15,
-          "ratio": 0.202
-        },
-        "rr": {
-          "points": 1.0,
-          "max": 15,
-          "ratio": 0.064
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★★☆",
-        "entry": "★★★☆☆",
-        "volume": "★☆☆☆☆",
-        "reversal": "★★★☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +6.4%）",
-      "why": "趨勢結構強、進場位置好；距前高仍有 4.0% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 1.8,
-      "swing_high": 4.0,
-      "upside_pct": 3.96,
-      "downside_pct": 6.04,
-      "rr_ratio": 0.66,
-      "reasons": [
-        "位置 77%、距前高 4.0%、乖離 +6.4%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +1.6%）",
-        "MA5 開始上彎、MA5 金叉 MA10、MACD 柱狀體改善、近期低點未再破",
-        "量能 2.0 倍；爆量收黑，量增價跌是賣壓訊號",
-        "上檔至 118.0 約 +4.0%，下檔支撐 106.7 約 −6.0%，風險報酬比 0.7:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 51.9,
-      "hist_raw": 52.1,
-      "hist_samples": 167,
-      "hist_avg_return": 0.86,
-      "hist_pf": 1.25,
-      "hist_mdd": -5.14,
-      "hist_source": "regime",
-      "hist_expectancy": 0.861,
-      "hist_confidence": 4,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 118.31,
-        "invalidation": 107.19,
-        "stop": 105.94,
-        "target1": 123.3,
-        "target2": 133.9,
-        "rr": 0.4,
-        "risk_pct": 10.5,
-        "atr_pct": 5.5
-      },
-      "regime": "sideways",
-      "rank": 110,
+      "rank": 102,
       "mark": {}
     },
     {
@@ -13779,129 +12781,7 @@
         "atr_pct": 6.8
       },
       "regime": "sideways",
-      "rank": 111,
-      "mark": {}
-    },
-    {
-      "code": "1303",
-      "name": "南亞",
-      "sector": "塑化",
-      "asset_type": "other",
-      "close": 192.0,
-      "prev_close": 192.0,
-      "day_open": 188.5,
-      "day_high": 193.5,
-      "day_low": 185.0,
-      "lot_cost": 192000,
-      "chg_pct": 0.0,
-      "rsi": 54.86341216442639,
-      "vol_ratio": 0.6001969650963369,
-      "volume": 54268548.0,
-      "vol_ma20": 90417898.05,
-      "ma5": 191.5,
-      "ma10": 193.35,
-      "ma20": 180.025,
-      "ma60": 163.51666666666668,
-      "ma20_slope": 0.15299026425590334,
-      "ma60_slope": 12.15904154377303,
-      "bias20": 6.651853909179284,
-      "pos20": 0.710691823899371,
-      "pct_above_low20": 41.697416974169734,
-      "pct_below_high20": 11.979166666666675,
-      "pct_below_high5": 6.510416666666674,
-      "pct_below_high60": 19.791666666666675,
-      "atr": 13.388733594329409,
-      "atr_pct": 6.9732987470465675,
-      "macd_hist": -0.2287558192159178,
-      "target": 215.0,
-      "support": 178.6112664056706,
-      "score": 50.1,
-      "opportunity": 50.6,
-      "risk": 2.7,
-      "breakdown": {
-        "entry": {
-          "points": 20.4,
-          "max": 25,
-          "ratio": 0.815
-        },
-        "trend": {
-          "points": 13.2,
-          "max": 20,
-          "ratio": 0.66
-        },
-        "reversal": {
-          "points": 2.4,
-          "max": 15,
-          "ratio": 0.16
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 9.5,
-          "max": 15,
-          "ratio": 0.635
-        }
-      },
-      "risk_items": [
-        {
-          "key": "far_from_low",
-          "level": 0.292,
-          "weight": 0.1,
-          "label": "已自 20 日低點上漲 42%"
-        }
-      ],
-      "stars": {
-        "trend": "★★★☆☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +6.7%）",
-      "why": "進場位置好、趨勢結構強；距前高仍有 12.0% 空間；風險項目輕微。",
-      "main_risk": "已自 20 日低點上漲 42%",
-      "swing_low": 5.4,
-      "swing_high": 12.0,
-      "upside_pct": 11.98,
-      "downside_pct": 6.97,
-      "rr_ratio": 1.72,
-      "reasons": [
-        "位於近 20 日區間 71% 位置，距前高還有 12.0% 空間，距 MA20 乖離 +6.7%",
-        "中期趨勢中性偏多，MA20 斜率 +0.2%",
-        "收盤重新站回 MA5",
-        "量能 0.6 倍，低於 20 日均量，買盤不足",
-        "上檔至 215.0 約 +12.0%，下檔支撐 178.6 約 −7.0%，風險報酬比 1.7:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 51.9,
-      "hist_raw": 52.1,
-      "hist_samples": 167,
-      "hist_avg_return": 0.86,
-      "hist_pf": 1.25,
-      "hist_mdd": -5.14,
-      "hist_source": "regime",
-      "hist_expectancy": 0.861,
-      "hist_confidence": 4,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 194.17,
-        "invalidation": 184.33,
-        "stop": 178.61,
-        "target1": 214.25,
-        "target2": 227.64,
-        "rr": 1.29,
-        "risk_pct": 8.0,
-        "atr_pct": 7.0
-      },
-      "regime": "sideways",
-      "rank": 112,
+      "rank": 103,
       "mark": {}
     },
     {
@@ -14025,7 +12905,7 @@
         "atr_pct": 6.9
       },
       "regime": "sideways",
-      "rank": 113,
+      "rank": 104,
       "mark": {}
     },
     {
@@ -14149,7 +13029,122 @@
         "atr_pct": 10.5
       },
       "regime": "sideways",
-      "rank": 114,
+      "rank": 105,
+      "mark": {}
+    },
+    {
+      "code": "5876",
+      "name": "上海商銀",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 44.15,
+      "prev_close": 44.15,
+      "day_open": 43.5,
+      "day_high": 44.15,
+      "day_low": 43.4,
+      "lot_cost": 44150,
+      "chg_pct": 0.0,
+      "rsi": 55.148466865469636,
+      "vol_ratio": 0.7408344079992235,
+      "volume": 6475010.0,
+      "vol_ma20": 8740158.3,
+      "ma5": 43.730000000000004,
+      "ma10": 43.144999999999996,
+      "ma20": 43.657500000000006,
+      "ma60": 43.071666666666665,
+      "ma20_slope": -1.1267127165666135,
+      "ma60_slope": 1.309341800933006,
+      "bias20": 1.1280994101815045,
+      "pos20": 0.6172839506172833,
+      "pct_above_low20": 6.002400960384158,
+      "pct_below_high20": 3.5107587768969495,
+      "pct_below_high5": 0.0,
+      "pct_below_high60": 6.681766704416758,
+      "atr": 0.9314134016103107,
+      "atr_pct": 2.109656628788926,
+      "macd_hist": 0.034442563700593884,
+      "target": 45.7,
+      "support": 43.218586598389685,
+      "score": 48.1,
+      "opportunity": 48.1,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 20.0,
+          "max": 25,
+          "ratio": 0.8
+        },
+        "trend": {
+          "points": 12.2,
+          "max": 20,
+          "ratio": 0.608
+        },
+        "reversal": {
+          "points": 6.0,
+          "max": 15,
+          "ratio": 0.4
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 5.2,
+          "max": 15,
+          "ratio": 0.344
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★★★☆☆",
+        "entry": "★★★★☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★★☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "多頭回檔",
+      "headline": "多頭回檔至支撐（乖離 +1.1%）",
+      "why": "進場位置好、趨勢結構強；距前高仍有 3.5% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 1.6,
+      "swing_high": 3.5,
+      "upside_pct": 3.51,
+      "downside_pct": 2.11,
+      "rr_ratio": 1.66,
+      "reasons": [
+        "位置 62%、距前高 3.5%、乖離 +1.1%，進場點普通",
+        "中期趨勢中性偏多，MA20 斜率 -1.1%",
+        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
+        "量能 0.7 倍，低於 20 日均量，買盤不足",
+        "上檔至 45.7 約 +3.5%，下檔支撐 43.2 約 −2.1%，風險報酬比 1.7:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 51.9,
+      "hist_raw": 52.1,
+      "hist_samples": 167,
+      "hist_avg_return": 0.86,
+      "hist_pf": 1.25,
+      "hist_mdd": -5.14,
+      "hist_source": "regime",
+      "hist_expectancy": 0.861,
+      "hist_confidence": 4,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 44.2,
+        "invalidation": 43.35,
+        "stop": 43.17,
+        "target1": 45.59,
+        "target2": 46.53,
+        "rr": 1.36,
+        "risk_pct": 2.3,
+        "atr_pct": 2.1
+      },
+      "regime": "sideways",
+      "rank": 106,
       "mark": {}
     },
     {
@@ -14271,7 +13266,7 @@
         "atr_pct": 7.7
       },
       "regime": "sideways",
-      "rank": 115,
+      "rank": 107,
       "mark": {}
     },
     {
@@ -14386,7 +13381,7 @@
         "atr_pct": 4.3
       },
       "regime": "sideways",
-      "rank": 116,
+      "rank": 108,
       "mark": {}
     },
     {
@@ -14516,7 +13511,7 @@
         "atr_pct": 7.7
       },
       "regime": "sideways",
-      "rank": 117,
+      "rank": 109,
       "mark": {}
     },
     {
@@ -14640,7 +13635,7 @@
         "atr_pct": 6.3
       },
       "regime": "sideways",
-      "rank": 118,
+      "rank": 110,
       "mark": {}
     },
     {
@@ -14771,7 +13766,7 @@
         "atr_pct": 8.5
       },
       "regime": "sideways",
-      "rank": 119,
+      "rank": 111,
       "mark": {}
     },
     {
@@ -14886,7 +13881,138 @@
         "atr_pct": 3.8
       },
       "regime": "sideways",
-      "rank": 120,
+      "rank": 112,
+      "mark": {}
+    },
+    {
+      "code": "6715",
+      "name": "嘉基",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 448.0,
+      "prev_close": 448.0,
+      "day_open": 498.0,
+      "day_high": 500.0,
+      "day_low": 443.0,
+      "lot_cost": 448000,
+      "chg_pct": 0.0,
+      "rsi": 58.0358256072736,
+      "vol_ratio": 1.8671752557377665,
+      "volume": 1959487.0,
+      "vol_ma20": 1049439.25,
+      "ma5": 450.9,
+      "ma10": 419.35,
+      "ma20": 379.925,
+      "ma60": 414.7583333333333,
+      "ma20_slope": 3.1633969180639543,
+      "ma60_slope": -2.1642553860669933,
+      "bias20": 17.91801013357899,
+      "pos20": 0.7523809523809524,
+      "pct_above_low20": 54.48275862068965,
+      "pct_below_high20": 11.607142857142861,
+      "pct_below_high5": 11.607142857142861,
+      "pct_below_high60": 27.00892857142858,
+      "atr": 40.407690068406865,
+      "atr_pct": 9.019573675983676,
+      "macd_hist": 13.098922068819258,
+      "target": 500.0,
+      "support": 379.925,
+      "score": 46.0,
+      "opportunity": 48.3,
+      "risk": 13.2,
+      "breakdown": {
+        "entry": {
+          "points": 15.3,
+          "max": 25,
+          "ratio": 0.61
+        },
+        "trend": {
+          "points": 16.8,
+          "max": 20,
+          "ratio": 0.84
+        },
+        "reversal": {
+          "points": 3.9,
+          "max": 15,
+          "ratio": 0.26
+        },
+        "volume": {
+          "points": 3.0,
+          "max": 15,
+          "ratio": 0.199
+        },
+        "rr": {
+          "points": 4.5,
+          "max": 15,
+          "ratio": 0.3
+        }
+      },
+      "risk_items": [
+        {
+          "key": "ma20_bias",
+          "level": 0.528,
+          "weight": 0.16,
+          "label": "距 MA20 正乖離 17.9%，回測均線的空間大"
+        },
+        {
+          "key": "far_from_low",
+          "level": 0.612,
+          "weight": 0.1,
+          "label": "已自 20 日低點上漲 54%"
+        }
+      ],
+      "stars": {
+        "trend": "★★★★☆",
+        "entry": "★★★☆☆",
+        "volume": "★☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "★☆☆☆☆"
+      },
+      "risk_level": "中低",
+      "kind": "多頭回檔",
+      "headline": "多頭回檔至支撐（乖離 +17.9%）",
+      "why": "趨勢結構強、進場位置好；距前高仍有 11.6% 空間；但距 MA20 正乖離 17.9%，回測均線的空間大。",
+      "main_risk": "距 MA20 正乖離 17.9%，回測均線的空間大",
+      "swing_low": 5.2,
+      "swing_high": 11.6,
+      "upside_pct": 11.61,
+      "downside_pct": 15.2,
+      "rr_ratio": 0.76,
+      "reasons": [
+        "位置 75%、距前高 11.6%、乖離 +17.9%，進場點普通",
+        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +3.2%）",
+        "MA5 開始上彎、近期低點未再破",
+        "量能 1.9 倍；爆量收黑，量增價跌是賣壓訊號，近月上漲日均量為下跌日的 1.2 倍",
+        "上檔至 500.0 約 +11.6%，下檔支撐 379.9 約 −15.2%，風險報酬比 0.8:1"
+      ],
+      "flags": [
+        "距 MA20 正乖離 17.9%，回測均線的空間大",
+        "已自 20 日低點上漲 54%"
+      ],
+      "hist_calibrated": 51.9,
+      "hist_raw": 52.1,
+      "hist_samples": 167,
+      "hist_avg_return": 0.86,
+      "hist_pf": 1.25,
+      "hist_mdd": -5.14,
+      "hist_source": "regime",
+      "hist_expectancy": 0.861,
+      "hist_confidence": 4,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 502.02,
+        "invalidation": 440.98,
+        "stop": 379.93,
+        "target1": 534.35,
+        "target2": 603.04,
+        "rr": 0.26,
+        "risk_pct": 24.3,
+        "atr_pct": 9.0
+      },
+      "regime": "sideways",
+      "rank": 113,
       "mark": {}
     },
     {
@@ -15016,7 +14142,7 @@
         "atr_pct": 6.4
       },
       "regime": "sideways",
-      "rank": 121,
+      "rank": 114,
       "mark": {}
     },
     {
@@ -15138,7 +14264,7 @@
         "atr_pct": 2.4
       },
       "regime": "sideways",
-      "rank": 122,
+      "rank": 115,
       "mark": {}
     },
     {
@@ -15268,7 +14394,7 @@
         "atr_pct": 6.7
       },
       "regime": "sideways",
-      "rank": 123,
+      "rank": 116,
       "mark": {}
     },
     {
@@ -15396,122 +14522,7 @@
         "atr_pct": 5.7
       },
       "regime": "sideways",
-      "rank": 124,
-      "mark": {}
-    },
-    {
-      "code": "2610",
-      "name": "華航",
-      "sector": "航空",
-      "asset_type": "other",
-      "close": 20.4,
-      "prev_close": 20.4,
-      "day_open": 20.15,
-      "day_high": 20.5,
-      "day_low": 20.0,
-      "lot_cost": 20400,
-      "chg_pct": 0.0,
-      "rsi": 44.34274317421441,
-      "vol_ratio": 0.6361115766019988,
-      "volume": 27868101.0,
-      "vol_ma20": 43810083.05,
-      "ma5": 20.16,
-      "ma10": 20.154999999999998,
-      "ma20": 21.085,
-      "ma60": 21.197499999999998,
-      "ma20_slope": -1.0210069240699449,
-      "ma60_slope": 1.2982358329019172,
-      "bias20": -3.248755039127349,
-      "pos20": 0.18333333333333238,
-      "pct_above_low20": 2.7707808564231495,
-      "pct_below_high20": 12.00980392156865,
-      "pct_below_high5": 0.4901960784313708,
-      "pct_below_high60": 21.323529411764717,
-      "atr": 0.5851792092676994,
-      "atr_pct": 2.8685255356259773,
-      "macd_hist": -0.08619063051230497,
-      "target": 22.85,
-      "support": 19.8148207907323,
-      "score": 58.5,
-      "opportunity": 58.5,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 25.0,
-          "max": 25,
-          "ratio": 1.0
-        },
-        "trend": {
-          "points": 4.5,
-          "max": 20,
-          "ratio": 0.227
-        },
-        "reversal": {
-          "points": 8.1,
-          "max": 15,
-          "ratio": 0.54
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 15.0,
-          "max": 15,
-          "ratio": 1.0
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★☆☆☆☆",
-        "entry": "★★★★★",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★★☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "低檔止跌轉強",
-      "headline": "低檔轉強（RSI 44）",
-      "why": "進場位置好、風險報酬比佳；距前高仍有 12.0% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 5.4,
-      "swing_high": 12.0,
-      "upside_pct": 12.01,
-      "downside_pct": 2.87,
-      "rr_ratio": 4.19,
-      "reasons": [
-        "位於近 20 日區間 18% 位置，距前高還有 12.0% 空間，距 MA20 乖離 -3.2%",
-        "均線仍偏空排列，MA20 斜率 -1.0%",
-        "MA5 開始上彎、MA5 金叉 MA10、MACD 柱狀體改善、近期低點未再破",
-        "量能 0.6 倍，低於 20 日均量，買盤不足",
-        "上檔至 22.9 約 +12.0%，下檔支撐 19.8 約 −2.9%，風險報酬比 4.2:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 49.4,
-      "hist_raw": 49.2,
-      "hist_samples": 63,
-      "hist_avg_return": 0.74,
-      "hist_pf": 1.43,
-      "hist_mdd": -3.06,
-      "hist_source": "regime",
-      "hist_expectancy": 0.736,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "可觀察進場",
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 20.53,
-        "invalidation": 19.97,
-        "stop": 19.81,
-        "target1": 21.41,
-        "target2": 22.85,
-        "rr": 1.23,
-        "risk_pct": 3.5,
-        "atr_pct": 2.9
-      },
-      "regime": "sideways",
-      "rank": 125,
+      "rank": 117,
       "mark": {}
     },
     {
@@ -15626,7 +14637,7 @@
         "atr_pct": 3.7
       },
       "regime": "sideways",
-      "rank": 126,
+      "rank": 118,
       "mark": {}
     },
     {
@@ -15741,7 +14752,7 @@
         "atr_pct": 7.6
       },
       "regime": "sideways",
-      "rank": 127,
+      "rank": 119,
       "mark": {}
     },
     {
@@ -15865,7 +14876,7 @@
         "atr_pct": 2.2
       },
       "regime": "sideways",
-      "rank": 128,
+      "rank": 120,
       "mark": {}
     },
     {
@@ -15980,7 +14991,7 @@
         "atr_pct": 5.4
       },
       "regime": "sideways",
-      "rank": 129,
+      "rank": 121,
       "mark": {}
     },
     {
@@ -16095,7 +15106,7 @@
         "atr_pct": 5.4
       },
       "regime": "sideways",
-      "rank": 130,
+      "rank": 122,
       "mark": {}
     },
     {
@@ -16210,7 +15221,7 @@
         "atr_pct": 8.7
       },
       "regime": "sideways",
-      "rank": 131,
+      "rank": 123,
       "mark": {}
     },
     {
@@ -16325,122 +15336,7 @@
         "atr_pct": 8.0
       },
       "regime": "sideways",
-      "rank": 132,
-      "mark": {}
-    },
-    {
-      "code": "1326",
-      "name": "台化",
-      "sector": "塑化",
-      "asset_type": "other",
-      "close": 60.1,
-      "prev_close": 60.1,
-      "day_open": 59.0,
-      "day_high": 60.3,
-      "day_low": 58.2,
-      "lot_cost": 60100,
-      "chg_pct": 0.0,
-      "rsi": 50.80746365467058,
-      "vol_ratio": 0.7140795438816899,
-      "volume": 19453470.0,
-      "vol_ma20": 27242721.3,
-      "ma5": 58.94,
-      "ma10": 59.17999999999999,
-      "ma20": 58.69500000000001,
-      "ma60": 58.729166666666664,
-      "ma20_slope": -3.983314248323244,
-      "ma60_slope": 4.178985335856189,
-      "bias20": 2.393730300707042,
-      "pos20": 0.6301369863013703,
-      "pct_above_low20": 8.288288288288292,
-      "pct_below_high20": 4.492512479201327,
-      "pct_below_high5": 2.1630615640598982,
-      "pct_below_high60": 29.118136439267882,
-      "atr": 3.104108643213098,
-      "atr_pct": 5.164906228307983,
-      "macd_hist": 0.025095529825804097,
-      "target": 62.8,
-      "support": 56.995891356786906,
-      "score": 44.0,
-      "opportunity": 44.0,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 21.1,
-          "max": 25,
-          "ratio": 0.846
-        },
-        "trend": {
-          "points": 11.0,
-          "max": 20,
-          "ratio": 0.549
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 1.5,
-          "max": 15,
-          "ratio": 0.1
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★☆☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好、趨勢結構強；距前高仍有 4.5% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 2.0,
-      "swing_high": 4.5,
-      "upside_pct": 4.49,
-      "downside_pct": 5.16,
-      "rr_ratio": 0.87,
-      "reasons": [
-        "位於近 20 日區間 63% 位置，距前高還有 4.5% 空間，距 MA20 乖離 +2.4%",
-        "中期趨勢中性偏多，MA20 斜率 -4.0%",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 0.7 倍，低於 20 日均量，買盤不足",
-        "上檔至 62.8 約 +4.5%，下檔支撐 57.0 約 −5.2%，風險報酬比 0.9:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 46.6,
-      "hist_raw": 45.9,
-      "hist_samples": 111,
-      "hist_avg_return": 0.03,
-      "hist_pf": 1.02,
-      "hist_mdd": -2.33,
-      "hist_source": "regime",
-      "hist_expectancy": 0.03,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "等待確認",
-        "note": "型態尚未完成，先觀察",
-        "trigger": 60.46,
-        "invalidation": 58.04,
-        "stop": 57.0,
-        "target1": 62.94,
-        "target2": 68.22,
-        "rr": 0.72,
-        "risk_pct": 5.7,
-        "atr_pct": 5.2
-      },
-      "regime": "sideways",
-      "rank": 133,
+      "rank": 124,
       "mark": {}
     },
     {
@@ -16555,7 +15451,7 @@
         "atr_pct": 6.5
       },
       "regime": "sideways",
-      "rank": 134,
+      "rank": 125,
       "mark": {}
     },
     {
@@ -16670,7 +15566,7 @@
         "atr_pct": 3.5
       },
       "regime": "sideways",
-      "rank": 135,
+      "rank": 126,
       "mark": {}
     },
     {
@@ -16785,7 +15681,7 @@
         "atr_pct": 5.6
       },
       "regime": "sideways",
-      "rank": 136,
+      "rank": 127,
       "mark": {}
     },
     {
@@ -16909,7 +15805,122 @@
         "atr_pct": 7.6
       },
       "regime": "sideways",
-      "rank": 137,
+      "rank": 128,
+      "mark": {}
+    },
+    {
+      "code": "2404",
+      "name": "漢唐",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 1060.0,
+      "prev_close": 1060.0,
+      "day_open": 1075.0,
+      "day_high": 1080.0,
+      "day_low": 1050.0,
+      "lot_cost": 1060000,
+      "chg_pct": 0.0,
+      "rsi": 38.93013177513649,
+      "vol_ratio": 0.45368952167388166,
+      "volume": 835869.0,
+      "vol_ma20": 1842381.1,
+      "ma5": 1081.0,
+      "ma10": 1110.0,
+      "ma20": 1101.75,
+      "ma60": 1190.1666666666667,
+      "ma20_slope": -1.4314471035562493,
+      "ma60_slope": -0.16776177827484418,
+      "bias20": -3.7894259133197217,
+      "pos20": 0.4146341463414634,
+      "pct_above_low20": 8.717948717948708,
+      "pct_below_high20": 11.32075471698113,
+      "pct_below_high5": 8.962264150943389,
+      "pct_below_high60": 36.79245283018868,
+      "atr": 54.77033916090972,
+      "atr_pct": 5.16701312838771,
+      "macd_hist": -3.6373272220783512,
+      "target": 1180.0,
+      "support": 1005.2296608390902,
+      "score": 43.2,
+      "opportunity": 43.2,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 25.0,
+          "max": 25,
+          "ratio": 1.0
+        },
+        "trend": {
+          "points": 1.0,
+          "max": 20,
+          "ratio": 0.051
+        },
+        "reversal": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 12.8,
+          "max": 15,
+          "ratio": 0.856
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "☆☆☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "☆☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 11.3% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 5.1,
+      "swing_high": 11.3,
+      "upside_pct": 11.32,
+      "downside_pct": 5.17,
+      "rr_ratio": 2.19,
+      "reasons": [
+        "位於近 20 日區間 41% 位置，距前高還有 11.3% 空間，距 MA20 乖離 -3.8%",
+        "均線仍偏空排列，MA20 斜率 -1.4%",
+        "尚未出現明確的轉強訊號",
+        "量能 0.5 倍，低於 20 日均量，買盤不足",
+        "上檔至 1180.0 約 +11.3%，下檔支撐 1005.2 約 −5.2%，風險報酬比 2.2:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 46.6,
+      "hist_raw": 45.9,
+      "hist_samples": 111,
+      "hist_avg_return": 0.03,
+      "hist_pf": 1.02,
+      "hist_mdd": -2.33,
+      "hist_source": "regime",
+      "hist_expectancy": 0.03,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 1082.74,
+        "invalidation": 1047.26,
+        "stop": 1005.23,
+        "target1": 1164.89,
+        "target2": 1219.66,
+        "rr": 1.06,
+        "risk_pct": 7.2,
+        "atr_pct": 5.2
+      },
+      "regime": "sideways",
+      "rank": 129,
       "mark": {}
     },
     {
@@ -17033,129 +16044,7 @@
         "atr_pct": 7.7
       },
       "regime": "sideways",
-      "rank": 138,
-      "mark": {}
-    },
-    {
-      "code": "2105",
-      "name": "正新",
-      "sector": "橡膠",
-      "asset_type": "other",
-      "close": 31.55,
-      "prev_close": 31.55,
-      "day_open": 31.45,
-      "day_high": 31.8,
-      "day_low": 31.35,
-      "lot_cost": 31550,
-      "chg_pct": 0.0,
-      "rsi": 52.96621891677791,
-      "vol_ratio": 0.566930805483496,
-      "volume": 4465557.0,
-      "vol_ma20": 7876723.15,
-      "ma5": 31.35,
-      "ma10": 31.250000000000007,
-      "ma20": 30.997500000000002,
-      "ma60": 31.800833333333333,
-      "ma20_slope": 0.0,
-      "ma60_slope": -0.42012421063618577,
-      "bias20": 1.7824018065973002,
-      "pos20": 0.6595744680851063,
-      "pct_above_low20": 5.166666666666675,
-      "pct_below_high20": 2.535657686212356,
-      "pct_below_high5": 0.7923930269413626,
-      "pct_below_high60": 11.88589540412044,
-      "atr": 0.6982783525531339,
-      "atr_pct": 2.2132435897088234,
-      "macd_hist": 0.09171437463003942,
-      "target": 32.35,
-      "support": 30.851721647446865,
-      "score": 42.5,
-      "opportunity": 42.7,
-      "risk": 2.0,
-      "breakdown": {
-        "entry": {
-          "points": 17.7,
-          "max": 25,
-          "ratio": 0.708
-        },
-        "trend": {
-          "points": 11.7,
-          "max": 20,
-          "ratio": 0.583
-        },
-        "reversal": {
-          "points": 8.1,
-          "max": 15,
-          "ratio": 0.54
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 1.0,
-          "max": 15,
-          "ratio": 0.068
-        }
-      },
-      "risk_items": [
-        {
-          "key": "near_high",
-          "level": 0.155,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 2.5%，追高空間有限"
-        }
-      ],
-      "stars": {
-        "trend": "★★★☆☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★★☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好、趨勢結構強；距前高僅剩 2.5%；風險項目輕微。",
-      "main_risk": "距 20 日高點僅 2.5%，追高空間有限",
-      "swing_low": 1.1,
-      "swing_high": 2.5,
-      "upside_pct": 2.54,
-      "downside_pct": 2.21,
-      "rr_ratio": 1.15,
-      "reasons": [
-        "位置 66%、距前高 2.5%、乖離 +1.8%，進場點普通",
-        "中期趨勢中性偏多，MA20 斜率 +0.0%",
-        "MA5 開始上彎、MA5 金叉 MA10、MACD 柱狀體改善、近期低點未再破",
-        "量能 0.6 倍，低於 20 日均量，買盤不足",
-        "上檔至 32.4 約 +2.5%，下檔支撐 30.9 約 −2.2%，風險報酬比 1.1:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 46.6,
-      "hist_raw": 45.9,
-      "hist_samples": 111,
-      "hist_avg_return": 0.03,
-      "hist_pf": 1.02,
-      "hist_mdd": -2.33,
-      "hist_source": "regime",
-      "hist_expectancy": 0.03,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "等待確認",
-        "note": "型態尚未完成，先觀察",
-        "trigger": 31.83,
-        "invalidation": 31.32,
-        "stop": 30.85,
-        "target1": 32.39,
-        "target2": 33.58,
-        "rr": 0.57,
-        "risk_pct": 3.1,
-        "atr_pct": 2.2
-      },
-      "regime": "sideways",
-      "rank": 139,
+      "rank": 130,
       "mark": {}
     },
     {
@@ -17270,7 +16159,7 @@
         "atr_pct": 2.3
       },
       "regime": "sideways",
-      "rank": 140,
+      "rank": 131,
       "mark": {}
     },
     {
@@ -17385,7 +16274,7 @@
         "atr_pct": 6.6
       },
       "regime": "sideways",
-      "rank": 141,
+      "rank": 132,
       "mark": {}
     },
     {
@@ -17507,7 +16396,7 @@
         "atr_pct": 9.2
       },
       "regime": "sideways",
-      "rank": 142,
+      "rank": 133,
       "mark": {}
     },
     {
@@ -17629,7 +16518,7 @@
         "atr_pct": 9.3
       },
       "regime": "sideways",
-      "rank": 143,
+      "rank": 134,
       "mark": {}
     },
     {
@@ -17744,7 +16633,7 @@
         "atr_pct": 6.8
       },
       "regime": "sideways",
-      "rank": 144,
+      "rank": 135,
       "mark": {}
     },
     {
@@ -17866,129 +16755,7 @@
         "atr_pct": 6.0
       },
       "regime": "sideways",
-      "rank": 145,
-      "mark": {}
-    },
-    {
-      "code": "2002",
-      "name": "中鋼",
-      "sector": "鋼鐵",
-      "asset_type": "other",
-      "close": 19.45,
-      "prev_close": 19.45,
-      "day_open": 19.15,
-      "day_high": 19.5,
-      "day_low": 19.15,
-      "lot_cost": 19450,
-      "chg_pct": 0.0,
-      "rsi": 58.47963982087724,
-      "vol_ratio": 0.7470016392136344,
-      "volume": 31436536.0,
-      "vol_ma20": 42083623.85,
-      "ma5": 19.229999999999997,
-      "ma10": 19.27,
-      "ma20": 19.1425,
-      "ma60": 18.97833333333333,
-      "ma20_slope": 0.26188293832656306,
-      "ma60_slope": 0.5563405157188006,
-      "bias20": 1.6063732532323405,
-      "pos20": 0.6400000000000006,
-      "pct_above_low20": 4.289544235924936,
-      "pct_below_high20": 2.3136246786632286,
-      "pct_below_high5": 0.7712082262210984,
-      "pct_below_high60": 2.570694087403602,
-      "atr": 0.3517573137677119,
-      "atr_pct": 1.8085208934072592,
-      "macd_hist": 0.015295147448329466,
-      "target": 19.9,
-      "support": 19.098242686232286,
-      "score": 40.6,
-      "opportunity": 41.0,
-      "risk": 2.9,
-      "breakdown": {
-        "entry": {
-          "points": 17.8,
-          "max": 25,
-          "ratio": 0.711
-        },
-        "trend": {
-          "points": 11.1,
-          "max": 20,
-          "ratio": 0.557
-        },
-        "reversal": {
-          "points": 6.0,
-          "max": 15,
-          "ratio": 0.4
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 2.0,
-          "max": 15,
-          "ratio": 0.13
-        }
-      },
-      "risk_items": [
-        {
-          "key": "near_high",
-          "level": 0.229,
-          "weight": 0.14,
-          "label": "距 20 日高點僅 2.3%，追高空間有限"
-        }
-      ],
-      "stars": {
-        "trend": "★★★☆☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★★☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好、趨勢結構強；距前高僅剩 2.3%；風險項目輕微。",
-      "main_risk": "距 20 日高點僅 2.3%，追高空間有限",
-      "swing_low": 1.0,
-      "swing_high": 2.3,
-      "upside_pct": 2.31,
-      "downside_pct": 1.81,
-      "rr_ratio": 1.28,
-      "reasons": [
-        "位置 64%、距前高 2.3%、乖離 +1.6%，進場點普通",
-        "中期趨勢中性偏多，MA20 斜率 +0.3%",
-        "MA5 開始上彎、MACD 柱狀體改善、近期低點未再破",
-        "量能 0.7 倍，低於 20 日均量，買盤不足",
-        "上檔至 19.9 約 +2.3%，下檔支撐 19.1 約 −1.8%，風險報酬比 1.3:1"
-      ],
-      "flags": [],
-      "hist_calibrated": 46.6,
-      "hist_raw": 45.9,
-      "hist_samples": 111,
-      "hist_avg_return": 0.03,
-      "hist_pf": 1.02,
-      "hist_mdd": -2.33,
-      "hist_source": "regime",
-      "hist_expectancy": 0.03,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "status": "等待確認",
-        "note": "型態尚未完成，先觀察",
-        "trigger": 19.52,
-        "invalidation": 19.13,
-        "stop": 19.06,
-        "target1": 19.9,
-        "target2": 20.4,
-        "rr": 0.84,
-        "risk_pct": 2.3,
-        "atr_pct": 1.8
-      },
-      "regime": "sideways",
-      "rank": 146,
+      "rank": 136,
       "mark": {}
     },
     {
@@ -18112,7 +16879,7 @@
         "atr_pct": 1.7
       },
       "regime": "sideways",
-      "rank": 147,
+      "rank": 137,
       "mark": {}
     },
     {
@@ -18227,7 +16994,7 @@
         "atr_pct": 5.6
       },
       "regime": "sideways",
-      "rank": 148,
+      "rank": 138,
       "mark": {}
     },
     {
@@ -18342,55 +17109,55 @@
         "atr_pct": 6.0
       },
       "regime": "sideways",
-      "rank": 149,
+      "rank": 139,
       "mark": {}
     },
     {
-      "code": "1802",
-      "name": "台玻",
+      "code": "4977",
+      "name": "眾達-KY",
       "sector": "其他",
       "asset_type": "other",
-      "close": 57.6,
-      "prev_close": 57.6,
-      "day_open": 57.9,
-      "day_high": 57.9,
-      "day_low": 56.1,
-      "lot_cost": 57600,
+      "close": 150.5,
+      "prev_close": 150.5,
+      "day_open": 159.0,
+      "day_high": 160.0,
+      "day_low": 150.0,
+      "lot_cost": 150500,
       "chg_pct": 0.0,
-      "rsi": 52.56459359695448,
-      "vol_ratio": 0.7890262826626241,
-      "volume": 24675666.0,
-      "vol_ma20": 31273566.6,
-      "ma5": 57.3,
-      "ma10": 57.35999999999999,
-      "ma20": 53.5125,
-      "ma60": 61.295833333333334,
-      "ma20_slope": 1.8073721759809702,
-      "ma60_slope": -2.911788387164893,
-      "bias20": 7.638402242466702,
-      "pos20": 0.8077922077922081,
-      "pct_above_low20": 36.979785969084446,
-      "pct_below_high20": 6.423611111111094,
-      "pct_below_high5": 6.423611111111094,
-      "pct_below_high60": 36.111111111111114,
-      "atr": 3.2637670957370304,
-      "atr_pct": 5.6662623189879,
-      "macd_hist": 0.8869372915037408,
-      "target": 61.3,
-      "support": 54.2,
-      "score": 37.4,
-      "opportunity": 37.6,
-      "risk": 1.6,
+      "rsi": 52.502017612910755,
+      "vol_ratio": 1.6923777504314206,
+      "volume": 6080444.0,
+      "vol_ma20": 3592840.9,
+      "ma5": 150.7,
+      "ma10": 150.75,
+      "ma20": 138.925,
+      "ma60": 158.83333333333334,
+      "ma20_slope": 2.907407407407425,
+      "ma60_slope": -6.417243580301458,
+      "bias20": 8.331833723231941,
+      "pos20": 0.8125,
+      "pct_above_low20": 43.333333333333336,
+      "pct_below_high20": 6.976744186046502,
+      "pct_below_high5": 6.312292358803995,
+      "pct_below_high60": 54.48504983388705,
+      "atr": 10.4675398552639,
+      "atr_pct": 6.955175983564052,
+      "macd_hist": 2.502446351950446,
+      "target": 161.0,
+      "support": 140.0324601447361,
+      "score": 37.9,
+      "opportunity": 38.4,
+      "risk": 3.0,
       "breakdown": {
         "entry": {
-          "points": 17.9,
+          "points": 17.5,
           "max": 25,
-          "ratio": 0.715
+          "ratio": 0.698
         },
         "trend": {
-          "points": 10.1,
+          "points": 10.4,
           "max": 20,
-          "ratio": 0.504
+          "ratio": 0.52
         },
         "reversal": {
           "points": 1.8,
@@ -18398,27 +17165,27 @@
           "ratio": 0.12
         },
         "volume": {
-          "points": 0.0,
+          "points": 0.9,
           "max": 15,
-          "ratio": 0.0
+          "ratio": 0.058
         },
         "rr": {
           "points": 4.0,
           "max": 15,
-          "ratio": 0.269
+          "ratio": 0.267
         }
       },
       "risk_items": [
         {
           "key": "far_from_low",
-          "level": 0.174,
+          "level": 0.333,
           "weight": 0.1,
-          "label": "已自 20 日低點上漲 37%"
+          "label": "已自 20 日低點上漲 43%"
         }
       ],
       "stars": {
         "trend": "★★★☆☆",
-        "entry": "★★★★☆",
+        "entry": "★★★☆☆",
         "volume": "☆☆☆☆☆",
         "reversal": "★☆☆☆☆",
         "risk": "☆☆☆☆☆"
@@ -18426,19 +17193,19 @@
       "risk_level": "低",
       "kind": "區間整理",
       "headline": "區間整理，訊號中性",
-      "why": "進場位置好、趨勢結構強；距前高仍有 6.4% 空間；風險項目輕微。",
-      "main_risk": "已自 20 日低點上漲 37%",
-      "swing_low": 2.9,
-      "swing_high": 6.4,
-      "upside_pct": 6.42,
-      "downside_pct": 5.9,
-      "rr_ratio": 1.09,
+      "why": "進場位置好、趨勢結構強；距前高仍有 7.0% 空間；風險項目輕微。",
+      "main_risk": "已自 20 日低點上漲 43%",
+      "swing_low": 3.1,
+      "swing_high": 7.0,
+      "upside_pct": 6.98,
+      "downside_pct": 6.96,
+      "rr_ratio": 1.0,
       "reasons": [
-        "位置 81%、距前高 6.4%、乖離 +7.6%，進場點普通",
-        "中期趨勢中性偏多，MA20 斜率 +1.8%",
+        "位置 81%、距前高 7.0%、乖離 +8.3%，進場點普通",
+        "中期趨勢中性偏多，MA20 斜率 +2.9%",
         "近期低點未再破",
-        "量能 0.8 倍，低於 20 日均量，買盤不足",
-        "上檔至 61.3 約 +6.4%，下檔支撐 54.2 約 −5.9%，風險報酬比 1.1:1"
+        "量能 1.7 倍；爆量收黑，量增價跌是賣壓訊號，且收盤跌破 MA5／MA10",
+        "上檔至 161.0 約 +7.0%，下檔支撐 140.0 約 −7.0%，風險報酬比 1.0:1"
       ],
       "flags": [],
       "hist_calibrated": 46.6,
@@ -18454,17 +17221,17 @@
         "available": true,
         "status": "等待確認",
         "note": "型態尚未完成，先觀察",
-        "trigger": 58.06,
-        "invalidation": 55.94,
-        "stop": 54.2,
-        "target1": 61.3,
-        "target2": 66.22,
-        "rr": 0.84,
-        "risk_pct": 6.7,
-        "atr_pct": 5.7
+        "trigger": 160.52,
+        "invalidation": 149.48,
+        "stop": 140.03,
+        "target1": 168.9,
+        "target2": 186.69,
+        "rr": 0.41,
+        "risk_pct": 12.8,
+        "atr_pct": 7.0
       },
       "regime": "sideways",
-      "rank": 150,
+      "rank": 140,
       "mark": {}
     },
     {
@@ -18579,7 +17346,7 @@
         "atr_pct": 2.9
       },
       "regime": "sideways",
-      "rank": 151,
+      "rank": 141,
       "mark": {}
     },
     {
@@ -18701,7 +17468,7 @@
         "atr_pct": 2.1
       },
       "regime": "sideways",
-      "rank": 152,
+      "rank": 142,
       "mark": {}
     },
     {
@@ -18823,7 +17590,7 @@
         "atr_pct": 2.1
       },
       "regime": "sideways",
-      "rank": 153,
+      "rank": 143,
       "mark": {}
     },
     {
@@ -18938,7 +17705,122 @@
         "atr_pct": 2.2
       },
       "regime": "sideways",
-      "rank": 154,
+      "rank": 144,
+      "mark": {}
+    },
+    {
+      "code": "2855",
+      "name": "統一證",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 47.1,
+      "prev_close": 47.1,
+      "day_open": 46.65,
+      "day_high": 47.1,
+      "day_low": 46.25,
+      "lot_cost": 47100,
+      "chg_pct": 0.0,
+      "rsi": 54.412515723186715,
+      "vol_ratio": 0.5235029522198644,
+      "volume": 2116917.0,
+      "vol_ma20": 4043753.7,
+      "ma5": 46.71,
+      "ma10": 46.86,
+      "ma20": 45.26,
+      "ma60": 48.235,
+      "ma20_slope": 1.2924523023555068,
+      "ma60_slope": 1.917489831493313,
+      "bias20": 4.065399911621759,
+      "pos20": 0.840909090909091,
+      "pct_above_low20": 18.639798488664972,
+      "pct_below_high20": 2.972399150743099,
+      "pct_below_high5": 0.0,
+      "pct_below_high60": 26.96390658174097,
+      "atr": 1.4787691170972128,
+      "atr_pct": 3.139637191289199,
+      "macd_hist": 0.2879369503608955,
+      "target": 48.5,
+      "support": 45.26,
+      "score": 33.2,
+      "opportunity": 33.2,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 14.5,
+          "max": 25,
+          "ratio": 0.58
+        },
+        "trend": {
+          "points": 11.5,
+          "max": 20,
+          "ratio": 0.573
+        },
+        "reversal": {
+          "points": 3.9,
+          "max": 15,
+          "ratio": 0.26
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★★★☆☆",
+        "entry": "★★★☆☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、趨勢結構強；距前高僅剩 3.0%；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 1.3,
+      "swing_high": 3.0,
+      "upside_pct": 2.97,
+      "downside_pct": 3.91,
+      "rr_ratio": 0.76,
+      "reasons": [
+        "位置 84%、距前高 3.0%、乖離 +4.1%，進場點普通",
+        "中期趨勢中性偏多，MA20 斜率 +1.3%",
+        "MA5 開始上彎、近期低點未再破",
+        "量能 0.5 倍，低於 20 日均量，買盤不足",
+        "上檔至 48.5 約 +3.0%，下檔支撐 45.3 約 −3.9%，風險報酬比 0.8:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 46.6,
+      "hist_raw": 45.9,
+      "hist_samples": 111,
+      "hist_avg_return": 0.03,
+      "hist_pf": 1.02,
+      "hist_mdd": -2.33,
+      "hist_source": "regime",
+      "hist_expectancy": 0.03,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 47.17,
+        "invalidation": 46.18,
+        "stop": 45.26,
+        "target1": 48.5,
+        "target2": 50.87,
+        "rr": 0.69,
+        "risk_pct": 4.1,
+        "atr_pct": 3.1
+      },
+      "regime": "sideways",
+      "rank": 145,
       "mark": {}
     },
     {
@@ -19062,7 +17944,7 @@
         "atr_pct": 6.4
       },
       "regime": "sideways",
-      "rank": 155,
+      "rank": 146,
       "mark": {}
     },
     {
@@ -19186,7 +18068,7 @@
         "atr_pct": 4.6
       },
       "regime": "sideways",
-      "rank": 156,
+      "rank": 147,
       "mark": {}
     },
     {
@@ -19310,7 +18192,7 @@
         "atr_pct": 4.0
       },
       "regime": "sideways",
-      "rank": 157,
+      "rank": 148,
       "mark": {}
     },
     {
@@ -19434,7 +18316,7 @@
         "atr_pct": 3.5
       },
       "regime": "sideways",
-      "rank": 158,
+      "rank": 149,
       "mark": {}
     },
     {
@@ -19558,7 +18440,7 @@
         "atr_pct": 4.5
       },
       "regime": "sideways",
-      "rank": 159,
+      "rank": 150,
       "mark": {}
     },
     {
@@ -19682,7 +18564,7 @@
         "atr_pct": 6.5
       },
       "regime": "sideways",
-      "rank": 160,
+      "rank": 151,
       "mark": {}
     },
     {
@@ -19806,7 +18688,7 @@
         "atr_pct": 6.7
       },
       "regime": "sideways",
-      "rank": 161,
+      "rank": 152,
       "mark": {}
     },
     {
@@ -19930,7 +18812,131 @@
         "atr_pct": 7.4
       },
       "regime": "sideways",
-      "rank": 162,
+      "rank": 153,
+      "mark": {}
+    },
+    {
+      "code": "8210",
+      "name": "勤誠",
+      "sector": "其他",
+      "asset_type": "other",
+      "close": 944.0,
+      "prev_close": 944.0,
+      "day_open": 964.0,
+      "day_high": 964.0,
+      "day_low": 942.0,
+      "lot_cost": 944000,
+      "chg_pct": 0.0,
+      "rsi": 36.84003046387336,
+      "vol_ratio": 0.6712898051411151,
+      "volume": 1079525.0,
+      "vol_ma20": 1608135.55,
+      "ma5": 972.4,
+      "ma10": 988.2,
+      "ma20": 1035.95,
+      "ma60": 1200.9,
+      "ma20_slope": -3.9319330458570834,
+      "ma60_slope": -5.000856988410862,
+      "bias20": -8.875910999565617,
+      "pos20": 0.006191950464396285,
+      "pct_above_low20": 0.2123142250530785,
+      "pct_below_high20": 34.0042372881356,
+      "pct_below_high5": 13.347457627118642,
+      "pct_below_high60": 65.78389830508475,
+      "atr": 59.439643249437715,
+      "atr_pct": 6.296572378118402,
+      "macd_hist": -5.744136981413078,
+      "target": 1265.0,
+      "support": 825.1207135011246,
+      "score": 39.3,
+      "opportunity": 42.0,
+      "risk": 18.2,
+      "breakdown": {
+        "entry": {
+          "points": 22.8,
+          "max": 25,
+          "ratio": 0.912
+        },
+        "trend": {
+          "points": 0.0,
+          "max": 20,
+          "ratio": 0.0
+        },
+        "reversal": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 15.0,
+          "max": 15,
+          "ratio": 1.0
+        }
+      },
+      "risk_items": [
+        {
+          "key": "no_bottom",
+          "level": 1.0,
+          "weight": 0.2,
+          "label": "均線空頭排列且仍在破底，屬跌深但尚未止跌"
+        }
+      ],
+      "stars": {
+        "trend": "☆☆☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "☆☆☆☆☆",
+        "risk": "★☆☆☆☆"
+      },
+      "risk_level": "中低",
+      "kind": "弱勢未止跌",
+      "headline": "跌深但尚未止跌",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 34.0% 空間；但均線空頭排列且仍在破底，屬跌深但尚未止跌。",
+      "main_risk": "均線空頭排列且仍在破底，屬跌深但尚未止跌",
+      "swing_low": 15.3,
+      "swing_high": 34.0,
+      "upside_pct": 34.0,
+      "downside_pct": 12.59,
+      "rr_ratio": 2.7,
+      "reasons": [
+        "位於近 20 日區間 1% 位置，距前高還有 34.0% 空間，距 MA20 乖離 -8.9%",
+        "均線仍偏空排列，MA20 斜率 -3.9%",
+        "尚未出現明確的轉強訊號",
+        "量能 0.7 倍，低於 20 日均量，買盤不足",
+        "上檔至 1265.0 約 +34.0%，下檔支撐 825.1 約 −12.6%，風險報酬比 2.7:1"
+      ],
+      "flags": [
+        "均線空頭排列且仍在破底，屬跌深但尚未止跌"
+      ],
+      "hist_calibrated": 32.5,
+      "hist_raw": 30.1,
+      "hist_samples": 146,
+      "hist_avg_return": -1.94,
+      "hist_pf": 0.47,
+      "hist_mdd": -4.69,
+      "hist_source": "regime",
+      "hist_expectancy": -1.942,
+      "hist_confidence": 4,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 966.97,
+        "invalidation": 939.03,
+        "stop": 825.12,
+        "target1": 1056.13,
+        "target2": 1265.0,
+        "rr": 0.63,
+        "risk_pct": 14.7,
+        "atr_pct": 6.3
+      },
+      "regime": "sideways",
+      "rank": 154,
       "mark": {}
     }
   ]
