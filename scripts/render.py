@@ -2,8 +2,7 @@
 """
 render.py — 把計算結果渲染成 index.html
 
-樣板在 templates/dashboard.html.j2。要改版面／配色只要改樣板，
-Python 這邊不用動。
+版面在 templates/dashboard.html.j2。改配色／排版只要動樣板。
 """
 
 from __future__ import annotations
@@ -21,13 +20,21 @@ log = logging.getLogger("render")
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = ROOT / "templates"
 
-# 能量條的五段：(breakdown 的 key, 顯示文字)。順序＝條上的左到右順序。
+# 機會分數能量條的五段：(breakdown 的 key, 顯示文字)
+# 順序 = 條上的左到右順序，段寬由 config.WEIGHTS 決定
 SEGMENTS = [
-    ("oversold", "超賣"),
-    ("volume", "量能"),
-    ("near_low", "低檔"),
-    ("ma_reclaim", "均線"),
-    ("structure", "結構"),
+    ("entry", "位置"),
+    ("trend", "趨勢"),
+    ("reversal", "轉強"),
+    ("volume", "量價"),
+    ("rr", "風報"),
+]
+
+STAR_ROWS = [
+    ("entry", "進場位置"),
+    ("trend", "趨勢"),
+    ("volume", "量價"),
+    ("reversal", "轉強"),
 ]
 
 
@@ -51,13 +58,17 @@ def render_html(payload: dict) -> str:
     return tpl.render(
         meta=payload["meta"],
         index=payload.get("index") or None,
+        backtest=payload.get("backtest") or None,
         rows=payload["rows"],
         segments=SEGMENTS,
+        star_rows=STAR_ROWS,
         weights=C.WEIGHTS,
         thresholds={
             "vol_surge": C.VOL_SURGE_RATIO,
             "vol_full": C.VOL_FULL_RATIO,
-            "near_low_zone": C.NEAR_LOW_ZONE,
+            "rsi_hot": int(C.RSI_HOT),
+            "near_high": C.NEAR_HIGH_PCT,
+            "risk_cut": int(C.RISK_MAX_CUT * 100),
             "min_price": int(C.MIN_CLOSE_PRICE),
             "min_turnover": _format_twd(C.MIN_TURNOVER_TWD),
         },

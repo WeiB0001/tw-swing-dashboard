@@ -175,6 +175,30 @@ header{padding:20px 0 14px}
   margin:8px 6px 0 0;
 }
 
+/* ---------- 型態標籤 / 星等 / 預期空間 ---------- */
+.kind{
+  display:inline-block;margin-left:8px;padding:1px 7px;border-radius:999px;
+  background:#1E2530;border:1px solid #2E3846;color:#93A1B1;
+  font-size:10.5px;font-weight:700;letter-spacing:.02em;vertical-align:1px;
+}
+.score em{display:block;font-size:9.5px;font-style:normal;color:var(--muted);
+  font-weight:700;letter-spacing:.04em;margin-top:2px}
+.stars{
+  display:flex;flex-wrap:wrap;gap:4px 14px;margin:11px 0 0;padding:0;
+  font-size:12px;
+}
+.stars div{display:flex;gap:5px;align-items:baseline}
+.stars dt{color:var(--muted);margin:0}
+.stars dd{margin:0;color:var(--signal);letter-spacing:-.5px;font-size:11.5px}
+.stars .risk-star dd{color:#FF7A5C}
+.swing{
+  display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:9px;
+  font-size:12.5px;color:var(--muted);
+}
+.swing b{color:#B9C4D0;font-weight:700}
+.swing .wr b{color:#7FD1E8}
+.mainrisk{margin-top:5px;font-size:12.5px;color:#8E7B63;line-height:1.5}
+
 /* ---------- 展開內容 ---------- */
 .detail{border-top:1px solid var(--line);background:var(--panel-2);padding:14px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
@@ -182,12 +206,36 @@ header{padding:20px 0 14px}
 .cell{background:var(--panel-2);padding:9px 10px}
 .cell dt{font-size:11px;color:var(--muted);margin:0 0 2px;letter-spacing:.03em}
 .cell dd{margin:0;font-size:15px;font-weight:700}
-.why{margin:14px 0 0;padding:0;list-style:none}
-.why li{
-  font-size:13.5px;color:#C3CEDA;padding:6px 0 6px 16px;position:relative;line-height:1.5;
+.why{
+  font-size:13.5px;color:#C3CEDA;line-height:1.7;margin:0 0 13px;
+  padding:11px 13px;border-radius:10px;background:#12181F;border-left:3px solid var(--signal);
 }
-.why li::before{content:"";position:absolute;left:0;top:13px;width:6px;height:6px;
+.why b{color:var(--signal);font-weight:800;margin-right:6px}
+.scoreline{font-size:12.5px;color:#9FACBA;margin:0 0 13px;line-height:1.8}
+.scoreline b{color:#C3CEDA;font-weight:700}
+.scoreline b.sig{color:var(--signal);font-size:15px}
+.scoreline .muted{color:var(--muted)}
+.rr{
+  display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:13px;padding:11px 13px;
+  border-radius:10px;background:#12181F;font-size:12.5px;
+}
+.rr div{display:flex;gap:8px;align-items:baseline}
+.rr span{color:var(--muted)}
+.rr b{font-weight:700}
+.reasons{margin:14px 0 0;padding:0;list-style:none}
+.reasons li{
+  font-size:13.5px;color:#C3CEDA;padding:6px 0 6px 16px;position:relative;line-height:1.55;
+}
+.reasons li::before{content:"";position:absolute;left:0;top:13px;width:6px;height:6px;
   border-radius:2px;background:var(--signal)}
+.risklist{margin-top:14px;font-size:13px}
+.risklist>b{color:#FF9E80;font-weight:800;font-size:12.5px}
+.risklist ul{margin:6px 0 0;padding:0;list-style:none}
+.risklist li{
+  color:#B8A896;padding:5px 0 5px 18px;position:relative;line-height:1.55;font-size:13px;
+}
+.lvl{position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:2px;background:#4A3A28}
+.lvl1{background:#7A5A2E}.lvl2{background:#C07A3A}.lvl3{background:#E05A3A}
 .pts{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.9}
 .pts b{color:#C3CEDA;font-weight:600}
 
@@ -237,7 +285,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">今日價差機會排行</h1>
+    <h1 class="title">今日獲利可能性排行</h1>
 
     {% if index %}
     <div class="market">
@@ -281,7 +329,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   <!-- ===================== 排名 ===================== -->
   <div class="section-head">
-    <h2>價差機會排名</h2>
+    <h2>獲利可能性排名</h2>
     <span>點卡片看細節</span>
   </div>
 
@@ -292,7 +340,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="row1">
           <div class="rank {{ 'top' if loop.index <= 3 }}">{{ loop.index }}</div>
           <div class="ident">
-            <div class="code mono">{{ r.code }}</div>
+            <div class="code mono">{{ r.code }}<span class="kind">{{ r.kind }}</span></div>
             <div class="name">{{ r.name }}</div>
           </div>
           <div class="px">
@@ -303,9 +351,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           </div>
         </div>
 
-        <!-- 訊號能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
+        <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="meter" role="img"
-             aria-label="訊號組成：{% for k,l in segments %}{{ l }} {{ (r.breakdown[k].ratio*100)|round|int }}%{{ '，' if not loop.last }}{% endfor %}">
+             aria-label="機會分數組成：{% for k,l in segments %}{{ l }} {{ (r.breakdown[k].ratio*100)|round|int }}%{{ '，' if not loop.last }}{% endfor %}">
           {% for k, label in segments %}
           <div class="seg" style="flex:{{ r.breakdown[k].max }}">
             <i style="width:{{ (r.breakdown[k].ratio*100)|round(1) }}%"></i>
@@ -320,13 +368,40 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         <div class="row3">
           <div class="headline">{{ r.headline }}</div>
-          <div class="score mono">{{ '%.0f'|format(r.score) }}<em>分</em></div>
+          <div class="score mono">{{ '%.0f'|format(r.score) }}<em>獲利可能性</em></div>
         </div>
+
+        <!-- 星等：趨勢強不強、現在買位置好不好，分開看 -->
+        <dl class="stars">
+          {% for k, label in star_rows %}
+          <div><dt>{{ label }}</dt><dd>{{ r.stars[k] }}</dd></div>
+          {% endfor %}
+          <div class="risk-star"><dt>風險</dt><dd>{{ r.stars.risk }} {{ r.risk_level }}</dd></div>
+        </dl>
+
+        <div class="swing">
+          <span>預期 Swing 空間 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
+          {% if r.hist_winrate is not none %}
+          <span class="wr">歷史相似訊號勝率 <b class="mono">{{ r.hist_winrate }}%</b>（{{ r.hist_samples }} 筆）</span>
+          {% endif %}
+        </div>
+        <div class="mainrisk">主要風險：{{ r.main_risk }}</div>
 
         {% for f in r.flags %}<span class="chip">{{ f }}</span>{% endfor %}
       </summary>
 
       <div class="detail">
+        <div class="why"><b>為什麼排第 {{ loop.index }}？</b>{{ r.why }}</div>
+
+        <div class="scoreline">
+          機會分數 <b class="mono">{{ '%.0f'|format(r.opportunity) }}</b>
+          × 風險調整 <b class="mono">{{ '%.2f'|format(1 - (thresholds.risk_cut/100) * r.risk/100) }}</b>
+          ＝ 獲利可能性 <b class="mono sig">{{ '%.0f'|format(r.score) }}</b>
+          <span class="muted">（風險分數 {{ '%.0f'|format(r.risk) }}／100）</span>
+          <br><span class="muted">分數相近（1.5 分內）時，依風險報酬比 → 下檔風險 → 進場位置 → 趨勢決定先後，
+          所以名次未必與四捨五入後的分數完全同序。</span>
+        </div>
+
         <dl class="grid">
           <div class="cell"><dt>RSI(14)</dt><dd class="mono">{{ '%.1f'|format(r.rsi) }}</dd></div>
           <div class="cell"><dt>量 / 20日均量</dt><dd class="mono">{{ '%.2f'|format(r.vol_ratio) }}×</dd></div>
@@ -334,18 +409,40 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="cell"><dt>MA5</dt><dd class="mono">{{ '%.2f'|format(r.ma5) }}</dd></div>
           <div class="cell"><dt>MA10</dt><dd class="mono">{{ '%.2f'|format(r.ma10) }}</dd></div>
           <div class="cell"><dt>MA20</dt><dd class="mono">{{ '%.2f'|format(r.ma20) }}</dd></div>
+          <div class="cell"><dt>MA60</dt><dd class="mono">{{ '%.2f'|format(r.ma60) }}</dd></div>
+          <div class="cell"><dt>MA20 斜率</dt><dd class="mono">{{ '%+.2f'|format(r.ma20_slope) }}%</dd></div>
+          <div class="cell"><dt>距 MA20 乖離</dt><dd class="mono">{{ '%+.1f'|format(r.bias20) }}%</dd></div>
           <div class="cell"><dt>距 20 日低</dt><dd class="mono">+{{ '%.1f'|format(r.pct_above_low20) }}%</dd></div>
           <div class="cell"><dt>距 20 日高</dt><dd class="mono">−{{ '%.1f'|format(r.pct_below_high20) }}%</dd></div>
-          <div class="cell"><dt>距 5 日高</dt><dd class="mono">−{{ '%.1f'|format(r.pct_below_high5) }}%</dd></div>
+          <div class="cell"><dt>距 60 日高</dt><dd class="mono">−{{ '%.1f'|format(r.pct_below_high60) }}%</dd></div>
+          <div class="cell"><dt>20 日區間位置</dt><dd class="mono">{{ (r.pos20*100)|round|int }}%</dd></div>
+          <div class="cell"><dt>ATR 波動</dt><dd class="mono">{{ '%.1f'|format(r.atr_pct) }}%</dd></div>
+          <div class="cell"><dt>MACD 柱</dt><dd class="mono">{{ '%+.3f'|format(r.macd_hist) }}</dd></div>
         </dl>
 
-        <ul class="why">
+        <div class="rr">
+          <div><span>上檔目標</span><b class="mono up">{{ '%.2f'|format(r.target) }}　+{{ '%.1f'|format(r.upside_pct) }}%</b></div>
+          <div><span>下檔支撐</span><b class="mono down">{{ '%.2f'|format(r.support) }}　−{{ '%.1f'|format(r.downside_pct) }}%</b></div>
+          <div><span>風險報酬比</span><b class="mono">{{ '%.1f'|format(r.rr_ratio) }} : 1</b></div>
+        </div>
+
+        <ul class="reasons">
           {% for reason in r.reasons %}<li>{{ reason }}</li>{% endfor %}
-          {% if not r.reasons %}<li>本檔僅在部分指標達標，訊號強度有限。</li>{% endif %}
         </ul>
 
+        {% if r.risk_items %}
+        <div class="risklist">
+          <b>風險項目</b>
+          <ul>
+            {% for it in r.risk_items %}
+            <li><span class="lvl lvl{{ (it.level*3)|round|int }}"></span>{{ it.label }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
         <div class="pts">
-          分數組成：
+          機會分數組成：
           {% for k, label in segments %}
           <b>{{ label }}</b> {{ '%.1f'|format(r.breakdown[k].points) }}/{{ r.breakdown[k].max }}{{ '　' if not loop.last }}
           {% endfor %}
@@ -364,12 +461,32 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 方法說明 ===================== -->
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
-    <h3>五項訊號加權相加，再依風險打折</h3>
-    <b>超賣 {{ weights.oversold }}分</b>：RSI(14) 越低越好，且收盤必須站回 MA5 或 MA10，才算真的出現反彈。<br>
-    <b>量能 {{ weights.volume }}分</b>：成交量達 20 日均量 {{ thresholds.vol_surge }} 倍開始加分，{{ thresholds.vol_full }} 倍給滿分。<br>
-    <b>低檔 {{ weights.near_low }}分</b>：收盤落在近 20 日高低區間的下緣 {{ (thresholds.near_low_zone*100)|round|int }}% 內，且當日止跌。<br>
-    <b>均線 {{ weights.ma_reclaim }}分</b>：MA5 金叉 MA10 給滿分，剛站回 MA5／MA10 次之。<br>
-    <b>結構 {{ weights.structure }}分</b>：MA20 斜率與回檔深度是否合理。<br><br>
+    <h3>排的不是「技術指標最漂亮」，是「現在買賺錢的可能性」</h3>
+    先算<b>機會分數</b>（五項加權，正規化成 0～100），再乘上<b>風險調整</b>，
+    得到最終的<b>獲利可能性分數</b>。趨勢強度與進場位置是分開的兩件事——
+    一檔 RSI 90、貼著前高的股票，趨勢分數會很高，但位置分數低、風險分數高，不會自動排第一。<br><br>
+
+    <b>位置 {{ weights.entry }}分</b>：20 日區間位置、距 20／60 日高點的空間、距 MA20 乖離、RSI 所在區帶。權重最高。<br>
+    <b>趨勢 {{ weights.trend }}分</b>：MA5/10/20/60 排列、MA20 與 MA60 斜率、是否站穩季線。只代表「強不強」。<br>
+    <b>轉強 {{ weights.reversal }}分</b>：RSI 自低檔回升、站回 MA5、MA5 上彎或金叉、MACD 柱改善、帶量收紅、低點未再破。<br>
+    <b>量價 {{ weights.volume }}分</b>：量能倍數再乘上「品質係數」——上漲收高檔加分，長上影、爆量收黑、高檔爆量大幅打折。<br>
+    <b>風報 {{ weights.rr }}分</b>：以 20／60 日高點與 ATR 推估上檔目標，以 MA20、近期低點與 ATR 推估下檔支撐，算出風險報酬比。<br><br>
+
+    <b>風險調整</b>：RSI &gt; {{ thresholds.rsi_hot }}、距前高 &lt; {{ thresholds.near_high }}%、乖離過大、
+    連續大漲、假突破、跌深未止跌等項目，最多讓分數打 {{ 100 - thresholds.risk_cut }} 折。
+    有效突破（帶量、收在高檔、無長上影、未過熱）不套用追高懲罰。<br><br>
+
+    {% if backtest %}
+    <b>歷史回測</b>：{{ backtest.period }}，共 {{ backtest.samples }} 筆訊號。
+    卡片上的「歷史相似訊號勝率」來自同分數級距的歷史統計，與模型分數是兩件事。
+    歷史結果不代表未來績效。<br><br>
+    {% else %}
+    <b>⚠️ 目前只是模型分數，不是真實獲利機率。</b>
+    尚未跑過歷史回測，所以頁面上不會出現任何勝率數字。
+    跑 <code>python scripts/backtest.py</code> 產生 <code>data/backtest.json</code> 之後，
+    卡片才會顯示「歷史相似訊號勝率」。<br><br>
+    {% endif %}
+
     掃描池為當日成交金額前 {{ meta.top_n }} 名加主要權值股，股價低於 {{ thresholds.min_price }} 元或成交金額低於
     {{ thresholds.min_turnover }} 的個股不納入。資料來源：{{ meta.source_note }}。<br>
     要調整訊號邏輯，改 <code>scripts/config.py</code> 的權重與門檻即可。
@@ -378,6 +495,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 底部免責聲明 ===================== -->
   <div class="disclaimer-bottom">
     ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
+    獲利可能性分數是模型推估，不是統計上的獲利機率。<br>
     分數高不代表會上漲，技術指標只描述過去的價量行為。<br>
     資料可能因來源延遲或錯誤而失真，下單前請自行以券商報價複核。
   </div>
