@@ -61,6 +61,7 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
         "asset_type": C.asset_type(code),   # etf / tech / other，供網頁篩選
         # --- 原始指標（UI 展開後顯示，一個都沒刪） ---
         "close": f["close"],
+        "prev_close": f.get("prev_close"),      # 記帳算今日損益用
         "day_open": f.get("open"),              # 模擬組合用 t+1 開盤價成交
         "day_high": f.get("high"),
         "day_low": f.get("low"),

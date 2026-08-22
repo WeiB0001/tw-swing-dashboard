@@ -47,6 +47,21 @@ def _format_twd(amount: int) -> str:
     return f"{amount:,} 元"
 
 
+def _price_map_json(rows: list) -> str:
+    """
+    給「我的交易記帳」用的精簡價格表：{代號: [名稱, 收盤, 昨收]}。
+    直接重用本次已經算好的資料，不會為了記帳多抓任何 API。
+    """
+    m = {}
+    for r in rows:
+        try:
+            m[r["code"]] = [r.get("name", ""), round(float(r["close"]), 2),
+                            round(float(r.get("prev_close") or 0), 2) or None]
+        except Exception:
+            continue
+    return json.dumps(m, ensure_ascii=False, separators=(",", ":"))
+
+
 def render_html(payload: dict) -> str:
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATE_DIR)),
@@ -63,6 +78,7 @@ def render_html(payload: dict) -> str:
         signals=payload.get("signals") or None,
         portfolio=payload.get("portfolio") or None,
         pattern_min_samples=C.PATTERN_MIN_SAMPLES,
+        price_map_json=_price_map_json(payload["rows"]),
         paper_max_positions=C.PAPER_MAX_POSITIONS,
         paper_max_hold=C.PAPER_MAX_HOLD_DAYS,
         smooth_wins=C.SMOOTH_WINS,
