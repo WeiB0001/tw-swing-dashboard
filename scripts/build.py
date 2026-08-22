@@ -31,6 +31,8 @@ import pandas as pd
 import config as C
 import fetch
 import indicators
+import plan
+import tracking
 import render
 import scoring
 
@@ -59,6 +61,9 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
         "asset_type": C.asset_type(code),   # etf / tech / other，供網頁篩選
         # --- 原始指標（UI 展開後顯示，一個都沒刪） ---
         "close": f["close"],
+        "day_open": f.get("open"),              # 模擬組合用 t+1 開盤價成交
+        "day_high": f.get("high"),
+        "day_low": f.get("low"),
         "lot_cost": round(f["close"] * 1000),   # 一張（1000 股）要多少錢
         "chg_pct": f["chg_pct"],
         "rsi": f["rsi"],
@@ -108,21 +113,36 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
         "hist_avg_return": None,    # 平均淨報酬（已扣交易成本）
         "hist_pf": None,            # Profit Factor
         "hist_mdd": None,           # 平均最大回撤
-        "hist_source": None,        # pattern / bucket / None
+        "hist_source": None,        # regime+pattern / pattern / bucket / None
+        "hist_expectancy": None,    # 期望值 %
+        "hist_confidence": 0,       # 可信度星數（0 = 樣本不足）
+        "plan": plan.build_plan(f, result),     # 明日交易計畫（純規則）
     }
 
 
 # ---------------------------------------------------------------------------
 # 掛上回測結果（有跑過 scripts/backtest.py 才會有）
 # ---------------------------------------------------------------------------
-def attach_backtest(rows: list[dict]) -> dict | None:
-    """
-    掛上歷史勝率。查找順序：
+def _confidence(n) -> int:
+    """依樣本數給可信度星數；不足 30 筆回 0（頁面顯示樣本不足）。"""
+    try:
+        n = int(n or 0)
+    except Exception:
+        return 0
+    for need, stars in C.CONFIDENCE_TIERS:
+        if n >= need:
+            return stars
+    return 0
 
-      1. 「型態 + 分數級距」──同樣 65 分，帶量突破跟低檔轉強的歷史勝率可能差很多，
-         所以優先用這一層。樣本需達 config.PATTERN_MIN_SAMPLES（30 筆）。
-      2. 「分數級距」──型態樣本不足時退回這一層，樣本需達 BACKTEST_MIN_SAMPLES。
-      3. 都不足 → 全部留空，UI 顯示「樣本不足」。**絕不生一個假勝率出來。**
+
+def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
+    """
+    掛上歷史統計。查表順序（樣本不足就往下退一層）：
+
+      1. 大盤狀態 + 型態 + 分數級距   ← 最精細
+      2. 型態 + 分數級距
+      3. 分數級距
+      4. 都不足 → 全部留空，UI 顯示「樣本不足」。絕不生假數字。
     """
     path = ROOT / C.BACKTEST_JSON
     if not path.exists():
@@ -134,42 +154,48 @@ def attach_backtest(rows: list[dict]) -> dict | None:
         log.warning("回測檔讀取失敗：%s", e)
         return None
 
-    pat_buckets = bt.get("pattern_buckets", [])
-    buckets = bt.get("score_buckets", [])
+    reg_buckets = bt.get("regime_buckets", []) or []
+    pat_buckets = bt.get("pattern_buckets", []) or []
+    buckets = bt.get("score_buckets", []) or []
 
-    def fill(r: dict, d: dict, source: str) -> None:
+    def fill(r, d, source):
         r["hist_calibrated"] = d.get("calibrated_win_rate")
         r["hist_raw"] = d.get("win_rate")
         r["hist_samples"] = d.get("samples")
         r["hist_avg_return"] = d.get("avg_return")
         r["hist_pf"] = d.get("profit_factor")
         r["hist_mdd"] = d.get("avg_mdd")
+        r["hist_expectancy"] = d.get("expectancy")
+        r["hist_confidence"] = _confidence(d.get("samples"))
         r["hist_source"] = source
 
-    n_pat = n_bucket = 0
+    counts = {"regime": 0, "pattern": 0, "bucket": 0, "none": 0}
     for r in rows:
         hit = None
-        for b in pat_buckets:
-            if (b.get("pattern") == r["kind"]
+        for b in reg_buckets:
+            if (b.get("regime") == regime and b.get("pattern") == r["kind"]
                     and b["lo"] <= r["score"] < b["hi"]
                     and b.get("samples", 0) >= C.PATTERN_MIN_SAMPLES):
-                hit = (b, "pattern")
-                break
+                hit = (b, "regime"); break
+        if hit is None:
+            for b in pat_buckets:
+                if (b.get("pattern") == r["kind"] and b["lo"] <= r["score"] < b["hi"]
+                        and b.get("samples", 0) >= C.PATTERN_MIN_SAMPLES):
+                    hit = (b, "pattern"); break
         if hit is None:
             for b in buckets:
                 if (b["lo"] <= r["score"] < b["hi"]
                         and b.get("samples", 0) >= C.BACKTEST_MIN_SAMPLES):
-                    hit = (b, "bucket")
-                    break
+                    hit = (b, "bucket"); break
         if hit:
             fill(r, hit[0], hit[1])
-            if hit[1] == "pattern":
-                n_pat += 1
-            else:
-                n_bucket += 1
+            counts[hit[1]] += 1
+        else:
+            counts["none"] += 1
 
-    log.info("歷史勝率掛載：型態層 %d 檔、級距層 %d 檔、樣本不足 %d 檔（回測日期 %s）",
-             n_pat, n_bucket, len(rows) - n_pat - n_bucket, bt.get("generated_at", "?"))
+    log.info("歷史統計掛載：大盤層 %d、型態層 %d、級距層 %d、樣本不足 %d（回測 %s）",
+             counts["regime"], counts["pattern"], counts["bucket"], counts["none"],
+             bt.get("generated_at", "?"))
     return bt
 
 
@@ -212,13 +238,25 @@ def run_live() -> dict:
             log.warning("%s 計算失敗：%s", code, e)
 
     scanned = len(rows)
-    bt = attach_backtest(rows)
+    twii = fetch.fetch_twii_history()
+    regime = indicators.regime_of(twii)
+    for r in rows:
+        r["regime"] = regime
+    bt = attach_backtest(rows, regime)
     rows.sort(key=scoring.sort_key)          # 主鍵分數，接近時用 tie-breaker
     for i, r in enumerate(rows, 1):
         r["rank"] = i                        # 完整名次，之後不論怎麼篩選都用這個
     strong = sum(1 for r in rows if r["score"] >= C.WEAK_SCORE)
     top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows
-    log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d", scanned, strong, C.WEAK_SCORE)
+    log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d｜大盤狀態 %s",
+             scanned, strong, C.WEAK_SCORE, regime)
+
+    index_info = fetch.fetch_market_index()
+    idx_close = (index_info or {}).get("close")
+    signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
+    for r in rows:
+        r["mark"] = signals["marks"].get(r["code"], {})
+    portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), idx_close)
 
     return {
         "meta": {
@@ -229,14 +267,17 @@ def run_live() -> dict:
             "qualified_count": len(rows),
             "universe_count": len(universe),
             "has_backtest": bt is not None,
+            "regime": regime,
             "top_n": C.TOP_N_BY_TURNOVER,
             "weak_score": C.WEAK_SCORE,
             "strong_count": strong,
             "source_note": "證交所 OpenAPI（當日行情）＋ yfinance（歷史日線）",
             "mode": "live",
         },
-        "index": fetch.fetch_market_index(),
+        "index": index_info,
         "us": _us_snapshot(),
+        "signals": signals,
+        "portfolio": portfolio,
         "backtest": _backtest_summary(bt),
         "rows": top,
     }
@@ -264,6 +305,7 @@ def _backtest_summary(bt: dict | None) -> dict | None:
         "cooldown_days": bt.get("cooldown_days"),
         "entry_rule": bt.get("entry_rule"),
         "samples": bt.get("total_signals"),
+        "walk_forward": bt.get("walk_forward"),
     }
 
 

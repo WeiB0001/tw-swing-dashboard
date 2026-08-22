@@ -178,6 +178,24 @@ def _fmt_roc_or_iso(d) -> str:
     return s
 
 
+def fetch_twii_history(period: str = "3y") -> pd.DataFrame | None:
+    """
+    加權指數日線，供大盤狀態（regime）判定與回測分層使用。
+    只抓一次、失敗回 None，不讓主流程中斷。
+    """
+    try:
+        import yfinance as yf
+        h = yf.Ticker("^TWII").history(period=period, auto_adjust=False)
+        if h is None or len(h) < 60:
+            return None
+        h = h.rename(columns=str.lower)[["open", "high", "low", "close"]].dropna()
+        h.index = pd.to_datetime(h.index).tz_localize(None).normalize()
+        return h
+    except Exception as e:
+        log.warning("加權指數日線取得失敗：%s", e)
+        return None
+
+
 # ===========================================================================
 # 2) 掃描池：決定今天要算哪些股票
 # ===========================================================================

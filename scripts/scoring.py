@@ -474,42 +474,33 @@ def _why(kind: str, f: dict, comp: dict, risk_items: list) -> str:
 # ---------------------------------------------------------------------------
 def sort_key(row: dict):
     """
-    排名的第一順位是**歷史平滑勝率**，不是技術分數。
+    排名順位（有足夠歷史樣本時）：
+        期望值 EV → 平滑勝率 → Profit Factor → 平均回撤 → 技術分數
 
-    技術分數（原本的 PPS）只是把當下的價量型態量化成一個特徵，
-    它本身不代表賺錢機率。真正該回答「這個訊號歷史上贏過幾次」的，
-    是 scripts/backtest.py 統計出來的 calibrated_win_rate。
+    兩個原則：
+      - **EV <= 0 的一律降到有正 EV 的之後**，但不刪除。看得到、但排在後面。
+      - 沒有歷史樣本的走 fallback：EV 視為 0（與負 EV 同層），純用技術分數決定先後。
 
-    順位：
-      1. 歷史平滑勝率 calibrated_win_rate
-         沒有樣本的一律當作先驗 50%（(0+10)/(0+20)），所以會落在中間，
-         不會因為「沒資料」就被排到最後，也不會假裝自己很強。
-      2. 歷史平均淨報酬
-      3. Profit Factor
-      4. 歷史平均最大回撤（越淺越好）
-      5. 技術分數（同分時才用得到）
-      6. 風險報酬比、下檔風險、進場位置
+    技術分數只是型態描述，不是機率，所以它排在最後。
     """
-    # 沒有回測資料時 → 先驗 50%，等於整批打平，直接由技術分數決定順序
+    ev = row.get("hist_expectancy")
+    has = ev is not None
+    ev = float(ev) if has else 0.0
+
     wr = row.get("hist_calibrated")
-    wr = wr if wr is not None else 50.0
-
-    avg = row.get("hist_avg_return")
-    avg = avg if avg is not None else 0.0
-
+    wr = float(wr) if wr is not None else 50.0
     pf = row.get("hist_pf")
-    pf = pf if pf is not None else 1.0
-
+    pf = float(pf) if pf is not None else 1.0
     mdd = row.get("hist_mdd")
-    mdd = mdd if mdd is not None else -99.0     # 越接近 0 越好
+    mdd = float(mdd) if mdd is not None else -99.0
 
     return (
-        -round(wr, 1),          # 勝率差距小於 0.1% 視為同級
-        -round(avg, 2),
+        0 if ev > 0 else 1,      # 第一層：正期望值優先
+        -round(ev, 3),
+        -round(wr, 1),
         -round(pf, 2),
         -round(mdd, 1),
-        -row["score"],          # 技術分數
+        -row["score"],           # 技術分數（fallback 時才真正起作用）
         -row.get("rr_ratio", 0),
         row.get("downside_pct", 99),
-        -row["breakdown"]["entry"]["ratio"],
     )

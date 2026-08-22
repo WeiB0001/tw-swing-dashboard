@@ -159,12 +159,21 @@ def build_demo_payload() -> dict:
             rows.append(row)
 
     from build import attach_backtest
-    bt = attach_backtest(rows)               # 先掛歷史勝率，排序才有依據
+    import tracking
+    regime = "sideways"
+    for r in rows:
+        r["regime"] = regime
+    bt = attach_backtest(rows, regime)               # 先掛歷史勝率，排序才有依據
     rows.sort(key=scoring.sort_key)
     for i, r in enumerate(rows, 1):
         r["rank"] = i                        # 完整名次，之後不論怎麼篩選都用這個
     strong = sum(1 for r in rows if r["score"] >= C.WEAK_SCORE)
     top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows
+
+    signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
+    for r in rows:
+        r["mark"] = signals["marks"].get(r["code"], {})
+    portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), 23456.78)
 
     return {
         "meta": {
@@ -175,6 +184,7 @@ def build_demo_payload() -> dict:
             "qualified_count": len(rows),
             "universe_count": len(DEMO_STOCKS),
             "has_backtest": bt is not None,
+            "regime": regime,
             "top_n": C.TOP_N_BY_TURNOVER,
             "weak_score": C.WEAK_SCORE,
             "strong_count": strong,
@@ -206,5 +216,7 @@ def build_demo_payload() -> dict:
                       "beta_sox": 0.19, "resid_sd": 0.99},
         },
         "backtest": None,
+        "signals": signals,
+        "portfolio": portfolio,
         "rows": top,
     }

@@ -89,7 +89,13 @@ def describe(nets: list[float], mdds: list[float]) -> dict:
     wins, losses = a[a > 0], a[a <= 0]
     gross_win, gross_loss = float(wins.sum()), float(-losses.sum())
     n = int(len(a))
+    avg_win = float(wins.mean()) if len(wins) else 0.0
+    avg_loss = float(losses.mean()) if len(losses) else 0.0
+    wr = (len(wins) / n) if n else 0.0
+    # 期望值：勝率×平均獲利 ＋ 敗率×平均虧損（avg_loss 本身是負值）
+    expectancy = wr * avg_win + (1 - wr) * avg_loss
     return {
+        "expectancy": round(expectancy, 3) if n else None,
         "samples": n,
         "wins": int(len(wins)),
         "win_rate": round(float(len(wins) / n * 100), 1) if n else None,
@@ -98,8 +104,8 @@ def describe(nets: list[float], mdds: list[float]) -> dict:
         "median_return": round(float(np.median(a)), 2) if n else None,
         "max_gain": round(float(a.max()), 2) if n else None,
         "max_loss": round(float(a.min()), 2) if n else None,
-        "avg_win": round(float(wins.mean()), 2) if len(wins) else 0.0,
-        "avg_loss": round(float(losses.mean()), 2) if len(losses) else 0.0,
+        "avg_win": round(avg_win, 2),
+        "avg_loss": round(avg_loss, 2),
         "payoff": round(float(wins.mean() / abs(losses.mean())), 2)
                   if len(wins) and len(losses) and losses.mean() != 0 else None,
         "profit_factor": round(gross_win / gross_loss, 2) if gross_loss > 0 else None,
@@ -111,7 +117,21 @@ def describe(nets: list[float], mdds: list[float]) -> dict:
 # ---------------------------------------------------------------------------
 # 核心：逐日重算分數並記錄樣本
 # ---------------------------------------------------------------------------
-def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int) -> dict:
+def load_regimes(demo: bool) -> pd.Series | None:
+    """每個交易日的大盤狀態。抓不到就回 None，統計時全部當 sideways。"""
+    if demo:
+        return None
+    try:
+        import fetch
+        twii = fetch.fetch_twii_history()
+        return indicators.regime_series(twii) if twii is not None else None
+    except Exception as e:
+        log.warning("大盤狀態取得失敗，回測不分多空：%s", e)
+        return None
+
+
+def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
+                 regimes: pd.Series | None = None) -> dict:
     max_hold = max(C.BACKTEST_HOLD_DAYS)
     cost = C.TRADE_COST_PCT
     cooldown = C.SIGNAL_COOLDOWN_DAYS
@@ -168,7 +188,17 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int) -> dict:
                     "mdd": (trough / entry - 1) * 100,   # 持有期間最糟的帳面虧損
                 }
 
+            reg = "sideways"
+            if regimes is not None:
+                try:
+                    v = regimes.get(day)
+                    if isinstance(v, str):
+                        reg = v
+                except Exception:
+                    pass
+
             day_rows.append({
+                "regime": reg,
                 "day_index": n,
                 "date": str(day)[:10],
                 "code": code,
@@ -217,7 +247,9 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int) -> dict:
         "entry_rule": "訊號日 t 收盤後產生，t+1 開盤價進場，t+h 收盤價出場",
         "topk": stats_by_topk(signals),
         "score_buckets": stats_by_bucket(signals),
+        "regime_buckets": stats_by_regime_pattern_bucket(signals),
         "pattern_buckets": stats_by_pattern_bucket(signals),
+        "walk_forward": walk_forward(signals),
         "patterns": stats_by_pattern(signals),
         "note": "歷史模擬結果，不代表未來績效。已扣 %.1f%% 來回交易成本，未計滑價。" % cost,
     }
@@ -265,6 +297,94 @@ def stats_by_pattern_bucket(signals: list[dict]) -> list[dict]:
                 continue
             out.append({"pattern": pat, "lo": lo, "hi": hi, "hold_days": h, **_pack(sub, h)})
     return out
+
+
+def stats_by_regime_pattern_bucket(signals: list[dict]) -> list[dict]:
+    """大盤狀態 × 型態 × 分數級距。這是排名查表的第一順位。"""
+    h = 5
+    out = []
+    keys = sorted(set((s.get("regime", "sideways"), s["pattern"]) for s in signals))
+    for reg, pat in keys:
+        for lo, hi in C.BACKTEST_SCORE_BUCKETS:
+            sub = [s for s in signals
+                   if s.get("regime", "sideways") == reg and s["pattern"] == pat
+                   and lo <= s["score"] < hi]
+            if not sub:
+                continue
+            out.append({"regime": reg, "pattern": pat, "lo": lo, "hi": hi,
+                        "hold_days": h, **_pack(sub, h)})
+    return out
+
+
+def walk_forward(signals: list[dict]) -> dict:
+    """
+    簡單的 walk-forward：把樣本依時間切成 WF_FOLDS 段。
+    第 1 段只用來建表，之後每一段都用「該段之前」的資料建表再測，
+    絕不用測試期間自己的資料去調自己 —— 這樣才是 out-of-sample。
+
+    測試方式：用前期表查每筆訊號的期望值，每日取期望值最高的前 WF_TOP_N 筆，
+    記錄它們實際的 5 日淨報酬。
+    """
+    h = 5
+    k = max(int(C.WF_FOLDS), 2)
+    if len(signals) < k * 40:
+        return {"available": False, "reason": "樣本不足，無法做 walk-forward 驗證"}
+
+    ordered = sorted(signals, key=lambda s: (s["date"], s["code"]))
+    size = len(ordered) // k
+    folds = [ordered[i * size: (i + 1) * size] for i in range(k - 1)]
+    folds.append(ordered[(k - 1) * size:])
+
+    def build_table(rows: list[dict]) -> dict:
+        """(regime, pattern, bucket) -> expectancy；樣本不足的層自動略過。"""
+        tbl = {}
+        for reg in set(r.get("regime", "sideways") for r in rows):
+            for pat in set(r["pattern"] for r in rows):
+                for lo, hi in C.BACKTEST_SCORE_BUCKETS:
+                    sub = [r for r in rows
+                           if r.get("regime", "sideways") == reg and r["pattern"] == pat
+                           and lo <= r["score"] < hi]
+                    if len(sub) >= C.PATTERN_MIN_SAMPLES:
+                        tbl[(reg, pat, lo)] = _pack(sub, h)["expectancy"]
+        for pat in set(r["pattern"] for r in rows):        # 退一層：型態＋級距
+            for lo, hi in C.BACKTEST_SCORE_BUCKETS:
+                sub = [r for r in rows if r["pattern"] == pat and lo <= r["score"] < hi]
+                if len(sub) >= C.PATTERN_MIN_SAMPLES:
+                    tbl.setdefault((None, pat, lo), _pack(sub, h)["expectancy"])
+        return tbl
+
+    def bucket_lo(score: float):
+        for lo, hi in C.BACKTEST_SCORE_BUCKETS:
+            if lo <= score < hi:
+                return lo
+        return None
+
+    picked = []
+    for i in range(1, k):
+        table = build_table([r for f in folds[:i] for r in f])
+        if not table:
+            continue
+        by_day = {}
+        for r in folds[i]:
+            lo = bucket_lo(r["score"])
+            ev = table.get((r.get("regime", "sideways"), r["pattern"], lo))
+            if ev is None:
+                ev = table.get((None, r["pattern"], lo))
+            if ev is None:
+                continue
+            by_day.setdefault(r["date"], []).append((ev, r))
+        for day, lst in by_day.items():
+            lst.sort(key=lambda x: -x[0])
+            for ev, r in lst[: C.WF_TOP_N]:
+                if ev > 0:                       # 只交易期望值為正的訊號
+                    picked.append(r)
+
+    if len(picked) < 20:
+        return {"available": False, "reason": "out-of-sample 樣本不足，不產出結果"}
+
+    d = _pack(picked, h)
+    return {"available": True, "folds": k, "top_n": C.WF_TOP_N,
+            "period": f"{picked[0]['date']} ～ {picked[-1]['date']}", **d}
 
 
 def stats_by_pattern(signals: list[dict]) -> list[dict]:
@@ -320,6 +440,21 @@ def print_report(bt: dict, demo: bool) -> None:
               f"（平滑 {p['calibrated_win_rate']:>5.1f}%）｜平均 {p['avg_return']:+.2f}%"
               f"｜PF {p['profit_factor']}{flag}")
 
+    wf = bt.get("walk_forward", {})
+    if wf.get("available"):
+        print(f"\n■ Walk-forward（out-of-sample，{wf['folds']} 段、每日取前 {wf['top_n']}）")
+        print(f"  期間 {wf['period']}｜樣本 {wf['samples']}｜勝率 {wf['win_rate']}%"
+              f"（平滑 {wf['calibrated_win_rate']}%）｜EV {wf['expectancy']:+.2f}%"
+              f"｜PF {wf['profit_factor']}｜平均回撤 {wf['avg_mdd']}%")
+    else:
+        print(f"\n■ Walk-forward：{wf.get('reason', '資料不足')}")
+
+    reg = [b for b in bt.get("regime_buckets", []) if b["samples"] >= C.PATTERN_MIN_SAMPLES]
+    print(f"\n■ 大盤狀態 × 型態 × 級距：{len(reg)} 組樣本達標")
+    for b in sorted(reg, key=lambda x: -(x["expectancy"] or -99))[:8]:
+        print(f"  {b['regime']:<9}{b['pattern']:<12}{b['lo']:>3}–{b['hi']:<3}｜N {b['samples']:>4}"
+              f"｜EV {b['expectancy']:+.2f}%｜勝率 {b['calibrated_win_rate']}%")
+
     usable = [b for b in bt["pattern_buckets"] if b["samples"] >= C.PATTERN_MIN_SAMPLES]
     print(f"\n■ 型態 × 分數級距：共 {len(bt['pattern_buckets'])} 組，"
           f"其中 {len(usable)} 組樣本達 {C.PATTERN_MIN_SAMPLES} 筆，排名時會優先採用")
@@ -337,7 +472,8 @@ def main() -> int:
     args = ap.parse_args()
 
     hist_map = load_universe_history(args.demo)
-    bt = run_backtest(hist_map, args.days)
+    regimes = load_regimes(args.demo)
+    bt = run_backtest(hist_map, args.days, regimes)
     bt["mode"] = "demo" if args.demo else "live"
     print_report(bt, args.demo)
 

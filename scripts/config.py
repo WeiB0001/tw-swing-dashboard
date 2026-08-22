@@ -278,6 +278,26 @@ OUTPUT_HTML = "index.html"
 OUTPUT_JSON = "data/latest.json"
 ARCHIVE_DIR = "data/history"
 BACKTEST_JSON = "data/backtest.json"   # 回測結果（有跑過才會存在）
+SIGNALS_JSON = "data/signals.json"     # 每日排名紀錄（訊號生命週期用）
+PORTFOLIO_JSON = "data/portfolio.json" # 模擬投資組合狀態
+
+# --- 訊號生命週期 ---
+SIGNALS_KEEP_DAYS = 40        # 排名紀錄保留幾天
+STREAK_HOT = 3                # 連續入榜幾日標示 🔥
+RANK_MOVE_MIN = 3             # 名次變動超過幾名才標示 ↑↓
+
+# --- 模擬投資組合（Paper Portfolio）---
+PAPER_INITIAL_CASH = 100_000  # 初始本金
+PAPER_MAX_POSITIONS = 3       # 每日最多持有幾檔
+PAPER_MAX_HOLD_DAYS = 10      # 最長持有幾個交易日，到期以收盤出場
+PAPER_COST_SIDE_PCT = 0.15    # 單邊成本 %（來回等於 TRADE_COST_PCT）
+
+# --- 可信度分級（依樣本數）---
+CONFIDENCE_TIERS = [(250, 5), (120, 4), (60, 3), (30, 2)]   # (最少樣本, 星數)
+
+# --- Walk-forward ---
+WF_FOLDS = 4                  # 切成幾段，第 1 段只做校準，其餘為 out-of-sample
+WF_TOP_N = 3                  # 每日取前幾名進行 out-of-sample 檢驗
 
 # ---------------------------------------------------------------------------
 # 回測設定（scripts/backtest.py 使用）

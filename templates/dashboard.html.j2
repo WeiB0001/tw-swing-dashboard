@@ -298,6 +298,52 @@ header{padding:20px 0 14px}
   margin:8px 6px 0 0;
 }
 
+/* ---------- 大盤狀態 / 生命週期 / 計畫 / 組合 ---------- */
+.regime{
+  display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;
+  font-size:12px;font-weight:700;vertical-align:3px;
+  background:#1E2530;border:1px solid #2E3846;color:#B9C4D0;
+}
+.regime.bull{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.regime.bear{background:#2A1418;border-color:#5A2530;color:#FF8A96}
+.regime.side{background:#2A2412;border-color:#544720;color:#F2C14E}
+.mark{
+  display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;
+  background:#16222B;border:1px solid #243542;color:#9FD6EA;
+  font-size:10.5px;font-weight:700;vertical-align:1px;
+}
+.wr .conf{color:var(--signal);letter-spacing:-1px;margin-left:4px}
+.lamp{font-size:14px;font-weight:800}
+.lamp.bull{color:#6EE7A8}.lamp.bear{color:#FF8A96}.lamp.side{color:#F2C14E}
+.us-fine{margin-top:5px;font-size:11.5px;color:#7E8B9A}
+
+.plan{margin:0 0 13px;padding:11px 13px;border-radius:10px;background:#12181F;border-left:3px solid #3A4552}
+.plan-go{border-left-color:#2E9E6B}
+.plan-wait{border-left-color:#8A7430}
+.plan-no{border-left-color:#8A3A3A}
+.plan-head{font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:3px}
+.plan-head b{color:var(--text);font-size:13.5px}
+.plan-note{font-size:11.5px;color:#6E7A88;line-height:1.6;margin-top:6px}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px 10px;margin-top:9px}
+.plan-grid div{display:flex;flex-direction:column;gap:1px}
+.plan-grid span{font-size:10.5px;color:var(--muted)}
+.plan-grid b{font-size:14px;font-weight:700}
+
+.pf{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px}
+.pf-top{display:flex;flex-wrap:wrap;gap:9px 18px}
+.pf-top div{display:flex;flex-direction:column;gap:1px}
+.pf-top span{font-size:11px;color:var(--muted)}
+.pf-top b{font-size:16px;font-weight:800}
+.pf-list{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:13px}
+.pf-list>b{font-size:12px;color:var(--muted);font-weight:700}
+.pf-row{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;margin-top:6px}
+.pf-row>.mono{color:var(--muted);font-size:12px}
+.pf-meta{font-size:11.5px;color:#6E7A88}
+.pf-note{margin:11px 0 0;font-size:11.5px;color:#6E7A88;line-height:1.65}
+.note.track b{color:var(--signal)}
+.note.wf{margin-top:12px;font-size:12.5px}
+.note.wf b{color:var(--text)}
+
 /* ---------- 展開內容 ---------- */
 .detail{border-top:1px solid var(--line);background:var(--panel-2);padding:14px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
@@ -384,7 +430,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">今日勝率排行</h1>
+    <h1 class="title">今日勝率排行
+      {% if meta.regime == 'bull' %}<span class="regime bull">🟢 多頭</span>
+      {% elif meta.regime == 'bear' %}<span class="regime bear">🔴 空頭</span>
+      {% else %}<span class="regime side">🟡 震盪</span>{% endif %}
+    </h1>
 
     {% if index %}
     <div class="market">
@@ -427,15 +477,19 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
       {% if us.forecast and us.forecast.available %}
       <div class="us-fc">
-        隔日加權指數推估 <b>{{ '%+.2f'|format(us.forecast.point) }}%</b>
-        <span class="muted">（區間 {{ '%+.2f'|format(us.forecast.low) }}% ～ {{ '%+.2f'|format(us.forecast.high) }}%）</span><br>
-        {{ us.forecast.basis }}，模型 R² {{ us.forecast.r2 }}、樣本 {{ us.forecast.samples }} 日
+        {% if us.forecast.point > 0.25 %}<b class="lamp bull">🟢 海外環境偏多</b>
+        {% elif us.forecast.point < -0.25 %}<b class="lamp bear">🔴 海外環境偏空</b>
+        {% else %}<b class="lamp side">🟡 海外環境中性</b>{% endif %}
+        <div class="us-fine mono">中央估計 {{ '%+.2f'|format(us.forecast.point) }}%
+          · 區間 {{ '%+.2f'|format(us.forecast.low) }}% ～ {{ '%+.2f'|format(us.forecast.high) }}%
+          · R² {{ us.forecast.r2 }} · N {{ us.forecast.samples }}</div>
       </div>
       <p class="us-note">
         這是「台股當日漲跌 ≈ a + b×前夜那斯達克 + c×前夜費半」的迴歸外推，
         用現在的美股期貨代替今晚尚未發生的美股。R² {{ us.forecast.r2 }} 代表美股只能解釋台股約
         {{ (us.forecast.r2 * 100)|round|int }}% 的波動，其餘來自台股自身的籌碼與消息面。
         <b>這是統計相關性，不是預測，更不是投資建議。</b>
+        個股排名以大盤狀態與歷史期望值為準，這個燈號不參與排序。
       </p>
       {% elif us.forecast %}
       <p class="us-note">{{ us.forecast.reason }}</p>
@@ -519,7 +573,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="row1">
           <div class="rank {{ 'top' if r.rank <= 3 }}">{{ r.rank }}</div>
           <div class="ident">
-            <div class="code mono">{{ r.code }}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}</div>
+            <div class="code mono">{{ r.code }}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
+              {% if r.mark and r.mark.badge %}<span class="mark" title="{{ r.mark.label }}">{{ r.mark.badge }}{% if r.mark.badge in ['🔥','↑','↓'] %}{{ r.mark.streak if r.mark.badge == '🔥' else (r.mark.rank_delta|abs) }}{% endif %}</span>{% endif %}</div>
             <div class="name">{{ r.name }}</div>
           </div>
           <div class="px">
@@ -573,11 +628,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="swing">
           <span>預期 Swing 空間 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
           {% if r.hist_calibrated is not none %}
-          <span class="wr">同型態歷史 <b class="mono">{{ r.hist_samples }}</b> 筆，平均淨報酬
-            <b class="mono">{{ '%+.2f'|format(r.hist_avg_return) }}%</b>
-            {% if r.hist_pf %}· PF <b class="mono">{{ r.hist_pf }}</b>{% endif %}</span>
+          <span class="wr">5日勝率 <b class="mono">{{ '%.0f'|format(r.hist_calibrated) }}%</b>
+            · EV <b class="mono {{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.1f'|format(r.hist_expectancy or 0) }}%</b>
+            {% if r.hist_pf %}· PF <b class="mono">{{ r.hist_pf }}</b>{% endif %}
+            · N=<b class="mono">{{ r.hist_samples }}</b>
+            <b class="conf">{{ '★' * r.hist_confidence }}</b></span>
           {% else %}
-          <span class="wr nodata">歷史樣本不足，僅供型態參考</span>
+          <span class="wr nodata">歷史樣本不足（N&lt;{{ pattern_min_samples }}），僅供型態參考</span>
           {% endif %}
         </div>
         <div class="mainrisk">主要風險：{{ r.main_risk }}</div>
@@ -604,6 +661,23 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           {% endif %}
           </span>
         </div>
+
+        {% if r.plan and r.plan.available %}
+        <div class="plan plan-{{ 'go' if r.plan.status == '可觀察進場' else ('no' if r.plan.status == '禁止追價' else 'wait') }}">
+          <div class="plan-head">明日交易計畫 · <b>{{ r.plan.status }}</b></div>
+          <div class="plan-note">{{ r.plan.note }}</div>
+          <div class="plan-grid">
+            <div><span>觸發價</span><b class="mono">{{ '%.2f'|format(r.plan.trigger) }}</b></div>
+            <div><span>失效價</span><b class="mono">{{ '%.2f'|format(r.plan.invalidation) }}</b></div>
+            <div><span>停損</span><b class="mono down">{{ '%.2f'|format(r.plan.stop) }}</b></div>
+            <div><span>目標一</span><b class="mono up">{{ '%.2f'|format(r.plan.target1) }}</b></div>
+            <div><span>目標二</span><b class="mono up">{{ '%.2f'|format(r.plan.target2) }}</b></div>
+            <div><span>RR</span><b class="mono">{{ r.plan.rr if r.plan.rr else '—' }}</b></div>
+          </div>
+          <div class="plan-note">單筆風險約 {{ r.plan.risk_pct }}%（觸發價到停損），ATR 波動 {{ r.plan.atr_pct }}%。
+            價位由 ATR 與支撐壓力換算，不保證成交也不保證獲利。</div>
+        </div>
+        {% endif %}
 
         <dl class="grid">
           <div class="cell"><dt>RSI(14)</dt><dd class="mono">{{ '%.1f'|format(r.rsi) }}</dd></div>
@@ -670,6 +744,72 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     設成你的每股上限即可。
   </div>
 
+  {% if portfolio and portfolio.days %}
+  <div class="section-head"><h2>模擬投資組合</h2><span>本金 {{ '{:,.0f}'.format(portfolio.initial) }} · 規則自動執行</span></div>
+  <div class="pf">
+    <div class="pf-top">
+      <div><span>總報酬</span>
+        <b class="mono {{ 'up' if portfolio.total_return > 0 else ('down' if portfolio.total_return < 0 else '') }}">{{ '%+.2f'|format(portfolio.total_return) }}%</b></div>
+      <div><span>同期大盤</span>
+        <b class="mono {{ 'up' if (portfolio.benchmark_return or 0) > 0 else ('down' if (portfolio.benchmark_return or 0) < 0 else '') }}">{{ ('%+.2f'|format(portfolio.benchmark_return) ~ '%') if portfolio.benchmark_return is not none else '—' }}</b></div>
+      <div><span>交易數</span><b class="mono">{{ portfolio.trades }}</b></div>
+      <div><span>勝率</span><b class="mono">{{ (portfolio.win_rate ~ '%') if portfolio.win_rate is not none else '—' }}</b></div>
+      <div><span>PF</span><b class="mono">{{ portfolio.profit_factor if portfolio.profit_factor is not none else '—' }}</b></div>
+      <div><span>最大回撤</span><b class="mono down">{{ '%.2f'|format(portfolio.mdd) }}%</b></div>
+    </div>
+    {% if portfolio.positions %}
+    <div class="pf-list">
+      <b>目前持股</b>
+      {% for p in portfolio.positions %}
+      <div class="pf-row"><span class="mono">{{ p.code }}</span>{{ p.name }}
+        <span class="pf-meta mono">成本 {{ '%.2f'|format(p.entry) }} · 停損 {{ '%.2f'|format(p.stop) }} · 持有 {{ p.held }} 日</span></div>
+      {% endfor %}
+    </div>
+    {% elif portfolio.pending %}
+    <div class="pf-list"><b>明日待成交 {{ portfolio.pending }} 筆</b>
+      <div class="pf-meta">以明日開盤價成交，等權配置</div></div>
+    {% else %}
+    <div class="pf-list"><span class="pf-meta">目前空手</span></div>
+    {% endif %}
+    {% if portfolio.recent %}
+    <div class="pf-list">
+      <b>最近平倉</b>
+      {% for t in portfolio.recent %}
+      <div class="pf-row"><span class="mono">{{ t.code }}</span>{{ t.name }}
+        <span class="pf-meta mono {{ 'up' if t.net_pct > 0 else 'down' }}">{{ '%+.2f'|format(t.net_pct) }}% · {{ t.reason }} · 持有 {{ t.held }} 日</span></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <p class="pf-note">
+      規則：每日最多持有 {{ paper_max_positions }} 檔、等權配置、隔日開盤成交、
+      觸及停損或目標一出場、最長持有 {{ paper_max_hold }} 個交易日，來回扣 {{ backtest.cost_pct if backtest else 0.3 }}% 成本。
+      完全依規則執行，沒有人為判斷，也沒有使用任何未來資料。這是紀錄，不是實際交易。
+    </p>
+  </div>
+  {% endif %}
+
+  {% if signals and (signals.new_count or signals.hot_count or signals.dropped) %}
+  <div class="section-head"><h2>訊號追蹤</h2><span>近 {{ signals.history_days }} 日</span></div>
+  <div class="note track">
+    今日新訊號 <b>{{ signals.new_count }}</b> 檔 · 連續入榜 <b>{{ signals.hot_count }}</b> 檔
+    {% if signals.dropped %}<br>❌ 已掉出榜單：
+      {% for d in signals.dropped %}<span class="mono">{{ d.symbol }}</span>（原第 {{ d.prev_rank }} 名）{{ '、' if not loop.last }}{% endfor %}
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if backtest and backtest.walk_forward %}
+  <div class="note wf">
+    {% if backtest.walk_forward.available %}
+    <b>Walk-forward</b>（out-of-sample）：EV {{ '%+.2f'|format(backtest.walk_forward.expectancy) }}% ·
+    PF {{ backtest.walk_forward.profit_factor }} · N {{ backtest.walk_forward.samples }}
+    <span class="muted">（{{ backtest.walk_forward.folds }} 段滾動校準，僅用前期資料建表再測後期）</span>
+    {% else %}
+    <b>Walk-forward</b>：{{ backtest.walk_forward.reason }}
+    {% endif %}
+  </div>
+  {% endif %}
+
   <!-- ===================== 方法說明 ===================== -->
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
@@ -678,7 +818,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     先用技術面把每檔標的歸類成「型態 ＋ 分數級距」（例如「帶量突破 ＋ 65–75 分」），
     再去查回測資料裡同一類訊號歷史上贏過幾次。<br><br>
 
-    <b>排序順位</b>：歷史平滑勝率 → 平均淨報酬 → Profit Factor → 平均最大回撤 → 技術分數。<br>
+    <b>排序順位</b>：期望值 EV → 平滑勝率 → Profit Factor → 平均最大回撤 → 技術分數。
+    EV = 勝率×平均獲利 ＋ 敗率×平均虧損（已扣成本）。
+    <b>EV ≤ 0 的標的會降到有正 EV 的之後，但不會被刪除</b>，仍看得到名次。<br>
+    <b>查表順序</b>：大盤狀態＋型態＋分數級距 → 型態＋分數級距 → 分數級距 → 樣本不足。<br>
+    <b>可信度</b>：N&lt;30 樣本不足、30–59 ★★、60–119 ★★★、120–249 ★★★★、≥250 ★★★★★。<br>
     <b>勝率平滑</b>：(勝場 + {{ smooth_wins }}) / (樣本 + {{ smooth_n }})，避免「3 戰 3 勝 = 100%」這種假訊號。<br>
     <b>樣本門檻</b>：型態層需 {{ pattern_min_samples }} 筆，不足退回只看分數級距；再不足就標示
     <b>樣本不足</b>，以先驗 50% 計入排名並改用技術分數決定先後——不會生一個假勝率出來。<br><br>

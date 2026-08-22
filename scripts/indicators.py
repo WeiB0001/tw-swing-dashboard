@@ -55,6 +55,34 @@ def macd(close: pd.Series, fast=12, slow=26, signal=9):
     return line, sig, line - sig
 
 
+def regime_series(twii: pd.DataFrame) -> pd.Series:
+    """
+    大盤狀態（Market Regime），依加權指數判定：
+      bull     ── 收盤 > MA20 > MA60 且 MA20 斜率 > 0
+      bear     ── 收盤 < MA20 且 MA20 斜率 < 0
+      sideways ── 其餘
+    回測時用來分層（同一個型態在多頭與空頭的勝率差很多）。
+    """
+    c = twii["close"].astype(float)
+    ma20 = c.rolling(20).mean()
+    ma60 = c.rolling(60).mean()
+    slope = (ma20 / ma20.shift(5) - 1) * 100
+    bull = (c > ma20) & (ma20 > ma60) & (slope > 0)
+    bear = (c < ma20) & (slope < 0)
+    out = np.where(bull, "bull", np.where(bear, "bear", "sideways"))
+    return pd.Series(out, index=c.index)
+
+
+def regime_of(twii: pd.DataFrame) -> str:
+    """取最新一日的大盤狀態；資料不足回 sideways。"""
+    try:
+        if twii is None or len(twii) < 60:
+            return "sideways"
+        return str(regime_series(twii).iloc[-1])
+    except Exception:
+        return "sideways"
+
+
 # ---------------------------------------------------------------------------
 # 一次算完整段歷史
 # ---------------------------------------------------------------------------
