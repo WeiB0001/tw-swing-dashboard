@@ -20,6 +20,7 @@ install.py — 一鍵安裝
 
 from __future__ import annotations
 
+import argparse
 import base64
 import getpass
 import json
@@ -174,13 +175,13 @@ def ensure_ready(gh: GitHub, owner: str, name: str) -> tuple[str, str | None]:
     return "main", None   # 不會走到，只是讓型別清楚
 
 
-def main() -> None:
+def main(args) -> None:
     TOTAL = 6
     print(_c("1;33", "\n╔══════════════════════════════════════════╗"))
     print(_c("1;33", "║   台股價差機會儀表板 · 一鍵安裝           ║"))
     print(_c("1;33", "╚══════════════════════════════════════════╝"))
     print("\n這支程式會把儀表板架在你自己的 GitHub 上，全程免費。")
-    print("大約需要 5 分鐘，中間只要貼一次權杖。")
+    print("貼上 GitHub 權杖就會全自動跑完，大約 5 分鐘。")
     print(_c("2", "\n本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險。"))
 
     if sys.version_info < (3, 8):
@@ -192,23 +193,19 @@ def main() -> None:
             "請確認 install.py 和 scripts/ 資料夾在同一層，並且是在解壓縮後的資料夾裡執行。")
 
     # --- 1) 取得權杖 ---
-    step(1, TOTAL, "取得 GitHub 權杖")
-    print("  等一下會打開瀏覽器，畫面上的權限已經幫你勾好了。")
-    print("  請把頁面拉到最下面按綠色的 " + _c("1", "Generate token") + "，")
-    print("  然後複製那串 " + _c("1", "ghp_ 開頭") + " 的文字。")
-    print(_c("2", "  （沒有自動打開的話，手動複製這個網址）"))
-    print(_c("2", f"  {TOKEN_URL}"))
-    input("\n  準備好了就按 Enter 打開瀏覽器…")
-    try:
-        webbrowser.open(TOKEN_URL)
-    except Exception:
-        pass
+    step(1, TOTAL, "輸入 GitHub 權杖")
 
-    token = ""
-    while not token:
-        token = getpass.getpass("\n  貼上權杖後按 Enter（畫面不會顯示，這是正常的）：").strip()
-        if not token:
-            warn("沒有讀到內容，請再貼一次。")
+    # 三種來源，依序嘗試：命令列參數 > 環境變數 > 手動貼上
+    token = (args.token or os.environ.get("GITHUB_TOKEN") or "").strip()
+    if token:
+        ok("已從" + ("參數" if args.token else "環境變數 GITHUB_TOKEN") + "讀取權杖")
+    else:
+        print(_c("2", "  需要一組有 repo 與 workflow 權限的權杖。"))
+        print(_c("2", f"  還沒有的話到這裡產生（權限已預先勾好）：{TOKEN_URL}"))
+        while not token:
+            token = getpass.getpass("\n  貼上權杖後按 Enter（畫面不會顯示，這是正常的）：").strip()
+            if not token:
+                warn("沒有讀到內容，請再貼一次。")
 
     gh = GitHub(token)
     code, me = gh.call("GET", "/user")
@@ -220,7 +217,9 @@ def main() -> None:
     # --- 2) 建立 repo ---
     step(2, TOTAL, "建立存放的 repo")
     default_name = "tw-swing-dashboard"
-    name = input(f"  repo 名稱（直接按 Enter 用 {default_name}）：").strip() or default_name
+    name = (args.repo.strip() or
+            input(f"  repo 名稱（直接按 Enter 用 {default_name}）：").strip() or
+            default_name)
 
     code, res = gh.call("POST", "/user/repos", {
         "name": name,
@@ -378,8 +377,15 @@ def wait_for_run(gh: GitHub, owner: str, name: str, timeout: int = 600) -> str:
     return "timeout"
 
 
+def parse_args():
+    ap = argparse.ArgumentParser(description="台股價差機會儀表板 一鍵安裝")
+    ap.add_argument("--token", default="", help="GitHub 權杖，直接帶入就不會再問")
+    ap.add_argument("--repo", default="", help="repo 名稱，預設 tw-swing-dashboard")
+    return ap.parse_args()
+
+
 if __name__ == "__main__":
     try:
-        main()
+        main(parse_args())
     except KeyboardInterrupt:
         print("\n\n已取消。")

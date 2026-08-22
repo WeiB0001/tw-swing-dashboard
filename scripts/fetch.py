@@ -172,9 +172,17 @@ def build_universe(snapshot: pd.DataFrame) -> pd.DataFrame:
         (snapshot["close"] >= C.MIN_CLOSE_PRICE)
         & (snapshot["turnover"] >= C.MIN_TURNOVER_TWD)
     ].copy()
+    # 股價上限（0 = 不限）。買不起的就不用浪費時間算指標。
+    if C.MAX_CLOSE_PRICE and C.MAX_CLOSE_PRICE > 0:
+        before = len(liquid)
+        liquid = liquid[liquid["close"] <= C.MAX_CLOSE_PRICE]
+        log.info("股價上限 %.0f 元，濾掉 %d 檔", C.MAX_CLOSE_PRICE, before - len(liquid))
 
     top = liquid.sort_values("turnover", ascending=False).head(C.TOP_N_BY_TURNOVER)
     core = snapshot[snapshot["code"].isin(C.CORE_WEIGHTED_STOCKS)]
+    if C.MAX_CLOSE_PRICE and C.MAX_CLOSE_PRICE > 0:
+        # 權值股白名單也要受上限約束，否則台積電這種高價股還是會被放進來
+        core = core[core["close"] <= C.MAX_CLOSE_PRICE]
 
     uni = pd.concat([top, core]).drop_duplicates(subset="code")
     uni = uni.sort_values("turnover", ascending=False).head(C.MAX_UNIVERSE)

@@ -62,6 +62,13 @@ def render_html(payload: dict) -> str:
         rows=payload["rows"],
         segments=SEGMENTS,
         star_rows=STAR_ROWS,
+        price_bands=C.PRICE_BANDS,
+        default_band=C.DEFAULT_PRICE_BAND,
+        budget_presets=C.BUDGET_PRESETS,
+        split_options=C.SPLIT_OPTIONS,
+        default_splits=C.DEFAULT_SPLITS,
+        max_position_pct=C.MAX_POSITION_PCT,
+        allow_odd_lot=C.ALLOW_ODD_LOT,
         weights=C.WEIGHTS,
         thresholds={
             "vol_surge": C.VOL_SURGE_RATIO,
@@ -71,6 +78,7 @@ def render_html(payload: dict) -> str:
             "risk_cut": int(C.RISK_MAX_CUT * 100),
             "min_price": int(C.MIN_CLOSE_PRICE),
             "min_turnover": _format_twd(C.MIN_TURNOVER_TWD),
+            "max_price": int(C.MAX_CLOSE_PRICE) if C.MAX_CLOSE_PRICE else 0,
         },
     )
 

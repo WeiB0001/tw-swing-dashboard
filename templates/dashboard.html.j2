@@ -74,22 +74,79 @@ body{
   font:inherit;font-size:12px;padding:2px 9px;border-radius:999px;margin-left:8px;cursor:pointer;
 }
 
-/* ---------- 加到主畫面引導 ---------- */
-.install{
-  display:none;margin:16px 0 0;padding:14px 16px;border-radius:var(--radius);
-  background:var(--panel);border:1px solid #2E3846;
+/* ---------- 每張預算快選 ---------- */
+.bands{
+  display:flex;gap:7px;overflow-x:auto;margin:14px -14px 0;padding:0 14px 2px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
 }
-.install.show{display:block}
-.install h3{margin:0 0 4px;font-size:14.5px;font-weight:800}
-.install p{margin:0;font-size:13px;color:#9FACBA;line-height:1.65}
-.install-row{display:flex;gap:8px;margin-top:11px}
-.btn{
-  flex:1 1 auto;font:inherit;font-size:14px;font-weight:700;padding:9px 14px;
-  border-radius:10px;border:1px solid var(--signal);background:var(--signal);
-  color:#161105;cursor:pointer;
+.bands::-webkit-scrollbar{display:none}
+.band{
+  flex:0 0 auto;font:inherit;font-size:13px;font-weight:700;
+  padding:7px 14px;border-radius:999px;cursor:pointer;
+  background:var(--panel);border:1px solid var(--line);color:var(--muted);
+  white-space:nowrap;
 }
-.btn.ghost{flex:0 0 auto;background:none;border-color:#3A4552;color:var(--muted)}
-.btn:focus-visible,.toast button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.band[aria-pressed="true"]{
+  background:var(--signal);border-color:var(--signal);color:#161105;
+}
+.band:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.band-note{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.6}
+.lot{
+  display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px;
+}
+
+/* ---------- 本週預算試算 ---------- */
+.budget{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 14px;margin:12px 0 14px;
+}
+.budget-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.budget-head label{font-size:13.5px;font-weight:800;color:var(--text);flex:0 0 auto}
+.budget-input{
+  flex:1 1 150px;display:flex;align-items:center;gap:6px;
+  background:var(--panel-2);border:1px solid #2E3846;border-radius:10px;padding:7px 10px;
+}
+.budget-input:focus-within{border-color:var(--signal)}
+.budget-input span{font-size:12.5px;color:var(--muted);font-weight:700}
+.budget-input input{
+  flex:1 1 auto;min-width:0;background:none;border:0;color:var(--text);
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:17px;font-weight:700;
+  font-variant-numeric:tabular-nums;outline:none;-moz-appearance:textfield;
+}
+.budget-input input::-webkit-outer-spin-button,
+.budget-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.budget-input button{
+  background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px;
+}
+.presets,.splits{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:9px}
+.splits span{font-size:12.5px;color:var(--muted);margin-right:2px}
+.preset,.split{
+  font:inherit;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:999px;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;
+}
+.split[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#161105}
+.preset:active{background:#2A333F}
+.preset:focus-visible,.split:focus-visible,.budget-input input:focus-visible{
+  outline:2px solid var(--signal);outline-offset:2px}
+.budget-result{
+  display:none;margin-top:11px;padding:10px 12px;border-radius:10px;
+  background:#12181F;border-left:3px solid var(--signal);
+  font-size:13px;color:#C3CEDA;line-height:1.65;
+}
+.budget-result.show{display:block}
+.budget-result b{color:var(--signal);font-weight:800}
+.budget-note{
+  margin:10px 0 0;font-size:11.5px;color:#6E7A88;line-height:1.65;
+}
+.budget-note b{color:#8E9AA8}
+.alloc{
+  margin-top:9px;padding:7px 11px;border-radius:8px;
+  background:#1B2733;border:1px solid #2A3A4A;
+  font-size:13px;color:#9FD6EA;font-weight:700;
+}
+.alloc b{color:#CFEAF5;font-family:ui-monospace,Menlo,monospace}
+.alloc .sub{color:#6F8494;font-weight:600;font-size:11.5px}
+.toast button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 
 /* ---------- 大盤 ---------- */
 header{padding:20px 0 14px}
@@ -316,15 +373,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
     </div>
 
-    <!-- 只有在瀏覽器裡開啟（還沒加到主畫面）時才會出現 -->
-    <section class="install" id="install">
-      <h3>把它放到手機主畫面</h3>
-      <p id="install-hint">加到主畫面後會像一般 app 一樣開啟，秒開、沒有網址列，捷運上沒訊號也看得到上次的結果。</p>
-      <div class="install-row">
-        <button type="button" class="btn" id="btn-install">加到主畫面</button>
-        <button type="button" class="btn ghost" id="btn-dismiss">不用了</button>
-      </div>
-    </section>
   </header>
 
   <!-- ===================== 排名 ===================== -->
@@ -333,9 +381,49 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <span>點卡片看細節</span>
   </div>
 
+  <!-- 每張預算快選：台股一張＝1000 股，點一次會記住 -->
+  <div class="bands" role="group" aria-label="每張預算">
+    {% for b in price_bands %}
+    <button type="button" class="band" data-band="{{ b.id }}" data-max="{{ b.max_lot_cost }}"
+            aria-pressed="{{ 'true' if b.id == default_band else 'false' }}">{{ b.label }}</button>
+    {% endfor %}
+  </div>
+  <div class="band-note" id="band-count"></div>
+
+  <!-- 本週預算試算：輸入一次會記住，不用每天重打 -->
+  <section class="budget">
+    <div class="budget-head">
+      <label for="budget-input">本週預算</label>
+      <div class="budget-input">
+        <span>NT$</span>
+        <input id="budget-input" type="number" inputmode="numeric" min="0" step="1000"
+               placeholder="例如 100000" autocomplete="off">
+        <button type="button" id="budget-clear" title="清除">✕</button>
+      </div>
+    </div>
+    <div class="presets">
+      {% for amt in budget_presets %}
+      <button type="button" class="preset" data-amt="{{ amt }}">{{ (amt // 10000) }}萬</button>
+      {% endfor %}
+    </div>
+    <div class="splits">
+      <span>分散成</span>
+      {% for n in split_options %}
+      <button type="button" class="split" data-n="{{ n }}"
+              aria-pressed="{{ 'true' if n == default_splits else 'false' }}">{{ n }} 檔</button>
+      {% endfor %}
+    </div>
+    <div class="budget-result" id="budget-result"></div>
+    <p class="budget-note">
+      這是把你輸入的金額，按獲利可能性分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%。
+      不是建議你買進，也沒有計入手續費與證交稅。台股一張＝1000 股，
+      {% if allow_odd_lot %}一張買不起時會改用零股試算（需券商支援盤中零股交易）。{% endif %}
+    </p>
+  </section>
+
   {% if rows %}
     {% for r in rows %}
-    <details class="card">
+    <details class="card" data-lot="{{ r.lot_cost }}" data-price="{{ r.close }}" data-score="{{ r.score }}">
       <summary>
         <div class="row1">
           <div class="rank {{ 'top' if loop.index <= 3 }}">{{ loop.index }}</div>
@@ -348,6 +436,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             <div class="chg mono {{ 'up' if r.chg_pct > 0 else ('down' if r.chg_pct < 0 else 'flat') }}">
               {{ '%+.2f'|format(r.chg_pct) }}%
             </div>
+            <span class="lot mono">一張 {{ '%.1f'|format(r.lot_cost / 10000) }} 萬</span>
           </div>
         </div>
 
@@ -385,6 +474,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <span class="wr">歷史相似訊號勝率 <b class="mono">{{ r.hist_winrate }}%</b>（{{ r.hist_samples }} 筆）</span>
           {% endif %}
         </div>
+        <div class="alloc" data-alloc hidden></div>
         <div class="mainrisk">主要風險：{{ r.main_risk }}</div>
 
         {% for f in r.flags %}<span class="chip">{{ f }}</span>{% endfor %}
@@ -458,6 +548,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
   {% endif %}
 
+  <div class="empty" id="band-empty" style="display:none">
+    <b>這個預算範圍內今天沒有標的</b>
+    今天入選的都超過你選的每張預算。可以改選比較寬的區間，或明天再看。
+    若想從源頭就只掃低價股，把 <code>scripts/config.py</code> 的 <code>MAX_CLOSE_PRICE</code>
+    設成你的每股上限即可。
+  </div>
+
   <!-- ===================== 方法說明 ===================== -->
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
@@ -488,7 +585,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% endif %}
 
     掃描池為當日成交金額前 {{ meta.top_n }} 名加主要權值股，股價低於 {{ thresholds.min_price }} 元或成交金額低於
-    {{ thresholds.min_turnover }} 的個股不納入。資料來源：{{ meta.source_note }}。<br>
+    {{ thresholds.min_turnover }} 的個股不納入{% if thresholds.max_price %}，股價高於 {{ thresholds.max_price }} 元的也不納入{% endif %}。
+    上方的「每張預算」是以一張 1000 股計算的成本，只影響顯示、不影響排名，選過會記住。資料來源：{{ meta.source_note }}。<br>
     要調整訊號邏輯，改 <code>scripts/config.py</code> 的權重與門檻即可。
   </div>
 
@@ -569,43 +667,194 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     if (!document.hidden) { syncOnline(); renderFreshness(); checkForNewData(); }
   });
 
-  /* ---- 5) 加到主畫面引導 ---- */
-  var box = document.getElementById("install");
-  var hint = document.getElementById("install-hint");
-  var addBtn = document.getElementById("btn-install");
-  var noBtn = document.getElementById("btn-dismiss");
-  var standalone = window.matchMedia("(display-mode: standalone)").matches ||
-                   window.navigator.standalone === true;
-  var dismissed = false;
-  try { dismissed = localStorage.getItem("hide-install") === "1"; } catch (e) {}
+  /* ---- 5) 每張預算篩選：點一次就記住，下次打開自動套用 ---- */
+  var DEFAULT_BAND = "{{ default_band }}";
+  var chips = Array.prototype.slice.call(document.querySelectorAll(".band"));
+  var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
+  var countEl = document.getElementById("band-count");
+  var emptyEl = document.getElementById("band-empty");
 
-  var deferred = null;
-  window.addEventListener("beforeinstallprompt", function (e) {
-    e.preventDefault();
-    deferred = e;
-    if (box && !standalone && !dismissed) box.classList.add("show");
-  });
-
-  if (box && !standalone && !dismissed) {
-    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    if (isIOS) {
-      // iOS 沒有安裝 API，只能教使用者按分享鍵
-      if (hint) hint.textContent = "在 Safari 按下方中間的「分享」鍵，往下捲找到「加入主畫面」，就會多一個 app 圖示。";
-      if (addBtn) addBtn.style.display = "none";
-      if (noBtn) noBtn.style.flex = "1 1 auto";
-      box.classList.add("show");
+  function applyBand(id) {
+    var chip = null;
+    for (var i = 0; i < chips.length; i++) {
+      var on = chips[i].dataset.band === id;
+      chips[i].setAttribute("aria-pressed", on ? "true" : "false");
+      if (on) chip = chips[i];
     }
+    if (!chip) return applyBand(DEFAULT_BAND);
+
+    var limit = parseInt(chip.dataset.max, 10) || 0;   // 0 = 不限
+    var shown = 0;
+    cards.forEach(function (c) {
+      var cost = parseInt(c.dataset.lot, 10) || 0;
+      var ok = !limit || cost <= limit;
+      c.style.display = ok ? "" : "none";
+      if (!ok) c.open = false;
+      if (ok) shown++;
+    });
+    if (countEl) {
+      countEl.textContent = limit
+        ? "符合預算的有 " + shown + " 檔（共 " + cards.length + " 檔）"
+        : "顯示全部 " + cards.length + " 檔";
+    }
+    if (emptyEl) emptyEl.style.display = shown ? "none" : "block";
+    try { localStorage.setItem("price-band", id); } catch (e) {}
+    if (typeof allocate === "function") allocate();   // 預算範圍變了就重新分配
   }
 
-  if (addBtn) addBtn.addEventListener("click", function () {
-    if (!deferred) return;
-    deferred.prompt();
-    deferred.userChoice.then(function () { deferred = null; box.classList.remove("show"); });
+  var saved = DEFAULT_BAND;
+  try { saved = localStorage.getItem("price-band") || DEFAULT_BAND; } catch (e) {}
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () { applyBand(c.dataset.band); });
   });
-  if (noBtn) noBtn.addEventListener("click", function () {
-    box.classList.remove("show");
-    try { localStorage.setItem("hide-install", "1"); } catch (e) {}
+  if (chips.length) applyBand(saved);
+
+  /* ---- 6) 本週預算試算 ----------------------------------------------------
+     做法（純算術，不是投資建議）：
+       1. 從目前顯示中的卡片，依名次取前 N 檔（N = 使用者選的分散檔數）
+       2. 依獲利可能性分數的比例分配金額
+       3. 單一標的上限 MAX_POS%，超過的部分退回去分給其他檔
+       4. 金額換算成張數（1000 股）；不足一張時改算零股
+     預算與檔數都存在手機本機，輸入一次就記住。
+  ------------------------------------------------------------------------- */
+  var MAX_POS = {{ max_position_pct }} / 100;
+  var ODD_LOT = {{ 'true' if allow_odd_lot else 'false' }};
+  var budgetInput = document.getElementById("budget-input");
+  var budgetClear = document.getElementById("budget-clear");
+  var resultEl = document.getElementById("budget-result");
+  var presets = Array.prototype.slice.call(document.querySelectorAll(".preset"));
+  var splitBtns = Array.prototype.slice.call(document.querySelectorAll(".split"));
+  var splits = {{ default_splits }};
+
+  function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
+
+  function allocate() {
+    // 預算面板可能還沒初始化（篩選會比它早呼叫一次），先擋掉
+    if (!budgetInput || !resultEl) return;
+    var budget = parseFloat(budgetInput.value) || 0;
+
+    // 沒填預算就把所有配置欄位收起來
+    cards.forEach(function (c) {
+      var el = c.querySelector("[data-alloc]");
+      if (el) { el.hidden = true; el.innerHTML = ""; }
+    });
+    if (!budget || budget <= 0) {
+      if (resultEl) resultEl.classList.remove("show");
+      return;
+    }
+
+    var visible = cards.filter(function (c) { return c.style.display !== "none"; });
+    var picks = visible.slice(0, splits);
+    if (!picks.length) {
+      resultEl.classList.add("show");
+      resultEl.innerHTML = "目前的預算範圍內沒有標的可以試算。";
+      return;
+    }
+
+    // 依分數比例分配，並套用單一標的上限
+    var scores = picks.map(function (c) { return Math.max(parseFloat(c.dataset.score) || 0, 1); });
+    var total = scores.reduce(function (a, b) { return a + b; }, 0);
+    // 單一標的上限：分散檔數少時要放寬，否則選「1 檔」永遠只能用 45% 的錢
+    var cap = budget * Math.max(MAX_POS, 1 / picks.length);
+    var targets = scores.map(function (s) { return budget * s / total; });
+
+    var overflow = 0, room = [];
+    targets.forEach(function (t, i) {
+      if (t > cap) { overflow += t - cap; targets[i] = cap; }
+      else { room.push(i); }
+    });
+    // 超過上限的部分，平均退回給還有空間的標的
+    while (overflow > 1 && room.length) {
+      var share = overflow / room.length;
+      overflow = 0;
+      var nextRoom = [];
+      room.forEach(function (i) {
+        var t = targets[i] + share;
+        if (t > cap) { overflow += t - cap; targets[i] = cap; }
+        else { targets[i] = t; nextRoom.push(i); }
+      });
+      room = nextRoom;
+    }
+
+    var used = 0, lines = 0;
+    picks.forEach(function (c, i) {
+      var price = parseFloat(c.dataset.price) || 0;
+      var lotCost = parseFloat(c.dataset.lot) || price * 1000;
+      var target = targets[i];
+      var lots = Math.floor(target / lotCost);
+      var amount = 0, unit = "";
+
+      if (lots >= 1) {
+        amount = lots * lotCost;
+        unit = lots + " 張";
+      } else if (ODD_LOT) {
+        var shares = Math.floor(target / price);
+        if (shares >= 1) { amount = shares * price; unit = "零股 " + shares + " 股"; }
+      }
+
+      var el = c.querySelector("[data-alloc]");
+      if (!el) return;
+      if (amount > 0) {
+        used += amount;
+        lines++;
+        el.hidden = false;
+        el.innerHTML = "本週配置 <b>" + money(amount) + "</b> · " + unit +
+          ' <span class="sub">（目標 ' + money(target) + "）</span>";
+      } else {
+        el.hidden = false;
+        el.innerHTML = '<span class="sub">分到的 ' + money(target) +
+          " 不夠買進最小單位（一股 " + money(price) + "）</span>";
+      }
+    });
+
+    resultEl.classList.add("show");
+    resultEl.innerHTML =
+      "預算 <b>" + money(budget) + "</b>，分散到前 " + picks.length + " 檔，" +
+      "實際可投入 <b>" + money(used) + "</b>" +
+      (lines < picks.length ? "（其中 " + (picks.length - lines) + " 檔金額不足）" : "") +
+      "，剩餘現金 " + money(budget - used) + "。";
+
+    try {
+      localStorage.setItem("budget", String(budget));
+      localStorage.setItem("splits", String(splits));
+    } catch (e) {}
+  }
+
+  presets.forEach(function (b) {
+    b.addEventListener("click", function () {
+      budgetInput.value = b.dataset.amt;
+      allocate();
+    });
   });
+  splitBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      splits = parseInt(b.dataset.n, 10) || 3;
+      splitBtns.forEach(function (x) {
+        x.setAttribute("aria-pressed", x === b ? "true" : "false");
+      });
+      allocate();
+    });
+  });
+  if (budgetInput) budgetInput.addEventListener("input", allocate);
+  if (budgetClear) budgetClear.addEventListener("click", function () {
+    budgetInput.value = "";
+    try { localStorage.removeItem("budget"); } catch (e) {}
+    allocate();
+  });
+
+  // 還原上次輸入的預算與檔數
+  try {
+    var savedBudget = localStorage.getItem("budget");
+    var savedSplits = parseInt(localStorage.getItem("splits"), 10);
+    if (savedBudget) budgetInput.value = savedBudget;
+    if (savedSplits) {
+      splits = savedSplits;
+      splitBtns.forEach(function (x) {
+        x.setAttribute("aria-pressed", parseInt(x.dataset.n, 10) === splits ? "true" : "false");
+      });
+    }
+  } catch (e) {}
+  allocate();
 })();
 </script>
 

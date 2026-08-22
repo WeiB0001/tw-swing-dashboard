@@ -57,6 +57,7 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
         "name": name,
         # --- 原始指標（UI 展開後顯示，一個都沒刪） ---
         "close": f["close"],
+        "lot_cost": round(f["close"] * 1000),   # 一張（1000 股）要多少錢
         "chg_pct": f["chg_pct"],
         "rsi": f["rsi"],
         "vol_ratio": f["vol_ratio"],
