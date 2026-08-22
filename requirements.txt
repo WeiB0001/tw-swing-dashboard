@@ -1,0 +1,7 @@
+# 全部免費、無需 API 金鑰
+pandas>=2.0
+numpy>=1.24
+requests>=2.31
+Jinja2>=3.1
+yfinance>=0.2.40      # 台股歷史日線（代號加 .TW）
+lxml>=5.0             # yfinance 解析用

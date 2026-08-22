@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0E1116">
+<meta name="description" content="台股短線價差機會掃描：每日收盤後自動更新，僅供技術分析參考。">
+<title>台股價差機會 · {{ meta.trade_date }}</title>
+
+<!-- ===== PWA：讓這頁可以「加到主畫面」，開起來像一個 app ===== -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="價差機會">
+<style>
+/* =======================================================================
+   設計 tokens — 想換配色只要改這裡
+   紅漲綠跌採台股慣例（與美股相反）
+   ======================================================================= */
+:root{
+  --ink:#0E1116;        /* 底色 */
+  --panel:#161B22;      /* 卡片 */
+  --panel-2:#1C232C;    /* 卡片內層 */
+  --line:#242C36;       /* 分隔線 */
+  --text:#E7ECF2;
+  --muted:#828F9E;
+  --up:#FF4D5A;         /* 漲 */
+  --down:#12B886;       /* 跌 */
+  --signal:#FFB020;     /* 訊號強度 */
+  --signal-dim:#8A5F13;
+  --warn:#F2C14E;
+  --radius:14px;
+  --gap:12px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ink);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei","Helvetica Neue",sans-serif;
+  font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(24px + var(--safe-b));
+}
+.mono{font-family:ui-monospace,"SF Mono","JetBrains Mono","Roboto Mono",Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:680px;margin:0 auto;padding:0 14px}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--muted)}
+
+/* ---------- 免責聲明（頂部固定） ---------- */
+.disclaimer-top{
+  position:sticky;top:0;z-index:50;
+  background:#2A1A12;border-bottom:1px solid #4A2E1B;
+  color:#FFC98A;font-size:13px;font-weight:600;
+  padding:calc(9px + env(safe-area-inset-top,0px)) 14px 9px;
+  text-align:center;letter-spacing:.02em;
+}
+
+/* ---------- 狀態提示（離線／有新資料），平常不占空間 ---------- */
+.toast{
+  display:none;position:sticky;z-index:49;
+  top:calc(37px + env(safe-area-inset-top,0px));
+  padding:9px 14px;font-size:13px;font-weight:600;
+  text-align:center;border-bottom:1px solid transparent;
+}
+.toast.show{display:block}
+.toast.offline{background:#1E2530;border-bottom-color:#2E3846;color:#9FACBA}
+.toast.update{background:#12212B;border-bottom-color:#1E3A4A;color:#7FD1E8;cursor:pointer}
+.toast button{
+  background:none;border:1px solid currentColor;color:inherit;
+  font:inherit;font-size:12px;padding:2px 9px;border-radius:999px;margin-left:8px;cursor:pointer;
+}
+
+/* ---------- 加到主畫面引導 ---------- */
+.install{
+  display:none;margin:16px 0 0;padding:14px 16px;border-radius:var(--radius);
+  background:var(--panel);border:1px solid #2E3846;
+}
+.install.show{display:block}
+.install h3{margin:0 0 4px;font-size:14.5px;font-weight:800}
+.install p{margin:0;font-size:13px;color:#9FACBA;line-height:1.65}
+.install-row{display:flex;gap:8px;margin-top:11px}
+.btn{
+  flex:1 1 auto;font:inherit;font-size:14px;font-weight:700;padding:9px 14px;
+  border-radius:10px;border:1px solid var(--signal);background:var(--signal);
+  color:#161105;cursor:pointer;
+}
+.btn.ghost{flex:0 0 auto;background:none;border-color:#3A4552;color:var(--muted)}
+.btn:focus-visible,.toast button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+/* ---------- 大盤 ---------- */
+header{padding:20px 0 14px}
+.eyebrow{
+  font-size:12px;letter-spacing:.18em;color:var(--muted);
+  text-transform:uppercase;font-weight:700;margin-bottom:6px;
+}
+.title{font-size:22px;font-weight:800;letter-spacing:-.01em;margin:0 0 14px}
+.market{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+}
+.market-label{font-size:13px;color:var(--muted);margin-bottom:2px}
+.market-close{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.market-chg{font-size:15px;font-weight:700;text-align:right}
+.market-meta{font-size:12px;color:var(--muted);margin-top:4px;text-align:right}
+.demo-flag{
+  margin-top:10px;padding:9px 12px;border-radius:10px;
+  background:#12212B;border:1px solid #1E3A4A;color:#7FD1E8;
+  font-size:12.5px;font-weight:600;line-height:1.5;
+}
+.stamp{
+  display:flex;flex-wrap:wrap;gap:6px 14px;
+  font-size:12.5px;color:var(--muted);margin-top:10px;
+}
+.stamp b{color:#B9C4D0;font-weight:600}
+
+/* ---------- 區段標題 ---------- */
+.section-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin:26px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line);
+}
+.section-head h2{font-size:16px;font-weight:800;margin:0;letter-spacing:.01em}
+.section-head span{font-size:12px;color:var(--muted)}
+
+/* ---------- 排名卡片 ---------- */
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:var(--gap);overflow:hidden;
+}
+.card>summary{
+  list-style:none;cursor:pointer;padding:14px 14px 12px;display:block;
+}
+.card>summary::-webkit-details-marker{display:none}
+.card>summary:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+
+.row1{display:flex;align-items:center;gap:10px}
+.rank{
+  flex:0 0 26px;font-size:15px;font-weight:800;color:var(--muted);
+  text-align:right;letter-spacing:-.02em;
+}
+.rank.top{color:var(--signal)}
+.ident{flex:1 1 auto;min-width:0}
+.code{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.name{font-size:18px;font-weight:700;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px{text-align:right;flex:0 0 auto}
+.px .close{font-size:19px;font-weight:700}
+.px .chg{font-size:13.5px;font-weight:700}
+
+/* 訊號能量條 — 本頁的核心視覺：條的每一段就是分數的來源 */
+.meter{display:flex;gap:3px;margin:12px 0 5px;height:8px}
+.seg{background:#222932;border-radius:3px;overflow:hidden;position:relative}
+.seg i{
+  display:block;height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--signal-dim),var(--signal));
+}
+.meter-labels{display:flex;gap:3px;font-size:10.5px;color:#5F6B78;letter-spacing:.04em}
+.meter-labels span{text-align:center}
+
+.row3{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.headline{font-size:14px;color:#AEBAC7;flex:1 1 auto;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{
+  flex:0 0 auto;font-size:22px;font-weight:800;color:var(--signal);
+  letter-spacing:-.02em;line-height:1;
+}
+.score em{font-size:11px;font-style:normal;color:var(--muted);font-weight:600;margin-left:2px}
+
+.chip{
+  display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;
+  border-radius:999px;border:1px solid #4A3A18;color:var(--warn);background:#241C0D;
+  margin:8px 6px 0 0;
+}
+
+/* ---------- 展開內容 ---------- */
+.detail{border-top:1px solid var(--line);background:var(--panel-2);padding:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cell{background:var(--panel-2);padding:9px 10px}
+.cell dt{font-size:11px;color:var(--muted);margin:0 0 2px;letter-spacing:.03em}
+.cell dd{margin:0;font-size:15px;font-weight:700}
+.why{margin:14px 0 0;padding:0;list-style:none}
+.why li{
+  font-size:13.5px;color:#C3CEDA;padding:6px 0 6px 16px;position:relative;line-height:1.5;
+}
+.why li::before{content:"";position:absolute;left:0;top:13px;width:6px;height:6px;
+  border-radius:2px;background:var(--signal)}
+.pts{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.9}
+.pts b{color:#C3CEDA;font-weight:600}
+
+/* ---------- 空狀態 ---------- */
+.empty{
+  background:var(--panel);border:1px dashed var(--line);border-radius:var(--radius);
+  padding:26px 18px;text-align:center;color:var(--muted);font-size:14px;
+}
+.empty b{display:block;color:var(--text);font-size:16px;margin-bottom:6px}
+
+/* ---------- 方法說明 & 底部 ---------- */
+.note{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;font-size:13px;color:#9FACBA;line-height:1.7;
+}
+.note h3{font-size:13px;color:var(--text);margin:0 0 8px;letter-spacing:.02em}
+.note code{font-family:ui-monospace,monospace;color:var(--signal);font-size:12px}
+.disclaimer-bottom{
+  margin:22px 0 8px;padding:16px;border-radius:var(--radius);
+  background:#2A1A12;border:1px solid #4A2E1B;color:#FFC98A;
+  font-size:13.5px;font-weight:600;line-height:1.7;text-align:center;
+}
+footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-height:1.8}
+
+@media (max-width:360px){
+  .name{font-size:16.5px} .px .close{font-size:17px} .score{font-size:20px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .card{transition:border-color .18s ease}
+  .card[open]{border-color:#33404E}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== 頂部免責聲明 ===================== -->
+<div class="disclaimer-top">⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險</div>
+
+<!-- 平常隱藏，只有斷網或有更新時才出現 -->
+<div class="toast offline" id="toast-offline">目前離線，顯示的是上次載入的資料</div>
+<div class="toast update" id="toast-update">
+  已有新的收盤資料<button type="button" id="btn-reload">重新載入</button>
+</div>
+
+<div class="wrap">
+
+  <!-- ===================== 大盤 ===================== -->
+  <header>
+    <div class="eyebrow">TAIWAN SWING SCANNER</div>
+    <h1 class="title">今日價差機會排行</h1>
+
+    {% if index %}
+    <div class="market">
+      <div>
+        <div class="market-label">加權指數 TAIEX</div>
+        <div class="market-close mono">{{ '{:,.2f}'.format(index.close) }}</div>
+      </div>
+      <div>
+        <div class="market-chg mono {{ 'up' if index.chg_pct > 0 else ('down' if index.chg_pct < 0 else 'flat') }}">
+          {{ '%+.2f'|format(index.change) }}　{{ '%+.2f'|format(index.chg_pct) }}%
+        </div>
+        <div class="market-meta">{{ index.date }}　{{ index.source }}</div>
+      </div>
+    </div>
+    {% else %}
+    <div class="market"><div><div class="market-label">加權指數 TAIEX</div>
+      <div class="market-close mono flat">—</div></div>
+      <div class="market-meta">指數資料本次取得失敗</div></div>
+    {% endif %}
+
+    {% if meta.mode == 'demo' %}
+    <div class="demo-flag">示範模式：以下價格與訊號皆為模擬資料，用來預覽版面，非真實行情。</div>
+    {% endif %}
+
+    <div class="stamp">
+      <span id="freshness">更新時間 <b class="mono">{{ meta.generated_at }}</b></span>
+      <span>交易日 <b class="mono">{{ meta.trade_date }}</b></span>
+      <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
+    </div>
+
+    <!-- 只有在瀏覽器裡開啟（還沒加到主畫面）時才會出現 -->
+    <section class="install" id="install">
+      <h3>把它放到手機主畫面</h3>
+      <p id="install-hint">加到主畫面後會像一般 app 一樣開啟，秒開、沒有網址列，捷運上沒訊號也看得到上次的結果。</p>
+      <div class="install-row">
+        <button type="button" class="btn" id="btn-install">加到主畫面</button>
+        <button type="button" class="btn ghost" id="btn-dismiss">不用了</button>
+      </div>
+    </section>
+  </header>
+
+  <!-- ===================== 排名 ===================== -->
+  <div class="section-head">
+    <h2>價差機會排名</h2>
+    <span>點卡片看細節</span>
+  </div>
+
+  {% if rows %}
+    {% for r in rows %}
+    <details class="card">
+      <summary>
+        <div class="row1">
+          <div class="rank {{ 'top' if loop.index <= 3 }}">{{ loop.index }}</div>
+          <div class="ident">
+            <div class="code mono">{{ r.code }}</div>
+            <div class="name">{{ r.name }}</div>
+          </div>
+          <div class="px">
+            <div class="close mono">{{ '%.2f'|format(r.close) }}</div>
+            <div class="chg mono {{ 'up' if r.chg_pct > 0 else ('down' if r.chg_pct < 0 else 'flat') }}">
+              {{ '%+.2f'|format(r.chg_pct) }}%
+            </div>
+          </div>
+        </div>
+
+        <!-- 訊號能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
+        <div class="meter" role="img"
+             aria-label="訊號組成：{% for k,l in segments %}{{ l }} {{ (r.breakdown[k].ratio*100)|round|int }}%{{ '，' if not loop.last }}{% endfor %}">
+          {% for k, label in segments %}
+          <div class="seg" style="flex:{{ r.breakdown[k].max }}">
+            <i style="width:{{ (r.breakdown[k].ratio*100)|round(1) }}%"></i>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="meter-labels" aria-hidden="true">
+          {% for k, label in segments %}
+          <span style="flex:{{ r.breakdown[k].max }}">{{ label }}</span>
+          {% endfor %}
+        </div>
+
+        <div class="row3">
+          <div class="headline">{{ r.headline }}</div>
+          <div class="score mono">{{ '%.0f'|format(r.score) }}<em>分</em></div>
+        </div>
+
+        {% for f in r.flags %}<span class="chip">{{ f }}</span>{% endfor %}
+      </summary>
+
+      <div class="detail">
+        <dl class="grid">
+          <div class="cell"><dt>RSI(14)</dt><dd class="mono">{{ '%.1f'|format(r.rsi) }}</dd></div>
+          <div class="cell"><dt>量 / 20日均量</dt><dd class="mono">{{ '%.2f'|format(r.vol_ratio) }}×</dd></div>
+          <div class="cell"><dt>成交量(張)</dt><dd class="mono">{{ '{:,.0f}'.format(r.volume/1000) }}</dd></div>
+          <div class="cell"><dt>MA5</dt><dd class="mono">{{ '%.2f'|format(r.ma5) }}</dd></div>
+          <div class="cell"><dt>MA10</dt><dd class="mono">{{ '%.2f'|format(r.ma10) }}</dd></div>
+          <div class="cell"><dt>MA20</dt><dd class="mono">{{ '%.2f'|format(r.ma20) }}</dd></div>
+          <div class="cell"><dt>距 20 日低</dt><dd class="mono">+{{ '%.1f'|format(r.pct_above_low20) }}%</dd></div>
+          <div class="cell"><dt>距 20 日高</dt><dd class="mono">−{{ '%.1f'|format(r.pct_below_high20) }}%</dd></div>
+          <div class="cell"><dt>距 5 日高</dt><dd class="mono">−{{ '%.1f'|format(r.pct_below_high5) }}%</dd></div>
+        </dl>
+
+        <ul class="why">
+          {% for reason in r.reasons %}<li>{{ reason }}</li>{% endfor %}
+          {% if not r.reasons %}<li>本檔僅在部分指標達標，訊號強度有限。</li>{% endif %}
+        </ul>
+
+        <div class="pts">
+          分數組成：
+          {% for k, label in segments %}
+          <b>{{ label }}</b> {{ '%.1f'|format(r.breakdown[k].points) }}/{{ r.breakdown[k].max }}{{ '　' if not loop.last }}
+          {% endfor %}
+        </div>
+      </div>
+    </details>
+    {% endfor %}
+  {% else %}
+    <div class="empty">
+      <b>今天沒有達標的標的</b>
+      掃描了 {{ meta.scanned_count }} 檔，沒有任何一檔同時滿足超賣與量能條件。
+      分數門檻設在 {{ meta.min_score }} 分，寧可空手也不硬找。明天收盤後會再更新。
+    </div>
+  {% endif %}
+
+  <!-- ===================== 方法說明 ===================== -->
+  <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
+  <div class="note">
+    <h3>五項訊號加權相加，再依風險打折</h3>
+    <b>超賣 {{ weights.oversold }}分</b>：RSI(14) 越低越好，且收盤必須站回 MA5 或 MA10，才算真的出現反彈。<br>
+    <b>量能 {{ weights.volume }}分</b>：成交量達 20 日均量 {{ thresholds.vol_surge }} 倍開始加分，{{ thresholds.vol_full }} 倍給滿分。<br>
+    <b>低檔 {{ weights.near_low }}分</b>：收盤落在近 20 日高低區間的下緣 {{ (thresholds.near_low_zone*100)|round|int }}% 內，且當日止跌。<br>
+    <b>均線 {{ weights.ma_reclaim }}分</b>：MA5 金叉 MA10 給滿分，剛站回 MA5／MA10 次之。<br>
+    <b>結構 {{ weights.structure }}分</b>：MA20 斜率與回檔深度是否合理。<br><br>
+    掃描池為當日成交金額前 {{ meta.top_n }} 名加主要權值股，股價低於 {{ thresholds.min_price }} 元或成交金額低於
+    {{ thresholds.min_turnover }} 的個股不納入。資料來源：{{ meta.source_note }}。<br>
+    要調整訊號邏輯，改 <code>scripts/config.py</code> 的權重與門檻即可。
+  </div>
+
+  <!-- ===================== 底部免責聲明 ===================== -->
+  <div class="disclaimer-bottom">
+    ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
+    分數高不代表會上漲，技術指標只描述過去的價量行為。<br>
+    資料可能因來源延遲或錯誤而失真，下單前請自行以券商報價複核。
+  </div>
+
+  <footer>
+    台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
+    <span class="mono">{{ meta.generated_at }}</span>
+  </footer>
+</div>
+
+<script>
+/* =========================================================================
+   app 行為：全部是漸進增強，就算這段整個掛掉，頁面內容照樣看得到。
+   ========================================================================= */
+(function () {
+  "use strict";
+
+  var GENERATED = "{{ meta.generated_iso }}";
+  var TRADE_DATE = "{{ meta.trade_date }}";
+
+  /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
+  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+    navigator.serviceWorker.register("./sw.js").catch(function () {});
+  }
+
+  /* ---- 2) 相對更新時間：上班時間掃一眼就知道資料多新 ---- */
+  var freshness = document.getElementById("freshness");
+  function renderFreshness() {
+    if (!freshness) return;
+    var t = new Date(GENERATED);
+    if (isNaN(t)) return;
+    var mins = Math.floor((Date.now() - t.getTime()) / 60000);
+    var word;
+    if (mins < 2) word = "剛剛更新";
+    else if (mins < 60) word = mins + " 分鐘前更新";
+    else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
+    else word = Math.floor(mins / 1440) + " 天前更新";
+    freshness.innerHTML = '<b>' + word + '</b>';
+    freshness.title = "更新時間 {{ meta.generated_at }}";
+  }
+  renderFreshness();
+  setInterval(renderFreshness, 60000);
+
+  /* ---- 3) 離線提示 ---- */
+  var offlineBar = document.getElementById("toast-offline");
+  function syncOnline() {
+    if (offlineBar) offlineBar.classList.toggle("show", !navigator.onLine);
+  }
+  window.addEventListener("online", syncOnline);
+  window.addEventListener("offline", syncOnline);
+  syncOnline();
+
+  /* ---- 4) 有新收盤資料就提示（避免看到手機快取的舊版） ---- */
+  var updateBar = document.getElementById("toast-update");
+  var reloadBtn = document.getElementById("btn-reload");
+  function checkForNewData() {
+    if (!navigator.onLine || location.protocol.indexOf("http") !== 0) return;
+    fetch("./data/latest.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (j && j.meta && j.meta.trade_date && j.meta.trade_date !== TRADE_DATE) {
+          if (updateBar) updateBar.classList.add("show");
+        }
+      })
+      .catch(function () {});
+  }
+  if (reloadBtn) reloadBtn.addEventListener("click", function () { location.reload(); });
+  checkForNewData();
+  // 從背景切回前景時再確認一次（早上打開 app 的情境）
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) { syncOnline(); renderFreshness(); checkForNewData(); }
+  });
+
+  /* ---- 5) 加到主畫面引導 ---- */
+  var box = document.getElementById("install");
+  var hint = document.getElementById("install-hint");
+  var addBtn = document.getElementById("btn-install");
+  var noBtn = document.getElementById("btn-dismiss");
+  var standalone = window.matchMedia("(display-mode: standalone)").matches ||
+                   window.navigator.standalone === true;
+  var dismissed = false;
+  try { dismissed = localStorage.getItem("hide-install") === "1"; } catch (e) {}
+
+  var deferred = null;
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferred = e;
+    if (box && !standalone && !dismissed) box.classList.add("show");
+  });
+
+  if (box && !standalone && !dismissed) {
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (isIOS) {
+      // iOS 沒有安裝 API，只能教使用者按分享鍵
+      if (hint) hint.textContent = "在 Safari 按下方中間的「分享」鍵，往下捲找到「加入主畫面」，就會多一個 app 圖示。";
+      if (addBtn) addBtn.style.display = "none";
+      if (noBtn) noBtn.style.flex = "1 1 auto";
+      box.classList.add("show");
+    }
+  }
+
+  if (addBtn) addBtn.addEventListener("click", function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function () { deferred = null; box.classList.remove("show"); });
+  });
+  if (noBtn) noBtn.addEventListener("click", function () {
+    box.classList.remove("show");
+    try { localStorage.setItem("hide-install", "1"); } catch (e) {}
+  });
+})();
+</script>
+
+</body>
+</html>
