@@ -47,6 +47,27 @@ def _to_float(x):
         return None
 
 
+def _scannable(code: str) -> bool:
+    """
+    判斷這個代號要不要納入掃描。
+    - 上市普通股：4 碼純數字，且開頭不是 00（00 開頭的 4 碼是 ETF，例如 0050）
+    - ETF：00 開頭、4～6 碼。槓桿（L）、反向（R）、債券（B）依設定排除，
+           因為這類商品的技術訊號跟一般股票不是同一回事。
+    - 其餘（權證、特別股、存託憑證等）一律排除
+    """
+    if not code:
+        return False
+    if code.startswith("00"):
+        if not C.INCLUDE_ETF:
+            return False
+        if not (4 <= len(code) <= 6):
+            return False
+        if not C.ETF_ALLOW_LEVERAGED and code[-1].upper() in ("L", "R", "B"):
+            return False
+        return code[:4].isdigit()
+    return len(code) == 4 and code.isdigit()
+
+
 def fetch_twse_snapshot() -> pd.DataFrame:
     """
     抓當日上市個股行情快照。
@@ -65,8 +86,7 @@ def fetch_twse_snapshot() -> pd.DataFrame:
     rows = []
     for it in raw:
         code = str(it.get("Code", "")).strip()
-        # 只留 4 碼純數字＝上市普通股（排除權證、ETF 5 碼、特別股等）
-        if not (len(code) == 4 and code.isdigit()):
+        if not _scannable(code):
             continue
 
         close = _to_float(it.get("ClosingPrice"))
@@ -94,7 +114,8 @@ def fetch_twse_snapshot() -> pd.DataFrame:
         })
 
     df = pd.DataFrame(rows)
-    log.info("證交所快照：%d 檔上市普通股", len(df))
+    n_etf = sum(1 for c in df["code"] if c.startswith("00")) if len(df) else 0
+    log.info("證交所快照：%d 檔（其中 ETF %d 檔）", len(df), n_etf)
     return df
 
 
@@ -181,15 +202,15 @@ def build_universe(snapshot: pd.DataFrame) -> pd.DataFrame:
     top = liquid.sort_values("turnover", ascending=False).head(C.TOP_N_BY_TURNOVER)
     # 白名單（權值股 + 電子科技股）：一定納入，但仍要通過股價與流動性門檻，
     # 否則會掃到根本沒人交易、掛單掛不掉的冷門股。
-    watchlist = set(C.CORE_WEIGHTED_STOCKS) | set(C.TECH_STOCKS)
+    watchlist = set(C.CORE_WEIGHTED_STOCKS) | set(C.TECH_STOCKS) | set(C.ETF_STOCKS)
     listed = liquid[liquid["code"].isin(watchlist)]
 
     uni = pd.concat([top, listed]).drop_duplicates(subset="code")
     uni = uni.sort_values("turnover", ascending=False).head(C.MAX_UNIVERSE)
 
-    n_tech = sum(1 for c in uni["code"] if C.is_tech(c))
-    log.info("掃描池：%d 檔（成交金額前 %d + 權值股 + 電子科技股；其中電子科技 %d 檔）",
-             len(uni), C.TOP_N_BY_TURNOVER, n_tech)
+    n_tech = sum(1 for c in uni["code"] if C.asset_type(c) == "tech")
+    n_etf = sum(1 for c in uni["code"] if C.asset_type(c) == "etf")
+    log.info("掃描池：%d 檔（電子科技 %d、ETF %d）", len(uni), n_tech, n_etf)
     return uni.reset_index(drop=True)
 
 

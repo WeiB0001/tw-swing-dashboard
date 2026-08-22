@@ -109,19 +109,36 @@ body{
 .budget-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .budget-input button{background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
 
-.preset,.split,.band,.sector-btn{
+.preset,.split,.mode-btn,.type-btn{
   flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;
   padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
   background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
 }
 .split{padding:6px 11px;min-width:34px;text-align:center}
-.split[aria-pressed="true"],.band[aria-pressed="true"],.sector-btn[aria-pressed="true"]{
+.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"]{
   background:var(--signal);border-color:var(--signal);color:#161105;
 }
 .preset:active{background:#2A333F}
-.preset:focus-visible,.split:focus-visible,.band:focus-visible,
-.sector-btn:focus-visible,.budget-input input:focus-visible{
+.preset:focus-visible,.split:focus-visible,.mode-btn:focus-visible,
+.type-btn:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
   outline:2px solid var(--signal);outline-offset:2px}
+.ghost-btn{
+  flex:0 0 auto;font:inherit;font-size:12px;font-weight:600;padding:5px 10px;
+  border-radius:999px;background:none;border:1px solid #3A4552;color:var(--muted);cursor:pointer;
+}
+#pick-count{margin-left:4px;font-size:11px;opacity:.85}
+.panel-row .lbl.dim{opacity:.35}
+
+/* 選入按鈕 + 配置金額 */
+.pickrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.pick{
+  flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;
+  padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
+}
+.pick[aria-pressed="true"]{
+  background:#1B3A2A;border-color:#2E6B4A;color:#6EE7A8;
+}
 
 .budget-result{
   display:none;margin:0 0 9px;padding:10px 12px;border-radius:10px;
@@ -144,7 +161,7 @@ body{
 .lot{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px}
 /* 配置金額：緊接在獲利可能性分數下方 */
 .alloc{
-  margin-top:10px;padding:8px 11px;border-radius:9px;
+  flex:1 1 200px;padding:8px 11px;border-radius:9px;
   background:#1B2733;border:1px solid #2A3A4A;
   font-size:13px;color:#9FD6EA;font-weight:700;
 }
@@ -371,14 +388,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <span>點卡片看細節</span>
   </div>
 
-  <!-- 一個面板搞定：本週預算、分散檔數、每張預算、產業。全部會記住，不用每天重設 -->
+  <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
   <section class="panel">
     <div class="panel-row">
       <label for="budget-input">本週預算</label>
       <div class="budget-input">
         <span>NT$</span>
         <input id="budget-input" type="number" inputmode="numeric" min="0" step="1000"
-               placeholder="輸入後每檔會算出配置金額" autocomplete="off">
+               placeholder="填了就只顯示買得起的" autocomplete="off">
         <button type="button" id="budget-clear" title="清除">✕</button>
       </div>
     </div>
@@ -387,42 +404,44 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       {% for amt in budget_presets %}
       <button type="button" class="preset" data-amt="{{ amt }}">{{ (amt // 10000) }}萬</button>
       {% endfor %}
+    </div>
+
+    <div class="panel-row wrap">
+      <span class="lbl">配置</span>
+      <button type="button" class="mode-btn" data-mode="auto" aria-pressed="true">自動分配</button>
+      <button type="button" class="mode-btn" data-mode="pick" aria-pressed="false">
+        自己挑<span id="pick-count"></span>
+      </button>
       <span class="sep"></span>
-      <span class="lbl">分散成</span>
+      <span class="lbl" id="splits-label">分散成</span>
       {% for n in split_options %}
       <button type="button" class="split" data-n="{{ n }}"
               aria-pressed="{{ 'true' if n == default_splits else 'false' }}">{{ n }}</button>
       {% endfor %}
+      <button type="button" class="ghost-btn" id="pick-clear" hidden>清除選擇</button>
     </div>
 
     <div class="budget-result" id="budget-result"></div>
 
-    <div class="panel-row scroll" role="group" aria-label="每張預算">
-      <span class="lbl">每張</span>
-      {% for b in price_bands %}
-      <button type="button" class="band" data-band="{{ b.id }}" data-max="{{ b.max_lot_cost }}"
-              aria-pressed="{{ 'true' if b.id == default_band else 'false' }}">{{ b.label }}</button>
-      {% endfor %}
-    </div>
-
-    <div class="panel-row scroll" role="group" aria-label="產業">
-      <span class="lbl">產業</span>
-      <button type="button" class="sector-btn" data-sector="all" aria-pressed="true">全部</button>
-      <button type="button" class="sector-btn" data-sector="tech" aria-pressed="false">電子科技</button>
-      <button type="button" class="sector-btn" data-sector="other" aria-pressed="false">非電子</button>
+    <div class="panel-row scroll" role="group" aria-label="類別">
+      <span class="lbl">類別</span>
+      <button type="button" class="type-btn" data-type="all" aria-pressed="true">全部</button>
+      <button type="button" class="type-btn" data-type="tech" aria-pressed="false">電子科技</button>
+      <button type="button" class="type-btn" data-type="etf" aria-pressed="false">ETF</button>
+      <button type="button" class="type-btn" data-type="other" aria-pressed="false">其他</button>
     </div>
 
     <div class="band-note" id="band-count"></div>
     <p class="budget-note">
-      配置金額是把預算按獲利可能性分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）。
-      不是建議你買進，也沒有計入手續費與證交稅。台股一張＝1000 股，
-      {% if allow_odd_lot %}一張買不起時會改用零股試算（需券商支援盤中零股交易）。{% endif %}
+      自動分配是把預算按獲利可能性分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）；
+      自己挑則是在你選的標的之間平均分配。不是建議你買進，也沒有計入手續費與證交稅。
+      台股一張＝1000 股，{% if allow_odd_lot %}一張買不起時會改用零股試算（需券商支援盤中零股交易）。{% endif %}
     </p>
   </section>
 
   {% if rows %}
     {% for r in rows %}
-    <details class="card" data-lot="{{ r.lot_cost }}" data-price="{{ r.close }}" data-score="{{ r.score }}" data-tech="{{ '1' if r.is_tech else '0' }}">
+    <details class="card" data-code="{{ r.code }}" data-lot="{{ r.lot_cost }}" data-price="{{ r.close }}" data-score="{{ r.score }}" data-type="{{ r.asset_type }}">
       <summary>
         <div class="row1">
           <div class="rank {{ 'top' if loop.index <= 3 }}">{{ loop.index }}</div>
@@ -459,7 +478,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="score mono">{{ '%.0f'|format(r.score) }}<em>獲利可能性</em></div>
         </div>
 
-        <div class="alloc" data-alloc hidden></div>
+        <div class="pickrow">
+          <button type="button" class="pick" data-pick data-code="{{ r.code }}" aria-pressed="false">
+            ＋ 選入
+          </button>
+          <div class="alloc" data-alloc hidden></div>
+        </div>
 
         <!-- 星等：趨勢強不強、現在買位置好不好，分開看 -->
         <dl class="stars">
@@ -549,8 +573,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
 
   <div class="empty" id="band-empty" style="display:none">
-    <b>這個預算範圍內今天沒有標的</b>
-    今天入選的都超過你選的每張預算。可以改選比較寬的區間，或明天再看。
+    <b>這個預算買不到今天入選的標的</b>
+    今天排進來的每一檔，一張都超過你的預算。可以提高預算、換個類別看看，或明天再來。
     若想從源頭就只掃低價股，把 <code>scripts/config.py</code> 的 <code>MAX_CLOSE_PRICE</code>
     設成你的每股上限即可。
   </div>
@@ -588,7 +612,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {{ thresholds.min_turnover }} 的個股不納入{% if thresholds.max_price %}，股價高於 {{ thresholds.max_price }} 元的也不納入{% endif %}。
     電子／科技類上市公司（半導體、IC 設計、封測、PCB、網通、光電、電腦週邊等 85 檔）一律納入掃描，
     不必等它們擠進成交金額前 {{ meta.top_n }} 名。<br>
-    面板上的「每張預算」與「產業」只影響顯示、不影響排名與分數，選過會記住。資料來源：{{ meta.source_note }}。<br>
+    台股 ETF（市值型、高股息、科技主題等）也一併掃描，槓桿型（L）、反向型（R）、債券型（B）除外——
+    這類商品的技術訊號跟一般股票不是同一回事。<br>
+    本週預算與類別只影響顯示與配置試算，<b>不影響排名與分數</b>，設定過會記住。資料來源：{{ meta.source_note }}。<br>
     要調整訊號邏輯，改 <code>scripts/config.py</code> 的權重與門檻即可。
   </div>
 
@@ -669,140 +695,118 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     if (!document.hidden) { syncOnline(); renderFreshness(); checkForNewData(); }
   });
 
-  /* ---- 5) 篩選：每張預算 + 產業，兩個都會記住 ---- */
-  var DEFAULT_BAND = "{{ default_band }}";
-  var bandBtns = Array.prototype.slice.call(document.querySelectorAll(".band"));
-  var sectorBtns = Array.prototype.slice.call(document.querySelectorAll(".sector-btn"));
-  var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
-  var countEl = document.getElementById("band-count");
-  var emptyEl = document.getElementById("band-empty");
-  var curBand = DEFAULT_BAND, curSector = "all";
-
-  function press(list, attr, value) {
-    var hit = null;
-    list.forEach(function (b) {
-      var on = b.dataset[attr] === value;
-      b.setAttribute("aria-pressed", on ? "true" : "false");
-      if (on) hit = b;
-    });
-    return hit;
-  }
-
-  function applyFilters() {
-    var chip = press(bandBtns, "band", curBand) || press(bandBtns, "band", DEFAULT_BAND);
-    press(sectorBtns, "sector", curSector);
-    var limit = chip ? (parseInt(chip.dataset.max, 10) || 0) : 0;   // 0 = 不限
-
-    var shown = 0;
-    cards.forEach(function (c) {
-      var cost = parseInt(c.dataset.lot, 10) || 0;
-      var tech = c.dataset.tech === "1";
-      var okPrice = !limit || cost <= limit;
-      var okSector = curSector === "all" ||
-                     (curSector === "tech" && tech) ||
-                     (curSector === "other" && !tech);
-      var ok = okPrice && okSector;
-      c.style.display = ok ? "" : "none";
-      if (!ok) c.open = false;
-      if (ok) shown++;
-    });
-
-    if (countEl) {
-      var parts = [];
-      if (limit) parts.push("每張 " + (limit / 10000) + " 萬以下");
-      if (curSector === "tech") parts.push("電子科技");
-      if (curSector === "other") parts.push("非電子");
-      countEl.textContent = parts.length
-        ? parts.join("、") + "：" + shown + " 檔（共 " + cards.length + " 檔）"
-        : "顯示全部 " + cards.length + " 檔";
-    }
-    if (emptyEl) emptyEl.style.display = shown ? "none" : "block";
-    try {
-      localStorage.setItem("price-band", curBand);
-      localStorage.setItem("sector", curSector);
-    } catch (e) {}
-    if (typeof allocate === "function") allocate();
-  }
-
-  bandBtns.forEach(function (b) {
-    b.addEventListener("click", function () { curBand = b.dataset.band; applyFilters(); });
-  });
-  sectorBtns.forEach(function (b) {
-    b.addEventListener("click", function () { curSector = b.dataset.sector; applyFilters(); });
-  });
-  try {
-    curBand = localStorage.getItem("price-band") || DEFAULT_BAND;
-    curSector = localStorage.getItem("sector") || "all";
-  } catch (e) {}
-
-  /* ---- 6) 本週預算試算 ----------------------------------------------------
-     做法（純算術，不是投資建議）：
-       1. 從目前顯示中的卡片，依名次取前 N 檔（N = 使用者選的分散檔數）
-       2. 依獲利可能性分數的比例分配金額
-       3. 單一標的上限 MAX_POS%，超過的部分退回去分給其他檔
-       4. 金額換算成張數（1000 股）；不足一張時改算零股
-     預算與檔數都存在手機本機，輸入一次就記住。
+  /* ---- 5) 預算、篩選、配置：全部由這個控制器統一處理 ------------------------
+     規則：
+       - 只有一個預算輸入框。填了之後，一張買不起的標的直接不顯示。
+       - 配置方式兩種：
+           自動分配 → 取顯示中的前 N 檔，按獲利可能性分數比例拆分預算
+           自己挑   → 只在你點過「選入」的標的之間平均分配
+       - 單一標的上限 MAX_POS%（自動模式；只選 1 檔時放寬）
+       - 金額換算成張數（1000 股），不足一張時改算零股
+       - 預算、模式、檔數、類別、選入清單都存在手機本機，開啟時自動還原
+         （選入清單綁當日交易日，換一天的資料就自動清空，避免對到昨天的標的）
   ------------------------------------------------------------------------- */
+  var TRADE_DATE = "{{ meta.trade_date }}";
   var MAX_POS = {{ max_position_pct }} / 100;
   var ODD_LOT = {{ 'true' if allow_odd_lot else 'false' }};
+  var HIDE_UNAFFORDABLE = {{ 'true' if hide_unaffordable else 'false' }};
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
   var budgetInput = document.getElementById("budget-input");
-  var budgetClear = document.getElementById("budget-clear");
+  var clearBtn = document.getElementById("budget-clear");
   var resultEl = document.getElementById("budget-result");
+  var countEl = document.getElementById("band-count");
+  var emptyEl = document.getElementById("band-empty");
+  var splitsLabel = document.getElementById("splits-label");
+  var pickCountEl = document.getElementById("pick-count");
+  var pickClearBtn = document.getElementById("pick-clear");
   var presets = Array.prototype.slice.call(document.querySelectorAll(".preset"));
   var splitBtns = Array.prototype.slice.call(document.querySelectorAll(".split"));
-  var splits = {{ default_splits }};
+  var modeBtns = Array.prototype.slice.call(document.querySelectorAll(".mode-btn"));
+  var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
+  var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
+
+  var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all", picks: [] };
 
   function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 
-  function allocate() {
-    // 預算面板可能還沒初始化（篩選會比它早呼叫一次），先擋掉
-    if (!budgetInput || !resultEl) return;
-    var budget = parseFloat(budgetInput.value) || 0;
+  function press(list, attr, value) {
+    list.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset[attr] === value ? "true" : "false");
+    });
+  }
 
-    // 沒填預算就把所有配置欄位收起來
+  /* ---- 決定哪些卡片看得到：類別 + 買不買得起 ---- */
+  function visible() {
+    var out = [];
+    cards.forEach(function (c) {
+      var okType = st.type === "all" || c.dataset.type === st.type;
+      var lot = parseInt(c.dataset.lot, 10) || 0;
+      var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
+      var ok = okType && okBudget;
+      c.style.display = ok ? "" : "none";
+      if (!ok) c.open = false;
+      if (ok) out.push(c);
+    });
+    return out;
+  }
+
+  /* ---- 計算每檔要投入多少 ---- */
+  function allocate(shown) {
+    // 先清空所有配置欄位
     cards.forEach(function (c) {
       var el = c.querySelector("[data-alloc]");
       if (el) { el.hidden = true; el.innerHTML = ""; }
     });
-    if (!budget || budget <= 0) {
-      if (resultEl) resultEl.classList.remove("show");
-      return;
+
+    var picks;
+    if (st.mode === "pick") {
+      picks = shown.filter(function (c) { return st.picks.indexOf(c.dataset.code) >= 0; });
+    } else {
+      picks = shown.slice(0, st.splits);
     }
 
-    var visible = cards.filter(function (c) { return c.style.display !== "none"; });
-    var picks = visible.slice(0, splits);
+    if (!st.budget || st.budget <= 0) {
+      resultEl.classList.add("show");
+      resultEl.innerHTML = "填入本週預算，就會算出每一檔要投入多少，並自動隱藏買不起的標的。";
+      return;
+    }
     if (!picks.length) {
       resultEl.classList.add("show");
-      resultEl.innerHTML = "目前的預算範圍內沒有標的可以試算。";
+      resultEl.innerHTML = st.mode === "pick"
+        ? "還沒挑任何標的。點卡片上的「＋ 選入」把想買的加進來。"
+        : "目前的條件下沒有標的可以配置。";
       return;
     }
 
-    // 依分數比例分配，並套用單一標的上限
-    var scores = picks.map(function (c) { return Math.max(parseFloat(c.dataset.score) || 0, 1); });
-    var total = scores.reduce(function (a, b) { return a + b; }, 0);
-    // 單一標的上限：分散檔數少時要放寬，否則選「1 檔」永遠只能用 45% 的錢
-    var cap = budget * Math.max(MAX_POS, 1 / picks.length);
-    var targets = scores.map(function (s) { return budget * s / total; });
+    // 自動：按分數比例並套上限；自己挑：平均分配（你既然自己選了，就等權對待）
+    var targets;
+    if (st.mode === "pick") {
+      targets = picks.map(function () { return st.budget / picks.length; });
+    } else {
+      var scores = picks.map(function (c) { return Math.max(parseFloat(c.dataset.score) || 0, 1); });
+      var total = scores.reduce(function (a, b) { return a + b; }, 0);
+      var cap = st.budget * Math.max(MAX_POS, 1 / picks.length);
+      targets = scores.map(function (x) { return st.budget * x / total; });
 
-    var overflow = 0, room = [];
-    targets.forEach(function (t, i) {
-      if (t > cap) { overflow += t - cap; targets[i] = cap; }
-      else { room.push(i); }
-    });
-    // 超過上限的部分，平均退回給還有空間的標的
-    while (overflow > 1 && room.length) {
-      var share = overflow / room.length;
-      overflow = 0;
-      var nextRoom = [];
-      room.forEach(function (i) {
-        var t = targets[i] + share;
-        if (t > cap) { overflow += t - cap; targets[i] = cap; }
-        else { targets[i] = t; nextRoom.push(i); }
+      var overflow = 0, room = [];
+      targets.forEach(function (t, i) {
+        if (t > cap) { overflow += t - cap; targets[i] = cap; } else { room.push(i); }
       });
-      room = nextRoom;
+      while (overflow > 1 && room.length) {   // 超過上限的部分退回去分給其他檔
+        var share = overflow / room.length, next = [];
+        overflow = 0;
+        room.forEach(function (i) {
+          var t = targets[i] + share;
+          if (t > cap) { overflow += t - cap; targets[i] = cap; } else { targets[i] = t; next.push(i); }
+        });
+        room = next;
+      }
     }
 
-    var used = 0, lines = 0;
+    var used = 0, filled = 0;
     picks.forEach(function (c, i) {
       var price = parseFloat(c.dataset.price) || 0;
       var lotCost = parseFloat(c.dataset.lot) || price * 1000;
@@ -820,14 +824,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
       var el = c.querySelector("[data-alloc]");
       if (!el) return;
+      el.hidden = false;
       if (amount > 0) {
-        used += amount;
-        lines++;
-        el.hidden = false;
+        used += amount; filled++;
         el.innerHTML = "本週配置 <b>" + money(amount) + "</b> · " + unit +
           ' <span class="sub">（目標 ' + money(target) + "）</span>";
       } else {
-        el.hidden = false;
         el.innerHTML = '<span class="sub">分到的 ' + money(target) +
           " 不夠買進最小單位（一股 " + money(price) + "）</span>";
       }
@@ -835,54 +837,113 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     resultEl.classList.add("show");
     resultEl.innerHTML =
-      "預算 <b>" + money(budget) + "</b>，分散到前 " + picks.length + " 檔，" +
-      "實際可投入 <b>" + money(used) + "</b>" +
-      (lines < picks.length ? "（其中 " + (picks.length - lines) + " 檔金額不足）" : "") +
-      "，剩餘現金 " + money(budget - used) + "。";
-
-    try {
-      localStorage.setItem("budget", String(budget));
-      localStorage.setItem("splits", String(splits));
-    } catch (e) {}
+      (st.mode === "pick" ? "自己挑的 " : "自動分配到前 ") + picks.length + " 檔，" +
+      "預算 <b>" + money(st.budget) + "</b>，實際可投入 <b>" + money(used) + "</b>" +
+      (filled < picks.length ? "（其中 " + (picks.length - filled) + " 檔金額不足）" : "") +
+      "，剩餘現金 " + money(st.budget - used) + "。";
   }
 
+  /* ---- 重畫全部 ---- */
+  function render() {
+    press(modeBtns, "mode", st.mode);
+    press(typeBtns, "type", st.type);
+    press(splitBtns, "n", String(st.splits));
+
+    // 自己挑模式下，「分散成 N」不適用，淡化但不移除，避免版面跳動
+    var dim = st.mode === "pick";
+    if (splitsLabel) splitsLabel.classList.toggle("dim", dim);
+    splitBtns.forEach(function (b) { b.disabled = dim; b.style.opacity = dim ? ".35" : ""; });
+    if (pickClearBtn) pickClearBtn.hidden = !st.picks.length;
+    if (pickCountEl) pickCountEl.textContent = st.picks.length ? " " + st.picks.length : "";
+
+    pickBtns.forEach(function (b) {
+      var on = st.picks.indexOf(b.dataset.code) >= 0;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.textContent = on ? "✓ 已選入" : "＋ 選入";
+    });
+
+    var shown = visible();
+    if (countEl) {
+      var bits = [];
+      if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
+      if (st.type !== "all") {
+        bits.push({ tech: "電子科技", etf: "ETF", other: "其他" }[st.type]);
+      }
+      countEl.textContent = bits.length
+        ? bits.join("、") + "：" + shown.length + " 檔（共 " + cards.length + " 檔）"
+        : "顯示全部 " + cards.length + " 檔";
+    }
+    if (emptyEl) emptyEl.style.display = shown.length ? "none" : "block";
+
+    allocate(shown);
+
+    save("budget", String(st.budget || ""));
+    save("splits", String(st.splits));
+    save("mode", st.mode);
+    save("type", st.type);
+    save("picks", JSON.stringify({ date: TRADE_DATE, codes: st.picks }));
+  }
+
+  /* ---- 事件 ---- */
+  budgetInput.addEventListener("input", function () {
+    st.budget = parseFloat(budgetInput.value) || 0;
+    render();
+  });
+  clearBtn.addEventListener("click", function () {
+    budgetInput.value = ""; st.budget = 0; render();
+  });
   presets.forEach(function (b) {
     b.addEventListener("click", function () {
-      budgetInput.value = b.dataset.amt;
-      allocate();
+      st.budget = parseInt(b.dataset.amt, 10) || 0;
+      budgetInput.value = st.budget;
+      render();
     });
   });
   splitBtns.forEach(function (b) {
     b.addEventListener("click", function () {
-      splits = parseInt(b.dataset.n, 10) || 3;
-      splitBtns.forEach(function (x) {
-        x.setAttribute("aria-pressed", x === b ? "true" : "false");
-      });
-      allocate();
+      st.splits = parseInt(b.dataset.n, 10) || 3;
+      st.mode = "auto";
+      render();
     });
   });
-  if (budgetInput) budgetInput.addEventListener("input", allocate);
-  if (budgetClear) budgetClear.addEventListener("click", function () {
-    budgetInput.value = "";
-    try { localStorage.removeItem("budget"); } catch (e) {}
-    allocate();
+  modeBtns.forEach(function (b) {
+    b.addEventListener("click", function () { st.mode = b.dataset.mode; render(); });
+  });
+  typeBtns.forEach(function (b) {
+    b.addEventListener("click", function () { st.type = b.dataset.type; render(); });
+  });
+  pickClearBtn.addEventListener("click", function () {
+    st.picks = []; st.mode = "auto"; render();
+  });
+  pickBtns.forEach(function (b) {
+    b.addEventListener("click", function (e) {
+      // 按鈕在 <summary> 裡面，不擋住的話會順便把卡片展開
+      e.preventDefault(); e.stopPropagation();
+      var code = b.dataset.code;
+      var i = st.picks.indexOf(code);
+      if (i >= 0) st.picks.splice(i, 1); else st.picks.push(code);
+      st.mode = st.picks.length ? "pick" : "auto";   // 選了就自動切到自己挑
+      render();
+    });
   });
 
-  // 還原上次輸入的預算與檔數
+  /* ---- 還原上次的設定 ---- */
+  var savedBudget = load("budget");
+  if (savedBudget) { st.budget = parseFloat(savedBudget) || 0; budgetInput.value = savedBudget; }
+  var savedSplits = parseInt(load("splits"), 10);
+  if (savedSplits) st.splits = savedSplits;
+  var savedMode = load("mode");
+  if (savedMode === "auto" || savedMode === "pick") st.mode = savedMode;
+  var savedType = load("type");
+  if (savedType) st.type = savedType;
   try {
-    var savedBudget = localStorage.getItem("budget");
-    var savedSplits = parseInt(localStorage.getItem("splits"), 10);
-    if (savedBudget) budgetInput.value = savedBudget;
-    if (savedSplits) {
-      splits = savedSplits;
-      splitBtns.forEach(function (x) {
-        x.setAttribute("aria-pressed", parseInt(x.dataset.n, 10) === splits ? "true" : "false");
-      });
-    }
+    var pk = JSON.parse(load("picks") || "{}");
+    // 只還原同一個交易日的選擇，換一天就重來
+    if (pk && pk.date === TRADE_DATE && Array.isArray(pk.codes)) st.picks = pk.codes;
   } catch (e) {}
+  if (!st.picks.length && st.mode === "pick") st.mode = "auto";
 
-  // 兩者都準備好之後才第一次套用（篩選會順便觸發配置試算）
-  applyFilters();
+  render();
 })();
 </script>
 

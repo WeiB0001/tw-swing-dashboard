@@ -44,6 +44,11 @@ DEMO_STOCKS = [
     ("3711", "日月光投控"), ("6415", "矽力-KY"), ("8046", "南電"), ("3045", "台灣大"),
     ("4904", "遠傳"), ("2356", "英業達"), ("2301", "光寶科"), ("1402", "遠東新"),
     ("2049", "上銀"), ("2610", "華航"), ("5871", "中租-KY"), ("9910", "豐泰"),
+    # ETF（示範用，價格同樣是模擬的）
+    ("0050", "元大台灣50"), ("0056", "元大高股息"), ("00878", "國泰永續高股息"),
+    ("00919", "群益台灣精選高息"), ("00891", "中信關鍵半導體"), ("006208", "富邦台50"),
+    ("00929", "復華台灣科技優息"), ("0052", "富邦科技"), ("00940", "元大台灣價值高息"),
+    ("00713", "元大台灣高息低波"),
 ]
 
 ARCHETYPES = ["A_低檔轉強", "B_強勢漲多", "C_帶量突破", "D_跌深未止跌", "E_區間整理"]
@@ -77,11 +82,13 @@ def _base_path(rng, n, drift, vol):
     return np.cumsum(rng.normal(drift, vol, n))
 
 
-def make_case(kind: str, seed: int) -> pd.DataFrame:
+def make_case(kind: str, seed: int, etf: bool = False) -> pd.DataFrame:
     """依型態產生一段日線。刻意控制最後幾根，讓訊號可預期、可驗證。"""
     rng = np.random.default_rng(seed)
     n = N_BARS
     base = float(rng.uniform(28, 620))
+    if etf:
+        base = float(rng.uniform(15, 60))   # ETF 價格帶比個股低很多，一張多在 1.5～6 萬
     vol_base = rng.uniform(6e6, 5e7)
     vols = rng.lognormal(np.log(vol_base), 0.28, n)
 
@@ -135,7 +142,7 @@ def build_dataset() -> list[tuple[str, str, str, pd.DataFrame]]:
     out = []
     for i, (code, name) in enumerate(DEMO_STOCKS):
         kind = ARCHETYPES[i % len(ARCHETYPES)]
-        out.append((code, name, kind, make_case(kind, seed=2000 + i)))
+        out.append((code, name, kind, make_case(kind, seed=2000 + i, etf=C.is_etf(code))))
     return out
 
 
