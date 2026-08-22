@@ -1,12 +1,13 @@
 {
   "meta": {
-    "generated_at": "2026-08-22 21:26",
-    "generated_iso": "2026-08-22T21:26:36+08:00",
+    "generated_at": "2026-08-22 21:55",
+    "generated_iso": "2026-08-22T21:55:31+08:00",
     "trade_date": "2026-08-22",
     "scanned_count": 162,
     "qualified_count": 162,
     "universe_count": 163,
     "has_backtest": false,
+    "regime": "sideways",
     "top_n": 100,
     "weak_score": 30,
     "strong_count": 161,
@@ -70,6 +71,155 @@
       "resid_sd": 1.39
     }
   },
+  "signals": {
+    "marks": {
+      "2359": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "3665": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2207": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2912": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "3034": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2324": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2610": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2880": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "4938": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2892": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2801": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2357": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2634": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2426": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "6770": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "2356": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "3017": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      },
+      "3661": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
+    },
+    "dropped": [],
+    "new_count": 18,
+    "hot_count": 0,
+    "history_days": 1
+  },
+  "portfolio": {
+    "initial": 100000.0,
+    "equity": 100000.0,
+    "total_return": 0.0,
+    "benchmark_return": 0.0,
+    "trades": 0,
+    "win_rate": null,
+    "profit_factor": null,
+    "avg_net": null,
+    "mdd": 0.0,
+    "positions": [],
+    "pending": 3,
+    "recent": [],
+    "days": 1
+  },
   "backtest": null,
   "rows": [
     {
@@ -78,6 +228,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 150.0,
+      "day_open": 159.0,
+      "day_high": 159.5,
+      "day_low": 149.0,
       "lot_cost": 150000,
       "chg_pct": 0.0,
       "rsi": 50.86142722606468,
@@ -164,7 +317,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 1
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 160.09,
+        "invalidation": 148.41,
+        "stop": 138.23,
+        "target1": 177.75,
+        "target2": 189.52,
+        "rr": 0.81,
+        "risk_pct": 13.7,
+        "atr_pct": 7.8
+      },
+      "regime": "sideways",
+      "rank": 1,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "3665",
@@ -172,6 +348,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 2275.0,
+      "day_open": 2270.0,
+      "day_high": 2360.0,
+      "day_low": 2225.0,
       "lot_cost": 2275000,
       "chg_pct": 0.0,
       "rsi": 56.411248872479945,
@@ -258,7 +437,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 2
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 2367.25,
+        "invalidation": 2217.75,
+        "stop": 2129.96,
+        "target1": 2555.0,
+        "target2": 2729.86,
+        "rr": 0.79,
+        "risk_pct": 10.0,
+        "atr_pct": 6.4
+      },
+      "regime": "sideways",
+      "rank": 2,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2207",
@@ -266,6 +468,9 @@
       "sector": "汽車",
       "asset_type": "other",
       "close": 518.0,
+      "day_open": 505.0,
+      "day_high": 519.0,
+      "day_low": 505.0,
       "lot_cost": 518000,
       "chg_pct": 0.0,
       "rsi": 55.500119697794204,
@@ -352,7 +557,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 3
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 519.68,
+        "invalidation": 504.32,
+        "stop": 501.62,
+        "target1": 539.94,
+        "target2": 573.0,
+        "rr": 1.12,
+        "risk_pct": 3.5,
+        "atr_pct": 2.6
+      },
+      "regime": "sideways",
+      "rank": 3,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2912",
@@ -360,6 +588,9 @@
       "sector": "零售",
       "asset_type": "other",
       "close": 223.5,
+      "day_open": 219.0,
+      "day_high": 225.5,
+      "day_low": 219.0,
       "lot_cost": 223500,
       "chg_pct": 0.0,
       "rsi": 48.77133450570027,
@@ -446,7 +677,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 4
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 225.73,
+        "invalidation": 218.77,
+        "stop": 217.84,
+        "target1": 232.7,
+        "target2": 242.0,
+        "rr": 0.88,
+        "risk_pct": 3.5,
+        "atr_pct": 2.1
+      },
+      "regime": "sideways",
+      "rank": 4,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "3034",
@@ -454,6 +708,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 530.0,
+      "day_open": 528.0,
+      "day_high": 531.0,
+      "day_low": 526.0,
       "lot_cost": 530000,
       "chg_pct": 0.0,
       "rsi": 53.893590352736965,
@@ -540,7 +797,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 5
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 531.98,
+        "invalidation": 525.02,
+        "stop": 510.38,
+        "target1": 561.41,
+        "target2": 581.03,
+        "rr": 1.36,
+        "risk_pct": 4.1,
+        "atr_pct": 3.7
+      },
+      "regime": "sideways",
+      "rank": 5,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2324",
@@ -548,6 +828,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 38.95,
+      "day_open": 38.4,
+      "day_high": 39.0,
+      "day_low": 37.9,
       "lot_cost": 38950,
       "chg_pct": -1.9587662047904075e-06,
       "rsi": 53.894575832765845,
@@ -634,7 +917,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 6
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 39.1,
+        "invalidation": 37.8,
+        "stop": 36.97,
+        "target1": 42.07,
+        "target2": 44.95,
+        "rr": 1.4,
+        "risk_pct": 5.5,
+        "atr_pct": 5.1
+      },
+      "regime": "sideways",
+      "rank": 6,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2610",
@@ -642,6 +948,9 @@
       "sector": "航空",
       "asset_type": "other",
       "close": 20.4,
+      "day_open": 20.15,
+      "day_high": 20.5,
+      "day_low": 20.0,
       "lot_cost": 20400,
       "chg_pct": 1.8699496617813338e-06,
       "rsi": 44.30101055495775,
@@ -728,7 +1037,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 7
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 20.53,
+        "invalidation": 19.97,
+        "stop": 19.82,
+        "target1": 21.4,
+        "target2": 22.85,
+        "rr": 1.23,
+        "risk_pct": 3.5,
+        "atr_pct": 2.8
+      },
+      "regime": "sideways",
+      "rank": 7,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2880",
@@ -736,6 +1068,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 39.6,
+      "day_open": 38.65,
+      "day_high": 39.8,
+      "day_low": 38.6,
       "lot_cost": 39600,
       "chg_pct": 3.8532297130799975e-06,
       "rsi": 45.39881675946424,
@@ -822,7 +1157,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 8
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 39.87,
+        "invalidation": 38.53,
+        "stop": 38.0,
+        "target1": 41.95,
+        "target2": 44.7,
+        "rr": 1.11,
+        "risk_pct": 4.7,
+        "atr_pct": 3.5
+      },
+      "regime": "sideways",
+      "rank": 8,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "4938",
@@ -830,6 +1188,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 88.6,
+      "day_open": 89.1,
+      "day_high": 89.1,
+      "day_low": 87.8,
       "lot_cost": 88600,
       "chg_pct": 1.7222109738312952e-06,
       "rsi": 51.25846729620682,
@@ -916,7 +1277,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 9
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 89.27,
+        "invalidation": 87.63,
+        "stop": 84.7,
+        "target1": 94.32,
+        "target2": 100.5,
+        "rr": 1.11,
+        "risk_pct": 5.1,
+        "atr_pct": 3.8
+      },
+      "regime": "sideways",
+      "rank": 9,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2892",
@@ -924,6 +1308,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 33.65,
+      "day_open": 33.25,
+      "day_high": 33.8,
+      "day_low": 33.2,
       "lot_cost": 33650,
       "chg_pct": -4.534558217805795e-06,
       "rsi": 47.66050405826794,
@@ -1010,7 +1397,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 10
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 33.84,
+        "invalidation": 33.16,
+        "stop": 32.45,
+        "target1": 35.11,
+        "target2": 36.9,
+        "rr": 0.91,
+        "risk_pct": 4.1,
+        "atr_pct": 2.5
+      },
+      "regime": "sideways",
+      "rank": 10,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2801",
@@ -1018,6 +1428,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 24.1,
+      "day_open": 23.85,
+      "day_high": 24.15,
+      "day_low": 23.7,
       "lot_cost": 24100,
       "chg_pct": -1.5828619082114415e-06,
       "rsi": 59.20356437738749,
@@ -1104,7 +1517,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 11
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 24.17,
+        "invalidation": 23.68,
+        "stop": 23.59,
+        "target1": 24.82,
+        "target2": 25.26,
+        "rr": 1.12,
+        "risk_pct": 2.4,
+        "atr_pct": 1.8
+      },
+      "regime": "sideways",
+      "rank": 11,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2357",
@@ -1112,6 +1548,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 921.0,
+      "day_open": 913.0,
+      "day_high": 923.0,
+      "day_low": 906.0,
       "lot_cost": 921000,
       "chg_pct": 0.0,
       "rsi": 63.04448865594063,
@@ -1198,7 +1637,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 12
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 924.87,
+        "invalidation": 904.13,
+        "stop": 854.55,
+        "target1": 980.94,
+        "target2": 1025.0,
+        "rr": 0.8,
+        "risk_pct": 7.6,
+        "atr_pct": 4.1
+      },
+      "regime": "sideways",
+      "rank": 12,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2634",
@@ -1206,6 +1668,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 69.3,
+      "day_open": 73.0,
+      "day_high": 73.5,
+      "day_low": 69.0,
       "lot_cost": 69300,
       "chg_pct": -4.403690734289256e-06,
       "rsi": 57.43075510546366,
@@ -1292,7 +1757,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 13
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 73.72,
+        "invalidation": 68.78,
+        "stop": 64.74,
+        "target1": 77.28,
+        "target2": 84.83,
+        "rr": 0.4,
+        "risk_pct": 12.2,
+        "atr_pct": 6.4
+      },
+      "regime": "sideways",
+      "rank": 13,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2426",
@@ -1300,6 +1788,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 82.2,
+      "day_open": 80.0,
+      "day_high": 82.2,
+      "day_low": 80.0,
       "lot_cost": 82200,
       "chg_pct": 3.7126008933796584e-06,
       "rsi": 65.81066100152853,
@@ -1414,7 +1905,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 14
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 82.47,
+        "invalidation": 79.73,
+        "stop": 71.25,
+        "target1": 90.68,
+        "target2": 98.8,
+        "rr": 0.73,
+        "risk_pct": 13.6,
+        "atr_pct": 6.7
+      },
+      "regime": "sideways",
+      "rank": 14,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "6770",
@@ -1422,6 +1936,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 68.4,
+      "day_open": 67.0,
+      "day_high": 68.5,
+      "day_low": 66.5,
       "lot_cost": 68400,
       "chg_pct": -2.2308170533058558e-06,
       "rsi": 50.88582739238512,
@@ -1515,7 +2032,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 15
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 68.72,
+        "invalidation": 66.28,
+        "stop": 63.99,
+        "target1": 75.33,
+        "target2": 81.8,
+        "rr": 1.4,
+        "risk_pct": 6.9,
+        "atr_pct": 6.4
+      },
+      "regime": "sideways",
+      "rank": 15,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "2356",
@@ -1523,6 +2063,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 65.7,
+      "day_open": 64.5,
+      "day_high": 65.9,
+      "day_low": 64.0,
       "lot_cost": 65700,
       "chg_pct": 4.644989282098777e-06,
       "rsi": 51.669809515205856,
@@ -1609,7 +2152,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 16
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 66.06,
+        "invalidation": 63.84,
+        "stop": 62.57,
+        "target1": 70.75,
+        "target2": 73.88,
+        "rr": 1.35,
+        "risk_pct": 5.3,
+        "atr_pct": 4.8
+      },
+      "regime": "sideways",
+      "rank": 16,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "3017",
@@ -1617,6 +2183,9 @@
       "sector": "散熱機構",
       "asset_type": "tech",
       "close": 2865.0,
+      "day_open": 2995.0,
+      "day_high": 3035.0,
+      "day_low": 2850.0,
       "lot_cost": 2865000,
       "chg_pct": 0.0,
       "rsi": 54.37241800886689,
@@ -1710,7 +2279,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 17
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 3044.33,
+        "invalidation": 2840.67,
+        "stop": 2678.44,
+        "target1": 3320.0,
+        "target2": 3510.74,
+        "rr": 0.75,
+        "risk_pct": 12.0,
+        "atr_pct": 6.5
+      },
+      "regime": "sideways",
+      "rank": 17,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "3661",
@@ -1718,6 +2310,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 3700.0,
+      "day_open": 3740.0,
+      "day_high": 3790.0,
+      "day_low": 3670.0,
       "lot_cost": 3700000,
       "chg_pct": 0.0,
       "rsi": 48.48952551748314,
@@ -1811,7 +2406,30 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 18
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 3802.17,
+        "invalidation": 3657.83,
+        "stop": 3456.61,
+        "target1": 4167.25,
+        "target2": 4530.0,
+        "rr": 1.06,
+        "risk_pct": 9.1,
+        "atr_pct": 6.6
+      },
+      "regime": "sideways",
+      "rank": 18,
+      "mark": {
+        "badge": "🆕",
+        "label": "今日新訊號",
+        "streak": 1,
+        "rank_delta": null,
+        "prev_rank": null
+      }
     },
     {
       "code": "8046",
@@ -1819,6 +2437,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 1135.0,
+      "day_open": 1180.0,
+      "day_high": 1200.0,
+      "day_low": 1105.0,
       "lot_cost": 1135000,
       "chg_pct": 0.0,
       "rsi": 49.62370630954043,
@@ -1912,7 +2533,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 19
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 1205.02,
+        "invalidation": 1099.98,
+        "stop": 1034.56,
+        "target1": 1355.68,
+        "target2": 1456.12,
+        "rr": 0.88,
+        "risk_pct": 14.1,
+        "atr_pct": 8.8
+      },
+      "regime": "sideways",
+      "rank": 19,
+      "mark": {}
     },
     {
       "code": "6669",
@@ -1920,6 +2558,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 6255.0,
+      "day_open": 6285.0,
+      "day_high": 6445.0,
+      "day_low": 6230.0,
       "lot_cost": 6255000,
       "chg_pct": 0.0,
       "rsi": 58.98966588020122,
@@ -2006,7 +2647,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 20
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 6460.16,
+        "invalidation": 6214.84,
+        "stop": 5951.89,
+        "target1": 6740.0,
+        "target2": 7217.94,
+        "rr": 0.55,
+        "risk_pct": 7.9,
+        "atr_pct": 4.8
+      },
+      "regime": "sideways",
+      "rank": 20,
+      "mark": {}
     },
     {
       "code": "8996",
@@ -2014,6 +2672,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 1090.0,
+      "day_open": 1105.0,
+      "day_high": 1125.0,
+      "day_low": 1085.0,
       "lot_cost": 1090000,
       "chg_pct": 0.0,
       "rsi": 47.661648119463024,
@@ -2107,7 +2768,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 21
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 1129.2,
+        "invalidation": 1080.8,
+        "stop": 1005.9,
+        "target1": 1255.35,
+        "target2": 1339.45,
+        "rr": 1.02,
+        "risk_pct": 10.9,
+        "atr_pct": 7.7
+      },
+      "regime": "sideways",
+      "rank": 21,
+      "mark": {}
     },
     {
       "code": "5880",
@@ -2115,6 +2793,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 25.05,
+      "day_open": 24.8,
+      "day_high": 25.2,
+      "day_low": 24.65,
       "lot_cost": 25050,
       "chg_pct": 3.0456665855993492e-06,
       "rsi": 52.11777388473337,
@@ -2201,7 +2882,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 22
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 25.23,
+        "invalidation": 24.62,
+        "stop": 24.03,
+        "target1": 25.99,
+        "target2": 26.98,
+        "rr": 0.64,
+        "risk_pct": 4.7,
+        "atr_pct": 2.0
+      },
+      "regime": "sideways",
+      "rank": 22,
+      "mark": {}
     },
     {
       "code": "2383",
@@ -2209,6 +2907,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 5680.0,
+      "day_open": 6005.0,
+      "day_high": 6015.0,
+      "day_low": 5650.0,
       "lot_cost": 5680000,
       "chg_pct": 0.0,
       "rsi": 54.25281243862605,
@@ -2302,7 +3003,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 23
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 6032.55,
+        "invalidation": 5632.45,
+        "stop": 5329.02,
+        "target1": 6470.0,
+        "target2": 6910.0,
+        "rr": 0.62,
+        "risk_pct": 11.7,
+        "atr_pct": 6.2
+      },
+      "regime": "sideways",
+      "rank": 23,
+      "mark": {}
     },
     {
       "code": "2886",
@@ -2310,6 +3028,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 46.95,
+      "day_open": 46.35,
+      "day_high": 47.05,
+      "day_low": 46.2,
       "lot_cost": 46950,
       "chg_pct": -1.6250041312559915e-06,
       "rsi": 44.61230782676086,
@@ -2396,7 +3117,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 24
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 47.12,
+        "invalidation": 46.13,
+        "stop": 44.95,
+        "target1": 49.18,
+        "target2": 53.7,
+        "rr": 0.95,
+        "risk_pct": 4.6,
+        "atr_pct": 2.9
+      },
+      "regime": "sideways",
+      "rank": 24,
+      "mark": {}
     },
     {
       "code": "2464",
@@ -2404,6 +3142,9 @@
       "sector": "工業電腦",
       "asset_type": "tech",
       "close": 179.0,
+      "day_open": 181.5,
+      "day_high": 181.5,
+      "day_low": 173.0,
       "lot_cost": 179000,
       "chg_pct": 0.0,
       "rsi": 55.85155523754823,
@@ -2499,7 +3240,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 25
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 182.18,
+        "invalidation": 172.32,
+        "stop": 165.34,
+        "target1": 202.68,
+        "target2": 216.34,
+        "rr": 1.22,
+        "risk_pct": 9.2,
+        "atr_pct": 7.6
+      },
+      "regime": "sideways",
+      "rank": 25,
+      "mark": {}
     },
     {
       "code": "6269",
@@ -2507,6 +3265,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 62.4,
+      "day_open": 63.6,
+      "day_high": 63.6,
+      "day_low": 62.4,
       "lot_cost": 62400,
       "chg_pct": -2.4453187030815116e-06,
       "rsi": 50.429752579492224,
@@ -2600,7 +3361,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 26
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 63.76,
+        "invalidation": 62.24,
+        "stop": 59.16,
+        "target1": 68.62,
+        "target2": 71.86,
+        "rr": 1.06,
+        "risk_pct": 7.2,
+        "atr_pct": 5.2
+      },
+      "regime": "sideways",
+      "rank": 26,
+      "mark": {}
     },
     {
       "code": "3532",
@@ -2608,6 +3386,9 @@
       "sector": "半導體",
       "asset_type": "tech",
       "close": 342.5,
+      "day_open": 350.5,
+      "day_high": 353.0,
+      "day_low": 337.5,
       "lot_cost": 342500,
       "chg_pct": 0.0,
       "rsi": 49.04507358338168,
@@ -2701,7 +3482,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 27
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 354.54,
+        "invalidation": 335.96,
+        "stop": 311.74,
+        "target1": 400.67,
+        "target2": 431.43,
+        "rr": 1.08,
+        "risk_pct": 12.1,
+        "atr_pct": 9.0
+      },
+      "regime": "sideways",
+      "rank": 27,
+      "mark": {}
     },
     {
       "code": "8271",
@@ -2709,6 +3507,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 232.5,
+      "day_open": 233.0,
+      "day_high": 237.0,
+      "day_low": 230.5,
       "lot_cost": 232500,
       "chg_pct": 0.0,
       "rsi": 57.06594622265465,
@@ -2795,7 +3596,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 28
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 237.56,
+        "invalidation": 229.94,
+        "stop": 221.22,
+        "target1": 249.5,
+        "target2": 265.75,
+        "rr": 0.73,
+        "risk_pct": 6.9,
+        "atr_pct": 4.8
+      },
+      "regime": "sideways",
+      "rank": 28,
+      "mark": {}
     },
     {
       "code": "3189",
@@ -2803,6 +3621,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 811.0,
+      "day_open": 842.0,
+      "day_high": 842.0,
+      "day_low": 792.0,
       "lot_cost": 811000,
       "chg_pct": 0.0,
       "rsi": 51.56265923317212,
@@ -2896,7 +3717,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 29
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 844.95,
+        "invalidation": 789.05,
+        "stop": 752.05,
+        "target1": 933.38,
+        "target2": 992.33,
+        "rr": 0.95,
+        "risk_pct": 11.0,
+        "atr_pct": 7.3
+      },
+      "regime": "sideways",
+      "rank": 29,
+      "mark": {}
     },
     {
       "code": "2451",
@@ -2904,6 +3742,9 @@
       "sector": "記憶體",
       "asset_type": "tech",
       "close": 312.5,
+      "day_open": 285.0,
+      "day_high": 312.5,
+      "day_low": 285.0,
       "lot_cost": 312500,
       "chg_pct": 0.0,
       "rsi": 63.08739644646792,
@@ -2999,7 +3840,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 30
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 313.27,
+        "invalidation": 284.23,
+        "stop": 281.14,
+        "target1": 336.42,
+        "target2": 383.0,
+        "rr": 0.72,
+        "risk_pct": 10.3,
+        "atr_pct": 4.9
+      },
+      "regime": "sideways",
+      "rank": 30,
+      "mark": {}
     },
     {
       "code": "2395",
@@ -3007,6 +3865,9 @@
       "sector": "工業電腦",
       "asset_type": "tech",
       "close": 649.0,
+      "day_open": 672.0,
+      "day_high": 672.0,
+      "day_low": 643.0,
       "lot_cost": 649000,
       "chg_pct": 0.0,
       "rsi": 57.014342306867114,
@@ -3093,7 +3954,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 31
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 673.61,
+        "invalidation": 641.39,
+        "stop": 616.73,
+        "target1": 709.0,
+        "target2": 754.28,
+        "rr": 0.62,
+        "risk_pct": 8.4,
+        "atr_pct": 5.0
+      },
+      "regime": "sideways",
+      "rank": 31,
+      "mark": {}
     },
     {
       "code": "2337",
@@ -3101,6 +3979,9 @@
       "sector": "記憶體",
       "asset_type": "tech",
       "close": 122.5,
+      "day_open": 120.5,
+      "day_high": 122.5,
+      "day_low": 119.5,
       "lot_cost": 122500,
       "chg_pct": 0.0,
       "rsi": 46.597622850765056,
@@ -3194,7 +4075,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 32
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 122.93,
+        "invalidation": 119.07,
+        "stop": 113.84,
+        "target1": 135.92,
+        "target2": 144.58,
+        "rr": 1.43,
+        "risk_pct": 7.4,
+        "atr_pct": 7.1
+      },
+      "regime": "sideways",
+      "rank": 32,
+      "mark": {}
     },
     {
       "code": "2308",
@@ -3202,6 +4100,9 @@
       "sector": "電子零組件",
       "asset_type": "tech",
       "close": 1750.0,
+      "day_open": 1760.0,
+      "day_high": 1760.0,
+      "day_low": 1720.0,
       "lot_cost": 1750000,
       "chg_pct": 0.0,
       "rsi": 46.82385833060499,
@@ -3288,7 +4189,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 33
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 1764.89,
+        "invalidation": 1715.11,
+        "stop": 1652.28,
+        "target1": 1911.46,
+        "target2": 2009.18,
+        "rr": 1.3,
+        "risk_pct": 6.4,
+        "atr_pct": 5.6
+      },
+      "regime": "sideways",
+      "rank": 33,
+      "mark": {}
     },
     {
       "code": "2368",
@@ -3296,6 +4214,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 965.0,
+      "day_open": 1015.0,
+      "day_high": 1025.0,
+      "day_low": 958.0,
       "lot_cost": 965000,
       "chg_pct": 0.0,
       "rsi": 46.91006158738952,
@@ -3389,7 +4310,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 34
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 1028.68,
+        "invalidation": 954.32,
+        "stop": 891.39,
+        "target1": 1110.0,
+        "target2": 1212.7,
+        "rr": 0.59,
+        "risk_pct": 13.3,
+        "atr_pct": 7.6
+      },
+      "regime": "sideways",
+      "rank": 34,
+      "mark": {}
     },
     {
       "code": "6415",
@@ -3397,6 +4335,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 445.5,
+      "day_open": 451.5,
+      "day_high": 452.5,
+      "day_low": 438.0,
       "lot_cost": 445500,
       "chg_pct": 0.0,
       "rsi": 46.014155889053406,
@@ -3483,7 +4424,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 35
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 453.94,
+        "invalidation": 436.56,
+        "stop": 416.69,
+        "target1": 497.16,
+        "target2": 525.98,
+        "rr": 1.16,
+        "risk_pct": 8.2,
+        "atr_pct": 6.5
+      },
+      "regime": "sideways",
+      "rank": 35,
+      "mark": {}
     },
     {
       "code": "00891",
@@ -3491,6 +4449,9 @@
       "sector": "ETF·科技主題",
       "asset_type": "etf",
       "close": 33.65,
+      "day_open": 33.53,
+      "day_high": 33.76,
+      "day_low": 33.32,
       "lot_cost": 33650,
       "chg_pct": 0.5979050298920541,
       "rsi": 44.666266695496184,
@@ -3577,7 +4538,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 36
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 33.81,
+        "invalidation": 33.27,
+        "stop": 32.58,
+        "target1": 35.42,
+        "target2": 37.02,
+        "rr": 1.3,
+        "risk_pct": 3.6,
+        "atr_pct": 3.2
+      },
+      "regime": "sideways",
+      "rank": 36,
+      "mark": {}
     },
     {
       "code": "2421",
@@ -3585,6 +4563,9 @@
       "sector": "散熱機構",
       "asset_type": "tech",
       "close": 142.5,
+      "day_open": 144.0,
+      "day_high": 144.5,
+      "day_low": 141.0,
       "lot_cost": 142500,
       "chg_pct": 0.0,
       "rsi": 49.98434436903747,
@@ -3671,7 +4652,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 37
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 144.79,
+        "invalidation": 140.71,
+        "stop": 136.78,
+        "target1": 153.37,
+        "target2": 159.08,
+        "rr": 1.07,
+        "risk_pct": 5.5,
+        "atr_pct": 4.0
+      },
+      "regime": "sideways",
+      "rank": 37,
+      "mark": {}
     },
     {
       "code": "2605",
@@ -3679,6 +4677,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 37.8,
+      "day_open": 36.25,
+      "day_high": 38.3,
+      "day_low": 36.25,
       "lot_cost": 37800,
       "chg_pct": 2.0183583693267337e-06,
       "rsi": 76.79362638815773,
@@ -3792,7 +4793,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 38
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 38.38,
+        "invalidation": 36.17,
+        "stop": 34.78,
+        "target1": 40.64,
+        "target2": 42.15,
+        "rr": 0.63,
+        "risk_pct": 9.4,
+        "atr_pct": 4.0
+      },
+      "regime": "sideways",
+      "rank": 38,
+      "mark": {}
     },
     {
       "code": "00923",
@@ -3800,6 +4818,9 @@
       "sector": "ETF·市值型",
       "asset_type": "etf",
       "close": 38.66,
+      "day_open": 38.5,
+      "day_high": 38.8,
+      "day_low": 38.2,
       "lot_cost": 38660,
       "chg_pct": 0.4155844155844024,
       "rsi": 39.93962255004555,
@@ -3886,7 +4907,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 39
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 38.86,
+        "invalidation": 38.14,
+        "stop": 37.49,
+        "target1": 40.62,
+        "target2": 43.4,
+        "rr": 1.28,
+        "risk_pct": 3.5,
+        "atr_pct": 3.0
+      },
+      "regime": "sideways",
+      "rank": 39,
+      "mark": {}
     },
     {
       "code": "8112",
@@ -3894,6 +4932,9 @@
       "sector": "電子通路",
       "asset_type": "tech",
       "close": 93.5,
+      "day_open": 93.5,
+      "day_high": 94.5,
+      "day_low": 92.7,
       "lot_cost": 93500,
       "chg_pct": 0.0,
       "rsi": 55.580294073874526,
@@ -3980,7 +5021,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 40
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 94.7,
+        "invalidation": 92.5,
+        "stop": 89.11,
+        "target1": 100.68,
+        "target2": 104.66,
+        "rr": 1.07,
+        "risk_pct": 5.9,
+        "atr_pct": 4.3
+      },
+      "regime": "sideways",
+      "rank": 40,
+      "mark": {}
     },
     {
       "code": "6446",
@@ -3988,6 +5046,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 1400.0,
+      "day_open": 1375.0,
+      "day_high": 1410.0,
+      "day_low": 1360.0,
       "lot_cost": 1400000,
       "chg_pct": 0.0,
       "rsi": 58.918519896804746,
@@ -4081,7 +5142,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 41
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 1414.3,
+        "invalidation": 1355.7,
+        "stop": 1313.99,
+        "target1": 1543.31,
+        "target2": 1629.32,
+        "rr": 1.29,
+        "risk_pct": 7.1,
+        "atr_pct": 6.1
+      },
+      "regime": "sideways",
+      "rank": 41,
+      "mark": {}
     },
     {
       "code": "2347",
@@ -4089,6 +5167,9 @@
       "sector": "電子通路",
       "asset_type": "tech",
       "close": 87.5,
+      "day_open": 86.6,
+      "day_high": 88.2,
+      "day_low": 86.2,
       "lot_cost": 87500,
       "chg_pct": 0.0,
       "rsi": 44.98019899833443,
@@ -4175,7 +5256,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 42
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 88.35,
+        "invalidation": 86.05,
+        "stop": 84.44,
+        "target1": 92.95,
+        "target2": 98.3,
+        "rr": 1.17,
+        "risk_pct": 4.4,
+        "atr_pct": 3.5
+      },
+      "regime": "sideways",
+      "rank": 42,
+      "mark": {}
     },
     {
       "code": "00878",
@@ -4183,6 +5281,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 32.38,
+      "day_open": 32.11,
+      "day_high": 32.39,
+      "day_low": 31.99,
       "lot_cost": 32380,
       "chg_pct": 0.7153917984606073,
       "rsi": 46.43923385968545,
@@ -4269,7 +5370,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 43
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 32.42,
+        "invalidation": 31.96,
+        "stop": 31.74,
+        "target1": 33.38,
+        "target2": 34.19,
+        "rr": 1.41,
+        "risk_pct": 2.1,
+        "atr_pct": 2.0
+      },
+      "regime": "sideways",
+      "rank": 43,
+      "mark": {}
     },
     {
       "code": "2360",
@@ -4277,6 +5395,9 @@
       "sector": "設備儀器",
       "asset_type": "tech",
       "close": 2100.0,
+      "day_open": 2190.0,
+      "day_high": 2190.0,
+      "day_low": 2085.0,
       "lot_cost": 2100000,
       "chg_pct": 0.0,
       "rsi": 49.6353459270338,
@@ -4363,7 +5484,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 44
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 2197.53,
+        "invalidation": 2077.47,
+        "stop": 1949.49,
+        "target1": 2400.0,
+        "target2": 2573.79,
+        "rr": 0.82,
+        "risk_pct": 11.3,
+        "atr_pct": 7.2
+      },
+      "regime": "sideways",
+      "rank": 44,
+      "mark": {}
     },
     {
       "code": "6805",
@@ -4371,6 +5509,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 1765.0,
+      "day_open": 1870.0,
+      "day_high": 1875.0,
+      "day_low": 1760.0,
       "lot_cost": 1765000,
       "chg_pct": 0.0,
       "rsi": 54.52895742537906,
@@ -4464,7 +5605,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 45
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 1881.17,
+        "invalidation": 1753.83,
+        "stop": 1641.53,
+        "target1": 1995.0,
+        "target2": 2189.85,
+        "rr": 0.47,
+        "risk_pct": 12.7,
+        "atr_pct": 7.0
+      },
+      "regime": "sideways",
+      "rank": 45,
+      "mark": {}
     },
     {
       "code": "4904",
@@ -4472,6 +5630,9 @@
       "sector": "電信",
       "asset_type": "tech",
       "close": 102.5,
+      "day_open": 101.5,
+      "day_high": 102.5,
+      "day_low": 101.0,
       "lot_cost": 102500,
       "chg_pct": 0.0,
       "rsi": 52.142943467808855,
@@ -4558,7 +5719,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 46
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 102.61,
+        "invalidation": 100.89,
+        "stop": 98.1,
+        "target1": 106.06,
+        "target2": 108.5,
+        "rr": 0.76,
+        "risk_pct": 4.4,
+        "atr_pct": 2.2
+      },
+      "regime": "sideways",
+      "rank": 46,
+      "mark": {}
     },
     {
       "code": "6919",
@@ -4566,6 +5744,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 113.5,
+      "day_open": 108.5,
+      "day_high": 118.0,
+      "day_low": 107.5,
       "lot_cost": 113500,
       "chg_pct": 0.0,
       "rsi": 59.84373012401239,
@@ -4652,7 +5833,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 47
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 118.31,
+        "invalidation": 107.19,
+        "stop": 105.95,
+        "target1": 123.26,
+        "target2": 133.79,
+        "rr": 0.4,
+        "risk_pct": 10.4,
+        "atr_pct": 5.5
+      },
+      "regime": "sideways",
+      "rank": 47,
+      "mark": {}
     },
     {
       "code": "3044",
@@ -4660,6 +5858,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 459.0,
+      "day_open": 504.0,
+      "day_high": 515.0,
+      "day_low": 455.0,
       "lot_cost": 459000,
       "chg_pct": 0.0,
       "rsi": 54.08542877989561,
@@ -4753,7 +5954,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 48
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 516.46,
+        "invalidation": 453.54,
+        "stop": 429.85,
+        "target1": 539.78,
+        "target2": 589.34,
+        "rr": 0.27,
+        "risk_pct": 16.8,
+        "atr_pct": 6.4
+      },
+      "regime": "sideways",
+      "rank": 48,
+      "mark": {}
     },
     {
       "code": "2301",
@@ -4761,6 +5979,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 261.0,
+      "day_open": 266.0,
+      "day_high": 269.5,
+      "day_low": 251.0,
       "lot_cost": 261000,
       "chg_pct": 0.0,
       "rsi": 57.96534134234063,
@@ -4854,7 +6075,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 49
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 270.38,
+        "invalidation": 250.12,
+        "stop": 243.38,
+        "target1": 286.5,
+        "target2": 314.42,
+        "rr": 0.6,
+        "risk_pct": 10.0,
+        "atr_pct": 6.7
+      },
+      "regime": "sideways",
+      "rank": 49,
+      "mark": {}
     },
     {
       "code": "2377",
@@ -4862,6 +6100,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 141.5,
+      "day_open": 140.0,
+      "day_high": 142.5,
+      "day_low": 140.0,
       "lot_cost": 141500,
       "chg_pct": 0.0,
       "rsi": 43.5996242414114,
@@ -4948,7 +6189,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 50
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 142.85,
+        "invalidation": 139.65,
+        "stop": 134.45,
+        "target1": 153.43,
+        "target2": 173.5,
+        "rr": 1.26,
+        "risk_pct": 5.9,
+        "atr_pct": 5.0
+      },
+      "regime": "sideways",
+      "rank": 50,
+      "mark": {}
     },
     {
       "code": "2409",
@@ -4956,6 +6214,9 @@
       "sector": "光電面板",
       "asset_type": "tech",
       "close": 25.6,
+      "day_open": 25.8,
+      "day_high": 25.8,
+      "day_low": 25.35,
       "lot_cost": 25600,
       "chg_pct": -1.4901160971803051e-06,
       "rsi": 48.4075116622131,
@@ -5042,7 +6303,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 51
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 25.87,
+        "invalidation": 25.28,
+        "stop": 24.22,
+        "target1": 27.9,
+        "target2": 29.33,
+        "rr": 1.23,
+        "risk_pct": 6.4,
+        "atr_pct": 5.4
+      },
+      "regime": "sideways",
+      "rank": 51,
+      "mark": {}
     },
     {
       "code": "2412",
@@ -5050,6 +6328,9 @@
       "sector": "電信",
       "asset_type": "tech",
       "close": 136.5,
+      "day_open": 136.5,
+      "day_high": 137.0,
+      "day_low": 136.0,
       "lot_cost": 136500,
       "chg_pct": 0.0,
       "rsi": 45.389542232503416,
@@ -5136,7 +6417,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 52
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 137.08,
+        "invalidation": 135.92,
+        "stop": 134.85,
+        "target1": 139.56,
+        "target2": 142.5,
+        "rr": 1.11,
+        "risk_pct": 1.6,
+        "atr_pct": 1.2
+      },
+      "regime": "sideways",
+      "rank": 52,
+      "mark": {}
     },
     {
       "code": "1303",
@@ -5144,6 +6442,9 @@
       "sector": "塑化",
       "asset_type": "other",
       "close": 192.0,
+      "day_open": 188.5,
+      "day_high": 193.5,
+      "day_low": 185.0,
       "lot_cost": 192000,
       "chg_pct": 0.0,
       "rsi": 54.76980122254988,
@@ -5237,7 +6538,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 53
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 194.16,
+        "invalidation": 184.34,
+        "stop": 178.71,
+        "target1": 214.1,
+        "target2": 227.39,
+        "rr": 1.29,
+        "risk_pct": 8.0,
+        "atr_pct": 6.9
+      },
+      "regime": "sideways",
+      "rank": 53,
+      "mark": {}
     },
     {
       "code": "1590",
@@ -5245,6 +6563,9 @@
       "sector": "機械",
       "asset_type": "other",
       "close": 1435.0,
+      "day_open": 1420.0,
+      "day_high": 1445.0,
+      "day_low": 1385.0,
       "lot_cost": 1435000,
       "chg_pct": 0.0,
       "rsi": 49.15799781810245,
@@ -5331,7 +6652,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 54
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 1448.86,
+        "invalidation": 1381.14,
+        "stop": 1357.78,
+        "target1": 1564.69,
+        "target2": 1641.91,
+        "rr": 1.27,
+        "risk_pct": 6.3,
+        "atr_pct": 5.4
+      },
+      "regime": "sideways",
+      "rank": 54,
+      "mark": {}
     },
     {
       "code": "00927",
@@ -5339,6 +6677,9 @@
       "sector": "ETF·科技主題",
       "asset_type": "etf",
       "close": 35.45,
+      "day_open": 35.33,
+      "day_high": 35.58,
+      "day_low": 35.14,
       "lot_cost": 35450,
       "chg_pct": 0.42493134895587037,
       "rsi": 44.806929027727634,
@@ -5425,7 +6766,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 55
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 35.64,
+        "invalidation": 35.08,
+        "stop": 34.28,
+        "target1": 37.39,
+        "target2": 38.56,
+        "rr": 1.29,
+        "risk_pct": 3.8,
+        "atr_pct": 3.3
+      },
+      "regime": "sideways",
+      "rank": 55,
+      "mark": {}
     },
     {
       "code": "6414",
@@ -5433,6 +6791,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 395.0,
+      "day_open": 402.5,
+      "day_high": 402.5,
+      "day_low": 395.0,
       "lot_cost": 395000,
       "chg_pct": 0.0,
       "rsi": 42.62097185805465,
@@ -5528,7 +6889,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 56
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 403.75,
+        "invalidation": 393.75,
+        "stop": 369.92,
+        "target1": 441.37,
+        "target2": 494.5,
+        "rr": 1.11,
+        "risk_pct": 8.4,
+        "atr_pct": 6.3
+      },
+      "regime": "sideways",
+      "rank": 56,
+      "mark": {}
     },
     {
       "code": "2367",
@@ -5536,6 +6914,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 42.1,
+      "day_open": 42.5,
+      "day_high": 42.8,
+      "day_low": 41.95,
       "lot_cost": 42100,
       "chg_pct": 3.6244155898756958e-06,
       "rsi": 43.896513241867325,
@@ -5622,7 +7003,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 57
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 42.9,
+        "invalidation": 41.85,
+        "stop": 40.06,
+        "target1": 45.97,
+        "target2": 48.01,
+        "rr": 1.08,
+        "risk_pct": 6.6,
+        "atr_pct": 4.9
+      },
+      "regime": "sideways",
+      "rank": 57,
+      "mark": {}
     },
     {
       "code": "00991A",
@@ -5630,6 +7028,9 @@
       "sector": "ETF",
       "asset_type": "etf",
       "close": 17.52,
+      "day_open": 17.78,
+      "day_high": 17.8,
+      "day_low": 17.44,
       "lot_cost": 17520,
       "chg_pct": -2.177553605442728,
       "rsi": 49.656068432928464,
@@ -5716,7 +7117,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 58
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 17.83,
+        "invalidation": 17.41,
+        "stop": 16.85,
+        "target1": 18.74,
+        "target2": 19.5,
+        "rr": 0.93,
+        "risk_pct": 5.5,
+        "atr_pct": 3.8
+      },
+      "regime": "sideways",
+      "rank": 58,
+      "mark": {}
     },
     {
       "code": "2454",
@@ -5724,6 +7142,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 3790.0,
+      "day_open": 3725.0,
+      "day_high": 3810.0,
+      "day_low": 3695.0,
       "lot_cost": 3790000,
       "chg_pct": 0.0,
       "rsi": 47.42511531667848,
@@ -5810,7 +7231,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 59
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 3820.4,
+        "invalidation": 3684.6,
+        "stop": 3581.93,
+        "target1": 4132.51,
+        "target2": 4400.0,
+        "rr": 1.31,
+        "risk_pct": 6.2,
+        "atr_pct": 5.5
+      },
+      "regime": "sideways",
+      "rank": 59,
+      "mark": {}
     },
     {
       "code": "2492",
@@ -5818,6 +7256,9 @@
       "sector": "被動元件",
       "asset_type": "tech",
       "close": 266.0,
+      "day_open": 274.0,
+      "day_high": 277.0,
+      "day_low": 262.5,
       "lot_cost": 266000,
       "chg_pct": 0.0,
       "rsi": 42.27438307842742,
@@ -5911,7 +7352,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 60
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 278.31,
+        "invalidation": 261.19,
+        "stop": 239.87,
+        "target1": 317.49,
+        "target2": 343.62,
+        "rr": 1.02,
+        "risk_pct": 13.8,
+        "atr_pct": 9.8
+      },
+      "regime": "sideways",
+      "rank": 60,
+      "mark": {}
     },
     {
       "code": "00935",
@@ -5919,6 +7377,9 @@
       "sector": "ETF·科技主題",
       "asset_type": "etf",
       "close": 55.85,
+      "day_open": 55.95,
+      "day_high": 56.15,
+      "day_low": 55.35,
       "lot_cost": 55850,
       "chg_pct": -0.17873237100237693,
       "rsi": 48.50543880949906,
@@ -6005,7 +7466,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 61
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 56.24,
+        "invalidation": 55.26,
+        "stop": 53.97,
+        "target1": 59.06,
+        "target2": 60.94,
+        "rr": 1.24,
+        "risk_pct": 4.0,
+        "atr_pct": 3.4
+      },
+      "regime": "sideways",
+      "rank": 61,
+      "mark": {}
     },
     {
       "code": "3026",
@@ -6013,6 +7491,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 639.0,
+      "day_open": 701.0,
+      "day_high": 745.0,
+      "day_low": 639.0,
       "lot_cost": 639000,
       "chg_pct": 0.0,
       "rsi": 48.960308720362,
@@ -6108,7 +7589,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 62
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 748.33,
+        "invalidation": 635.67,
+        "stop": 572.45,
+        "target1": 801.57,
+        "target2": 914.71,
+        "rr": 0.3,
+        "risk_pct": 23.5,
+        "atr_pct": 10.4
+      },
+      "regime": "sideways",
+      "rank": 62,
+      "mark": {}
     },
     {
       "code": "6672",
@@ -6116,6 +7614,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 267.5,
+      "day_open": 285.0,
+      "day_high": 292.0,
+      "day_low": 264.0,
       "lot_cost": 267500,
       "chg_pct": 0.0,
       "rsi": 55.52962396036595,
@@ -6211,7 +7712,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 63
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 292.91,
+        "invalidation": 263.09,
+        "stop": 247.0,
+        "target1": 307.55,
+        "target2": 338.64,
+        "rr": 0.32,
+        "risk_pct": 15.7,
+        "atr_pct": 6.8
+      },
+      "regime": "sideways",
+      "rank": 63,
+      "mark": {}
     },
     {
       "code": "00881",
@@ -6219,6 +7737,9 @@
       "sector": "ETF·科技主題",
       "asset_type": "etf",
       "close": 48.59,
+      "day_open": 48.63,
+      "day_high": 48.91,
+      "day_low": 48.23,
       "lot_cost": 48590,
       "chg_pct": -0.184881480303134,
       "rsi": 38.97746378063886,
@@ -6305,7 +7826,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 64
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 48.99,
+        "invalidation": 48.15,
+        "stop": 46.94,
+        "target1": 51.46,
+        "target2": 55.55,
+        "rr": 1.21,
+        "risk_pct": 4.2,
+        "atr_pct": 3.4
+      },
+      "regime": "sideways",
+      "rank": 64,
+      "mark": {}
     },
     {
       "code": "3702",
@@ -6313,6 +7851,9 @@
       "sector": "電子通路",
       "asset_type": "tech",
       "close": 111.0,
+      "day_open": 104.5,
+      "day_high": 111.5,
+      "day_low": 104.5,
       "lot_cost": 111000,
       "chg_pct": 0.0,
       "rsi": 46.6794562629125,
@@ -6399,7 +7940,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 65
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 111.82,
+        "invalidation": 104.18,
+        "stop": 102.89,
+        "target1": 121.46,
+        "target2": 130.5,
+        "rr": 1.08,
+        "risk_pct": 8.0,
+        "atr_pct": 5.8
+      },
+      "regime": "sideways",
+      "rank": 65,
+      "mark": {}
     },
     {
       "code": "8021",
@@ -6407,6 +7965,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 397.0,
+      "day_open": 407.0,
+      "day_high": 410.5,
+      "day_low": 394.0,
       "lot_cost": 397000,
       "chg_pct": 0.0,
       "rsi": 45.738871970190985,
@@ -6500,7 +8061,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 66
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 412.06,
+        "invalidation": 392.44,
+        "stop": 365.86,
+        "target1": 452.0,
+        "target2": 489.92,
+        "rr": 0.86,
+        "risk_pct": 11.2,
+        "atr_pct": 7.8
+      },
+      "regime": "sideways",
+      "rank": 66,
+      "mark": {}
     },
     {
       "code": "2885",
@@ -6508,6 +8086,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 64.0,
+      "day_open": 62.6,
+      "day_high": 64.0,
+      "day_low": 62.0,
       "lot_cost": 64000,
       "chg_pct": 0.0,
       "rsi": 49.89021739369214,
@@ -6594,7 +8175,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 67
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 64.1,
+        "invalidation": 61.9,
+        "stop": 61.5,
+        "target1": 67.1,
+        "target2": 69.09,
+        "rr": 1.15,
+        "risk_pct": 4.1,
+        "atr_pct": 3.1
+      },
+      "regime": "sideways",
+      "rank": 67,
+      "mark": {}
     },
     {
       "code": "3231",
@@ -6602,6 +8200,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 175.5,
+      "day_open": 178.0,
+      "day_high": 178.0,
+      "day_low": 175.0,
       "lot_cost": 175500,
       "chg_pct": 0.0,
       "rsi": 48.0953382688894,
@@ -6688,7 +8289,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 68
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 178.42,
+        "invalidation": 174.58,
+        "stop": 158.53,
+        "target1": 191.15,
+        "target2": 206.0,
+        "rr": 0.64,
+        "risk_pct": 11.2,
+        "atr_pct": 4.8
+      },
+      "regime": "sideways",
+      "rank": 68,
+      "mark": {}
     },
     {
       "code": "4906",
@@ -6696,6 +8314,9 @@
       "sector": "網通",
       "asset_type": "tech",
       "close": 34.6,
+      "day_open": 34.8,
+      "day_high": 35.15,
+      "day_low": 34.2,
       "lot_cost": 34600,
       "chg_pct": 4.410054832426624e-06,
       "rsi": 46.23178567599509,
@@ -6782,7 +8403,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 69
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 35.23,
+        "invalidation": 34.12,
+        "stop": 32.92,
+        "target1": 37.75,
+        "target2": 39.45,
+        "rr": 1.08,
+        "risk_pct": 6.6,
+        "atr_pct": 4.9
+      },
+      "regime": "sideways",
+      "rank": 69,
+      "mark": {}
     },
     {
       "code": "2317",
@@ -6790,6 +8428,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 245.5,
+      "day_open": 245.0,
+      "day_high": 247.0,
+      "day_low": 243.0,
       "lot_cost": 245500,
       "chg_pct": 0.0,
       "rsi": 44.77169219567203,
@@ -6876,7 +8517,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 70
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 247.41,
+        "invalidation": 242.59,
+        "stop": 237.39,
+        "target1": 259.58,
+        "target2": 274.5,
+        "rr": 1.21,
+        "risk_pct": 4.0,
+        "atr_pct": 3.3
+      },
+      "regime": "sideways",
+      "rank": 70,
+      "mark": {}
     },
     {
       "code": "3481",
@@ -6884,6 +8542,9 @@
       "sector": "光電面板",
       "asset_type": "tech",
       "close": 46.05,
+      "day_open": 45.95,
+      "day_high": 46.3,
+      "day_low": 45.05,
       "lot_cost": 46050,
       "chg_pct": 1.6567632155073397e-06,
       "rsi": 41.001921681163005,
@@ -6970,7 +8631,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 71
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 46.45,
+        "invalidation": 44.9,
+        "stop": 43.09,
+        "target1": 50.89,
+        "target2": 53.85,
+        "rr": 1.32,
+        "risk_pct": 7.2,
+        "atr_pct": 6.4
+      },
+      "regime": "sideways",
+      "rank": 71,
+      "mark": {}
     },
     {
       "code": "5388",
@@ -6978,6 +8656,9 @@
       "sector": "網通",
       "asset_type": "tech",
       "close": 77.6,
+      "day_open": 77.9,
+      "day_high": 78.4,
+      "day_low": 77.5,
       "lot_cost": 77600,
       "chg_pct": 1.966338825099001e-06,
       "rsi": 37.542181163775,
@@ -7073,7 +8754,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 72
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 78.55,
+        "invalidation": 77.35,
+        "stop": 74.55,
+        "target1": 83.13,
+        "target2": 95.0,
+        "rr": 1.14,
+        "risk_pct": 5.1,
+        "atr_pct": 3.9
+      },
+      "regime": "sideways",
+      "rank": 72,
+      "mark": {}
     },
     {
       "code": "00981A",
@@ -7081,6 +8779,9 @@
       "sector": "ETF",
       "asset_type": "etf",
       "close": 28.72,
+      "day_open": 29.11,
+      "day_high": 29.12,
+      "day_low": 28.62,
       "lot_cost": 28720,
       "chg_pct": -1.811965811965821,
       "rsi": 49.90739013364192,
@@ -7167,7 +8868,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 73
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 29.17,
+        "invalidation": 28.57,
+        "stop": 27.69,
+        "target1": 30.57,
+        "target2": 31.75,
+        "rr": 0.94,
+        "risk_pct": 5.1,
+        "atr_pct": 3.6
+      },
+      "regime": "sideways",
+      "rank": 73,
+      "mark": {}
     },
     {
       "code": "00929",
@@ -7175,6 +8893,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 28.33,
+      "day_open": 28.42,
+      "day_high": 28.5,
+      "day_low": 28.26,
       "lot_cost": 28330,
       "chg_pct": -0.3867810548241368,
       "rsi": 45.0552376674154,
@@ -7261,7 +8982,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 74
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 28.53,
+        "invalidation": 28.23,
+        "stop": 27.64,
+        "target1": 29.57,
+        "target2": 30.27,
+        "rr": 1.16,
+        "risk_pct": 3.1,
+        "atr_pct": 2.4
+      },
+      "regime": "sideways",
+      "rank": 74,
+      "mark": {}
     },
     {
       "code": "6830",
@@ -7269,6 +9007,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 462.0,
+      "day_open": 428.5,
+      "day_high": 462.0,
+      "day_low": 417.5,
       "lot_cost": 462000,
       "chg_pct": 0.0,
       "rsi": 58.48098399594759,
@@ -7377,7 +9118,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 75
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 463.6,
+        "invalidation": 415.9,
+        "stop": 404.93,
+        "target1": 511.57,
+        "target2": 733.0,
+        "rr": 0.82,
+        "risk_pct": 12.7,
+        "atr_pct": 6.9
+      },
+      "regime": "sideways",
+      "rank": 75,
+      "mark": {}
     },
     {
       "code": "2327",
@@ -7385,6 +9143,9 @@
       "sector": "被動元件",
       "asset_type": "tech",
       "close": 554.0,
+      "day_open": 561.0,
+      "day_high": 567.0,
+      "day_low": 553.0,
       "lot_cost": 554000,
       "chg_pct": 0.0,
       "rsi": 40.24731130088872,
@@ -7471,7 +9232,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 76
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 569.27,
+        "invalidation": 550.73,
+        "stop": 508.52,
+        "target1": 637.49,
+        "target2": 682.98,
+        "rr": 1.12,
+        "risk_pct": 10.7,
+        "atr_pct": 8.2
+      },
+      "regime": "sideways",
+      "rank": 76,
+      "mark": {}
     },
     {
       "code": "6515",
@@ -7479,6 +9257,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 6400.0,
+      "day_open": 6445.0,
+      "day_high": 6700.0,
+      "day_low": 6250.0,
       "lot_cost": 6400000,
       "chg_pct": 0.0,
       "rsi": 43.670526831355446,
@@ -7565,7 +9346,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 77
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 6724.07,
+        "invalidation": 6225.93,
+        "stop": 5918.68,
+        "target1": 7295.0,
+        "target2": 7927.38,
+        "rr": 0.71,
+        "risk_pct": 12.0,
+        "atr_pct": 7.5
+      },
+      "regime": "sideways",
+      "rank": 77,
+      "mark": {}
     },
     {
       "code": "5269",
@@ -7573,6 +9371,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 1415.0,
+      "day_open": 1425.0,
+      "day_high": 1425.0,
+      "day_low": 1405.0,
       "lot_cost": 1415000,
       "chg_pct": 0.0,
       "rsi": 49.99826248302599,
@@ -7659,7 +9460,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 78
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 1428.03,
+        "invalidation": 1401.97,
+        "stop": 1354.41,
+        "target1": 1485.0,
+        "target2": 1579.49,
+        "rr": 0.77,
+        "risk_pct": 5.2,
+        "atr_pct": 4.3
+      },
+      "regime": "sideways",
+      "rank": 78,
+      "mark": {}
     },
     {
       "code": "1326",
@@ -7667,6 +9485,9 @@
       "sector": "塑化",
       "asset_type": "other",
       "close": 60.1,
+      "day_open": 59.0,
+      "day_high": 60.3,
+      "day_low": 58.2,
       "lot_cost": 60100,
       "chg_pct": 2.5389000679609808e-06,
       "rsi": 50.75424748454177,
@@ -7753,7 +9574,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 79
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 60.45,
+        "invalidation": 58.05,
+        "stop": 57.02,
+        "target1": 62.91,
+        "target2": 68.14,
+        "rr": 0.72,
+        "risk_pct": 5.7,
+        "atr_pct": 5.1
+      },
+      "regime": "sideways",
+      "rank": 79,
+      "mark": {}
     },
     {
       "code": "3042",
@@ -7761,6 +9599,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 190.0,
+      "day_open": 187.5,
+      "day_high": 202.0,
+      "day_low": 187.5,
       "lot_cost": 190000,
       "chg_pct": 0.0,
       "rsi": 55.473304761143496,
@@ -7854,7 +9695,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 80
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 202.72,
+        "invalidation": 186.78,
+        "stop": 172.6,
+        "target1": 214.3,
+        "target2": 238.89,
+        "rr": 0.38,
+        "risk_pct": 14.9,
+        "atr_pct": 7.6
+      },
+      "regime": "sideways",
+      "rank": 80,
+      "mark": {}
     },
     {
       "code": "2376",
@@ -7862,6 +9720,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 339.5,
+      "day_open": 342.5,
+      "day_high": 344.0,
+      "day_low": 338.5,
       "lot_cost": 339500,
       "chg_pct": 0.0,
       "rsi": 46.277775097039836,
@@ -7948,7 +9809,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 81
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 344.73,
+        "invalidation": 337.77,
+        "stop": 312.0,
+        "target1": 366.74,
+        "target2": 402.0,
+        "rr": 0.67,
+        "risk_pct": 9.5,
+        "atr_pct": 4.3
+      },
+      "regime": "sideways",
+      "rank": 81,
+      "mark": {}
     },
     {
       "code": "7750",
@@ -7956,6 +9834,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 2215.0,
+      "day_open": 2435.0,
+      "day_high": 2435.0,
+      "day_low": 2215.0,
       "lot_cost": 2215000,
       "chg_pct": 0.0,
       "rsi": 47.33851394784031,
@@ -8042,7 +9923,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 82
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 2442.86,
+        "invalidation": 2207.14,
+        "stop": 1900.59,
+        "target1": 2568.62,
+        "target2": 2835.87,
+        "rr": 0.23,
+        "risk_pct": 22.2,
+        "atr_pct": 7.1
+      },
+      "regime": "sideways",
+      "rank": 82,
+      "mark": {}
     },
     {
       "code": "3450",
@@ -8050,6 +9948,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 551.0,
+      "day_open": 558.0,
+      "day_high": 578.0,
+      "day_low": 541.0,
       "lot_cost": 551000,
       "chg_pct": 0.0,
       "rsi": 58.228803025469524,
@@ -8151,7 +10052,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 83
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 580.11,
+        "invalidation": 538.89,
+        "stop": 482.85,
+        "target1": 613.8,
+        "target2": 685.39,
+        "rr": 0.35,
+        "risk_pct": 16.8,
+        "atr_pct": 7.6
+      },
+      "regime": "sideways",
+      "rank": 83,
+      "mark": {}
     },
     {
       "code": "6239",
@@ -8159,6 +10077,9 @@
       "sector": "封測",
       "asset_type": "tech",
       "close": 267.5,
+      "day_open": 268.5,
+      "day_high": 269.0,
+      "day_low": 263.5,
       "lot_cost": 267500,
       "chg_pct": 0.0,
       "rsi": 46.26287904348681,
@@ -8245,7 +10166,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 84
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 269.78,
+        "invalidation": 262.72,
+        "stop": 251.93,
+        "target1": 293.13,
+        "target2": 308.7,
+        "rr": 1.31,
+        "risk_pct": 6.6,
+        "atr_pct": 5.8
+      },
+      "regime": "sideways",
+      "rank": 84,
+      "mark": {}
     },
     {
       "code": "3006",
@@ -8253,6 +10191,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 256.5,
+      "day_open": 249.5,
+      "day_high": 260.5,
+      "day_low": 247.0,
       "lot_cost": 256500,
       "chg_pct": 0.0,
       "rsi": 56.24016416403312,
@@ -8348,7 +10289,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 85
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 261.3,
+        "invalidation": 246.2,
+        "stop": 238.7,
+        "target1": 285.24,
+        "target2": 301.21,
+        "rr": 1.06,
+        "risk_pct": 8.6,
+        "atr_pct": 6.2
+      },
+      "regime": "sideways",
+      "rank": 85,
+      "mark": {}
     },
     {
       "code": "2458",
@@ -8356,6 +10314,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 140.5,
+      "day_open": 141.5,
+      "day_high": 142.0,
+      "day_low": 139.0,
       "lot_cost": 140500,
       "chg_pct": 0.0,
       "rsi": 36.82450107271832,
@@ -8451,7 +10412,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 86
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 142.32,
+        "invalidation": 138.68,
+        "stop": 134.12,
+        "target1": 151.89,
+        "target2": 163.0,
+        "rr": 1.17,
+        "risk_pct": 5.8,
+        "atr_pct": 4.5
+      },
+      "regime": "sideways",
+      "rank": 86,
+      "mark": {}
     },
     {
       "code": "8039",
@@ -8459,6 +10437,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 282.0,
+      "day_open": 274.0,
+      "day_high": 306.0,
+      "day_low": 261.0,
       "lot_cost": 282000,
       "chg_pct": 0.0,
       "rsi": 66.34549366759674,
@@ -8561,7 +10542,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 87
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 307.2,
+        "invalidation": 259.8,
+        "stop": 233.94,
+        "target1": 326.42,
+        "target2": 367.27,
+        "rr": 0.26,
+        "risk_pct": 23.8,
+        "atr_pct": 8.5
+      },
+      "regime": "sideways",
+      "rank": 87,
+      "mark": {}
     },
     {
       "code": "2382",
@@ -8569,6 +10567,9 @@
       "sector": "電腦週邊",
       "asset_type": "tech",
       "close": 321.5,
+      "day_open": 327.5,
+      "day_high": 327.5,
+      "day_low": 320.5,
       "lot_cost": 321500,
       "chg_pct": 0.0,
       "rsi": 47.52084473607901,
@@ -8655,7 +10656,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 88
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 328.11,
+        "invalidation": 319.89,
+        "stop": 309.25,
+        "target1": 339.0,
+        "target2": 358.75,
+        "rr": 0.58,
+        "risk_pct": 5.7,
+        "atr_pct": 3.8
+      },
+      "regime": "sideways",
+      "rank": 88,
+      "mark": {}
     },
     {
       "code": "2884",
@@ -8663,6 +10681,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 38.0,
+      "day_open": 37.35,
+      "day_high": 38.0,
+      "day_low": 37.15,
       "lot_cost": 38000,
       "chg_pct": 0.0,
       "rsi": 59.355831994803054,
@@ -8756,7 +10777,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 89
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 38.05,
+        "invalidation": 37.1,
+        "stop": 36.92,
+        "target1": 39.1,
+        "target2": 40.3,
+        "rr": 0.94,
+        "risk_pct": 2.9,
+        "atr_pct": 2.4
+      },
+      "regime": "sideways",
+      "rank": 89,
+      "mark": {}
     },
     {
       "code": "2455",
@@ -8764,6 +10802,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 406.0,
+      "day_open": 404.0,
+      "day_high": 411.0,
+      "day_low": 393.5,
       "lot_cost": 406000,
       "chg_pct": 0.0,
       "rsi": 59.394907662154566,
@@ -8865,7 +10906,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 90
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 412.28,
+        "invalidation": 392.22,
+        "stop": 364.27,
+        "target1": 437.5,
+        "target2": 476.33,
+        "rr": 0.53,
+        "risk_pct": 11.6,
+        "atr_pct": 6.3
+      },
+      "regime": "sideways",
+      "rank": 90,
+      "mark": {}
     },
     {
       "code": "00892",
@@ -8873,6 +10931,9 @@
       "sector": "ETF·科技主題",
       "asset_type": "etf",
       "close": 39.04,
+      "day_open": 39.05,
+      "day_high": 39.34,
+      "day_low": 38.87,
       "lot_cost": 39040,
       "chg_pct": -0.025606241372366778,
       "rsi": 44.32270662760487,
@@ -8959,7 +11020,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 91
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 39.4,
+        "invalidation": 38.81,
+        "stop": 37.81,
+        "target1": 41.25,
+        "target2": 42.48,
+        "rr": 1.16,
+        "risk_pct": 4.0,
+        "atr_pct": 3.2
+      },
+      "regime": "sideways",
+      "rank": 91,
+      "mark": {}
     },
     {
       "code": "6116",
@@ -8967,6 +11045,9 @@
       "sector": "光電面板",
       "asset_type": "tech",
       "close": 13.8,
+      "day_open": 13.9,
+      "day_high": 13.9,
+      "day_low": 13.65,
       "lot_cost": 13800,
       "chg_pct": -1.3821366606769914e-06,
       "rsi": 46.216530814318205,
@@ -9053,7 +11134,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 92
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 13.94,
+        "invalidation": 13.61,
+        "stop": 12.99,
+        "target1": 15.05,
+        "target2": 15.97,
+        "rr": 1.17,
+        "risk_pct": 6.8,
+        "atr_pct": 5.9
+      },
+      "regime": "sideways",
+      "rank": 92,
+      "mark": {}
     },
     {
       "code": "2105",
@@ -9061,6 +11159,9 @@
       "sector": "橡膠",
       "asset_type": "other",
       "close": 31.55,
+      "day_open": 31.45,
+      "day_high": 31.8,
+      "day_low": 31.35,
       "lot_cost": 31550,
       "chg_pct": 2.418191669129044e-06,
       "rsi": 52.93947323180077,
@@ -9154,7 +11255,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 93
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 31.83,
+        "invalidation": 31.32,
+        "stop": 30.86,
+        "target1": 32.39,
+        "target2": 33.56,
+        "rr": 0.57,
+        "risk_pct": 3.1,
+        "atr_pct": 2.2
+      },
+      "regime": "sideways",
+      "rank": 93,
+      "mark": {}
     },
     {
       "code": "9910",
@@ -9162,6 +11280,9 @@
       "sector": "紡織",
       "asset_type": "other",
       "close": 70.4,
+      "day_open": 70.4,
+      "day_high": 70.8,
+      "day_low": 69.6,
       "lot_cost": 70400,
       "chg_pct": -2.167441570666284e-06,
       "rsi": 53.52473335559505,
@@ -9248,7 +11369,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 94
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 70.89,
+        "invalidation": 69.51,
+        "stop": 68.57,
+        "target1": 73.2,
+        "target2": 75.46,
+        "rr": 0.99,
+        "risk_pct": 3.3,
+        "atr_pct": 2.6
+      },
+      "regime": "sideways",
+      "rank": 94,
+      "mark": {}
     },
     {
       "code": "3406",
@@ -9256,6 +11394,9 @@
       "sector": "光學",
       "asset_type": "tech",
       "close": 652.0,
+      "day_open": 653.0,
+      "day_high": 660.0,
+      "day_low": 628.0,
       "lot_cost": 652000,
       "chg_pct": 0.0,
       "rsi": 62.002529610861856,
@@ -9355,7 +11496,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 95
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 661.84,
+        "invalidation": 626.16,
+        "stop": 578.29,
+        "target1": 705.0,
+        "target2": 753.98,
+        "rr": 0.52,
+        "risk_pct": 12.6,
+        "atr_pct": 5.7
+      },
+      "regime": "sideways",
+      "rank": 95,
+      "mark": {}
     },
     {
       "code": "2303",
@@ -9363,6 +11521,9 @@
       "sector": "半導體",
       "asset_type": "tech",
       "close": 116.5,
+      "day_open": 115.5,
+      "day_high": 117.0,
+      "day_low": 114.0,
       "lot_cost": 116500,
       "chg_pct": 0.0,
       "rsi": 41.18510312006535,
@@ -9449,7 +11610,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 96
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 117.36,
+        "invalidation": 113.64,
+        "stop": 109.39,
+        "target1": 128.02,
+        "target2": 135.13,
+        "rr": 1.34,
+        "risk_pct": 6.8,
+        "atr_pct": 6.1
+      },
+      "regime": "sideways",
+      "rank": 96,
+      "mark": {}
     },
     {
       "code": "3037",
@@ -9457,6 +11635,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 1085.0,
+      "day_open": 1120.0,
+      "day_high": 1120.0,
+      "day_low": 1030.0,
       "lot_cost": 1085000,
       "chg_pct": 0.0,
       "rsi": 60.9518776640221,
@@ -9558,7 +11739,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 97
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 1123.62,
+        "invalidation": 1026.38,
+        "stop": 972.0,
+        "target1": 1200.0,
+        "target2": 1304.65,
+        "rr": 0.5,
+        "risk_pct": 13.5,
+        "atr_pct": 6.7
+      },
+      "regime": "sideways",
+      "rank": 97,
+      "mark": {}
     },
     {
       "code": "3090",
@@ -9566,6 +11764,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 165.0,
+      "day_open": 175.5,
+      "day_high": 177.0,
+      "day_low": 164.0,
       "lot_cost": 165000,
       "chg_pct": 0.0,
       "rsi": 44.766254830949684,
@@ -9659,7 +11860,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 98
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 177.75,
+        "invalidation": 163.25,
+        "stop": 150.07,
+        "target1": 189.69,
+        "target2": 215.07,
+        "rr": 0.43,
+        "risk_pct": 15.6,
+        "atr_pct": 9.0
+      },
+      "regime": "sideways",
+      "rank": 98,
+      "mark": {}
     },
     {
       "code": "3596",
@@ -9667,6 +11885,9 @@
       "sector": "網通",
       "asset_type": "tech",
       "close": 161.0,
+      "day_open": 161.5,
+      "day_high": 162.5,
+      "day_low": 161.0,
       "lot_cost": 161000,
       "chg_pct": 0.0,
       "rsi": 34.74920379355828,
@@ -9762,7 +11983,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 99
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 162.78,
+        "invalidation": 160.72,
+        "stop": 155.49,
+        "target1": 171.04,
+        "target2": 189.5,
+        "rr": 1.13,
+        "risk_pct": 4.5,
+        "atr_pct": 3.4
+      },
+      "regime": "sideways",
+      "rank": 99,
+      "mark": {}
     },
     {
       "code": "2379",
@@ -9770,6 +12008,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 714.0,
+      "day_open": 703.0,
+      "day_high": 729.0,
+      "day_low": 703.0,
       "lot_cost": 714000,
       "chg_pct": 0.0,
       "rsi": 45.95167919344085,
@@ -9856,7 +12097,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 100
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 730.89,
+        "invalidation": 701.11,
+        "stop": 676.16,
+        "target1": 780.0,
+        "target2": 825.5,
+        "rr": 0.9,
+        "risk_pct": 7.5,
+        "atr_pct": 5.3
+      },
+      "regime": "sideways",
+      "rank": 100,
+      "mark": {}
     },
     {
       "code": "2330",
@@ -9864,6 +12122,9 @@
       "sector": "半導體",
       "asset_type": "tech",
       "close": 2410.0,
+      "day_open": 2375.0,
+      "day_high": 2410.0,
+      "day_low": 2365.0,
       "lot_cost": 2410000,
       "chg_pct": 0.0,
       "rsi": 53.38455230035885,
@@ -9959,7 +12220,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 101
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 2412.61,
+        "invalidation": 2362.39,
+        "stop": 2351.96,
+        "target1": 2490.83,
+        "target2": 2542.97,
+        "rr": 1.29,
+        "risk_pct": 2.5,
+        "atr_pct": 2.2
+      },
+      "regime": "sideways",
+      "rank": 101,
+      "mark": {}
     },
     {
       "code": "6285",
@@ -9967,6 +12245,9 @@
       "sector": "網通",
       "asset_type": "tech",
       "close": 235.5,
+      "day_open": 239.0,
+      "day_high": 240.5,
+      "day_low": 233.0,
       "lot_cost": 235500,
       "chg_pct": 0.0,
       "rsi": 45.52045057184925,
@@ -10053,7 +12334,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 102
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 241.13,
+        "invalidation": 232.37,
+        "stop": 222.96,
+        "target1": 259.94,
+        "target2": 272.49,
+        "rr": 1.04,
+        "risk_pct": 7.5,
+        "atr_pct": 5.3
+      },
+      "regime": "sideways",
+      "rank": 102,
+      "mark": {}
     },
     {
       "code": "2484",
@@ -10061,6 +12359,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 76.5,
+      "day_open": 71.3,
+      "day_high": 78.2,
+      "day_low": 71.3,
       "lot_cost": 76500,
       "chg_pct": 0.0,
       "rsi": 55.393538058609984,
@@ -10154,7 +12455,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 103
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 78.49,
+        "invalidation": 71.01,
+        "stop": 69.83,
+        "target1": 83.2,
+        "target2": 93.19,
+        "rr": 0.54,
+        "risk_pct": 11.0,
+        "atr_pct": 7.7
+      },
+      "regime": "sideways",
+      "rank": 103,
+      "mark": {}
     },
     {
       "code": "3413",
@@ -10162,6 +12480,9 @@
       "sector": "設備儀器",
       "asset_type": "tech",
       "close": 284.5,
+      "day_open": 286.5,
+      "day_high": 288.0,
+      "day_low": 283.5,
       "lot_cost": 284500,
       "chg_pct": 0.0,
       "rsi": 36.20732033465029,
@@ -10257,7 +12578,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 104
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 288.63,
+        "invalidation": 282.87,
+        "stop": 271.92,
+        "target1": 307.5,
+        "target2": 331.0,
+        "rr": 1.13,
+        "risk_pct": 5.8,
+        "atr_pct": 4.4
+      },
+      "regime": "sideways",
+      "rank": 104,
+      "mark": {}
     },
     {
       "code": "3167",
@@ -10265,6 +12603,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 725.0,
+      "day_open": 770.0,
+      "day_high": 795.0,
+      "day_low": 714.0,
       "lot_cost": 725000,
       "chg_pct": 0.0,
       "rsi": 53.24141516184203,
@@ -10366,7 +12707,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 105
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 798.09,
+        "invalidation": 710.91,
+        "stop": 639.73,
+        "target1": 847.52,
+        "target2": 952.55,
+        "rr": 0.31,
+        "risk_pct": 19.8,
+        "atr_pct": 8.5
+      },
+      "regime": "sideways",
+      "rank": 105,
+      "mark": {}
     },
     {
       "code": "4958",
@@ -10374,6 +12732,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 441.0,
+      "day_open": 461.0,
+      "day_high": 461.0,
+      "day_low": 431.5,
       "lot_cost": 441000,
       "chg_pct": 0.0,
       "rsi": 42.01245411953028,
@@ -10460,7 +12821,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 106
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 462.75,
+        "invalidation": 429.75,
+        "stop": 405.95,
+        "target1": 515.32,
+        "target2": 550.37,
+        "rr": 0.93,
+        "risk_pct": 12.3,
+        "atr_pct": 7.9
+      },
+      "regime": "sideways",
+      "rank": 106,
+      "mark": {}
     },
     {
       "code": "2481",
@@ -10468,6 +12846,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 133.0,
+      "day_open": 137.5,
+      "day_high": 139.5,
+      "day_low": 132.0,
       "lot_cost": 133000,
       "chg_pct": 0.0,
       "rsi": 43.905939889949096,
@@ -10554,7 +12935,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 107
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 140.07,
+        "invalidation": 131.43,
+        "stop": 121.57,
+        "target1": 152.5,
+        "target2": 168.63,
+        "rr": 0.67,
+        "risk_pct": 13.2,
+        "atr_pct": 8.6
+      },
+      "regime": "sideways",
+      "rank": 107,
+      "mark": {}
     },
     {
       "code": "7769",
@@ -10562,6 +12960,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 6405.0,
+      "day_open": 6405.0,
+      "day_high": 6550.0,
+      "day_low": 6350.0,
       "lot_cost": 6405000,
       "chg_pct": 0.0,
       "rsi": 49.60379308950805,
@@ -10648,7 +13049,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 108
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 6567.88,
+        "invalidation": 6332.12,
+        "stop": 6047.32,
+        "target1": 6960.0,
+        "target2": 7462.08,
+        "rr": 0.75,
+        "risk_pct": 7.9,
+        "atr_pct": 5.6
+      },
+      "regime": "sideways",
+      "rank": 108,
+      "mark": {}
     },
     {
       "code": "6531",
@@ -10656,6 +13074,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 883.0,
+      "day_open": 885.0,
+      "day_high": 924.0,
+      "day_low": 870.0,
       "lot_cost": 883000,
       "chg_pct": 0.0,
       "rsi": 51.92744355210176,
@@ -10751,7 +13172,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 109
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 927.31,
+        "invalidation": 866.69,
+        "stop": 816.72,
+        "target1": 1010.0,
+        "target2": 1093.02,
+        "rr": 0.75,
+        "risk_pct": 11.9,
+        "atr_pct": 7.5
+      },
+      "regime": "sideways",
+      "rank": 109,
+      "mark": {}
     },
     {
       "code": "2881",
@@ -10759,6 +13197,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 134.0,
+      "day_open": 129.0,
+      "day_high": 135.5,
+      "day_low": 127.5,
       "lot_cost": 134000,
       "chg_pct": 0.0,
       "rsi": 61.20350931011851,
@@ -10854,7 +13295,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 110
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 135.72,
+        "invalidation": 127.28,
+        "stop": 126.4,
+        "target1": 141.0,
+        "target2": 146.72,
+        "rr": 0.57,
+        "risk_pct": 6.9,
+        "atr_pct": 3.3
+      },
+      "regime": "sideways",
+      "rank": 110,
+      "mark": {}
     },
     {
       "code": "2887",
@@ -10862,6 +13320,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 37.25,
+      "day_open": 35.9,
+      "day_high": 37.4,
+      "day_low": 35.85,
       "lot_cost": 37250,
       "chg_pct": 0.0,
       "rsi": 60.687207947501896,
@@ -10957,7 +13418,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 111
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 37.46,
+        "invalidation": 35.79,
+        "stop": 35.56,
+        "target1": 39.22,
+        "target2": 40.39,
+        "rr": 0.92,
+        "risk_pct": 5.1,
+        "atr_pct": 3.1
+      },
+      "regime": "sideways",
+      "rank": 111,
+      "mark": {}
     },
     {
       "code": "6213",
@@ -10965,6 +13443,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 513.0,
+      "day_open": 534.0,
+      "day_high": 555.0,
+      "day_low": 498.5,
       "lot_cost": 513000,
       "chg_pct": 0.0,
       "rsi": 76.6666058668099,
@@ -11073,7 +13554,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 112
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 556.67,
+        "invalidation": 496.83,
+        "stop": 446.03,
+        "target1": 583.46,
+        "target2": 640.38,
+        "rr": 0.24,
+        "risk_pct": 19.9,
+        "atr_pct": 6.5
+      },
+      "regime": "sideways",
+      "rank": 112,
+      "mark": {}
     },
     {
       "code": "2883",
@@ -11081,6 +13579,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 31.55,
+      "day_open": 30.4,
+      "day_high": 31.55,
+      "day_low": 30.3,
       "lot_cost": 31550,
       "chg_pct": 2.418191669129044e-06,
       "rsi": 58.510103620300555,
@@ -11176,7 +13677,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 113
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 31.6,
+        "invalidation": 30.25,
+        "stop": 30.07,
+        "target1": 32.98,
+        "target2": 33.89,
+        "rr": 0.9,
+        "risk_pct": 4.8,
+        "atr_pct": 2.9
+      },
+      "regime": "sideways",
+      "rank": 113,
+      "mark": {}
     },
     {
       "code": "6442",
@@ -11184,6 +13702,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 1525.0,
+      "day_open": 1570.0,
+      "day_high": 1600.0,
+      "day_low": 1500.0,
       "lot_cost": 1525000,
       "chg_pct": 0.0,
       "rsi": 53.29498684423905,
@@ -11279,7 +13800,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 114
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 1605.78,
+        "invalidation": 1494.22,
+        "stop": 1409.34,
+        "target1": 1705.0,
+        "target2": 1894.94,
+        "rr": 0.51,
+        "risk_pct": 12.2,
+        "atr_pct": 7.6
+      },
+      "regime": "sideways",
+      "rank": 114,
+      "mark": {}
     },
     {
       "code": "1301",
@@ -11287,6 +13825,9 @@
       "sector": "塑化",
       "asset_type": "other",
       "close": 59.4,
+      "day_open": 57.8,
+      "day_high": 59.5,
+      "day_low": 57.8,
       "lot_cost": 59400,
       "chg_pct": -2.568819645887288e-06,
       "rsi": 55.015752715702625,
@@ -11373,7 +13914,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 115
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 59.63,
+        "invalidation": 57.67,
+        "stop": 56.75,
+        "target1": 61.8,
+        "target2": 65.9,
+        "rr": 0.76,
+        "risk_pct": 4.8,
+        "atr_pct": 4.2
+      },
+      "regime": "sideways",
+      "rank": 115,
+      "mark": {}
     },
     {
       "code": "3533",
@@ -11381,6 +13939,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 1595.0,
+      "day_open": 1600.0,
+      "day_high": 1640.0,
+      "day_low": 1585.0,
       "lot_cost": 1595000,
       "chg_pct": 0.0,
       "rsi": 31.850343906032904,
@@ -11476,7 +14037,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 116
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 1645.12,
+        "invalidation": 1579.88,
+        "stop": 1492.62,
+        "target1": 1798.69,
+        "target2": 2050.0,
+        "rr": 1.01,
+        "risk_pct": 9.3,
+        "atr_pct": 6.4
+      },
+      "regime": "sideways",
+      "rank": 116,
+      "mark": {}
     },
     {
       "code": "2059",
@@ -11484,6 +14062,9 @@
       "sector": "散熱機構",
       "asset_type": "tech",
       "close": 13385.0,
+      "day_open": 13900.0,
+      "day_high": 14000.0,
+      "day_low": 13310.0,
       "lot_cost": 13385000,
       "chg_pct": 0.0,
       "rsi": 71.5741745758797,
@@ -11586,7 +14167,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 117
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 14036.31,
+        "invalidation": 13273.69,
+        "stop": 11932.57,
+        "target1": 15085.0,
+        "target2": 15851.85,
+        "rr": 0.5,
+        "risk_pct": 15.0,
+        "atr_pct": 5.4
+      },
+      "regime": "sideways",
+      "rank": 117,
+      "mark": {}
     },
     {
       "code": "2449",
@@ -11594,6 +14192,9 @@
       "sector": "封測",
       "asset_type": "tech",
       "close": 232.0,
+      "day_open": 234.0,
+      "day_high": 236.0,
+      "day_low": 230.5,
       "lot_cost": 232000,
       "chg_pct": 0.0,
       "rsi": 40.80772878404698,
@@ -11680,7 +14281,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 118
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 236.73,
+        "invalidation": 229.77,
+        "stop": 217.33,
+        "target1": 258.73,
+        "target2": 273.4,
+        "rr": 1.13,
+        "risk_pct": 8.2,
+        "atr_pct": 6.3
+      },
+      "regime": "sideways",
+      "rank": 118,
+      "mark": {}
     },
     {
       "code": "1216",
@@ -11688,6 +14306,9 @@
       "sector": "食品",
       "asset_type": "other",
       "close": 77.5,
+      "day_open": 78.1,
+      "day_high": 78.6,
+      "day_low": 77.0,
       "lot_cost": 77500,
       "chg_pct": 0.0,
       "rsi": 56.12904419993148,
@@ -11783,7 +14404,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 119
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 78.68,
+        "invalidation": 76.92,
+        "stop": 75.78,
+        "target1": 80.7,
+        "target2": 82.52,
+        "rr": 0.7,
+        "risk_pct": 3.7,
+        "atr_pct": 2.0
+      },
+      "regime": "sideways",
+      "rank": 119,
+      "mark": {}
     },
     {
       "code": "00850",
@@ -11791,6 +14429,9 @@
       "sector": "ETF·市值型",
       "asset_type": "etf",
       "close": 88.6,
+      "day_open": 88.75,
+      "day_high": 89.0,
+      "day_low": 87.6,
       "lot_cost": 88600,
       "chg_pct": -0.6726423416699601,
       "rsi": 49.89766621266427,
@@ -11877,7 +14518,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 120
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 89.1,
+        "invalidation": 87.5,
+        "stop": 86.53,
+        "target1": 92.2,
+        "target2": 94.27,
+        "rr": 1.21,
+        "risk_pct": 2.9,
+        "atr_pct": 2.3
+      },
+      "regime": "sideways",
+      "rank": 120,
+      "mark": {}
     },
     {
       "code": "2345",
@@ -11885,6 +14543,9 @@
       "sector": "網通",
       "asset_type": "tech",
       "close": 2035.0,
+      "day_open": 2090.0,
+      "day_high": 2110.0,
+      "day_low": 2020.0,
       "lot_cost": 2035000,
       "chg_pct": 0.0,
       "rsi": 39.694822130034616,
@@ -11980,7 +14641,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 121
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 2116.73,
+        "invalidation": 2013.27,
+        "stop": 1900.37,
+        "target1": 2318.68,
+        "target2": 2595.0,
+        "rr": 0.93,
+        "risk_pct": 10.2,
+        "atr_pct": 6.6
+      },
+      "regime": "sideways",
+      "rank": 121,
+      "mark": {}
     },
     {
       "code": "2486",
@@ -11988,6 +14666,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 243.5,
+      "day_open": 249.0,
+      "day_high": 251.0,
+      "day_low": 238.5,
       "lot_cost": 243500,
       "chg_pct": 0.0,
       "rsi": 55.39588079592463,
@@ -12081,7 +14762,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 122
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 251.86,
+        "invalidation": 237.64,
+        "stop": 222.55,
+        "target1": 265.55,
+        "target2": 294.66,
+        "rr": 0.47,
+        "risk_pct": 11.6,
+        "atr_pct": 7.0
+      },
+      "regime": "sideways",
+      "rank": 122,
+      "mark": {}
     },
     {
       "code": "4919",
@@ -12089,6 +14787,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 114.0,
+      "day_open": 118.5,
+      "day_high": 118.5,
+      "day_low": 113.0,
       "lot_cost": 114000,
       "chg_pct": 0.0,
       "rsi": 37.12003691465412,
@@ -12184,7 +14885,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 123
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "均線仍空頭排列，等出現止跌訊號再說",
+        "trigger": 118.92,
+        "invalidation": 112.58,
+        "stop": 105.69,
+        "target1": 131.39,
+        "target2": 139.7,
+        "rr": 0.94,
+        "risk_pct": 11.1,
+        "atr_pct": 7.3
+      },
+      "regime": "sideways",
+      "rank": 123,
+      "mark": {}
     },
     {
       "code": "3045",
@@ -12192,6 +14910,9 @@
       "sector": "電信",
       "asset_type": "tech",
       "close": 115.0,
+      "day_open": 114.5,
+      "day_high": 115.0,
+      "day_low": 113.5,
       "lot_cost": 115000,
       "chg_pct": 0.0,
       "rsi": 61.88155573308567,
@@ -12287,7 +15008,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 124
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 115.09,
+        "invalidation": 113.41,
+        "stop": 111.8,
+        "target1": 117.91,
+        "target2": 121.5,
+        "rr": 0.86,
+        "risk_pct": 2.9,
+        "atr_pct": 1.6
+      },
+      "regime": "sideways",
+      "rank": 124,
+      "mark": {}
     },
     {
       "code": "6451",
@@ -12295,6 +15033,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 418.0,
+      "day_open": 431.0,
+      "day_high": 438.0,
+      "day_low": 413.0,
       "lot_cost": 418000,
       "chg_pct": 0.0,
       "rsi": 46.94057395590147,
@@ -12388,7 +15129,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 125
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 439.92,
+        "invalidation": 411.08,
+        "stop": 379.63,
+        "target1": 475.0,
+        "target2": 535.83,
+        "rr": 0.58,
+        "risk_pct": 13.7,
+        "atr_pct": 9.2
+      },
+      "regime": "sideways",
+      "rank": 125,
+      "mark": {}
     },
     {
       "code": "2049",
@@ -12396,6 +15154,9 @@
       "sector": "機械",
       "asset_type": "other",
       "close": 349.0,
+      "day_open": 366.5,
+      "day_high": 368.5,
+      "day_low": 348.0,
       "lot_cost": 349000,
       "chg_pct": 0.0,
       "rsi": 49.24876186648481,
@@ -12482,7 +15243,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 126
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 369.67,
+        "invalidation": 346.83,
+        "stop": 302.05,
+        "target1": 404.5,
+        "target2": 428.36,
+        "rr": 0.51,
+        "risk_pct": 18.3,
+        "atr_pct": 6.7
+      },
+      "regime": "sideways",
+      "rank": 126,
+      "mark": {}
     },
     {
       "code": "2313",
@@ -12490,6 +15268,9 @@
       "sector": "PCB載板",
       "asset_type": "tech",
       "close": 213.5,
+      "day_open": 216.0,
+      "day_high": 222.0,
+      "day_low": 211.0,
       "lot_cost": 213500,
       "chg_pct": 0.0,
       "rsi": 51.22253214821488,
@@ -12583,7 +15364,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 127
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 222.63,
+        "invalidation": 210.37,
+        "stop": 200.91,
+        "target1": 232.7,
+        "target2": 254.11,
+        "rr": 0.46,
+        "risk_pct": 9.8,
+        "atr_pct": 5.9
+      },
+      "regime": "sideways",
+      "rank": 127,
+      "mark": {}
     },
     {
       "code": "3443",
@@ -12591,6 +15389,9 @@
       "sector": "IC設計",
       "asset_type": "tech",
       "close": 5600.0,
+      "day_open": 5620.0,
+      "day_high": 5830.0,
+      "day_low": 5425.0,
       "lot_cost": 5600000,
       "chg_pct": 0.0,
       "rsi": 63.55328915116469,
@@ -12693,7 +15494,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 128
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 5848.31,
+        "invalidation": 5406.69,
+        "stop": 4867.61,
+        "target1": 6141.26,
+        "target2": 6763.79,
+        "rr": 0.3,
+        "risk_pct": 16.8,
+        "atr_pct": 6.5
+      },
+      "regime": "sideways",
+      "rank": 128,
+      "mark": {}
     },
     {
       "code": "2002",
@@ -12701,6 +15519,9 @@
       "sector": "鋼鐵",
       "asset_type": "other",
       "close": 19.45,
+      "day_open": 19.15,
+      "day_high": 19.5,
+      "day_low": 19.15,
       "lot_cost": 19450,
       "chg_pct": -3.9225677372911605e-06,
       "rsi": 58.62281174646629,
@@ -12794,7 +15615,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 129
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 19.52,
+        "invalidation": 19.13,
+        "stop": 19.06,
+        "target1": 19.9,
+        "target2": 20.39,
+        "rr": 0.84,
+        "risk_pct": 2.3,
+        "atr_pct": 1.8
+      },
+      "regime": "sideways",
+      "rank": 129,
+      "mark": {}
     },
     {
       "code": "00919",
@@ -12802,6 +15640,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 30.8,
+      "day_open": 30.3,
+      "day_high": 30.83,
+      "day_low": 30.23,
       "lot_cost": 30800,
       "chg_pct": 1.6166299659892802,
       "rsi": 63.94052263117371,
@@ -12904,7 +15745,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 130
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 30.85,
+        "invalidation": 30.21,
+        "stop": 29.85,
+        "target1": 31.56,
+        "target2": 32.04,
+        "rr": 0.71,
+        "risk_pct": 3.2,
+        "atr_pct": 1.5
+      },
+      "regime": "sideways",
+      "rank": 130,
+      "mark": {}
     },
     {
       "code": "2344",
@@ -12912,6 +15770,9 @@
       "sector": "記憶體",
       "asset_type": "tech",
       "close": 181.0,
+      "day_open": 176.0,
+      "day_high": 182.0,
+      "day_low": 174.5,
       "lot_cost": 181000,
       "chg_pct": 0.0,
       "rsi": 56.1541567578942,
@@ -13007,7 +15868,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 131
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 182.61,
+        "invalidation": 173.89,
+        "stop": 165.0,
+        "target1": 193.0,
+        "target2": 213.01,
+        "rr": 0.59,
+        "risk_pct": 9.6,
+        "atr_pct": 6.7
+      },
+      "regime": "sideways",
+      "rank": 131,
+      "mark": {}
     },
     {
       "code": "00940",
@@ -13015,6 +15893,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 12.48,
+      "day_open": 12.36,
+      "day_high": 12.52,
+      "day_low": 12.36,
       "lot_cost": 12480,
       "chg_pct": 0.6451643865389878,
       "rsi": 55.614004931183366,
@@ -13110,7 +15991,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 132
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 12.53,
+        "invalidation": 12.35,
+        "stop": 12.26,
+        "target1": 12.86,
+        "target2": 13.08,
+        "rr": 1.21,
+        "risk_pct": 2.2,
+        "atr_pct": 1.8
+      },
+      "regime": "sideways",
+      "rank": 132,
+      "mark": {}
     },
     {
       "code": "3711",
@@ -13118,6 +16016,9 @@
       "sector": "封測",
       "asset_type": "tech",
       "close": 587.0,
+      "day_open": 589.0,
+      "day_high": 593.0,
+      "day_low": 579.0,
       "lot_cost": 587000,
       "chg_pct": 0.0,
       "rsi": 45.792836439371,
@@ -13204,7 +16105,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 133
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 594.62,
+        "invalidation": 577.38,
+        "stop": 554.54,
+        "target1": 643.0,
+        "target2": 675.79,
+        "rr": 1.21,
+        "risk_pct": 6.7,
+        "atr_pct": 5.5
+      },
+      "regime": "sideways",
+      "rank": 133,
+      "mark": {}
     },
     {
       "code": "4967",
@@ -13212,6 +16130,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 276.0,
+      "day_open": 266.5,
+      "day_high": 277.0,
+      "day_low": 264.0,
       "lot_cost": 276000,
       "chg_pct": 0.0,
       "rsi": 59.88358838626437,
@@ -13305,7 +16226,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 134
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 277.62,
+        "invalidation": 263.38,
+        "stop": 259.0,
+        "target1": 288.5,
+        "target2": 308.58,
+        "rr": 0.58,
+        "risk_pct": 6.7,
+        "atr_pct": 4.5
+      },
+      "regime": "sideways",
+      "rank": 134,
+      "mark": {}
     },
     {
       "code": "5871",
@@ -13313,6 +16251,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 115.5,
+      "day_open": 111.5,
+      "day_high": 115.5,
+      "day_low": 111.5,
       "lot_cost": 115500,
       "chg_pct": 0.0,
       "rsi": 55.90247656696433,
@@ -13399,7 +16340,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 135
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 115.65,
+        "invalidation": 111.35,
+        "stop": 110.77,
+        "target1": 119.12,
+        "target2": 123.0,
+        "rr": 0.71,
+        "risk_pct": 4.2,
+        "atr_pct": 2.5
+      },
+      "regime": "sideways",
+      "rank": 135,
+      "mark": {}
     },
     {
       "code": "6505",
@@ -13407,6 +16365,9 @@
       "sector": "塑化",
       "asset_type": "other",
       "close": 75.8,
+      "day_open": 72.9,
+      "day_high": 76.5,
+      "day_low": 72.5,
       "lot_cost": 75800,
       "chg_pct": -4.02606555871543e-06,
       "rsi": 59.26082199902116,
@@ -13500,7 +16461,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 136
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 76.71,
+        "invalidation": 72.29,
+        "stop": 71.11,
+        "target1": 80.01,
+        "target2": 87.04,
+        "rr": 0.59,
+        "risk_pct": 7.3,
+        "atr_pct": 5.5
+      },
+      "regime": "sideways",
+      "rank": 136,
+      "mark": {}
     },
     {
       "code": "3583",
@@ -13508,6 +16486,9 @@
       "sector": "設備儀器",
       "asset_type": "tech",
       "close": 704.0,
+      "day_open": 712.0,
+      "day_high": 715.0,
+      "day_low": 699.0,
       "lot_cost": 704000,
       "chg_pct": 0.0,
       "rsi": 46.38334024509963,
@@ -13594,7 +16575,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 137
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 717.11,
+        "invalidation": 696.89,
+        "stop": 661.81,
+        "target1": 759.0,
+        "target2": 822.59,
+        "rr": 0.76,
+        "risk_pct": 7.7,
+        "atr_pct": 6.0
+      },
+      "regime": "sideways",
+      "rank": 137,
+      "mark": {}
     },
     {
       "code": "00922",
@@ -13602,6 +16600,9 @@
       "sector": "ETF·市值型",
       "asset_type": "etf",
       "close": 40.26,
+      "day_open": 40.07,
+      "day_high": 40.38,
+      "day_low": 39.79,
       "lot_cost": 40260,
       "chg_pct": 0.5243464842444423,
       "rsi": 52.99871767940087,
@@ -13688,7 +16689,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 138
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 40.43,
+        "invalidation": 39.74,
+        "stop": 39.35,
+        "target1": 41.67,
+        "target2": 42.7,
+        "rr": 1.16,
+        "risk_pct": 2.7,
+        "atr_pct": 2.3
+      },
+      "regime": "sideways",
+      "rank": 138,
+      "mark": {}
     },
     {
       "code": "1402",
@@ -13696,6 +16714,9 @@
       "sector": "紡織",
       "asset_type": "other",
       "close": 30.35,
+      "day_open": 29.25,
+      "day_high": 30.6,
+      "day_low": 29.05,
       "lot_cost": 30350,
       "chg_pct": -1.2569018825736578e-06,
       "rsi": 74.757821334352,
@@ -13791,7 +16812,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 139
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 30.64,
+        "invalidation": 29.01,
+        "stop": 28.73,
+        "target1": 31.85,
+        "target2": 32.66,
+        "rr": 0.64,
+        "risk_pct": 6.2,
+        "atr_pct": 2.7
+      },
+      "regime": "sideways",
+      "rank": 139,
+      "mark": {}
     },
     {
       "code": "00918",
@@ -13799,6 +16837,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 33.87,
+      "day_open": 33.64,
+      "day_high": 33.93,
+      "day_low": 33.53,
       "lot_cost": 33870,
       "chg_pct": 0.6837116959708789,
       "rsi": 62.30010679740069,
@@ -13892,7 +16933,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 140
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 33.96,
+        "invalidation": 33.5,
+        "stop": 33.32,
+        "target1": 34.43,
+        "target2": 35.3,
+        "rr": 0.74,
+        "risk_pct": 1.9,
+        "atr_pct": 1.6
+      },
+      "regime": "sideways",
+      "rank": 140,
+      "mark": {}
     },
     {
       "code": "2408",
@@ -13900,6 +16958,9 @@
       "sector": "記憶體",
       "asset_type": "tech",
       "close": 528.0,
+      "day_open": 519.0,
+      "day_high": 534.0,
+      "day_low": 512.0,
       "lot_cost": 528000,
       "chg_pct": 0.0,
       "rsi": 61.368929640127035,
@@ -14001,7 +17062,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 141
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 535.71,
+        "invalidation": 510.29,
+        "stop": 474.0,
+        "target1": 563.01,
+        "target2": 621.04,
+        "rr": 0.44,
+        "risk_pct": 11.5,
+        "atr_pct": 6.5
+      },
+      "regime": "sideways",
+      "rank": 141,
+      "mark": {}
     },
     {
       "code": "6472",
@@ -14009,6 +17087,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 455.0,
+      "day_open": 438.5,
+      "day_high": 462.0,
+      "day_low": 432.0,
       "lot_cost": 455000,
       "chg_pct": 0.0,
       "rsi": 64.30668341143812,
@@ -14102,7 +17183,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 142
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 462.96,
+        "invalidation": 431.04,
+        "stop": 416.61,
+        "target1": 478.32,
+        "target2": 510.95,
+        "rr": 0.33,
+        "risk_pct": 10.0,
+        "atr_pct": 4.2
+      },
+      "regime": "sideways",
+      "rank": 142,
+      "mark": {}
     },
     {
       "code": "1802",
@@ -14110,6 +17208,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 57.6,
+      "day_open": 57.9,
+      "day_high": 57.9,
+      "day_low": 56.1,
       "lot_cost": 57600,
       "chg_pct": 2.6490953874969136e-06,
       "rsi": 52.65139482859125,
@@ -14203,7 +17304,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 143
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 58.06,
+        "invalidation": 55.94,
+        "stop": 54.2,
+        "target1": 61.3,
+        "target2": 66.14,
+        "rr": 0.84,
+        "risk_pct": 6.7,
+        "atr_pct": 5.6
+      },
+      "regime": "sideways",
+      "rank": 143,
+      "mark": {}
     },
     {
       "code": "00713",
@@ -14211,6 +17329,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 61.55,
+      "day_open": 61.1,
+      "day_high": 61.65,
+      "day_low": 61.0,
       "lot_cost": 61550,
       "chg_pct": 0.654126678887823,
       "rsi": 61.245706510037394,
@@ -14306,7 +17427,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 144
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 61.68,
+        "invalidation": 60.97,
+        "stop": 60.85,
+        "target1": 62.61,
+        "target2": 63.23,
+        "rr": 1.11,
+        "risk_pct": 1.4,
+        "atr_pct": 1.0
+      },
+      "regime": "sideways",
+      "rank": 144,
+      "mark": {}
     },
     {
       "code": "0056",
@@ -14314,6 +17452,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 52.4,
+      "day_open": 52.05,
+      "day_high": 52.45,
+      "day_low": 51.8,
       "lot_cost": 52400,
       "chg_pct": 0.6724318310657118,
       "rsi": 55.34221849572881,
@@ -14400,7 +17541,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 145
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 52.51,
+        "invalidation": 51.74,
+        "stop": 51.28,
+        "target1": 54.0,
+        "target2": 55.31,
+        "rr": 1.22,
+        "risk_pct": 2.3,
+        "atr_pct": 2.1
+      },
+      "regime": "sideways",
+      "rank": 145,
+      "mark": {}
     },
     {
       "code": "2891",
@@ -14408,6 +17566,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 65.0,
+      "day_open": 63.7,
+      "day_high": 65.5,
+      "day_low": 63.0,
       "lot_cost": 65000,
       "chg_pct": 0.0,
       "rsi": 48.59060757308196,
@@ -14494,7 +17655,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 146
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 65.59,
+        "invalidation": 62.91,
+        "stop": 62.1,
+        "target1": 67.3,
+        "target2": 70.28,
+        "rr": 0.49,
+        "risk_pct": 5.3,
+        "atr_pct": 2.9
+      },
+      "regime": "sideways",
+      "rank": 146,
+      "mark": {}
     },
     {
       "code": "1101",
@@ -14502,6 +17680,9 @@
       "sector": "水泥",
       "asset_type": "other",
       "close": 24.85,
+      "day_open": 24.75,
+      "day_high": 24.95,
+      "day_low": 24.55,
       "lot_cost": 24850,
       "chg_pct": -1.5350894111421098e-06,
       "rsi": 59.7017406957914,
@@ -14597,7 +17778,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 147
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 24.98,
+        "invalidation": 24.52,
+        "stop": 24.32,
+        "target1": 25.4,
+        "target2": 26.29,
+        "rr": 0.65,
+        "risk_pct": 2.6,
+        "atr_pct": 2.1
+      },
+      "regime": "sideways",
+      "rank": 147,
+      "mark": {}
     },
     {
       "code": "2882",
@@ -14605,6 +17803,9 @@
       "sector": "金融",
       "asset_type": "other",
       "close": 100.5,
+      "day_open": 97.3,
+      "day_high": 101.0,
+      "day_low": 97.3,
       "lot_cost": 100500,
       "chg_pct": 0.0,
       "rsi": 54.43692965229608,
@@ -14698,7 +17899,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 148
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 101.15,
+        "invalidation": 97.15,
+        "stop": 96.56,
+        "target1": 103.53,
+        "target2": 108.6,
+        "rr": 0.52,
+        "risk_pct": 4.5,
+        "atr_pct": 3.0
+      },
+      "regime": "sideways",
+      "rank": 148,
+      "mark": {}
     },
     {
       "code": "0050",
@@ -14706,6 +17924,9 @@
       "sector": "ETF·市值型",
       "asset_type": "etf",
       "close": 104.65,
+      "day_open": 103.8,
+      "day_high": 104.8,
+      "day_low": 103.2,
       "lot_cost": 104650,
       "chg_pct": 0.8188795021695228,
       "rsi": 52.71329029689177,
@@ -14799,7 +18020,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 149
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 104.91,
+        "invalidation": 103.09,
+        "stop": 102.39,
+        "target1": 107.5,
+        "target2": 110.56,
+        "rr": 1.03,
+        "risk_pct": 2.4,
+        "atr_pct": 2.2
+      },
+      "regime": "sideways",
+      "rank": 149,
+      "mark": {}
     },
     {
       "code": "0052",
@@ -14807,6 +18045,9 @@
       "sector": "ETF·科技主題",
       "asset_type": "etf",
       "close": 60.85,
+      "day_open": 60.45,
+      "day_high": 61.1,
+      "day_low": 60.2,
       "lot_cost": 60850,
       "chg_pct": 0.661702617058979,
       "rsi": 51.76353756804513,
@@ -14893,7 +18134,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 150
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 61.17,
+        "invalidation": 60.13,
+        "stop": 59.48,
+        "target1": 62.8,
+        "target2": 64.61,
+        "rr": 0.96,
+        "risk_pct": 2.8,
+        "atr_pct": 2.3
+      },
+      "regime": "sideways",
+      "rank": 150,
+      "mark": {}
     },
     {
       "code": "00939",
@@ -14901,6 +18159,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 22.54,
+      "day_open": 22.2,
+      "day_high": 22.55,
+      "day_low": 22.2,
       "lot_cost": 22540,
       "chg_pct": 1.485821382847563,
       "rsi": 63.10699165058458,
@@ -14996,7 +18257,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 151
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 22.57,
+        "invalidation": 22.18,
+        "stop": 22.12,
+        "target1": 23.03,
+        "target2": 23.34,
+        "rr": 1.05,
+        "risk_pct": 2.0,
+        "atr_pct": 1.4
+      },
+      "regime": "sideways",
+      "rank": 151,
+      "mark": {}
     },
     {
       "code": "2474",
@@ -15004,6 +18282,9 @@
       "sector": "散熱機構",
       "asset_type": "tech",
       "close": 203.5,
+      "day_open": 204.0,
+      "day_high": 204.0,
+      "day_low": 202.5,
       "lot_cost": 203500,
       "chg_pct": 0.0,
       "rsi": 60.68953365435618,
@@ -15097,7 +18378,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 152
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 204.23,
+        "invalidation": 202.27,
+        "stop": 198.85,
+        "target1": 209.0,
+        "target2": 215.86,
+        "rr": 0.89,
+        "risk_pct": 2.6,
+        "atr_pct": 2.3
+      },
+      "regime": "sideways",
+      "rank": 152,
+      "mark": {}
     },
     {
       "code": "6278",
@@ -15105,6 +18403,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 187.0,
+      "day_open": 180.0,
+      "day_high": 190.5,
+      "day_low": 178.0,
       "lot_cost": 187000,
       "chg_pct": 0.0,
       "rsi": 60.28862759298433,
@@ -15210,7 +18511,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 153
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 191.05,
+        "invalidation": 177.45,
+        "stop": 165.09,
+        "target1": 199.81,
+        "target2": 218.43,
+        "rr": 0.34,
+        "risk_pct": 13.6,
+        "atr_pct": 5.9
+      },
+      "regime": "sideways",
+      "rank": 153,
+      "mark": {}
     },
     {
       "code": "3653",
@@ -15218,6 +18536,9 @@
       "sector": "散熱機構",
       "asset_type": "tech",
       "close": 5395.0,
+      "day_open": 5530.0,
+      "day_high": 5560.0,
+      "day_low": 5330.0,
       "lot_cost": 5395000,
       "chg_pct": 0.0,
       "rsi": 69.3406109519954,
@@ -15320,7 +18641,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 154
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 5575.96,
+        "invalidation": 5314.04,
+        "stop": 4756.68,
+        "target1": 5831.29,
+        "target2": 6373.86,
+        "rr": 0.31,
+        "risk_pct": 14.7,
+        "atr_pct": 5.9
+      },
+      "regime": "sideways",
+      "rank": 154,
+      "mark": {}
     },
     {
       "code": "2393",
@@ -15328,6 +18666,9 @@
       "sector": "光電面板",
       "asset_type": "tech",
       "close": 64.7,
+      "day_open": 66.2,
+      "day_high": 66.2,
+      "day_low": 64.4,
       "lot_cost": 64700,
       "chg_pct": 4.716782009417386e-06,
       "rsi": 50.86828743766717,
@@ -15421,7 +18762,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 155
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "可觀察進場",
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 66.31,
+        "invalidation": 64.29,
+        "stop": 62.57,
+        "target1": 68.01,
+        "target2": 71.63,
+        "rr": 0.46,
+        "risk_pct": 5.6,
+        "atr_pct": 3.3
+      },
+      "regime": "sideways",
+      "rank": 155,
+      "mark": {}
     },
     {
       "code": "2603",
@@ -15429,6 +18787,9 @@
       "sector": "航運",
       "asset_type": "other",
       "close": 251.5,
+      "day_open": 246.5,
+      "day_high": 254.0,
+      "day_low": 246.0,
       "lot_cost": 251500,
       "chg_pct": 0.0,
       "rsi": 82.94233229060305,
@@ -15536,7 +18897,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 156
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 254.33,
+        "invalidation": 245.67,
+        "stop": 238.28,
+        "target1": 264.24,
+        "target2": 270.85,
+        "rr": 0.62,
+        "risk_pct": 6.3,
+        "atr_pct": 2.6
+      },
+      "regime": "sideways",
+      "rank": 156,
+      "mark": {}
     },
     {
       "code": "2637",
@@ -15544,6 +18922,9 @@
       "sector": "其他",
       "asset_type": "other",
       "close": 102.0,
+      "day_open": 93.5,
+      "day_high": 104.0,
+      "day_low": 93.4,
       "lot_cost": 102000,
       "chg_pct": 0.0,
       "rsi": 79.48528491112523,
@@ -15661,7 +19042,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 157
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 104.2,
+        "invalidation": 93.2,
+        "stop": 92.38,
+        "target1": 107.46,
+        "target2": 114.37,
+        "rr": 0.28,
+        "risk_pct": 11.3,
+        "atr_pct": 4.0
+      },
+      "regime": "sideways",
+      "rank": 157,
+      "mark": {}
     },
     {
       "code": "3008",
@@ -15669,6 +19067,9 @@
       "sector": "光學",
       "asset_type": "tech",
       "close": 5610.0,
+      "day_open": 5520.0,
+      "day_high": 5750.0,
+      "day_low": 5260.0,
       "lot_cost": 5610000,
       "chg_pct": 0.0,
       "rsi": 73.24866805870879,
@@ -15777,7 +19178,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 158
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 5766.66,
+        "invalidation": 5243.34,
+        "stop": 4943.49,
+        "target1": 6033.27,
+        "target2": 6599.8,
+        "rr": 0.32,
+        "risk_pct": 14.3,
+        "atr_pct": 5.9
+      },
+      "regime": "sideways",
+      "rank": 158,
+      "mark": {}
     },
     {
       "code": "006208",
@@ -15785,6 +19203,9 @@
       "sector": "ETF·市值型",
       "asset_type": "etf",
       "close": 239.3,
+      "day_open": 237.8,
+      "day_high": 239.7,
+      "day_low": 236.4,
       "lot_cost": 239300,
       "chg_pct": 0.6096253349908709,
       "rsi": 51.80417076732848,
@@ -15878,7 +19299,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 159
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 239.96,
+        "invalidation": 236.14,
+        "stop": 234.06,
+        "target1": 246.0,
+        "target2": 253.06,
+        "rr": 1.02,
+        "risk_pct": 2.5,
+        "atr_pct": 2.2
+      },
+      "regime": "sideways",
+      "rank": 159,
+      "mark": {}
     },
     {
       "code": "2609",
@@ -15886,6 +19324,9 @@
       "sector": "航運",
       "asset_type": "other",
       "close": 64.0,
+      "day_open": 60.7,
+      "day_high": 64.6,
+      "day_low": 60.1,
       "lot_cost": 64000,
       "chg_pct": 0.0,
       "rsi": 84.66250595701533,
@@ -16000,7 +19441,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 160
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 64.7,
+        "invalidation": 60.0,
+        "stop": 59.58,
+        "target1": 67.81,
+        "target2": 69.88,
+        "rr": 0.61,
+        "risk_pct": 7.9,
+        "atr_pct": 3.2
+      },
+      "regime": "sideways",
+      "rank": 160,
+      "mark": {}
     },
     {
       "code": "00900",
@@ -16008,6 +19466,9 @@
       "sector": "ETF·高股息",
       "asset_type": "etf",
       "close": 18.69,
+      "day_open": 18.58,
+      "day_high": 18.72,
+      "day_low": 18.5,
       "lot_cost": 18690,
       "chg_pct": 0.7004339321031283,
       "rsi": 51.72783654901373,
@@ -16101,7 +19562,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 161
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "等待確認",
+        "note": "型態尚未完成，先觀察",
+        "trigger": 18.74,
+        "invalidation": 18.48,
+        "stop": 18.38,
+        "target1": 19.03,
+        "target2": 19.51,
+        "rr": 0.82,
+        "risk_pct": 1.9,
+        "atr_pct": 1.7
+      },
+      "regime": "sideways",
+      "rank": 161,
+      "mark": {}
     },
     {
       "code": "2615",
@@ -16109,6 +19587,9 @@
       "sector": "航運",
       "asset_type": "other",
       "close": 124.5,
+      "day_open": 113.0,
+      "day_high": 124.5,
+      "day_low": 111.5,
       "lot_cost": 124500,
       "chg_pct": 0.0,
       "rsi": 91.14896337867592,
@@ -16229,7 +19710,24 @@
       "hist_pf": null,
       "hist_mdd": null,
       "hist_source": null,
-      "rank": 162
+      "hist_expectancy": null,
+      "hist_confidence": 0,
+      "plan": {
+        "available": true,
+        "status": "禁止追價",
+        "note": "位置過高或風險偏大，明天不論怎麼漲都不建議追價",
+        "trigger": 124.76,
+        "invalidation": 111.24,
+        "stop": 110.19,
+        "target1": 132.62,
+        "target2": 137.87,
+        "rr": 0.54,
+        "risk_pct": 11.7,
+        "atr_pct": 4.2
+      },
+      "regime": "sideways",
+      "rank": 162,
+      "mark": {}
     }
   ]
 }

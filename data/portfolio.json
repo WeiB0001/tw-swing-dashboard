@@ -1,0 +1,37 @@
+{
+ "cash": 100000.0,
+ "positions": [],
+ "pending": [
+  {
+   "code": "2359",
+   "budget": 33333.33,
+   "stop": 138.23,
+   "target1": 177.75,
+   "pattern": "多頭回檔"
+  },
+  {
+   "code": "3665",
+   "budget": 33333.33,
+   "stop": 2129.96,
+   "target1": 2555.0,
+   "pattern": "多頭回檔"
+  },
+  {
+   "code": "2207",
+   "budget": 33333.33,
+   "stop": 501.62,
+   "target1": 539.94,
+   "pattern": "多頭回檔"
+  }
+ ],
+ "trades": [],
+ "equity": [
+  {
+   "date": "2026-08-22",
+   "equity": 100000.0,
+   "index": 45224.29
+  }
+ ],
+ "start_index": 45224.29,
+ "last_date": "2026-08-22"
+}
