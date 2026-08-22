@@ -265,7 +265,9 @@ tw-swing-dashboard/
 ├── setup.command / setup.bat      # 雙擊安裝（Mac / Windows）
 ├── install.py                     # 一鍵安裝：建 repo、上傳、開 Pages、跑第一次
 │
-├── index.html                     # 儀表板本體（Actions 每天覆寫）
+├── index.html                     # 排行榜首頁（Actions 每天覆寫）
+├── portfolio.html                 # 我的交易記帳（獨立頁）
+├── journal.js / journal.css       # 記帳邏輯與樣式，兩頁共用
 ├── manifest.webmanifest           # 讓它能加到主畫面、像 app 一樣開
 ├── sw.js                          # 離線快取：沒訊號也打得開
 ├── icons/                         # app 圖示
@@ -295,6 +297,16 @@ tw-swing-dashboard/
 ```
 
 ---
+
+## 我的交易記帳（獨立頁面）
+
+首頁只放排行榜、市場狀態與模型資訊；記帳搬到獨立的 `portfolio.html`，導覽列可以互相切換。
+
+- 首頁每張卡片的「＋加入我的持股」照常可以直接新增，存進同一份資料
+- `portfolio.html` 顯示：頂部總覽（總市值／總成本／總收益／總報酬率）、目前持股、歷史收益（折線圖＋已實現／未實現／勝率）、交易紀錄（全部／持有中／已賣出）
+- LocalStorage：`tw_swing_trade_journal_v1`（交易，兩頁共用唯一一份）、`tw_swing_trade_snapshots_v1`（每日快照）、`tw_swing_latest_prices_v1`（最新價，首頁寫入、交易頁讀取）
+- **切到交易頁不會多打任何一次股票 API**，最新價完全沿用首頁最後一次更新的報價
+- 這一頁跟首頁的「模擬投資組合」完全分開：那是模型照規則自動下單的紀錄，這裡才是你本人的買賣
 
 ## 資料來源
 

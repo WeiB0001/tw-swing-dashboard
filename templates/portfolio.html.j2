@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0E1116">
+<meta name="description" content="我的交易記帳：手動記錄實際買賣，自動計算損益與累積報酬。資料只存在本機。">
+<title>我的交易 · 台股 Swing</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="我的交易">
+<link rel="stylesheet" href="journal.css">
+</head>
+<body>
+
+<div class="disclaimer-top">⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險</div>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="./">首頁</a>
+    <a href="portfolio.html" class="on">我的交易</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">MY TRADES</div>
+    <h1 class="title">我的交易</h1>
+    <div class="jn-warn">
+      這裡是<b>你自己輸入的真實買賣</b>，跟首頁的「模擬投資組合」完全無關——那是程式照規則自動下單的紀錄。
+      資料只存在這個瀏覽器（LocalStorage），換手機或清除瀏覽資料就會不見，記得定期匯出備份。
+      最新價直接沿用首頁最後一次更新的報價，切到這一頁不會多抓任何資料。
+    </div>
+  </header>
+
+  <!-- ===================== 頂部總覽 ===================== -->
+  <div class="jn">
+    <div class="jn-hero" id="jn-overview"></div>
+    <div class="jn-hero-sub" id="jn-overview-sub"></div>
+  </div>
+
+  <!-- ===================== 目前持股 ===================== -->
+  <div class="section-head"><h2>目前持股</h2><span>只顯示未賣出的部位</span></div>
+  <div class="jn">
+    <div id="jn-open"></div>
+  </div>
+
+  <!-- ===================== 歷史收益 ===================== -->
+  <div class="section-head"><h2>歷史收益</h2><span>每天第一次開啟自動記錄</span></div>
+  <div class="jn">
+    <div id="jn-chart"></div>
+    <div class="jn-hero-sub" style="border-top:0;padding-top:0"></div>
+    <div class="jn-sum" id="jn-stats"></div>
+  </div>
+
+  <!-- ===================== 交易紀錄 ===================== -->
+  <div class="section-head"><h2>我的交易紀錄</h2><span>持有中與已賣出</span></div>
+  <div class="jn">
+    <div class="jn-bar">
+      <button type="button" class="btn-j primary" id="jn-add">＋ 手動新增交易</button>
+      <button type="button" class="btn-j" id="jn-export">匯出 JSON</button>
+      <button type="button" class="btn-j" id="jn-import">匯入 JSON</button>
+      <input type="file" id="jn-file" accept="application/json,.json" hidden>
+    </div>
+
+    <div class="jn-block">
+      <div class="jn-tabs">
+        <button type="button" class="jn-tab" data-jfilter="all" aria-pressed="true">全部</button>
+        <button type="button" class="jn-tab" data-jfilter="OPEN" aria-pressed="false">持有中</button>
+        <button type="button" class="jn-tab" data-jfilter="CLOSED" aria-pressed="false">已賣出</button>
+      </div>
+      <div id="jn-history"></div>
+    </div>
+  </div>
+
+  <div class="disclaimer-bottom">
+    ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
+    這一頁只是你自己的記帳，數字由你輸入的成交價計算，不代表券商對帳單。<br>
+    下單與損益請以券商實際交割資料為準。
+  </div>
+
+  <footer>
+    我的交易記帳 · 資料只存在這台裝置<br>
+    <a href="./">回排行榜首頁</a>
+  </footer>
+</div>
+
+<!-- 記帳表單（買入 / 賣出 / 編輯共用一個） -->
+<div class="jn-modal" id="jn-modal" hidden>
+  <div class="jn-dialog" role="dialog" aria-modal="true" aria-labelledby="jn-title">
+    <h3 id="jn-title">新增交易</h3>
+    <div class="jn-form" id="jn-form"></div>
+    <div class="jn-err" id="jn-err" hidden></div>
+    <div class="jn-actions">
+      <button type="button" class="btn-j" id="jn-cancel">取消</button>
+      <button type="button" class="btn-j primary" id="jn-save">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* 這一頁沒有 dashboard 的價格資料，journal.js 會自動改讀 LocalStorage
+   裡由首頁寫入的 tw_swing_latest_prices_v1，不會呼叫任何股票 API。 */
+if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+  navigator.serviceWorker.register("./sw.js").catch(function () {});
+}
+</script>
+<script src="journal.js" defer></script>
+
+</body>
+</html>

@@ -18,6 +18,9 @@ const CACHE = "tw-swing-v1";
 const SHELL = [
   "./",
   "./index.html",
+  "./portfolio.html",
+  "./journal.js",
+  "./journal.css",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",

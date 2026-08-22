@@ -107,12 +107,30 @@ def render_html(payload: dict) -> str:
     )
 
 
+def render_portfolio() -> str:
+    """
+    我的交易記帳頁。純靜態，不需要任何 payload——
+    交易資料在使用者的 LocalStorage，最新價由首頁寫進 LocalStorage 共用。
+    """
+    env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)),
+                      autoescape=select_autoescape(["html"]),
+                      trim_blocks=True, lstrip_blocks=True)
+    return env.get_template("portfolio.html.j2").render()
+
+
 def write_outputs(payload: dict) -> None:
-    """寫出 index.html、data/latest.json，並存一份當日封存檔。"""
+    """寫出 index.html、portfolio.html、data/latest.json，並存一份當日封存檔。"""
     html = render_html(payload)
 
     (ROOT / C.OUTPUT_HTML).write_text(html, encoding="utf-8")
     log.info("已寫出 %s（%d bytes）", C.OUTPUT_HTML, len(html.encode()))
+
+    try:
+        pf = render_portfolio()
+        (ROOT / "portfolio.html").write_text(pf, encoding="utf-8")
+        log.info("已寫出 portfolio.html（%d bytes）", len(pf.encode()))
+    except Exception as e:
+        log.warning("portfolio.html 產生失敗（不影響首頁）：%s", e)
 
     json_path = ROOT / C.OUTPUT_JSON
     json_path.parent.mkdir(parents=True, exist_ok=True)
