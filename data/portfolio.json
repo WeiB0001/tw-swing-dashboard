@@ -1,37 +1,54 @@
 {
- "cash": 100000.0,
- "positions": [],
- "pending": [
+ "cash": 1511.4884999999995,
+ "positions": [
   {
    "code": "2359",
-   "budget": 33333.33,
+   "name": "所羅門",
+   "shares": 209,
+   "entry": 159.0,
+   "entry_date": "2026-08-23",
+   "held": 0,
    "stop": 138.23,
    "target1": 177.75,
    "pattern": "多頭回檔"
   },
   {
    "code": "3665",
-   "budget": 33333.33,
+   "name": "貿聯-KY",
+   "shares": 14,
+   "entry": 2270.0,
+   "entry_date": "2026-08-23",
+   "held": 0,
    "stop": 2129.96,
    "target1": 2555.0,
    "pattern": "多頭回檔"
   },
   {
    "code": "2207",
-   "budget": 33333.33,
+   "name": "和泰車",
+   "shares": 66,
+   "entry": 505.0,
+   "entry_date": "2026-08-23",
+   "held": 0,
    "stop": 501.62,
    "target1": 539.94,
    "pattern": "多頭回檔"
   }
  ],
+ "pending": [],
  "trades": [],
  "equity": [
   {
    "date": "2026-08-22",
    "equity": 100000.0,
    "index": 45224.29
+  },
+  {
+   "date": "2026-08-23",
+   "equity": 98899.49,
+   "index": 45224.29
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-08-22"
+ "last_date": "2026-08-23"
 }
