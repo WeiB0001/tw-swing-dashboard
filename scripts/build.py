@@ -51,6 +51,19 @@ ROOT = Path(__file__).resolve().parent.parent
 # ---------------------------------------------------------------------------
 # 組裝單一個股的輸出列
 # ---------------------------------------------------------------------------
+def make_spark(hist) -> dict | None:
+    """卡片展開用的迷你價量圖資料：最近幾根的收盤與成交量，壓到最小體積。"""
+    try:
+        tail = hist.tail(C.SPARK_BARS)
+        if len(tail) < 10:
+            return None
+        c = [round(float(x), 2) for x in tail["close"]]
+        v = [int(x) for x in tail["volume"]]
+        return {"c": c, "v": v}
+    except Exception:
+        return None
+
+
 def build_row(code: str, name: str, f: dict, result: dict) -> dict:
     """
     原有的指標欄位全部保留（RSI、量能、均線、20 日高低…），
@@ -240,7 +253,9 @@ def run_live() -> dict:
             feats = indicators.compute_features(hist)
             if not feats:
                 continue
-            rows.append(build_row(code, name_map.get(code, code), feats, scoring.score_stock(feats)))
+            row = build_row(code, name_map.get(code, code), feats, scoring.score_stock(feats))
+            row["spark"] = make_spark(hist)
+            rows.append(row)
         except Exception as e:
             log.warning("%s 計算失敗：%s", code, e)
 
@@ -258,12 +273,21 @@ def run_live() -> dict:
     log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d｜大盤狀態 %s",
              scanned, strong, C.WEAK_SCORE, regime)
 
+    data_date = _data_date(hist_map, now)
     index_info = fetch.fetch_market_index()
     idx_close = (index_info or {}).get("close")
     signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), idx_close)
+    add_edges(rows[: C.INITIAL_VISIBLE * 2])   # 只有會被看到的前段需要這句話
+
+    # --- 其他產業：不進首頁，只挑亮眼的另開一頁 ---
+    try:
+        others = universe_mod.build_others(snapshot, info)
+        _scan_others(others, hist_map, data_date)
+    except Exception as e:
+        log.warning("其他產業掃描失敗（不影響首頁）：%s", e)
 
     # --- 雷達：只掃 Extended，與首頁共用同一份 history 快取 ---
     radar_rows, uni_stats = [], {}
@@ -286,7 +310,8 @@ def run_live() -> dict:
         "meta": {
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
             "generated_iso": now.isoformat(timespec="seconds"),
-            "trade_date": now.strftime("%Y-%m-%d"),
+            "trade_date": now.strftime("%Y-%m-%d"),      # 這次執行的日期
+            "data_date": data_date,                       # 行情資料實際的交易日
             "scanned_count": scanned,
             "qualified_count": len(rows),
             "universe_count": len(universe),
@@ -307,6 +332,132 @@ def run_live() -> dict:
         "backtest": _backtest_summary(bt),
         "rows": top,
     }
+
+
+def add_edges(rows: list[dict]) -> None:
+    """
+    每檔補一句「為什麼是它、不是隔壁那檔」。
+
+    問題背景：原本的 why 是由分項強度組出來的，前十名幾乎都會長成
+    「進場位置好、趨勢結構強、距前高仍有 X%、追高風險低」，看起來像模板。
+    這裡改成**跨標的比較**——只有跟同榜其他人比起來真的突出的那一點才會被寫出來，
+    而且一定帶數字。找不到突出點就老實說「各項普通」。
+
+    不動任何評分公式，只是換一句說明文字。
+    """
+    if not rows:
+        return
+
+    def med(key, default=0.0):
+        vals = sorted(float(r.get(key) or 0) for r in rows)
+        return vals[len(vals) // 2] if vals else default
+
+    m_vol = med("vol_ratio", 1.0) or 1.0
+    m_rr = med("rr_ratio", 1.0) or 1.0
+    m_up = med("upside_pct", 1.0) or 1.0
+    evs = [r.get("hist_expectancy") for r in rows if r.get("hist_expectancy") is not None]
+    best_ev = max(evs) if evs else None
+
+    # 「全榜之最」：只有真的第一名才拿得到這句話
+    def extreme(key, biggest=True):
+        vals = [(float(r.get(key) or 0), r["code"]) for r in rows]
+        if not vals:
+            return None
+        return (max(vals) if biggest else min(vals))[1]
+
+    top_vol = extreme("vol_ratio")
+    top_rr = extreme("rr_ratio")
+    low_rsi = extreme("rsi", biggest=False)
+    top_up = extreme("upside_pct")
+    best_entry = max(rows, key=lambda r: r["breakdown"]["entry"]["ratio"])["code"]
+    low_risk = extreme("risk", biggest=False)
+
+    # 第一天跑的時候全部都是新訊號，這句話就沒有鑑別力，乾脆不講
+    marked = [r for r in rows if (r.get("mark") or {}).get("badge")]
+    new_ratio = (sum(1 for r in marked if r["mark"]["badge"] == "🆕") / len(marked)) if marked else 1.0
+
+    for r in rows:
+        cands = []          # (優先度, 文字)
+        mark = r.get("mark") or {}
+        vol = float(r.get("vol_ratio") or 0)
+        rr = float(r.get("rr_ratio") or 0)
+        up = float(r.get("upside_pct") or 0)
+        ev = r.get("hist_expectancy")
+        streak = int(mark.get("streak") or 0)
+
+        # 歷史期望值是全榜最高 → 這是最有力的差異
+        if ev is not None and best_ev is not None and ev >= best_ev - 0.01 and ev > 0:
+            cands.append((0, "同型態歷史期望值 %+.2f%%，是本榜最高的一組" % ev))
+
+        # 量能明顯比同榜其他人大
+        if m_vol > 0 and vol >= m_vol * 1.6 and vol >= 1.5:
+            cands.append((1, "量能 %.1f 倍，是同榜中位數（%.1f 倍）的 %.1f 倍" %
+                          (vol, m_vol, vol / m_vol)))
+
+        # 風報比突出
+        if rr >= m_rr * 1.5 and rr >= 1.5:
+            cands.append((2, "風險報酬比 %.1f:1，同榜中位數只有 %.1f:1" % (rr, m_rr)))
+
+        # 上檔空間突出
+        if up >= m_up * 1.5 and up >= 5:
+            cands.append((3, "上檔空間 +%.1f%%，同榜多數只有 +%.1f%%" % (up, m_up)))
+
+        # 全榜之最
+        if r["code"] == top_vol and vol >= 1.3:
+            cands.append((1, "量能 %.1f 倍，是本榜最大的" % vol))
+        if r["code"] == top_rr and rr >= 1.2:
+            cands.append((2, "風險報酬比 %.1f:1，本榜最好" % rr))
+        if r["code"] == low_rsi:
+            cands.append((3, "RSI %.0f 是本榜最低，位置最靠近底部" % float(r.get("rsi") or 0)))
+        if r["code"] == top_up and up >= 4:
+            cands.append((3, "上檔空間 +%.1f%% 是本榜最大" % up))
+        if r["code"] == best_entry:
+            cands.append((3, "進場位置分數 %.2f 是本榜最高" % r["breakdown"]["entry"]["ratio"]))
+
+        # 訊號狀態（大家都是新訊號時就不講，沒有鑑別力）
+        if mark.get("badge") == "🆕" and new_ratio < 0.5:
+            cands.append((6, "今日新進榜，前一次更新還沒出現"))
+        elif streak >= C.STREAK_HOT:
+            cands.append((4, "已連續入榜 %d 日，訊號沒有斷過" % streak))
+        elif mark.get("rank_delta") and mark["rank_delta"] >= C.RANK_MOVE_MIN:
+            cands.append((5, "名次比前一次上升 %d 名" % mark["rank_delta"]))
+
+        # 型態本身就少見的話也算差異
+        kinds = [x.get("kind") for x in rows]
+        if r.get("kind") and kinds.count(r["kind"]) <= max(2, len(rows) // 10):
+            cands.append((5, "本榜少數的「%s」型態，只有 %d 檔"
+                          % (r["kind"], kinds.count(r["kind"]))))
+
+        # 風險面的差異：只有真的全榜最低才講，否則大家都「風險低」等於沒講
+        if r["code"] == low_risk and float(r.get("risk") or 0) <= 15:
+            cands.append((6, "風險分數 %.0f 是本榜最低，過熱與追高項目都沒觸發"
+                          % float(r.get("risk") or 0)))
+
+        if cands:
+            cands.sort(key=lambda x: x[0])
+            r["edge"] = cands[0][1] + "。"
+        else:
+            # 沒有哪一項特別突出時，就直接把這檔的實際數字攤開，
+            # 至少每檔看到的是自己的數字，不是同一句模板。
+            r["edge"] = ("各項都在中段：RSI %.0f、量能 %.1f 倍、距前高 %.1f%%、風報 %.1f:1，"
+                         "沒有明顯優於同榜其他標的的地方。"
+                         % (float(r.get("rsi") or 0), vol,
+                            float(r.get("pct_below_high20") or 0), rr))
+
+
+def _data_date(hist_map: dict, now) -> str:
+    """
+    行情資料實際的交易日。取所有個股「最後一根 K 棒」的眾數——
+    非交易日執行時，這個日期會停在最近一個有效交易日，不會跟著今天跑。
+    """
+    try:
+        from collections import Counter
+        last = [str(df.index[-1])[:10] for df in hist_map.values() if len(df)]
+        if last:
+            return Counter(last).most_common(1)[0][0]
+    except Exception:
+        pass
+    return now.strftime("%Y-%m-%d")
 
 
 def _write_universe(core, extended: list, radar_rows: list,
@@ -331,6 +482,60 @@ def _write_universe(core, extended: list, radar_rows: list,
                  len(radar_rows))
     except Exception as e:
         log.warning("universe/radar 輸出失敗：%s", e)
+
+
+def _scan_others(candidates: list, hist_map: dict, data_date: str) -> None:
+    """
+    非指定產業的股票用同一套評分排名，但結果只寫進 data/others.json，
+    不會混進首頁排行。歷史資料一樣走共用快取，缺的才補抓。
+    """
+    if not candidates:
+        return
+    codes = [c["symbol"] for c in candidates]
+    missing = [c for c in codes if c not in hist_map]
+    if missing:
+        log.info("其他產業：補抓 %d 檔缺少的歷史資料", len(missing))
+        hist_map.update(fetch.fetch_history(missing))
+
+    rows = []
+    for c in candidates:
+        hist = hist_map.get(c["symbol"])
+        if hist is None:
+            continue
+        try:
+            feats = indicators.compute_features(hist)
+            if not feats:
+                continue
+            res = scoring.score_stock(feats)
+            if res["score"] < C.OTHERS_MIN_SCORE:
+                continue
+            rows.append({
+                "symbol": c["symbol"], "name": c.get("name", ""),
+                "sector": c.get("sector", "其他"), "market": c.get("market", "TWSE"),
+                "close": round(feats["close"], 2),
+                "chg_pct": round(feats["chg_pct"], 2),
+                "score": res["score"], "kind": res["kind"],
+                "headline": res["headline"], "risk_level": res["risk_level"],
+                "rsi": round(feats["rsi"], 1),
+                "vol_ratio": round(feats["vol_ratio"], 2),
+                "rr_ratio": res["rr_ratio"],
+                "swing_low": res["swing_low"], "swing_high": res["swing_high"],
+                "main_risk": res["main_risk"],
+            })
+        except Exception:
+            continue
+
+    rows.sort(key=lambda r: -r["score"])
+    rows = rows[: C.OTHERS_TOP_N]
+    try:
+        (ROOT / C.OTHERS_JSON).parent.mkdir(parents=True, exist_ok=True)
+        (ROOT / C.OTHERS_JSON).write_text(json.dumps(
+            {"date": data_date, "scanned": len(candidates), "rows": rows},
+            ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        log.info("其他產業：掃 %d 檔，%d 檔達標（>= %d 分）",
+                 len(candidates), len(rows), C.OTHERS_MIN_SCORE)
+    except Exception as e:
+        log.warning("others.json 寫入失敗：%s", e)
 
 
 def _us_snapshot() -> dict | None:

@@ -194,6 +194,36 @@ def _category_map(info: pd.DataFrame | None) -> dict[str, tuple[str, str]]:
 
 
 # ---------------------------------------------------------------------------
+# 其他產業：不進首頁排行，只挑表現亮眼的放獨立分頁
+# ---------------------------------------------------------------------------
+def build_others(snapshot: pd.DataFrame, info: pd.DataFrame | None) -> list[dict]:
+    """
+    非科技／金融／ETF 的股票（食品、航運、生技、傳產…）。
+    首頁不掃這些，但成交金額前段的仍值得看一眼，所以獨立成一頁。
+    只取當日成交金額前 OTHERS_MAX 檔，避免流量暴增。
+    """
+    if snapshot is None or snapshot.empty:
+        return []
+    cat_map = _category_map(info)
+    rows = []
+    for _, r in snapshot.iterrows():
+        code = r["code"]
+        kind, sector = classify(code, cat_map.get(code, ("", ""))[0])
+        if kind is not None:            # 屬於指定三類 → 不是「其他」
+            continue
+        if r["close"] < C.CORE_MIN_PRICE or r["turnover"] < C.OTHERS_MIN_TURNOVER:
+            continue
+        rows.append({"symbol": code, "name": r.get("name", ""),
+                     "sector": sector or "其他", "kind": "other",
+                     "market": cat_map.get(code, ("", "TWSE"))[1],
+                     "turnover": float(r["turnover"]), "is_core": False})
+    rows.sort(key=lambda x: -x["turnover"])
+    rows = rows[: C.OTHERS_MAX]
+    log.info("其他產業候選：%d 檔", len(rows))
+    return rows
+
+
+# ---------------------------------------------------------------------------
 # 統計
 # ---------------------------------------------------------------------------
 def stats(core: pd.DataFrame, extended: list[dict]) -> dict:

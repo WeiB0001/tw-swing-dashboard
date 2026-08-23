@@ -344,9 +344,38 @@ header{padding:20px 0 14px}
 .note.wf{margin-top:12px;font-size:12.5px}
 .note.wf b{color:var(--text)}
 
+/* ---------- 搜尋框 ---------- */
+.find{
+  flex:1 1 auto;display:flex;align-items:center;gap:7px;min-width:0;
+  background:var(--panel-2);border:1px solid #2E3846;border-radius:10px;padding:8px 11px;
+}
+.find:focus-within{border-color:var(--signal)}
+.find span{font-size:13px;color:var(--muted)}
+.find input{
+  flex:1 1 auto;min-width:0;background:none;border:0;color:var(--text);
+  font:inherit;font-size:14.5px;outline:none;
+}
+.find button{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;padding:0 2px}
+
+/* ---------- 迷你價量圖 ---------- */
+.spark{margin:0 0 13px}
+.spark svg{width:100%;height:88px;display:block}
+.spark .px{fill:none;stroke:var(--signal);stroke-width:1.6}
+.spark .pxa{fill:rgba(255,176,32,.10)}
+.spark .vol rect{fill:#2C3742}
+.spark .vol rect.up{fill:#4A2A2E}
+.spark .ma{fill:none;stroke:#5A6673;stroke-width:1;stroke-dasharray:3 3}
+.spark-cap{font-size:11px;color:#6E7A88;margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
+
 /* ---------- 導覽列 ---------- */
-.nav{display:flex;gap:7px;padding:12px 0 0}
+.nav{
+  display:flex;gap:7px;padding:12px 0 2px;
+  overflow-x:auto;margin:0 -14px;padding-left:14px;padding-right:14px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none}
 .nav a{
+  flex:0 0 auto;white-space:nowrap;
   font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;
   text-decoration:none;color:var(--muted);
   background:var(--panel);border:1px solid var(--line);
@@ -543,7 +572,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   <nav class="nav">
     <a href="./" class="on">首頁</a>
+    <a href="alerts.html">盤中提醒</a>
     <a href="radar.html">雷達</a>
+    <a href="others.html">其他產業</a>
     <a href="portfolio.html">我的交易</a>
   </nav>
 
@@ -623,7 +654,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     <div class="stamp">
       <span id="freshness">更新時間 <b class="mono">{{ meta.generated_at }}</b></span>
-      <span>交易日 <b class="mono">{{ meta.trade_date }}</b></span>
+      <span>資料日 <b class="mono">{{ meta.data_date or meta.trade_date }}</b></span>
+      <span>更新於 <b class="mono">{{ meta.trade_date }}</b></span>
       <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
     </div>
 
@@ -637,6 +669,15 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
   <section class="panel">
+    <div class="panel-row">
+      <div class="find">
+        <span>🔍</span>
+        <input id="find-q" type="search" placeholder="搜尋代號、名稱或產業，直接看名次"
+               autocomplete="off" enterkeyhint="search">
+        <button type="button" id="find-clear" title="清除">✕</button>
+      </div>
+    </div>
+
     <div class="panel-row">
       <label for="budget-input">本週預算</label>
       <div class="budget-input">
@@ -765,7 +806,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </summary>
 
       <div class="detail">
-        <div class="why"><b>為什麼排第 {{ r.rank }}？</b>{{ r.why }}</div>
+        <div class="why"><b>為什麼是它？</b>{{ r.edge or r.why }}</div>
+        {% if r.spark %}
+        <div class="spark" data-spark='{{ r.spark|tojson }}'></div>
+        {% endif %}
 
         <div class="scoreline">
           機會分數 <b class="mono">{{ '%.0f'|format(r.opportunity) }}</b>
@@ -1110,7 +1154,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var INITIAL_VISIBLE = {{ initial_visible }};
   var moreBtn = document.getElementById("show-more");
   var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all",
-             picks: [], limit: INITIAL_VISIBLE };
+             picks: [], limit: INITIAL_VISIBLE, q: "" };
 
   function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
   function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -1133,7 +1177,15 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       var okType = st.type === "all" || c.dataset.type === st.type;
       var lot = parseInt(c.dataset.lot, 10) || 0;
       var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
-      if (okType && okBudget) matched.push(c);
+      // 搜尋：比對代號、名稱與產業標籤
+      var okFind = true;
+      if (st.q) {
+        var sec = c.querySelector(".sector");
+        var hay = (c.dataset.code + " " + (c.dataset.name || "") + " " +
+                   (sec ? sec.textContent : "")).toLowerCase();
+        okFind = hay.indexOf(st.q) >= 0;
+      }
+      if (okType && okBudget && okFind) matched.push(c);
       else { c.style.display = "none"; c.open = false; }
     });
     matched.forEach(function (c, i) {
@@ -1268,6 +1320,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       if (st.type !== "all") {
         bits.push({ tech: "電子科技", etf: "ETF", other: "其他" }[st.type]);
       }
+      if (st.q) bits.push("搜尋「" + st.q + "」");
       var head = bits.length ? bits.join("、") + "：" : "全部：";
       var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
@@ -1311,6 +1364,18 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   modeBtns.forEach(function (b) {
     b.addEventListener("click", function () { st.mode = b.dataset.mode; render(); });
   });
+  var findEl = document.getElementById("find-q");
+  var findClear = document.getElementById("find-clear");
+  if (findEl) findEl.addEventListener("input", function () {
+    st.q = findEl.value.trim().toLowerCase();
+    st.limit = st.q ? cards.length : INITIAL_VISIBLE;   // 搜尋時一次找完，不用按「顯示更多」
+    render();
+  });
+  if (findClear) findClear.addEventListener("click", function () {
+    if (findEl) findEl.value = "";
+    st.q = ""; st.limit = INITIAL_VISIBLE; render();
+  });
+
   typeBtns.forEach(function (b) {
     b.addEventListener("click", function () {
       st.type = b.dataset.type; st.limit = INITIAL_VISIBLE; render();
@@ -1354,6 +1419,55 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     if (pk && pk.date === TRADE_DATE && Array.isArray(pk.codes)) st.picks = pk.codes;
   } catch (e) {}
   if (!st.picks.length && st.mode === "pick") st.mode = "auto";
+
+  /* ---- 卡片展開時才畫迷你價量圖（原生 SVG，沒有引入圖表套件）
+         70 張卡片一次全畫會拖慢手機，所以等使用者真的展開再畫，而且只畫一次。 ---- */
+  function drawSpark(box) {
+    if (!box || box.dataset.done) return;
+    var d;
+    try { d = JSON.parse(box.dataset.spark || "{}"); } catch (e) { return; }
+    var c = d.c || [], v = d.v || [];
+    if (c.length < 5) { box.remove(); return; }
+
+    var W = 320, H = 88, PAD = 4, VH = 22;          // 下方 VH 高度留給成交量
+    var lo = Math.min.apply(null, c), hi = Math.max.apply(null, c);
+    if (hi - lo < 1e-9) { hi += 1; lo -= 1; }
+    var vmax = Math.max.apply(null, v) || 1;
+    var n = c.length;
+    var sx = function (i) { return PAD + i * (W - PAD * 2) / (n - 1); };
+    var sy = function (p) { return PAD + (hi - p) * (H - VH - PAD * 2) / (hi - lo); };
+
+    var pts = c.map(function (p, i) { return sx(i).toFixed(1) + "," + sy(p).toFixed(1); });
+    var area = "M" + pts[0] + "L" + pts.slice(1).join("L") +
+               "L" + sx(n - 1).toFixed(1) + "," + (H - VH).toFixed(1) +
+               "L" + sx(0).toFixed(1) + "," + (H - VH).toFixed(1) + "Z";
+
+    var bw = Math.max(1.2, (W - PAD * 2) / n * 0.62);
+    var bars = v.map(function (x, i) {
+      var h = Math.max(1, x / vmax * (VH - 3));
+      var up = i > 0 && c[i] >= c[i - 1];
+      return '<rect class="' + (up ? "up" : "") + '" x="' + (sx(i) - bw / 2).toFixed(1) +
+             '" y="' + (H - h).toFixed(1) + '" width="' + bw.toFixed(1) +
+             '" height="' + h.toFixed(1) + '"></rect>';
+    }).join("");
+
+    box.innerHTML =
+      '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" role="img" ' +
+        'aria-label="最近 ' + n + ' 個交易日的收盤與成交量走勢">' +
+        '<path class="pxa" d="' + area + '"></path>' +
+        '<polyline class="px" points="' + pts.join(" ") + '"></polyline>' +
+        '<g class="vol">' + bars + "</g></svg>" +
+      '<div class="spark-cap"><span>最近 ' + n + ' 個交易日</span>' +
+        "<span>區間 " + lo.toFixed(2) + " ～ " + hi.toFixed(2) + "</span>" +
+        "<span>下方長條為成交量</span></div>";
+    box.dataset.done = "1";
+  }
+
+  cards.forEach(function (card) {
+    card.addEventListener("toggle", function () {
+      if (card.open) drawSpark(card.querySelector("[data-spark]"));
+    });
+  });
 
   render();
 })();

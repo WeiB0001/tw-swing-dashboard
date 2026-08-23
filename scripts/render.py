@@ -123,7 +123,9 @@ def write_outputs(payload: dict) -> None:
     log.info("已寫出 %s（%d bytes）", C.OUTPUT_HTML, len(html.encode()))
 
     for tpl, out in [("portfolio.html.j2", "portfolio.html"),
-                     ("radar.html.j2", "radar.html")]:
+                     ("radar.html.j2", "radar.html"),
+                     ("others.html.j2", "others.html"),
+                     ("alerts.html.j2", "alerts.html")]:
         try:
             page = render_static(tpl)
             (ROOT / out).write_text(page, encoding="utf-8")

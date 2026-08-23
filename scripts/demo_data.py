@@ -72,7 +72,9 @@ def _ohlcv(closes: np.ndarray, vols: np.ndarray, rng, close_pos=None, upper=None
             hi = closes[-1] + span * upper
         lows[-1], highs[-1] = min(lo, closes[-1], opens[-1]), max(hi, closes[-1], opens[-1])
 
-    idx = pd.date_range(end=datetime.now().date() - timedelta(days=1), periods=n, freq="B")
+    # end 落在週末時，freq="B" 產出的筆數會少一天，所以多產一些再取尾端
+    idx = pd.date_range(end=datetime.now().date() - timedelta(days=1),
+                        periods=n + 6, freq="B")[-n:]
     return pd.DataFrame(
         {"open": opens, "high": highs, "low": lows, "close": closes, "volume": vols}, index=idx
     )
@@ -154,7 +156,9 @@ def build_demo_payload() -> dict:
     for code, name, kind, hist in build_dataset():
         feats = indicators.compute_features(hist)
         if feats:
+            from build import make_spark
             row = build_row(code, name, feats, scoring.score_stock(feats))
+            row["spark"] = make_spark(hist)
             row["demo_archetype"] = kind
             rows.append(row)
 
@@ -190,19 +194,27 @@ def build_demo_payload() -> dict:
                                 for c in core_codes])
         _write_universe(core_df, cand, rd, universe_mod.stats(core_df, cand),
                         now.strftime("%Y-%m-%d"))
+        # 示範用的「其他產業」：借用後段幾檔當範例
+        from build import _scan_others
+        others = [{"symbol": c, "name": dict(DEMO_STOCKS).get(c, ""), "sector": "傳產範例",
+                   "market": "TWSE"} for c in list(hist_map)[-25:]]
+        _scan_others(others, hist_map, now.strftime("%Y-%m-%d"))
     except Exception as e:
         import logging; logging.getLogger("demo").warning("示範雷達產生失敗：%s", e)
 
+    from build import add_edges
     signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), 23456.78)
+    add_edges(rows[: C.INITIAL_VISIBLE * 2])
 
     return {
         "meta": {
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
             "generated_iso": now.isoformat(timespec="seconds"),
             "trade_date": now.strftime("%Y-%m-%d"),
+            "data_date": now.strftime("%Y-%m-%d"),
             "scanned_count": len(rows),
             "qualified_count": len(rows),
             "universe_count": len(DEMO_STOCKS),

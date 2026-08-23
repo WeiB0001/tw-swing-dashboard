@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0E1116">
+<meta name="description" content="盤中觸發提醒：對照昨日收盤算出的交易計畫價位，顯示盤中觸發狀態。">
+<title>盤中提醒 · 台股 Swing</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="盤中提醒">
+<link rel="stylesheet" href="journal.css">
+<style>
+.al-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.al-live{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;
+  padding:6px 12px;border-radius:999px;border:1px solid #2E3846;background:var(--panel-2);color:var(--muted);
+}
+.al-live.open{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.al-live .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.al-meta{font-size:11.5px;color:#6E7A88;line-height:1.7;margin-top:8px}
+.al-meta b{color:#9FACBA}
+.al-warn{
+  background:#2A1A12;border:1px solid #4A2E1B;color:#FFC98A;border-radius:var(--radius);
+  padding:10px 13px;font-size:12.5px;font-weight:600;line-height:1.7;margin-bottom:12px;
+}
+.al-row{background:var(--panel-2);border:1px solid #232C36;border-radius:10px;
+  padding:11px 12px;margin-bottom:8px;border-left:3px solid #3A4552}
+.al-row.triggered{border-left-color:#2E9E6B}
+.al-row.target{border-left-color:var(--signal)}
+.al-row.near_stop{border-left-color:#8A7430}
+.al-row.stopped{border-left-color:#8A3A3A}
+.al-st{
+  display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;
+  background:#1E2530;border:1px solid #2E3846;color:#93A1B1;
+}
+.al-st.triggered{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.al-st.target{background:#241C0D;border-color:#4A3A18;color:#F2C14E}
+.al-st.near_stop{background:#2A2412;border-color:#544720;color:#F2C14E}
+.al-st.stopped{background:#2A1418;border-color:#5A2530;color:#FF8A96}
+.al-lvls{display:grid;grid-template-columns:repeat(4,1fr);gap:7px 9px;margin-top:9px}
+.al-lvls div{display:flex;flex-direction:column;gap:1px}
+.al-lvls span{font-size:10.5px;color:var(--muted)}
+.al-lvls b{font-size:14px;font-weight:700;font-family:ui-monospace,Menlo,monospace}
+.al-basis{margin-top:9px;font-size:11px;color:#6E7A88;line-height:1.7}
+.al-basis b{color:#8E9AA8;font-weight:600}
+.al-dash{font-size:34px;font-weight:800;color:#3A4552;font-family:ui-monospace,Menlo,monospace}
+</style>
+</head>
+<body>
+
+<div class="disclaimer-top">⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險</div>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="./">首頁</a>
+    <a href="alerts.html" class="on">盤中提醒</a>
+    <a href="radar.html">雷達</a>
+    <a href="others.html">其他產業</a>
+    <a href="portfolio.html">我的交易</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">INTRADAY ALERTS</div>
+    <h1 class="title">盤中提醒</h1>
+    <div class="al-warn">
+      ⚠️ <b>盤中訊號，尚未收盤確認。</b>
+      這裡只是拿<b>昨天收盤後算好的交易計畫價位</b>，對照盤中現價看走到哪一段。
+      不會重算排名、勝率、EV、PF，也不會影響回測——那些一律以收盤資料為準。
+      盤中觸發的價位，收盤前都可能被打回去。
+    </div>
+  </header>
+
+  <div class="jn">
+    <div class="al-bar">
+      <span class="al-live" id="al-live"><span class="dot"></span><span id="al-live-text">載入中</span></span>
+      <button type="button" class="btn-j" id="al-notify">🔔 開啟通知</button>
+      <button type="button" class="btn-j" id="al-refresh">重新整理</button>
+    </div>
+    <div class="al-meta" id="al-meta"></div>
+    <div id="al-list" style="margin-top:12px"></div>
+  </div>
+
+  <div class="disclaimer-bottom">
+    ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
+    盤中報價為延遲資料，且排程更新可能再延遲數分鐘，不能當成即時看盤工具。<br>
+    下單前請以券商即時報價為準。觸發不等於該買，停損不等於該賣。
+  </div>
+
+  <footer>
+    盤中提醒 · 只看價位觸發，不重算任何分數<br>
+    <a href="./">回排行榜首頁</a>
+  </footer>
+</div>
+
+<script>
+if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+  navigator.serviceWorker.register("./sw.js").catch(function () {});
+}
+</script>
+<script src="alerts.js" defer></script>
+
+</body>
+</html>

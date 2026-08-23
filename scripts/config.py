@@ -162,6 +162,20 @@ EXTENDED_MIN_AVG_TURNOVER = 20_000_000   # 20 日平均成交金額
 EXTENDED_MIN_BARS = 80                   # 少於此根數不進雷達
 WEEK52_MIN_BARS = 250                    # 不足 250 根就不算 52 週高低，不偽造
 
+# --- 其他產業（非科技／金融／ETF）：只挑表現亮眼的，放在獨立分頁 ---
+OTHERS_MAX = 120                  # 最多掃幾檔（依當日成交金額取前段）
+OTHERS_MIN_TURNOVER = 50_000_000  # 當日成交金額門檻
+OTHERS_MIN_SCORE = 45             # 技術分數低於此值不列入「亮眼」
+OTHERS_TOP_N = 30                 # 分頁最多顯示幾檔
+OTHERS_JSON = "data/others.json"
+
+# --- 卡片展開的迷你價量圖 ---
+SPARK_BARS = 40                   # 取最近幾根日 K
+
+# --- 盤中觸發提醒（只看價位觸發，不重算任何分數）---
+INTRADAY_JSON = "data/intraday.json"
+INTRADAY_MAX = 20              # 盤中最多追蹤前幾名的交易計畫
+
 UNIVERSE_JSON = "data/universe.json"
 RADAR_JSON = "data/radar.json"
 STOCK_INFO_CSV = "data/stock_info.csv"   # FinMind TaiwanStockInfo 快取

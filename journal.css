@@ -171,8 +171,14 @@ body{
 
 
 /* ---------- 導覽列 ---------- */
-.nav{display:flex;gap:7px;padding:12px 0 0}
+.nav{
+  display:flex;gap:7px;padding:12px 0 2px;
+  overflow-x:auto;margin:0 -14px;padding-left:14px;padding-right:14px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none}
 .nav a{
+  flex:0 0 auto;white-space:nowrap;
   font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;
   text-decoration:none;color:var(--muted);
   background:var(--panel);border:1px solid var(--line);

@@ -1,0 +1,47 @@
+name: 盤中觸發提醒
+
+# 只更新 data/intraday.json，不會重算排名、勝率、EV、PF，也不碰回測。
+# 台股 09:00–13:30 每 5 分鐘跑一次（GitHub cron 用 UTC，台北 = UTC+8）。
+# 註：GitHub 的排程在尖峰時段可能延遲數分鐘，頁面會顯示實際資料時間。
+on:
+  schedule:
+    - cron: "*/5 1-5 * * 1-5"     # 台北 09:00–13:55
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: intraday
+  cancel-in-progress: true        # 上一輪還沒跑完就直接換新的，不排隊
+
+jobs:
+  quote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install requests
+
+      - name: 抓即時報價並判斷觸發狀態
+        run: python scripts/intraday.py
+
+      - name: 提交盤中狀態
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/intraday.json || true
+          if git diff --staged --quiet; then
+            echo "狀態沒有變動"
+          else
+            git commit -m "盤中狀態 $(TZ=Asia/Taipei date '+%H:%M')"
+            # 盤中每 5 分鐘一次，可能撞到別的 workflow 在推，失敗就等下一輪
+            git pull --rebase --autostash || true
+            git push || echo "推送失敗，等下一輪"
+          fi
