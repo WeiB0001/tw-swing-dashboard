@@ -67,13 +67,83 @@ def build_plan(f: dict, res: dict) -> dict:
     t1 = max(t1, trigger + 0.8 * atr)                # 目標一定要在觸發價之上，否則 RR 會變負數
     t2 = max(target, t1 + 1.0 * atr, trigger + 2.5 * atr)
 
+    # ----------------------------------------------------------------
+    # 進場判定：只回答「現在適不適合進場」，不影響選股模型與排名
+    # ----------------------------------------------------------------
+    kind = res.get("kind") or ""
+    vol = float(f.get("vol_ratio") or 0)
+    breakout_kind = kind == "帶量突破"
+
+    # 判定基準：突破型看有沒有站上前 20 日高，回檔／轉強型看有沒有站回 MA5
+    if breakout_kind:
+        ref = float(f.get("high20_prev") or 0)
+        ref_label = "前 20 日高"
+    else:
+        ref = float(f.get("ma5") or 0)
+        ref_label = "MA5"
+    confirmed = ref > 0 and close >= ref
+
+    # 量能分級
+    if vol >= 1.0:
+        vol_tier, vol_text = "ok", "量能確認（%.2f×）" % vol
+    elif vol >= 0.7:
+        vol_tier, vol_text = "weak", "量能普通（%.2f×）" % vol
+    else:
+        vol_tier, vol_text = "bad", "⚠ 量能不足（%.2f×），不追價" % vol
+
+    if status == "禁止追價":
+        entry_icon, entry_status = "⛔", "禁止追價"
+        entry_note = note
+    elif not confirmed:
+        entry_icon, entry_status = "🟡", "等待確認，不建議立即進場"
+        entry_note = "收盤 %.2f 尚未站上%s %.2f" % (close, ref_label, ref) if ref > 0 \
+            else "缺少判定基準價，無法確認"
+    elif vol_tier == "bad":
+        entry_icon, entry_status = "⚠", "量能不足，不追價"
+        entry_note = "收盤已站上%s，但%s" % (ref_label, vol_text)
+    elif breakout_kind:
+        # 突破型：收盤站上前高且量能 >= 1.0 才算收盤確認
+        entry_icon, entry_status = "🟢", "收盤確認，可觀察進場"
+        entry_note = "收盤 %.2f 站上%s %.2f，%s" % (close, ref_label, ref, vol_text)
+    elif vol_tier == "ok":
+        entry_icon, entry_status = "🟢", "收盤確認，可觀察進場"
+        entry_note = "收盤站回%s %.2f，%s" % (ref_label, ref, vol_text)
+    else:
+        entry_icon, entry_status = "🟡", "等待確認，不建議立即進場"
+        entry_note = "收盤站回%s %.2f，但%s" % (ref_label, ref, vol_text)
+
     risk_amt = trigger - stop
     reward_amt = t1 - trigger
     rr = (reward_amt / risk_amt) if risk_amt > 0 else None
 
+    # RR 警示：只提醒，不改任何歷史 EV 或排名
+    if rr is None or not _ok(rr):
+        rr_tier, rr_tag = "na", "風報無法估算"
+    elif rr >= 1.5:
+        rr_tier, rr_tag = "good", "✓ 風報佳（%.2f）" % rr
+    elif rr >= 1.0:
+        rr_tier, rr_tag = "fair", "⚠ 風報普通（%.2f）" % rr
+    else:
+        rr_tier, rr_tag = "poor", "⚠ 風報偏差（%.2f），不追價" % rr
+
+    dist_trigger = (trigger / close - 1) * 100 if close > 0 else None
+
     return {
         "available": True,
         "status": status,
+        # --- 進場判定（只回答現在適不適合進場）---
+        "entry_icon": entry_icon,
+        "entry_status": entry_status,
+        "entry_note": entry_note,
+        "ref_price": round(ref, 2) if ref > 0 else None,
+        "ref_label": ref_label,
+        "vol_ratio": round(vol, 2),
+        "vol_tier": vol_tier,
+        "rr_tier": rr_tier,
+        "rr_tag": rr_tag,
+        "dist_trigger_pct": round(dist_trigger, 2) if dist_trigger is not None else None,
+        # 盤中狀態要有真實報價才能判斷，這裡一律 False，不偽造
+        "intraday_checked": False,
         "note": note,
         "trigger": round(trigger, 2),
         "invalidation": round(invalidation, 2),

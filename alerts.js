@@ -26,7 +26,7 @@
 
   var STATUS = {
     waiting: "未觸發",
-    triggered: "已突破觸發價",
+    triggered: "🟠 盤中突破，待收盤確認",
     near_stop: "接近停損",
     stopped: "已觸及停損",
     target: "已達目標一"

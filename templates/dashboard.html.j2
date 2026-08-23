@@ -336,6 +336,23 @@ header{padding:20px 0 14px}
 .plan-grid span{font-size:10.5px;color:var(--muted)}
 .plan-grid b{font-size:14px;font-weight:700}
 
+/* 進場判定：只回答「現在適不適合進場」，跟排名無關 */
+.entry{margin:9px 0 4px;padding:9px 11px;border-radius:9px;
+  background:#0F151C;border:1px solid #232C36}
+.entry-go{border-color:#1E5138}
+.entry-wait{border-color:#4A3A18}
+.entry-weak{border-color:#4A3A18}
+.entry-bad,.entry-no{border-color:#5A2530}
+.entry-st{font-size:14px;font-weight:800;color:var(--text)}
+.entry-go .entry-st{color:#6EE7A8}
+.entry-wait .entry-st{color:#F2C14E}
+.entry-bad .entry-st,.entry-no .entry-st{color:#FF8A96}
+.entry-note{font-size:11.5px;color:#6E7A88;line-height:1.65;margin-top:4px}
+.entry-facts{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:7px;font-size:12px;color:var(--muted)}
+.entry-facts b{color:#B9C4D0;font-family:ui-monospace,Menlo,monospace;font-weight:700}
+.entry-rr{margin-top:6px;font-size:12px;font-weight:700}
+.rr-good{color:#6EE7A8}.rr-fair{color:#F2C14E}.rr-poor{color:#FF8A96}.rr-na{color:#6E7A88}
+
 .pf{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px}
 .pf-top{display:flex;flex-wrap:wrap;gap:9px 18px}
 .pf-top div{display:flex;flex-direction:column;gap:1px}
@@ -839,6 +856,20 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         {% if r.plan and r.plan.available %}
         <div class="plan plan-{{ 'go' if r.plan.status == '可觀察進場' else ('no' if r.plan.status == '禁止追價' else 'wait') }}">
           <div class="plan-head">明日交易計畫 · <b>{{ r.plan.status }}</b></div>
+          {% if r.plan.entry_status %}
+          <div class="entry entry-{{ r.plan.vol_tier if r.plan.entry_icon == '⚠' else ('go' if r.plan.entry_icon == '🟢' else ('no' if r.plan.entry_icon == '⛔' else 'wait')) }}">
+            <div class="entry-st">{{ r.plan.entry_icon }} {{ r.plan.entry_status }}</div>
+            <div class="entry-note">{{ r.plan.entry_note }}</div>
+            <div class="entry-facts">
+              <span>距觸發價 <b>{{ '%+.2f'|format(r.plan.dist_trigger_pct) }}%</b></span>
+              <span>量能 <b>{{ '%.2f'|format(r.plan.vol_ratio) }}×</b></span>
+              <span>RR <b>{{ '%.2f'|format(r.plan.rr) if r.plan.rr else '--' }}</b></span>
+              <span>失效價 <b>{{ '%.2f'|format(r.plan.invalidation) }}</b></span>
+            </div>
+            <div class="entry-rr rr-{{ r.plan.rr_tier }}">{{ r.plan.rr_tag }}</div>
+            <div class="entry-note">盤中是否已突破，請看<a href="alerts.html">盤中提醒</a>；這裡只用收盤資料判斷。</div>
+          </div>
+          {% endif %}
           <div class="plan-note">{{ r.plan.note }}</div>
           <div class="plan-grid">
             <div><span>觸發價</span><b class="mono">{{ '%.2f'|format(r.plan.trigger) }}</b></div>
