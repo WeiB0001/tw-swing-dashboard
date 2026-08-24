@@ -202,11 +202,15 @@ def build_demo_payload() -> dict:
     except Exception as e:
         import logging; logging.getLogger("demo").warning("示範雷達產生失敗：%s", e)
 
-    from build import add_edges
+    from build import add_edges, add_final_score, sort_by_final
     signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), 23456.78)
+    add_final_score(rows)
+    rows = sort_by_final(rows)
+    # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
+    top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows
     add_edges(rows[: C.INITIAL_VISIBLE * 2])
 
     return {

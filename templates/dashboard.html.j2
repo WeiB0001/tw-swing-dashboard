@@ -294,6 +294,13 @@ header{padding:20px 0 14px}
 .stars dt{color:var(--muted);margin:0}
 .stars dd{margin:0;color:var(--signal);letter-spacing:-.5px;font-size:11.5px}
 .stars .risk-star dd{color:#FF7A5C}
+.final{
+  display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:9px;
+  padding:7px 10px;border-radius:9px;background:#12181F;border-left:3px solid var(--signal);
+  font-size:12px;color:var(--muted);
+}
+.final b{color:var(--signal);font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.final .sub{color:#5F6B78}
 .swing{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:9px;
   font-size:12.5px;color:var(--muted)}
 .swing b{color:#B9C4D0;font-weight:700}
@@ -757,7 +764,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.asset_type }}">
       <summary>
         <div class="row1">
-          <div class="rank {{ 'top' if r.rank <= 3 }}">{{ r.rank }}</div>
+          <div class="rank {{ 'top' if (r.final_rank or r.rank) <= 3 }}">{{ r.final_rank or r.rank }}</div>
           <div class="ident">
             <div class="code mono">{{ r.code }}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
               {% if r.mark and r.mark.badge %}<span class="mark" title="{{ r.mark.label }}">{{ r.mark.badge }}{% if r.mark.badge in ['🔥','↑','↓'] %}{{ r.mark.streak if r.mark.badge == '🔥' else (r.mark.rank_delta|abs) }}{% endif %}</span>{% endif %}</div>
@@ -789,7 +796,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         <div class="row3">
           <div class="headline">{{ r.headline }}</div>
-          {% if r.hist_calibrated is not none %}
+          {% if r.final_score is defined and r.final_score is not none %}
+          <div class="score mono">{{ '%.0f'|format(r.final_score) }}<span class="pct">/100</span><em>綜合分數</em></div>
+          {% elif r.hist_calibrated is not none %}
           <div class="score mono">{{ '%.0f'|format(r.hist_calibrated) }}<span class="pct">%</span><em>歷史勝率</em></div>
           {% else %}
           <div class="score mono nodata">{{ '%.0f'|format(r.score) }}<em>技術分數</em></div>
@@ -813,6 +822,15 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="risk-star"><dt>風險</dt><dd>{{ r.stars.risk }} {{ r.risk_level }}</dd></div>
         </dl>
 
+        {% if r.final_score is defined and r.final_score is not none %}
+        <div class="final">
+          <span>綜合 <b>{{ '%.0f'|format(r.final_score) }}/100</b></span>
+          <span>模型品質 <b>{{ '%.0f'|format(r.model_quality) }}</b>×65%</span>
+          <span>進場品質 <b>{{ '%.0f'|format(r.entry_quality) }}</b>×35%</span>
+          <span class="sub">模型名次 第 {{ r.rank }} 名</span>
+        </div>
+        {% endif %}
+
         <div class="swing">
           <span>預期 Swing 空間 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
           {% if r.hist_calibrated is not none %}
@@ -834,6 +852,22 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="why"><b>為什麼是它？</b>{{ r.edge or r.why }}</div>
         {% if r.spark %}
         <div class="spark" data-spark='{{ r.spark|tojson }}'></div>
+        {% endif %}
+
+        {% if r.final_parts %}
+        <div class="scoreline">
+          <b>綜合分數 {{ '%.0f'|format(r.final_score) }}/100</b>
+          ＝ 模型品質 {{ '%.0f'|format(r.model_quality) }} × 65% ＋ 進場品質 {{ '%.0f'|format(r.entry_quality) }} × 35%
+          <br><span class="muted">
+          模型品質：EV {{ r.final_parts.model.ev }}、勝率 {{ r.final_parts.model.winrate }}、
+          PF {{ r.final_parts.model.pf }}、回撤 {{ r.final_parts.model.mdd }}、技術分數 {{ r.final_parts.model.tech }}<br>
+          進場品質：收盤確認 {{ r.final_parts.entry.confirm }}、量能 {{ r.final_parts.entry.volume }}、
+          RR {{ r.final_parts.entry.rr }}、距觸發價 {{ r.final_parts.entry.distance }}<br>
+          全部標準化成 0～100 後加權；沒有歷史樣本的項目以中性 50 代入。
+          這一層<b>沒有改動任何模型</b>，EV、勝率、PF、回測、walk-forward 全部照舊。
+          清單順序先分 🟢 可觀察 → 🟡 等待確認 → 🔴 不追價，同層內才比綜合分數。
+          </span>
+        </div>
         {% endif %}
 
         <div class="scoreline">
@@ -1035,7 +1069,19 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 方法說明 ===================== -->
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
-    <h3>排名依據：歷史勝率優先，技術分數只是分層特徵</h3>
+    <h3>清單順序：先看進場狀態，再看綜合分數</h3>
+    卡片上的名次是<b>綜合排名</b>：先分成 🟢 可觀察進場 → 🟡 等待確認 → 🔴 不追價三層，
+    同一層內才比綜合分數。所以一檔模型很看好但今天量能不足的股票，會排在
+    模型分數較低、但今天收盤確認的股票後面——這回答的是「今天適不適合進場」。<br><br>
+
+    <b>綜合分數</b> ＝ 模型品質 × 65% ＋ 進場品質 × 35%（各自標準化成 0～100）<br>
+    <b>模型品質</b>：EV 30%、平滑勝率 25%、PF 20%、平均回撤 10%、技術分數 15%<br>
+    <b>進場品質</b>：收盤是否站上基準價 40%、量能倍數 25%、RR 25%、距觸發價 10%<br>
+    沒有歷史樣本的項目以中性 50 代入，不會因為缺資料被懲罰或加分。<br>
+    這一層<b>沒有改動任何模型</b>——EV、勝率、PF、回測、walk-forward 全部照舊，
+    每張卡片也仍然標示原本的<b>模型名次</b>。<br><br>
+
+    <h3>模型名次的依據：歷史勝率優先，技術分數只是分層特徵</h3>
     首頁名次的第一順位是<b>歷史平滑勝率</b>，不是技術分數。做法是：
     先用技術面把每檔標的歸類成「型態 ＋ 分數級距」（例如「帶量突破 ＋ 65–75 分」），
     再去查回測資料裡同一類訊號歷史上贏過幾次。<br><br>

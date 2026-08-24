@@ -169,6 +169,14 @@ OTHERS_MIN_SCORE = 45             # 技術分數低於此值不列入「亮眼�
 OTHERS_TOP_N = 30                 # 分頁最多顯示幾檔
 OTHERS_JSON = "data/others.json"
 
+# --- 綜合分數（只是把既有數字重新加權呈現，不改任何模型）---
+FINAL_W_MODEL = 0.65      # 模型品質佔比
+FINAL_W_ENTRY = 0.35      # 進場品質佔比
+# 模型品質內部權重（總和 1.0）
+FINAL_MODEL_W = {"ev": 0.30, "winrate": 0.25, "pf": 0.20, "mdd": 0.10, "tech": 0.15}
+# 進場品質內部權重（總和 1.0）
+FINAL_ENTRY_W = {"confirm": 0.40, "volume": 0.25, "rr": 0.25, "distance": 0.10}
+
 # --- 卡片展開的迷你價量圖 ---
 SPARK_BARS = 40                   # 取最近幾根日 K
 

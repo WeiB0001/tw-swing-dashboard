@@ -280,6 +280,10 @@ def run_live() -> dict:
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), idx_close)
+    add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
+    rows = sort_by_final(rows)
+    # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
+    top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows                 # 顯示順序改用綜合排名，rank 欄位不變
     add_edges(rows[: C.INITIAL_VISIBLE * 2])   # 只有會被看到的前段需要這句話
 
     # --- 其他產業：不進首頁，只挑亮眼的另開一頁 ---
@@ -332,6 +336,101 @@ def run_live() -> dict:
         "backtest": _backtest_summary(bt),
         "rows": top,
     }
+
+
+def _clamp100(x) -> float:
+    try:
+        v = float(x)
+        if v != v:
+            return 0.0
+        return max(0.0, min(100.0, v))
+    except Exception:
+        return 0.0
+
+
+def _scale(x, lo, hi) -> float:
+    """把一個值線性映射到 0～100，超出範圍就夾住。"""
+    try:
+        x = float(x)
+        if x != x or hi == lo:
+            return 0.0
+        return _clamp100((x - lo) / (hi - lo) * 100)
+    except Exception:
+        return 0.0
+
+
+def add_final_score(rows: list[dict]) -> None:
+    """
+    綜合分數（0～100）＝ 65% 模型品質 ＋ 35% 進場品質。
+
+    **這一層完全不動任何模型**：EV、勝率、PF、MDD、技術分數、回測、walk-forward
+    全部沿用既有結果，只是把它們標準化後重新加權，回答「這檔現在整體看起來如何」。
+    原本的欄位一個都沒被覆蓋。
+
+    沒有歷史統計的（樣本不足）就用中性值 50 代入，不會因為缺資料被懲罰或加分。
+    """
+    if not rows:
+        return
+
+    for r in rows:
+        # ---- 模型品質：全部來自既有欄位 ----
+        ev = r.get("hist_expectancy")
+        wr = r.get("hist_calibrated")
+        pf = r.get("hist_pf")
+        mdd = r.get("hist_mdd")
+
+        m = {
+            # EV −1% ～ +2% 映射到 0～100；沒有樣本給中性 50
+            "ev": _scale(ev, -1.0, 2.0) if ev is not None else 50.0,
+            # 平滑勝率 40% ～ 65%
+            "winrate": _scale(wr, 40.0, 65.0) if wr is not None else 50.0,
+            # PF 0.8 ～ 2.0
+            "pf": _scale(pf, 0.8, 2.0) if pf is not None else 50.0,
+            # 回撤 −8% ～ 0%（越淺越高分）
+            "mdd": _scale(mdd, -8.0, 0.0) if mdd is not None else 50.0,
+            # 技術分數本來就是 0～100
+            "tech": _clamp100(r.get("score")),
+        }
+        model_q = sum(m[k] * w for k, w in C.FINAL_MODEL_W.items())
+
+        # ---- 進場品質：全部來自 plan 已經算好的欄位 ----
+        pl = r.get("plan") or {}
+        icon = pl.get("entry_icon") or ""
+        vol = pl.get("vol_ratio")
+        rr = pl.get("rr")
+        dist = pl.get("dist_trigger_pct")
+
+        confirm = {"🟢": 100.0, "🟡": 45.0, "⚠": 20.0, "⛔": 0.0}.get(icon, 30.0)
+        e = {
+            "confirm": confirm,
+            # 量能 0.6× ～ 2.0×
+            "volume": _scale(vol, 0.6, 2.0) if vol is not None else 30.0,
+            # RR 0.8 ～ 2.5
+            "rr": _scale(rr, 0.8, 2.5) if rr is not None else 30.0,
+            # 距觸發價越近越好：0% 滿分、5% 以上 0 分
+            "distance": _scale(-abs(dist), -5.0, 0.0) if dist is not None else 30.0,
+        }
+        entry_q = sum(e[k] * w for k, w in C.FINAL_ENTRY_W.items())
+
+        final = C.FINAL_W_MODEL * model_q + C.FINAL_W_ENTRY * entry_q
+        r["final_score"] = round(_clamp100(final), 1)
+        r["model_quality"] = round(_clamp100(model_q), 1)
+        r["entry_quality"] = round(_clamp100(entry_q), 1)
+        r["final_parts"] = {"model": {k: round(v, 1) for k, v in m.items()},
+                            "entry": {k: round(v, 1) for k, v in e.items()}}
+        # 進場狀態分層：🟢 可觀察 → 🟡 等待確認 → 🔴 不追價
+        r["entry_tier"] = 0 if icon == "🟢" else (1 if icon == "🟡" else 2)
+
+
+def sort_by_final(rows: list[dict]) -> list[dict]:
+    """
+    先依進場狀態分三層，同一層內再依綜合分數高到低。
+    **原本的 rank（模型名次）保持不變**，這只是另一種排列方式。
+    """
+    out = sorted(rows, key=lambda r: (r.get("entry_tier", 2), -r.get("final_score", 0)))
+    for i, r in enumerate(out, 1):
+        r["final_rank"] = i
+    return out
 
 
 def add_edges(rows: list[dict]) -> None:
