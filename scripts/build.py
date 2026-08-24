@@ -227,6 +227,12 @@ def run_live() -> dict:
             "證交所當日行情取得失敗，無法決定掃描池。"
             "可能是非交易日或 API 暫時異常。"
         )
+    snapshot = fetch.fetch_twse_snapshot()
+    if snapshot.empty:
+        raise RuntimeError(
+            "證交所當日行情取得失敗，無法決定掃描池。"
+            "可能是非交易日或 API 暫時異常。"
+        )
 
     # 先取得大盤實際交易日，確認股票快照是否真的為今天。
     market_index = fetch.fetch_market_index()
@@ -238,11 +244,8 @@ def run_live() -> dict:
             f"行情尚未更新：今天是 {today_str}，"
             f"證交所最新交易日仍是 {index_date}。"
         )
-    # 先取得大盤實際交易日，確認股票快照是否真的為今天。
-    market_index = fetch.fetch_market_index()
-    index_date = (market_index or {}).get("date")
-    today_str = now.strftime("%Y-%m-%d")
 
+    info = fetch.fetch_stock_info()
     if index_date and index_date != today_str:
         raise RuntimeError(
             f"行情尚未更新：今天是 {today_str}，"
