@@ -221,9 +221,23 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
 def run_live() -> dict:
     now = datetime.now(C.TZ)
 
-    snapshot = fetch.fetch_twse_snapshot()
+       snapshot = fetch.fetch_twse_snapshot()
     if snapshot.empty:
-        raise RuntimeError("證交所當日行情取得失敗，無法決定掃描池。可能是非交易日或 API 暫時異常。")
+        raise RuntimeError(
+            "證交所當日行情取得失敗，無法決定掃描池。"
+            "可能是非交易日或 API 暫時異常。"
+        )
+
+    # 先取得大盤實際交易日，確認股票快照是否真的為今天。
+    market_index = fetch.fetch_market_index()
+    index_date = (market_index or {}).get("date")
+    today_str = now.strftime("%Y-%m-%d")
+
+    if index_date and index_date != today_str:
+        raise RuntimeError(
+            f"行情尚未更新：今天是 {today_str}，"
+            f"證交所最新交易日仍是 {index_date}。"
+        )
 
     # --- 雙層股票池：Core 給首頁排行，Extended 給雷達與搜尋 ---
     info = fetch.fetch_stock_info()                 # 產業分類（7 天更新一次）
@@ -283,16 +297,11 @@ def run_live() -> dict:
     log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d｜大盤狀態 %s",
              scanned, strong, C.WEAK_SCORE, regime)
 
-    index_info = fetch.fetch_market_index()
+    i    index_info = market_index
 
     # 若大盤 API 有回傳實際日期，優先用大盤日期校正。
     # 避免出現頁面顯示今天，但實際收盤仍是前一個交易日。
-    index_date = (index_info or {}).get("date")
-    if index_date and index_date <= data_date:
-        data_date = index_date
-        trade_date = pd.Timestamp(data_date)
 
-    log.info("最終採用行情交易日：%s", data_date)
     
     idx_close = (index_info or {}).get("close")
     signals = tracking.update_signals(rows, data_date, regime)
