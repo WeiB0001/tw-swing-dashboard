@@ -238,7 +238,6 @@ def run_live() -> dict:
             f"行情尚未更新：今天是 {today_str}，"
             f"證交所最新交易日仍是 {index_date}。"
         )
-        )
 
     # 先取得大盤實際交易日，確認股票快照是否真的為今天。
     market_index = fetch.fetch_market_index()
