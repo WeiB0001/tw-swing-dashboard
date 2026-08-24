@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-08-24 18:43",
-    "generated_iso": "2026-08-24T18:43:11+08:00",
-    "trade_date": "2026-08-24",
-    "data_date": "2026-08-24",
+    "generated_at": "2026-08-24 19:20",
+    "generated_iso": "2026-08-24T19:20:33+08:00",
+    "trade_date": "2026-08-21",
+    "data_date": "2026-08-21",
     "scanned_count": 154,
     "qualified_count": 154,
     "universe_count": 155,
@@ -49,19 +49,19 @@
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": -0.54
+        "chg_pct": -0.75
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": -0.17
+        "chg_pct": -0.31
       }
     ],
     "forecast": {
       "available": true,
-      "point": -0.2,
-      "low": -1.59,
-      "high": 1.19,
-      "basis": "以那斯達克期貨 -0.54% 代入",
+      "point": -0.34,
+      "low": -1.73,
+      "high": 1.05,
+      "basis": "以那斯達克期貨 -0.75% 代入",
       "r2": 0.333,
       "samples": 250
     },
@@ -77,135 +77,135 @@
     "marks": {
       "2359": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 1
       },
       "3665": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 2
       },
       "3034": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 3
       },
       "2324": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 4
       },
       "4938": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 5
       },
       "2801": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 6
       },
       "2357": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 7
       },
       "3017": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 8
       },
       "8046": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 9
       },
       "6669": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 10
       },
       "2383": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 11
       },
       "2464": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 12
       },
       "2484": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 13
       },
       "3167": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 14
       },
       "6426": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 15
       },
       "2059": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 16
       },
       "2890": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 17
       },
       "2486": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 18
       }
     },
     "dropped": [],
     "new_count": 0,
-    "hot_count": 14,
-    "history_days": 3
+    "hot_count": 18,
+    "history_days": 4
   },
   "portfolio": {
     "initial": 100000.0,
@@ -222,7 +222,7 @@
         "code": "2359",
         "name": "所羅門",
         "entry": 159.0,
-        "held": 1,
+        "held": 2,
         "stop": 138.23,
         "target1": 177.75
       },
@@ -230,7 +230,7 @@
         "code": "3665",
         "name": "貿聯-KY",
         "entry": 2270.0,
-        "held": 1,
+        "held": 2,
         "stop": 2129.96,
         "target1": 2555.0
       },
@@ -245,7 +245,7 @@
     ],
     "pending": 0,
     "recent": [],
-    "days": 3
+    "days": 4
   },
   "backtest": {
     "generated_at": "2026-08-23 00:19",
@@ -496,9 +496,9 @@
       "regime": "sideways",
       "rank": 18,
       "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 18
       },
@@ -983,8 +983,8 @@
       "rank": 13,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 13
       },
@@ -1008,7 +1008,7 @@
       },
       "entry_tier": 0,
       "final_rank": 3,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "2882",
@@ -1462,8 +1462,8 @@
       "rank": 2,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 2
       },
@@ -1487,7 +1487,7 @@
       },
       "entry_tier": 0,
       "final_rank": 5,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "3702",
@@ -2409,8 +2409,8 @@
       "rank": 4,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 4
       },
@@ -2434,7 +2434,7 @@
       },
       "entry_tier": 1,
       "final_rank": 9,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "2474",
@@ -3587,8 +3587,8 @@
       "rank": 5,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 5
       },
@@ -3612,7 +3612,7 @@
       },
       "entry_tier": 1,
       "final_rank": 14,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "2393",
@@ -4315,8 +4315,8 @@
       "rank": 12,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 12
       },
@@ -4340,7 +4340,7 @@
       },
       "entry_tier": 1,
       "final_rank": 17,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "8996",
@@ -4801,8 +4801,8 @@
       "rank": 9,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 9
       },
@@ -5047,8 +5047,8 @@
       "rank": 11,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 11
       },
@@ -5072,7 +5072,7 @@
       },
       "entry_tier": 1,
       "final_rank": 20,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "2359",
@@ -5286,8 +5286,8 @@
       "rank": 1,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 1
       },
@@ -5525,8 +5525,8 @@
       "rank": 10,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 10
       },
@@ -5550,7 +5550,7 @@
       },
       "entry_tier": 1,
       "final_rank": 22,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "3017",
@@ -5771,8 +5771,8 @@
       "rank": 8,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 8
       },
@@ -5796,7 +5796,7 @@
       },
       "entry_tier": 1,
       "final_rank": 23,
-      "edge": "已連續入榜 3 日，訊號沒有斷過。"
+      "edge": "已連續入榜 4 日，訊號沒有斷過。"
     },
     {
       "code": "3044",
@@ -21810,8 +21810,8 @@
       "rank": 14,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 14
       },
@@ -22063,9 +22063,9 @@
       "regime": "sideways",
       "rank": 15,
       "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 15
       },
@@ -23709,9 +23709,9 @@
       "regime": "sideways",
       "rank": 17,
       "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 17
       },
@@ -24442,8 +24442,8 @@
       "rank": 3,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 3
       },
@@ -27371,9 +27371,9 @@
       "regime": "sideways",
       "rank": 16,
       "mark": {
-        "badge": "",
-        "label": "",
-        "streak": 2,
+        "badge": "🔥",
+        "label": "連續入榜 3 日",
+        "streak": 3,
         "rank_delta": 0,
         "prev_rank": 16
       },
@@ -28092,8 +28092,8 @@
       "rank": 6,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 6
       },
@@ -28330,8 +28330,8 @@
       "rank": 7,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 3 日",
-        "streak": 3,
+        "label": "連續入榜 4 日",
+        "streak": 4,
         "rank_delta": 0,
         "prev_rank": 7
       },
