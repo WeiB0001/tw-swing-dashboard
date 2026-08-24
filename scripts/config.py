@@ -409,14 +409,8 @@ US_MIN_R2 = 0.05              # R² 低於此值就不顯示預估值（關聯�
 # ---------------------------------------------------------------------------
 # 資料來源
 # ---------------------------------------------------------------------------
-TWSE_STOCK_DAY_ALL = (
-    "https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL"
-)
-
-TWSE_INDEX_HIST = (
-    "https://www.twse.com.tw/rwd/zh/afterTrading/"
-    "MI_INDEX?response=json"
-)
+TWSE_STOCK_DAY_ALL = "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL"
+TWSE_INDEX_HIST = "https://openapi.twse.com.tw/v1/indicesReport/MI_5MINS_HIST"
 TWSE_MARKET_INDEX = "https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX"
 FINMIND_API = "https://api.finmindtrade.com/api/v4/data"
 
