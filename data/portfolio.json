@@ -7,7 +7,7 @@
    "shares": 209,
    "entry": 159.0,
    "entry_date": "2026-08-23",
-   "held": 0,
+   "held": 1,
    "stop": 138.23,
    "target1": 177.75,
    "pattern": "多頭回檔"
@@ -18,7 +18,7 @@
    "shares": 14,
    "entry": 2270.0,
    "entry_date": "2026-08-23",
-   "held": 0,
+   "held": 1,
    "stop": 2129.96,
    "target1": 2555.0,
    "pattern": "多頭回檔"
@@ -47,8 +47,13 @@
    "date": "2026-08-23",
    "equity": 98899.49,
    "index": 45224.29
+  },
+  {
+   "date": "2026-08-24",
+   "equity": 98041.49,
+   "index": 45224.29
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-08-23"
+ "last_date": "2026-08-24"
 }
