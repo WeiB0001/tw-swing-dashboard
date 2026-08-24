@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-08-24 19:20",
-    "generated_iso": "2026-08-24T19:20:33+08:00",
-    "trade_date": "2026-08-21",
-    "data_date": "2026-08-21",
+    "generated_at": "2026-08-24 20:29",
+    "generated_iso": "2026-08-24T20:29:16+08:00",
+    "trade_date": "2026-08-24",
+    "data_date": "2026-08-24",
     "scanned_count": 154,
     "qualified_count": 154,
     "universe_count": 155,
@@ -49,19 +49,19 @@
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": -0.75
+        "chg_pct": -0.55
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": -0.31
+        "chg_pct": -0.15
       }
     ],
     "forecast": {
       "available": true,
-      "point": -0.34,
-      "low": -1.73,
-      "high": 1.05,
-      "basis": "以那斯達克期貨 -0.75% 代入",
+      "point": -0.2,
+      "low": -1.59,
+      "high": 1.18,
+      "basis": "以那斯達克期貨 -0.55% 代入",
       "r2": 0.333,
       "samples": 250
     },
@@ -222,7 +222,7 @@
         "code": "2359",
         "name": "所羅門",
         "entry": 159.0,
-        "held": 2,
+        "held": 3,
         "stop": 138.23,
         "target1": 177.75
       },
@@ -230,7 +230,7 @@
         "code": "3665",
         "name": "貿聯-KY",
         "entry": 2270.0,
-        "held": 2,
+        "held": 3,
         "stop": 2129.96,
         "target1": 2555.0
       },
@@ -245,7 +245,7 @@
     ],
     "pending": 0,
     "recent": [],
-    "days": 4
+    "days": 5
   },
   "backtest": {
     "generated_at": "2026-08-23 00:19",
