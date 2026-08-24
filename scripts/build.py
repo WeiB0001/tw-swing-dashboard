@@ -309,7 +309,7 @@ def run_live() -> dict:
     log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d｜大盤狀態 %s",
              scanned, strong, C.WEAK_SCORE, regime)
 
-    i    index_info = market_index
+        index_info = market_index
 
     # 若大盤 API 有回傳實際日期，優先用大盤日期校正。
     # 避免出現頁面顯示今天，但實際收盤仍是前一個交易日。
