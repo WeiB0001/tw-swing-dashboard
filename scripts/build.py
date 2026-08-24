@@ -241,7 +241,17 @@ def run_live() -> dict:
     if not hist_map:
         raise RuntimeError("歷史日線全部取得失敗，無法計算指標。")
 
-    trade_date = pd.Timestamp(now.date())
+    # 使用歷史行情中最後一個實際交易日，
+    # 不直接使用 GitHub Actions 的執行日期。
+    data_date = _data_date(hist_map, now)
+    trade_date = pd.Timestamp(data_date)
+
+    log.info(
+        "本次執行時間：%s｜實際行情日期：%s",
+        now.strftime("%Y-%m-%d %H:%M:%S"),
+        data_date,
+    )
+
     rows = []
     for _, srow in universe.iterrows():
         code = srow["code"]
@@ -273,13 +283,22 @@ def run_live() -> dict:
     log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d｜大盤狀態 %s",
              scanned, strong, C.WEAK_SCORE, regime)
 
-    data_date = _data_date(hist_map, now)
     index_info = fetch.fetch_market_index()
+
+    # 若大盤 API 有回傳實際日期，優先用大盤日期校正。
+    # 避免出現頁面顯示今天，但實際收盤仍是前一個交易日。
+    index_date = (index_info or {}).get("date")
+    if index_date and index_date <= data_date:
+        data_date = index_date
+        trade_date = pd.Timestamp(data_date)
+
+    log.info("最終採用行情交易日：%s", data_date)
+    
     idx_close = (index_info or {}).get("close")
-    signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
+    signals = tracking.update_signals(rows, data_date, regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
-    portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), idx_close)
+        portfolio = tracking.update_portfolio(rows, data_date, idx_close)
     add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
     rows = sort_by_final(rows)
     # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
@@ -305,8 +324,7 @@ def run_live() -> dict:
         radar_rows = radar_mod.scan([c for c in extended if c["symbol"] in hist_map],
                                     hist_map, core_codes)
         uni_stats = universe_mod.stats(universe, extended)
-        _write_universe(universe, extended, radar_rows, uni_stats,
-                        now.strftime("%Y-%m-%d"))
+        _write_universe(universe, extended, radar_rows, uni_stats, data_date)
     except Exception as e:
         log.warning("雷達掃描失敗（不影響首頁）：%s", e)
 
@@ -314,8 +332,10 @@ def run_live() -> dict:
         "meta": {
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
             "generated_iso": now.isoformat(timespec="seconds"),
-            "trade_date": now.strftime("%Y-%m-%d"),      # 這次執行的日期
-            "data_date": data_date,                       # 行情資料實際的交易日
+            # trade_date 必須代表實際行情交易日，
+            # 不能使用 GitHub Actions 的執行日期。
+            "trade_date": data_date,
+            "data_date": data_date,                      # 行情資料實際的交易日
             "scanned_count": scanned,
             "qualified_count": len(rows),
             "universe_count": len(universe),
