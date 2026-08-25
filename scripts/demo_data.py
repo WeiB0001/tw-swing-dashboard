@@ -18,6 +18,8 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
+import pathlib
+
 import numpy as np
 import pandas as pd
 
@@ -159,6 +161,10 @@ def build_demo_payload() -> dict:
             from build import make_spark
             row = build_row(code, name, feats, scoring.score_stock(feats))
             row["spark"] = make_spark(hist)
+            try:
+                row["prev_low"] = float(hist["low"].iloc[-2])   # 判斷是否跌破昨日低點
+            except Exception:
+                row["prev_low"] = None
             row["demo_archetype"] = kind
             rows.append(row)
 
@@ -195,6 +201,15 @@ def build_demo_payload() -> dict:
         _write_universe(core_df, cand, rd, universe_mod.stats(core_df, cand),
                         now.strftime("%Y-%m-%d"))
         # 示範用的「其他產業」：借用後段幾檔當範例
+        # 明日強勢預測（示範）
+        import momentum as momentum_mod, json as _json
+        snap = pd.DataFrame([{"code": c, "name": dict(DEMO_STOCKS).get(c, ""),
+                              "chg_pct": float(indicators.compute_features(h)["chg_pct"])}
+                             for c, h in hist_map.items()])
+        fc = momentum_mod.build_forecast(snap, hist_map, cand, now.strftime("%Y-%m-%d"))
+        (pathlib.Path(__file__).resolve().parent.parent / C.MOMENTUM_JSON).write_text(
+            _json.dumps(fc, ensure_ascii=False), encoding="utf-8")
+
         from build import _scan_others
         others = [{"symbol": c, "name": dict(DEMO_STOCKS).get(c, ""), "sector": "傳產範例",
                    "market": "TWSE"} for c in list(hist_map)[-25:]]
@@ -202,11 +217,12 @@ def build_demo_payload() -> dict:
     except Exception as e:
         import logging; logging.getLogger("demo").warning("示範雷達產生失敗：%s", e)
 
-    from build import add_edges, add_final_score, sort_by_final
+    from build import add_edges, add_final_score, add_momentum, sort_by_final
     signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), 23456.78)
+    add_momentum(rows)
     add_final_score(rows)
     rows = sort_by_final(rows)
     # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）

@@ -336,3 +336,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 .tag.done{background:#12212B;border-color:#1E3A4A;color:#7FD1E8}
 .tag.live{background:#241C0D;border-color:#4A3A18;color:#F2C14E}
 footer a{color:#7E8B9A}
+
+/* 明日強勢預測 */
+.mo-hist{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:8px;padding:7px 10px;
+  border-radius:8px;background:#12181F;font-size:12px;color:var(--muted)}
+.mo-hist b{color:#B9C4D0;font-family:ui-monospace,Menlo,monospace;font-weight:700}
+.mo-hist .src{color:#5F6B78;font-size:11px}
+.mo-hist.none{color:#8E7B63}
+.mo-list{font-size:11.5px;line-height:1.7;margin-top:6px}
+.mo-list.ok{color:#8FD9B0}
+.mo-list.bad{color:#FF9E80}

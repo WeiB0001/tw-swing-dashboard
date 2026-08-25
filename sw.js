@@ -25,6 +25,8 @@ const SHELL = [
   "./others.js",
   "./alerts.html",
   "./alerts.js",
+  "./momentum.html",
+  "./momentum.js",
   "./journal.js",
   "./journal.css",
   "./manifest.webmanifest",

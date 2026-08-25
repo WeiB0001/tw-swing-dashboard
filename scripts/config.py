@@ -177,6 +177,31 @@ FINAL_MODEL_W = {"ev": 0.30, "winrate": 0.25, "pf": 0.20, "mdd": 0.10, "tech": 0
 # 進場品質內部權重（總和 1.0）
 FINAL_ENTRY_W = {"confirm": 0.40, "volume": 0.25, "rr": 0.25, "distance": 0.10}
 
+# --- 動能確認（只影響首頁最終排序，不碰 EV / 勝率 / 回測）---
+MOM_GOOD_CHG_LOW = 0.5      # 今日漲幅落在這個帶最好：不是沒動，也不是已經噴出
+MOM_GOOD_CHG_HIGH = 4.0
+MOM_RR_MIN = 1.2            # RR 達此值算加分
+MOM_VOL_MIN = 1.0           # 量能達此值算確認
+MOM_BLOWOFF = 1.5           # 爆量門檻（配上收黑就是警訊）
+MOM_DROP_BAD = -3.0         # 今日跌幅低於此值視為轉弱
+MOM_BIAS_MAX = 8.0          # 距 MA20 正乖離超過此值視為追高
+MOM_GREEN_MIN = 60          # 動能分數達此值才可能列入「強勢確認」
+MOM_PENALTY = 12            # 每個風險項目扣幾分
+# 同一層內的排序：綜合分數與動能分數的權重
+RANK_W_FINAL = 0.6
+RANK_W_MOM = 0.4
+TOP_SLOTS = 5               # 前幾名優先只從「強勢確認」挑
+
+# --- 明日強勢預測（獨立分頁，不影響首頁排行與任何模型）---
+MOM_MIN_CHG = 3.0             # 當日漲幅達此值才列入強勢股
+MOM_EXTREME_CHG = 9.5         # 超過此漲幅視為極端（接近漲停），隔日容易開高走低
+MOM_MIN_TURNOVER = 50_000_000 # 成交金額門檻
+MOM_MIN_SAMPLES = 30          # 歷史樣本不足此數就往上退一層，再不足就標「樣本不足」
+MOM_TOP_N = 30                # 產出前幾名（頁面顯示 Top 10）
+STRONG_HISTORY_JSON = "data/strong_history.json"
+STRONG_HISTORY_DAYS = 120     # 每日強勢榜保留幾天
+MOMENTUM_JSON = "data/momentum_forecast.json"
+
 # --- 卡片展開的迷你價量圖 ---
 SPARK_BARS = 40                   # 取最近幾根日 K
 

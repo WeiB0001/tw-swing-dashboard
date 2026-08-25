@@ -32,6 +32,7 @@ import config as C
 import fetch
 import indicators
 import plan
+import momentum as momentum_mod
 import radar as radar_mod
 import tracking
 import universe as universe_mod
@@ -101,6 +102,8 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
         "atr": f["atr"],
         "atr_pct": f["atr_pct"],
         "macd_hist": f["macd_hist"],
+        "macd_hist_prev": f.get("macd_hist_prev"),
+        "ma5_slope": f.get("ma5_slope"),
         "target": f["target"],
         "support": f["support"],
         # --- 新的排名結果 ---
@@ -255,6 +258,10 @@ def run_live() -> dict:
                 continue
             row = build_row(code, name_map.get(code, code), feats, scoring.score_stock(feats))
             row["spark"] = make_spark(hist)
+            try:
+                row["prev_low"] = float(hist["low"].iloc[-2])   # 判斷是否跌破昨日低點
+            except Exception:
+                row["prev_low"] = None
             rows.append(row)
         except Exception as e:
             log.warning("%s 計算失敗：%s", code, e)
@@ -284,11 +291,23 @@ def run_live() -> dict:
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, data_date, idx_close)
+    add_momentum(rows)                         # 動能確認：只用今天的價量分層
     add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
     rows = sort_by_final(rows)
     # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
     top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows                 # 顯示順序改用綜合排名，rank 欄位不變
     add_edges(rows[: C.INITIAL_VISIBLE * 2])   # 只有會被看到的前段需要這句話
+
+    # --- 明日強勢預測：獨立分頁，只用既有 history 快取，不額外下載 ---
+    try:
+        fc = momentum_mod.build_forecast(snapshot, hist_map, extended, data_date)
+        (ROOT / C.MOMENTUM_JSON).parent.mkdir(parents=True, exist_ok=True)
+        (ROOT / C.MOMENTUM_JSON).write_text(
+            json.dumps(fc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        log.info("明日強勢預測：%d 檔候選（歷史樣本 %d 筆）",
+                 len(fc["rows"]), fc["stats"]["total_samples"])
+    except Exception as e:
+        log.warning("明日強勢預測失敗（不影響首頁）：%s", e)
 
     # --- 其他產業：不進首頁，只挑亮眼的另開一頁 ---
     try:
@@ -364,6 +383,94 @@ def _scale(x, lo, hi) -> float:
         return 0.0
 
 
+def add_momentum(rows: list[dict]) -> None:
+    """
+    動能確認（0～100）：只回答「今天有沒有出現上漲確認、有沒有追高風險」。
+
+    **不碰任何歷史模型**：EV、勝率、PF、技術分數、回測、walk-forward 全部照舊，
+    這裡只用今天的價量把標的分成三層，並在同一層內做最終排序。
+
+    加分項（符合越多分數越高）：
+      收盤站上基準價、量能 >= 1.0×、收盤 >= MA5、MA5 上彎、
+      MACD 柱不比昨天差、RR >= 1.2、今日漲幅落在 +0.5%～+4%
+
+    **今日大漲不是加分項**：漲幅超過 4% 就不再加分，避免整套變成追高策略。
+
+    扣分項（每項扣 MOM_PENALTY 分，且部分會直接打入 🔴 那一層）：
+      今日跌幅 < -3%、收盤跌破 MA5、爆量收黑、跌破昨日低點、
+      MACD 柱明顯轉弱、距 MA20 正乖離 > 8%
+    """
+    for r in rows:
+        pl = r.get("plan") or {}
+        chg = float(r.get("chg_pct") or 0)
+        close = float(r.get("close") or 0)
+        ma5 = float(r.get("ma5") or 0)
+        vol = float(r.get("vol_ratio") or 0)
+        # 用交易計畫的 RR（觸發價→停損 vs 觸發價→目標一），
+        # 跟卡片上「明日交易計畫」顯示的是同一個數字，避免兩個 RR 打架
+        rr = float(pl.get("rr") or r.get("rr_ratio") or 0)
+        bias = float(r.get("bias20") or 0)
+        slope5 = float(r.get("ma5_slope") or 0)
+        mh = r.get("macd_hist")
+        mhp = r.get("macd_hist_prev")
+        confirmed = (pl.get("entry_icon") == "🟢")
+
+        # ---- 加分 ----
+        plus = [
+            (2.0, confirmed, "收盤站上基準價"),
+            (1.0, vol >= C.MOM_VOL_MIN, "量能 %.2f×" % vol),
+            (1.0, close >= ma5 > 0, "收盤站上 MA5"),
+            (1.0, slope5 > 0, "MA5 上彎"),
+            (1.0, mh is not None and mhp is not None and mh >= mhp, "MACD 柱未轉弱"),
+            (1.0, rr >= C.MOM_RR_MIN, "RR %.2f" % rr),
+            (1.0, C.MOM_GOOD_CHG_LOW <= chg <= C.MOM_GOOD_CHG_HIGH,
+             "今日 %+.2f%% 在合理帶" % chg),
+        ]
+        got = sum(w for w, ok, _ in plus if ok)
+        total = sum(w for w, _, _ in plus)
+        hits = [t for _, ok, t in plus if ok]
+
+        # ---- 扣分 ----
+        # 用「收盤」跌破昨日低點，不是盤中最低——
+        # 盤中殺一下又拉回來的不算轉弱，否則上漲的股票也會被誤判
+        broke_prev_low = False
+        pd_low = r.get("prev_low")
+        if pd_low and close:
+            broke_prev_low = close < float(pd_low)
+        macd_weak = (mh is not None and mhp is not None
+                     and mh < mhp and (mh < 0 or mh < mhp * 0.5))
+
+        minus = [
+            (chg < C.MOM_DROP_BAD, "今日跌 %.2f%%" % chg),
+            (ma5 > 0 and close < ma5, "收盤跌破 MA5"),
+            (vol >= C.MOM_BLOWOFF and chg < 0, "爆量收黑（%.2f×）" % vol),
+            (broke_prev_low, "收盤跌破昨日低點"),
+            (macd_weak, "MACD 柱明顯轉弱"),
+            (bias > C.MOM_BIAS_MAX, "距 MA20 乖離 %+.1f%%，追高風險" % bias),
+        ]
+        warns = [t for ok, t in minus if ok]
+
+        score = (got / total * 100) - len(warns) * C.MOM_PENALTY
+        r["momentum_score"] = round(max(0.0, min(100.0, score)), 1)
+        r["momentum_hits"] = hits
+        r["momentum_warns"] = warns
+
+        # ---- 三層 ----
+        # 這幾項只要中一個就是轉弱或追高，不該排在前面
+        hard = (chg < C.MOM_DROP_BAD or (ma5 > 0 and close < ma5)
+                or bias > C.MOM_BIAS_MAX or (vol >= C.MOM_BLOWOFF and chg < 0)
+                or broke_prev_low)
+        if hard:
+            tier, label, icon = 2, "轉弱／追高風險", "🔴"
+        elif confirmed and vol >= C.MOM_VOL_MIN and r["momentum_score"] >= C.MOM_GREEN_MIN:
+            tier, label, icon = 0, "強勢確認", "🟢"
+        else:
+            tier, label, icon = 1, "潛力觀察", "🟡"
+        r["momentum_tier"] = tier
+        r["momentum_label"] = label
+        r["momentum_icon"] = icon
+
+
 def add_final_score(rows: list[dict]) -> None:
     """
     綜合分數（0～100）＝ 65% 模型品質 ＋ 35% 進場品質。
@@ -429,12 +536,28 @@ def add_final_score(rows: list[dict]) -> None:
 
 def sort_by_final(rows: list[dict]) -> list[dict]:
     """
-    先依進場狀態分三層，同一層內再依綜合分數高到低。
-    **原本的 rank（模型名次）保持不變**，這只是另一種排列方式。
+    先依動能三層（🟢 強勢確認 → 🟡 潛力觀察 → 🔴 轉弱／追高），
+    同一層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
+
+    **原本的 rank（模型名次）保持不變**，這只是最終進場排序。
+    前 TOP_SLOTS 名優先只從 🟢 挑；不足才由 🟡 補入，並標記 top_fill，
+    卡片上會明說「這一檔是因為強勢確認不足 5 檔才補進來的」。
     """
-    out = sorted(rows, key=lambda r: (r.get("entry_tier", 2), -r.get("final_score", 0)))
+    def key(r):
+        blend = (C.RANK_W_FINAL * r.get("final_score", 0)
+                 + C.RANK_W_MOM * r.get("momentum_score", 0))
+        r["rank_score"] = round(blend, 1)
+        return (r.get("momentum_tier", 2), -blend)
+
+    out = sorted(rows, key=key)
+    green = sum(1 for r in out if r.get("momentum_tier") == 0)
     for i, r in enumerate(out, 1):
         r["final_rank"] = i
+        # 前幾名裡不是 🟢 的，就是因為強勢確認檔數不足才補上來
+        r["top_fill"] = bool(i <= C.TOP_SLOTS and r.get("momentum_tier", 2) != 0)
+    if green < C.TOP_SLOTS:
+        log.info("強勢確認只有 %d 檔，前 %d 名由潛力觀察補入 %d 檔",
+                 green, C.TOP_SLOTS, min(C.TOP_SLOTS, len(out)) - green)
     return out
 
 
@@ -484,6 +607,8 @@ def add_edges(rows: list[dict]) -> None:
         cands = []          # (優先度, 文字)
         mark = r.get("mark") or {}
         vol = float(r.get("vol_ratio") or 0)
+
+
         rr = float(r.get("rr_ratio") or 0)
         up = float(r.get("upside_pct") or 0)
         ev = r.get("hist_expectancy")

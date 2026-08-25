@@ -78,6 +78,11 @@ def render_html(payload: dict) -> str:
         signals=payload.get("signals") or None,
         portfolio=payload.get("portfolio") or None,
         pattern_min_samples=C.PATTERN_MIN_SAMPLES,
+        top_slots=C.TOP_SLOTS,
+        mom_high=C.MOM_GOOD_CHG_HIGH,
+        mom_low=C.MOM_GOOD_CHG_LOW,
+        mom_green=C.MOM_GREEN_MIN,
+        mom_bias=C.MOM_BIAS_MAX,
         price_map_json=_price_map_json(payload["rows"]),
         paper_max_positions=C.PAPER_MAX_POSITIONS,
         paper_max_hold=C.PAPER_MAX_HOLD_DAYS,
@@ -125,7 +130,8 @@ def write_outputs(payload: dict) -> None:
     for tpl, out in [("portfolio.html.j2", "portfolio.html"),
                      ("radar.html.j2", "radar.html"),
                      ("others.html.j2", "others.html"),
-                     ("alerts.html.j2", "alerts.html")]:
+                     ("alerts.html.j2", "alerts.html"),
+                     ("momentum.html.j2", "momentum.html")]:
         try:
             page = render_static(tpl)
             (ROOT / out).write_text(page, encoding="utf-8")

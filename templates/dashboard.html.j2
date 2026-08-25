@@ -312,6 +312,22 @@ header{padding:20px 0 14px}
   font-size:12px;color:var(--muted);
 }
 .final b{color:var(--signal);font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.final .fill{color:#F2C14E;flex-basis:100%}
+.mtier{
+  display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;
+  font-size:10.5px;font-weight:700;vertical-align:1px;
+  background:#1E2530;border:1px solid #2E3846;color:#93A1B1;
+}
+.mtier.m0{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.mtier.m1{background:#2A2412;border-color:#544720;color:#F2C14E}
+.mtier.m2{background:#2A1418;border-color:#5A2530;color:#FF8A96}
+.mom{margin:0 0 13px;padding:10px 12px;border-radius:10px;background:#12181F;border-left:3px solid #3A4552}
+.mom0{border-left-color:#2E9E6B}.mom1{border-left-color:#8A7430}.mom2{border-left-color:#8A3A3A}
+.mom-head{font-size:13.5px;font-weight:800;color:var(--text)}
+.mom-head b{float:right;font-family:ui-monospace,Menlo,monospace;color:var(--signal)}
+.mom-list{font-size:12px;line-height:1.7;margin-top:6px;clear:both}
+.mom-list.ok{color:#8FD9B0}.mom-list.bad{color:#FF9E80}
+.mom-note{font-size:11px;color:#6E7A88;line-height:1.65;margin-top:7px}
 .final .sub{color:#5F6B78}
 .swing{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:9px;
   font-size:12.5px;color:var(--muted)}
@@ -615,9 +631,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   <nav class="nav">
     <a href="./" class="on">首頁</a>
-    <a href="alerts.html">盤中提醒</a>
     <a href="radar.html">雷達</a>
-    <a href="others.html">其他產業</a>
+    <a href="momentum.html">明日強勢</a>
     <a href="portfolio.html">我的交易</a>
   </nav>
 
@@ -776,12 +791,29 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% if rows %}
     {% for r in rows %}
     <details class="card" data-code="{{ r.code }}" data-rank="{{ r.rank }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.score }}"
-             {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.asset_type }}">
+             {% if r.momentum_icon %}
+        <div class="mom mom{{ r.momentum_tier }}">
+          <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
+            <b>動能 {{ '%.0f'|format(r.momentum_score) }}/100</b></div>
+          {% if r.momentum_hits %}
+          <div class="mom-list ok">已確認：{{ r.momentum_hits|join('、') }}</div>
+          {% endif %}
+          {% if r.momentum_warns %}
+          <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
+          {% endif %}
+          <div class="mom-note">
+            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
+            今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
+          </div>
+        </div>
+        {% endif %}
+
+        {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.asset_type }}">
       <summary>
         <div class="row1">
           <div class="rank {{ 'top' if (r.final_rank or r.rank) <= 3 }}">{{ r.final_rank or r.rank }}</div>
           <div class="ident">
-            <div class="code mono">{{ r.code }}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
+            <div class="code mono">{{ r.code }}{% if r.momentum_icon %}<span class="mtier m{{ r.momentum_tier }}">{{ r.momentum_icon }} {{ r.momentum_label }}</span>{% endif %}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
               {% if r.mark and r.mark.badge %}<span class="mark" title="{{ r.mark.label }}">{{ r.mark.badge }}{% if r.mark.badge in ['🔥','↑','↓'] %}{{ r.mark.streak if r.mark.badge == '🔥' else (r.mark.rank_delta|abs) }}{% endif %}</span>{% endif %}</div>
             <div class="name">{{ r.name }}</div>
           </div>
@@ -842,7 +874,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <span>綜合 <b>{{ '%.0f'|format(r.final_score) }}/100</b></span>
           <span>模型品質 <b>{{ '%.0f'|format(r.model_quality) }}</b>×65%</span>
           <span>進場品質 <b>{{ '%.0f'|format(r.entry_quality) }}</b>×35%</span>
+          <span>動能 <b>{{ '%.0f'|format(r.momentum_score) }}</b></span>
           <span class="sub">模型名次 第 {{ r.rank }} 名</span>
+          {% if r.top_fill %}
+          <span class="fill">強勢確認不足 {{ top_slots }} 檔，這一檔是由潛力觀察補入</span>
+          {% endif %}
         </div>
         {% endif %}
 
@@ -880,7 +916,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           RR {{ r.final_parts.entry.rr }}、距觸發價 {{ r.final_parts.entry.distance }}<br>
           全部標準化成 0～100 後加權；沒有歷史樣本的項目以中性 50 代入。
           這一層<b>沒有改動任何模型</b>，EV、勝率、PF、回測、walk-forward 全部照舊。
-          清單順序先分 🟢 可觀察 → 🟡 等待確認 → 🔴 不追價，同層內才比綜合分數。
+          清單順序先分 🟢 強勢確認 → 🟡 潛力觀察 → 🔴 轉弱／追高，
+          同層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
           </span>
         </div>
         {% endif %}
@@ -901,6 +938,23 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           {% endif %}
           </span>
         </div>
+
+        {% if r.momentum_icon %}
+        <div class="mom mom{{ r.momentum_tier }}">
+          <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
+            <b>動能 {{ '%.0f'|format(r.momentum_score) }}/100</b></div>
+          {% if r.momentum_hits %}
+          <div class="mom-list ok">已確認：{{ r.momentum_hits|join('、') }}</div>
+          {% endif %}
+          {% if r.momentum_warns %}
+          <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
+          {% endif %}
+          <div class="mom-note">
+            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
+            今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
+          </div>
+        </div>
+        {% endif %}
 
         {% if r.plan and r.plan.available %}
         <div class="plan plan-{{ 'go' if r.plan.status == '可觀察進場' else ('no' if r.plan.status == '禁止追價' else 'wait') }}">
@@ -1085,9 +1139,17 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
     <h3>清單順序：先看進場狀態，再看綜合分數</h3>
-    卡片上的名次是<b>綜合排名</b>：先分成 🟢 可觀察進場 → 🟡 等待確認 → 🔴 不追價三層，
-    同一層內才比綜合分數。所以一檔模型很看好但今天量能不足的股票，會排在
-    模型分數較低、但今天收盤確認的股票後面——這回答的是「今天適不適合進場」。<br><br>
+    卡片上的名次是<b>最終進場排名</b>，先依<b>動能確認</b>分三層：<br>
+    🟢 <b>強勢確認</b>（收盤站上基準價、量能達標、動能分數 {{ mom_green }} 以上）→
+    🟡 <b>潛力觀察</b>（模型看好但今天還沒確認）→
+    🔴 <b>轉弱／追高風險</b>（今日跌逾 3%、收盤跌破 MA5、爆量收黑、收盤跌破昨日低點、
+    MACD 明顯轉弱，或距 MA20 乖離超過 {{ mom_bias }}%）。<br>
+    同一層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
+    前 {{ top_slots }} 名優先只從 🟢 挑，不足才由 🟡 補入，並在卡片上明說是補進來的。<br><br>
+
+    <b>動能不是追高</b>：今日漲幅落在 +{{ mom_low }}%～+{{ mom_high }}% 才加分，
+    超過 {{ mom_high }}% 不再加分。今天已經噴出的股票不會因為漲很多而排到前面。
+    動能只影響排序與風險過濾，<b>EV、勝率、PF、技術分數、回測、walk-forward 一律不變</b>。<br><br>
 
     <b>綜合分數</b> ＝ 模型品質 × 65% ＋ 進場品質 × 35%（各自標準化成 0～100）<br>
     <b>模型品質</b>：EV 30%、平滑勝率 25%、PF 20%、平均回撤 10%、技術分數 15%<br>

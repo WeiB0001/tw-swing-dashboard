@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0E1116">
-<meta name="description" content="其他產業：非科技金融 ETF 的產業中，技術面表現亮眼的標的。">
-<title>其他產業 · 台股 Swing</title>
+<meta name="description" content="明日強勢預測：用今日強勢股的歷史規律，找出隔日仍可能續強的候選。">
+<title>明日強勢 · 台股 Swing</title>
 
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon.png" sizes="32x32">
@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="其他產業">
+<meta name="apple-mobile-web-app-title" content="明日強勢">
 <link rel="stylesheet" href="journal.css">
 <style>
 .rd-search{
@@ -57,32 +57,41 @@
   <nav class="nav">
     <a href="./">首頁</a>
     <a href="radar.html">雷達</a>
-    <a href="momentum.html">明日強勢</a>
+    <a href="momentum.html" class="on">明日強勢</a>
     <a href="portfolio.html">我的交易</a>
   </nav>
 
   <header>
-    <div class="eyebrow">OTHER SECTORS</div>
-    <h1 class="title">其他產業亮眼 <span id="rd-total">--</span> 檔</h1>
+    <div class="eyebrow">TOMORROW MOMENTUM</div>
+    <h1 class="title">明日強勢預測 Top 10</h1>
     <div class="jn-warn" id="rd-stats">
-      首頁只掃科技電子、金融與 ETF。這一頁補上<b>其他產業</b>——食品、航運、生技、傳產、營建等，
-      用<b>同一套技術分數</b>排名，但只列出達標的標的，不會混進首頁排行。
-      這裡沒有歷史勝率分層，只有技術面分數，參考價值比首頁低一階。
+      這一頁回答的是「<b>今天漲很多的股票，明天還會不會續強</b>」——跟首頁的排行是兩件事，
+      首頁的模型、EV、勝率、回測完全沒有被動到。<br>
+      特徵取自<b>今日收盤</b>，歷史報酬一律從<b>隔日開盤</b>才開始算，不會偷看未來。
+      強勢股隔日的波動比一般標的大，開高走低是常態，這裡只是把歷史規律攤開給你看。
     </div>
   </header>
 
   <div class="jn">
     <div class="rd-search">
       <span>🔍</span>
-      <input id="rd-q" type="search" placeholder="搜尋代號、名稱或產業（例如 長榮、航運）"
+      <input id="rd-q" type="search" placeholder="搜尋代號或名稱"
              autocomplete="off" enterkeyhint="search">
     </div>
 
-    <div class="rd-row-filters" role="group" aria-label="排序">
-      <span class="lbl">排序</span>
-      <button type="button" class="rd-btn" data-sort="score" aria-pressed="true">技術分數</button>
-      <button type="button" class="rd-btn" data-sort="chg" aria-pressed="false">今日漲幅</button>
-      <button type="button" class="rd-btn" data-sort="vol" aria-pressed="false">量能倍數</button>
+    <div class="rd-row-filters" role="group" aria-label="產業">
+      <span class="lbl">產業</span>
+      <button type="button" class="rd-btn" data-kind="all" aria-pressed="true">全部</button>
+      <button type="button" class="rd-btn" data-kind="tech" aria-pressed="false">科技</button>
+      <button type="button" class="rd-btn" data-kind="finance" aria-pressed="false">金融</button>
+      <button type="button" class="rd-btn" data-kind="etf" aria-pressed="false">ETF</button>
+    </div>
+
+    <div class="rd-row-filters" role="group" aria-label="市場">
+      <span class="lbl">市場</span>
+      <button type="button" class="rd-btn" data-market="all" aria-pressed="true">全部</button>
+      <button type="button" class="rd-btn" data-market="TWSE" aria-pressed="false">上市</button>
+      <button type="button" class="rd-btn" data-market="TPEx" aria-pressed="false">上櫃</button>
     </div>
 
     <div class="rd-count" id="rd-count"></div>
@@ -92,12 +101,12 @@
 
   <div class="disclaimer-bottom">
     ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
-    這一頁只有技術分數，沒有經過首頁的歷史勝率統計。<br>
-    分數高不代表會漲，這些產業的股價常受原物料、匯率、政策等基本面因素主導。
+    強勢股的隔日波動大，追高風險高，開高走低是常態。<br>
+    歷史勝率是過去相似型態的統計，不是未來的成功機率，樣本不足時會直接標示。
   </div>
 
   <footer>
-    其他產業 · 非科技金融 ETF 的技術面排行<br>
+    明日強勢預測 · 今日強勢股的隔日續強統計<br>
     <a href="./">回排行榜首頁</a> · <a href="alerts.html">盤中提醒</a> · <a href="others.html">其他產業</a>
   </footer>
 </div>
@@ -107,7 +116,7 @@ if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
   navigator.serviceWorker.register("./sw.js").catch(function () {});
 }
 </script>
-<script src="others.js" defer></script>
+<script src="momentum.js" defer></script>
 
 </body>
 </html>
