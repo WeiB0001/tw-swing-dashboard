@@ -219,6 +219,7 @@ def build_demo_payload() -> dict:
             "generated_iso": now.isoformat(timespec="seconds"),
             "trade_date": now.strftime("%Y-%m-%d"),
             "data_date": now.strftime("%Y-%m-%d"),
+            "run_type": "close",
             "scanned_count": len(rows),
             "qualified_count": len(rows),
             "universe_count": len(DEMO_STOCKS),

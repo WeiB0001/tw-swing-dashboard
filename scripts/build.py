@@ -274,12 +274,16 @@ def run_live() -> dict:
              scanned, strong, C.WEAK_SCORE, regime)
 
     data_date = _data_date(hist_map, now)
+    # 早上那班只更新海外盤與排名依據（台股還沒開盤，行情仍是前一交易日的）
+    run_type = "morning" if now.hour < 12 else "close"
     index_info = fetch.fetch_market_index()
     idx_close = (index_info or {}).get("close")
-    signals = tracking.update_signals(rows, now.strftime("%Y-%m-%d"), regime)
+    # 用 data_date 而不是執行日：早上那班的行情日跟前一天收盤班相同，
+    # tracking 會判定為同一天而不重複記錄、也不會用舊開盤價成交
+    signals = tracking.update_signals(rows, data_date, regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
-    portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), idx_close)
+    portfolio = tracking.update_portfolio(rows, data_date, idx_close)
     add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
     rows = sort_by_final(rows)
     # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
@@ -315,6 +319,7 @@ def run_live() -> dict:
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
             "generated_iso": now.isoformat(timespec="seconds"),
             "trade_date": now.strftime("%Y-%m-%d"),      # 這次執行的日期
+            "run_type": run_type,                         # morning（海外盤）/ close（收盤）
             "data_date": data_date,                       # 行情資料實際的交易日
             "scanned_count": scanned,
             "qualified_count": len(rows),

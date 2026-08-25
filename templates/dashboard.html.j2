@@ -211,6 +211,14 @@ header{padding:20px 0 14px}
   font-size:12.5px;color:var(--muted);margin-top:10px;
 }
 .stamp b{color:#B9C4D0;font-weight:600}
+.btn-refresh{
+  font:inherit;font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;
+}
+.btn-refresh:disabled{opacity:.6;cursor:default}
+.btn-refresh:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.refresh-msg{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+.refresh-msg.new{color:#6EE7A8}
 
 /* ---------- 區段標題 ---------- */
 .section-head{
@@ -683,10 +691,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="demo-flag">示範模式：以下價格與訊號皆為模擬資料，用來預覽版面，非真實行情。</div>
     {% endif %}
 
+    <div class="refresh-msg" id="refresh-msg" hidden></div>
     <div class="stamp">
       <span id="freshness">更新時間 <b class="mono">{{ meta.generated_at }}</b></span>
-      <span>資料日 <b class="mono">{{ meta.data_date or meta.trade_date }}</b></span>
-      <span>更新於 <b class="mono">{{ meta.trade_date }}</b></span>
+      <span>行情資料日 <b class="mono">{{ meta.data_date or meta.trade_date }}</b></span>
+      <span>{{ '06:00 海外盤更新' if meta.run_type == 'morning' else '16:00 收盤更新' }}
+        <b class="mono">{{ meta.generated_at }}</b></span>
+      <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
       <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
     </div>
 
@@ -1183,6 +1194,74 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   window.addEventListener("online", syncOnline);
   window.addEventListener("offline", syncOnline);
   syncOnline();
+
+  /* ---- 3.5) 更新數據按鈕 ------------------------------------------------
+     這是靜態網頁，資料由 GitHub Actions 每天 06:00（海外盤）與 16:00（收盤）
+     產生。按鈕做的是「去伺服器確認有沒有新資料」，不是叫伺服器重算：
+       1. 繞過快取抓 data/latest.json
+       2. 比對 generated_at，有更新就清掉 Service Worker 的舊快取並重新載入
+       3. 沒有就直接告訴你目前是哪一班的資料、下一班什麼時候
+     ---------------------------------------------------------------------- */
+  var refreshBtn = document.getElementById("btn-refresh");
+  var refreshMsg = document.getElementById("refresh-msg");
+  var CURRENT_STAMP = "{{ meta.generated_at }}";
+
+  function showMsg(text, isNew) {
+    if (!refreshMsg) return;
+    refreshMsg.hidden = false;
+    refreshMsg.textContent = text;
+    refreshMsg.classList.toggle("new", !!isNew);
+  }
+
+  function nextRunHint() {
+    // 排程是台北時間，不能用裝置本地時區算，否則人在國外會顯示錯誤
+    var h;
+    try {
+      h = parseInt(new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Taipei", hour: "2-digit", hour12: false
+      }).format(new Date()), 10);
+    } catch (e) {
+      h = new Date().getHours();
+    }
+    if (h < 6) return "下一次更新：今天 06:00（海外盤）";
+    if (h < 16) return "下一次更新：今天 16:00（台股收盤）";
+    return "下一次更新：明天 06:00（海外盤）";
+  }
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener("click", function () {
+      refreshBtn.disabled = true;
+      refreshBtn.textContent = "↻ 檢查中…";
+      showMsg("正在向伺服器確認有沒有新資料…", false);
+
+      fetch("./data/latest.json?t=" + Date.now(), { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("bad")); })
+        .then(function (j) {
+          var stamp = (j.meta && j.meta.generated_at) || "";
+          if (stamp && stamp !== CURRENT_STAMP) {
+            showMsg("有新資料（" + stamp + "），正在重新載入…", true);
+            // 清掉 Service Worker 的舊快取，確保拿到新的 index.html
+            if (window.caches && caches.keys) {
+              caches.keys().then(function (ks) {
+                return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+              }).then(function () { location.reload(); });
+            } else {
+              location.reload();
+            }
+            return;
+          }
+          var kind = (j.meta && j.meta.run_type) === "morning" ? "06:00 海外盤" : "16:00 收盤";
+          showMsg("已是最新：" + kind + "，更新於 " + (stamp || "--") + "。" + nextRunHint(), false);
+          refreshBtn.disabled = false;
+          refreshBtn.textContent = "↻ 更新數據";
+        })
+        .catch(function () {
+          showMsg("連不到伺服器，顯示的是本機快取的資料。" + nextRunHint(), false);
+          refreshBtn.disabled = false;
+          refreshBtn.textContent = "↻ 更新數據";
+        });
+    });
+  }
 
   /* ---- 4) 有新收盤資料就提示（避免看到手機快取的舊版） ---- */
   var updateBar = document.getElementById("toast-update");
