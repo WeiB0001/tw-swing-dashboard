@@ -216,6 +216,10 @@ header{padding:20px 0 14px}
   background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;
 }
 .btn-refresh:disabled{opacity:.6;cursor:default}
+.card.live-px .px .close::after{
+  content:"·新";font-size:9.5px;color:#6EE7A8;font-weight:700;
+  margin-left:3px;vertical-align:2px;
+}
 .btn-refresh:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 .refresh-msg{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
 .refresh-msg.new{color:#6EE7A8}
@@ -1228,6 +1232,70 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     return "下一次更新：明天 06:00（海外盤）";
   }
 
+  /* 盤中／收盤價的來源：GitHub Pages 部署有頻率限制，不可能每 5 分鐘重新部署，
+     所以直接讀 raw.githubusercontent.com 上剛 commit 的檔案，讀不到才退回同站。 */
+  function intradaySources() {
+    var urls = [];
+    var m = (location.hostname || "").match(/^([^.]+)\.github\.io$/);
+    if (m) {
+      var repo = (location.pathname.split("/").filter(Boolean)[0]) || "";
+      if (repo && repo.indexOf(".html") < 0) {
+        ["main", "master"].forEach(function (br) {
+          urls.push("https://raw.githubusercontent.com/" + m[1] + "/" + repo +
+                    "/" + br + "/data/intraday.json");
+        });
+      }
+    }
+    urls.push("./data/intraday.json");
+    return urls;
+  }
+
+  function fetchIntraday() {
+    var urls = intradaySources(), i = 0;
+    function next() {
+      if (i >= urls.length) return Promise.reject(new Error("none"));
+      var u = urls[i++];
+      return fetch(u + (u.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(),
+                   { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("bad")); })
+        .catch(next);
+    }
+    return next();
+  }
+
+  /* 把最新價套到卡片上。**只換價格，不重算排名與分數**——
+     那些要用完整歷史資料在伺服器端算，瀏覽器裡做不到，也不該假裝做得到。 */
+  function applyLivePrices(j) {
+    var rows = (j && j.rows) || [];
+    var n = 0;
+    rows.forEach(function (r) {
+      if (!r || !r.symbol || !(r.price > 0)) return;
+      var c = document.querySelector('details.card[data-code="' + r.symbol + '"]');
+      if (!c) return;
+
+      c.dataset.price = r.price;
+      c.dataset.lot = Math.round(r.price * 1000);
+
+      var closeEl = c.querySelector(".px .close");
+      if (closeEl) closeEl.textContent = r.price.toFixed(2);
+
+      var chgEl = c.querySelector(".px .chg");
+      if (chgEl && r.chg_pct !== null && r.chg_pct !== undefined) {
+        chgEl.textContent = (r.chg_pct > 0 ? "+" : "") + r.chg_pct.toFixed(2) + "%";
+        chgEl.className = "chg mono " +
+          (r.chg_pct > 0 ? "up" : (r.chg_pct < 0 ? "down" : "flat"));
+      }
+
+      var lotEl = c.querySelector(".lot");
+      if (lotEl) lotEl.textContent = "一張 " + (r.price * 1000 / 10000).toFixed(1) + " 萬";
+
+      c.classList.add("live-px");
+      n++;
+    });
+    if (n) render();          // 預算配置要用新價重算張數
+    return n;
+  }
+
   if (refreshBtn) {
     refreshBtn.addEventListener("click", function () {
       refreshBtn.disabled = true;
@@ -1250,10 +1318,27 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             }
             return;
           }
+          // 排行沒有重算，但價格可以用盤中／收盤那支抓到的最新價即時更新
           var kind = (j.meta && j.meta.run_type) === "morning" ? "06:00 海外盤" : "16:00 收盤";
-          showMsg("已是最新：" + kind + "，更新於 " + (stamp || "--") + "。" + nextRunHint(), false);
-          refreshBtn.disabled = false;
-          refreshBtn.textContent = "↻ 更新數據";
+          fetchIntraday().then(function (q) {
+            var n = applyLivePrices(q);
+            if (n) {
+              var when = q.data_time || q.generated_at || "";
+              var label = q.is_closing_price ? "今日收盤價" : (q.market_open ? "盤中最新價" : "最後成交價");
+              showMsg("已套用" + label + "（" + when + "，" + n + " 檔）。" +
+                      "排名與分數仍是 " + kind + "（" + (stamp || "--") + "）算的，" +
+                      "要等下一班才會用新價重算。", true);
+            } else {
+              showMsg("已是最新：" + kind + "，更新於 " + (stamp || "--") + "。" +
+                      (q && q.note ? q.note + " " : "") + nextRunHint(), false);
+            }
+            refreshBtn.disabled = false;
+            refreshBtn.textContent = "↻ 更新數據";
+          }).catch(function () {
+            showMsg("已是最新：" + kind + "，更新於 " + (stamp || "--") + "。" + nextRunHint(), false);
+            refreshBtn.disabled = false;
+            refreshBtn.textContent = "↻ 更新數據";
+          });
         })
         .catch(function () {
           showMsg("連不到伺服器，顯示的是本機快取的資料。" + nextRunHint(), false);

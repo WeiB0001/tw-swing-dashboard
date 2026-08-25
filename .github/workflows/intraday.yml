@@ -1,11 +1,11 @@
 name: 盤中觸發提醒
 
 # 只更新 data/intraday.json，不會重算排名、勝率、EV、PF，也不碰回測。
-# 台股 09:00–13:30 每 5 分鐘跑一次（GitHub cron 用 UTC，台北 = UTC+8）。
+# 台股 09:00–14:00 每 5 分鐘跑一次（收盤後多跑 30 分鐘，確保抓到今日收盤價）（GitHub cron 用 UTC，台北 = UTC+8）。
 # 註：GitHub 的排程在尖峰時段可能延遲數分鐘，頁面會顯示實際資料時間。
 on:
   schedule:
-    - cron: "*/5 1-5 * * 1-5"     # 台北 09:00–13:55
+    - cron: "*/5 1-6 * * 1-5"     # 台北 09:00–14:55（程式本身只處理到 14:00）
   workflow_dispatch:
 
 permissions:

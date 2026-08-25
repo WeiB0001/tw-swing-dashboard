@@ -45,11 +45,26 @@ HEADERS = {
 
 
 # ---------------------------------------------------------------------------
-def is_market_open(now: datetime) -> bool:
-    """台股交易時段：週一～週五 09:00–13:30。收盤後與假日都算休市。"""
+def session_of(now: datetime) -> str | None:
+    """
+    回傳這個時間點屬於哪一段，休市回 None。
+      open  ── 09:00–13:30 盤中
+      close ── 13:30–14:00 收盤後，此時 MIS 給的就是今日收盤價
+    多留 30 分鐘是為了讓收盤價確定落袋，首頁的「更新數據」才拿得到今日收盤。
+    """
     if now.weekday() >= 5:
-        return False
-    return dtime(9, 0) <= now.time() <= dtime(13, 35)
+        return None
+    t = now.time()
+    if dtime(9, 0) <= t <= dtime(13, 30):
+        return "open"
+    if dtime(13, 30) < t <= dtime(14, 0):
+        return "close"
+    return None
+
+
+def is_market_open(now: datetime) -> bool:
+    """盤中（09:00–13:30）。收盤後與假日都不算。"""
+    return session_of(now) == "open"
 
 
 def _num(x):
@@ -122,17 +137,20 @@ def status_of(price: float, plan: dict, vol_ratio: float | None) -> tuple[str, s
 
 def build() -> dict:
     now = datetime.now(C.TZ)
-    open_now = is_market_open(now)
+    session = session_of(now)
+    open_now = session == "open"
 
     payload = {
         "generated_at": now.strftime("%Y-%m-%d %H:%M:%S"),
         "market_open": open_now,
+        "session": session,                      # open / close / None
+        "is_closing_price": session == "close",  # True 代表 price 就是今日收盤價
         "trade_date": now.strftime("%Y-%m-%d"),
         "source": "證交所 MIS 即時行情（延遲報價）",
         "rows": [],
     }
 
-    if not open_now:
+    if session is None:
         payload["note"] = "目前非交易時段，盤中狀態顯示為 --。收盤後請看首頁的正式排行。"
         log.info("非交易時段，只寫出休市狀態")
         return payload
@@ -209,6 +227,8 @@ def build() -> dict:
             },
         })
 
+    if session == "close":
+        payload["note"] = "已收盤，價格為今日收盤價。排名與分數仍是上一次收盤後計算的結果。"
     if data_times:
         newest = max(data_times)
         payload["data_time"] = newest.strftime("%Y-%m-%d %H:%M:%S")
