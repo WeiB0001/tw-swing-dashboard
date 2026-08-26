@@ -791,24 +791,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% if rows %}
     {% for r in rows %}
     <details class="card" data-code="{{ r.code }}" data-rank="{{ r.rank }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.score }}"
-             {% if r.momentum_icon %}
-        <div class="mom mom{{ r.momentum_tier }}">
-          <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
-            <b>動能 {{ '%.0f'|format(r.momentum_score) }}/100</b></div>
-          {% if r.momentum_hits %}
-          <div class="mom-list ok">已確認：{{ r.momentum_hits|join('、') }}</div>
-          {% endif %}
-          {% if r.momentum_warns %}
-          <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
-          {% endif %}
-          <div class="mom-note">
-            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
-            今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
-          </div>
-        </div>
-        {% endif %}
-
-        {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.asset_type }}">
+             {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.asset_type }}">
       <summary>
         <div class="row1">
           <div class="rank {{ 'top' if (r.final_rank or r.rank) <= 3 }}">{{ r.final_rank or r.rank }}</div>
@@ -938,6 +921,23 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           {% endif %}
           </span>
         </div>
+
+        {% if r.momentum_icon %}
+        <div class="mom mom{{ r.momentum_tier }}">
+          <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
+            <b>動能 {{ '%.0f'|format(r.momentum_score) }}/100</b></div>
+          {% if r.momentum_hits %}
+          <div class="mom-list ok">已確認：{{ r.momentum_hits|join('、') }}</div>
+          {% endif %}
+          {% if r.momentum_warns %}
+          <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
+          {% endif %}
+          <div class="mom-note">
+            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
+            今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
+          </div>
+        </div>
+        {% endif %}
 
         {% if r.momentum_icon %}
         <div class="mom mom{{ r.momentum_tier }}">

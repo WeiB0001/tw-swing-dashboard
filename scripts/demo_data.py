@@ -210,7 +210,10 @@ def build_demo_payload() -> dict:
         (pathlib.Path(__file__).resolve().parent.parent / C.MOMENTUM_JSON).write_text(
             _json.dumps(fc, ensure_ascii=False), encoding="utf-8")
 
-        from build import _scan_others
+        from build import _scan_others, _write_latest_prices
+        _write_latest_prices(snap, hist_map, now.strftime("%Y-%m-%d"), now,
+                             dict(DEMO_STOCKS))
+
         others = [{"symbol": c, "name": dict(DEMO_STOCKS).get(c, ""), "sector": "傳產範例",
                    "market": "TWSE"} for c in list(hist_map)[-25:]]
         _scan_others(others, hist_map, now.strftime("%Y-%m-%d"))

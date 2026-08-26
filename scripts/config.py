@@ -209,6 +209,9 @@ SPARK_BARS = 40                   # 取最近幾根日 K
 INTRADAY_JSON = "data/intraday.json"
 INTRADAY_MAX = 20              # 盤中最多追蹤前幾名的交易計畫
 
+# 全站共用的最新行情（首頁 Top10 與我的交易都讀這一份，不各自保存舊價）
+LATEST_PRICES_JSON = "data/latest_prices.json"
+
 UNIVERSE_JSON = "data/universe.json"
 RADAR_JSON = "data/radar.json"
 STOCK_INFO_CSV = "data/stock_info.csv"   # FinMind TaiwanStockInfo 快取

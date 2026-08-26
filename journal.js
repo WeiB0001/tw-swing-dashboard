@@ -19,32 +19,84 @@
   var PXKEY = "tw_swing_latest_prices_v1";      // 最新價快取（首頁寫、交易頁讀）
 
   /* ---------------------------------------------------------------
-     價格：首頁有就寫進 LocalStorage，交易頁直接讀
-     格式 {代號: [名稱, 收盤, 昨收]}
+     最新價：首頁與這一頁共用同一份 data/latest_prices.json。
+
+     取得順序（不各自保存舊價，也不多打任何 API）：
+       1. data/latest_prices.json ── 每次 Actions 更新行情後產生，涵蓋全市場，
+          所以就算某檔沒進首頁 Top10 也查得到價格
+       2. 頁面內嵌的 #px-data ── 首頁本來就有，當作第一次載入前的墊底
+       3. LocalStorage 快取 ── 行情抓不到時沿用最後有效價，並顯示它的資料日
+
+     每一檔都帶自己的 market_date，非交易日或停牌就顯示那一檔最後有效的交易日，
+     **不會用 0 或舊資料假裝成今天的價格**。
      --------------------------------------------------------------- */
-  var PX = {}, PX_DATE = "";
+  var PX = {}, PX_DATE = "", PX_UPDATED = "", PX_SOURCE = "";
+
+  function adoptPrices(map, date, updated, source) {
+    if (!map) return false;
+    var n = 0;
+    for (var k in map) { if (map.hasOwnProperty(k)) { n++; break; } }
+    if (!n) return false;
+    PX = map;
+    PX_DATE = date || "";
+    PX_UPDATED = updated || "";
+    PX_SOURCE = source || "";
+    try {
+      localStorage.setItem(PXKEY, JSON.stringify({
+        date: PX_DATE, updated_at: PX_UPDATED, source: PX_SOURCE, prices: PX
+      }));
+    } catch (e) {}
+    return true;
+  }
 
   (function initPrices() {
+    // 先用頁面內嵌的（首頁才有），沒有就用上次快取，確保第一次 render 就有價格
     var el = document.getElementById("px-data");
     if (el) {
       try {
-        PX = JSON.parse(el.textContent || "{}") || {};
-        PX_DATE = el.dataset.date || "";
-        localStorage.setItem(PXKEY, JSON.stringify({ date: PX_DATE, prices: PX }));
-      } catch (e) { PX = PX || {}; }
-      return;
+        var m = JSON.parse(el.textContent || "{}") || {};
+        var conv = {};
+        for (var k in m) {
+          if (!m.hasOwnProperty(k)) continue;
+          conv[k] = { name: m[k][0], price: m[k][1], prev_close: m[k][2] };
+        }
+        adoptPrices(conv, el.dataset.date || "", "", "頁面內嵌");
+      } catch (e) {}
     }
-    try {
-      var raw = JSON.parse(localStorage.getItem(PXKEY) || "{}");
-      PX = (raw && raw.prices) || {};
-      PX_DATE = (raw && raw.date) || "";
-    } catch (e) { PX = {}; }
+    if (!PX_DATE) {
+      try {
+        var raw = JSON.parse(localStorage.getItem(PXKEY) || "{}");
+        if (raw && raw.prices) {
+          PX = raw.prices;
+          PX_DATE = raw.date || "";
+          PX_UPDATED = raw.updated_at || "";
+          PX_SOURCE = raw.source || "本機快取";
+        }
+      } catch (e) {}
+    }
   })();
+
+  function refreshPrices() {
+    // 抓共用的最新行情；失敗就維持現有的（上面已經墊底過），不清空
+    return fetch("./data/latest_prices.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("bad")); })
+      .then(function (j) {
+        if (!j || !j.prices) return false;
+        return adoptPrices(j.prices, j.market_date, j.updated_at, j.source);
+      })
+      .catch(function () { return false; });
+  }
 
   function px(code) {
     var v = PX[String(code || "").trim()];
     if (!v) return null;
-    return { name: v[0], last: num(v[1]), prev: v[2] == null ? null : num(v[2]) };
+    if (Array.isArray(v)) {                       // 舊格式（頁面內嵌）也吃
+      return { name: v[0], last: num(v[1]), prev: v[2] == null ? null : num(v[2]),
+               date: PX_DATE };
+    }
+    return { name: v.name, last: num(v.price),
+             prev: v.prev_close == null ? null : num(v.prev_close),
+             date: v.market_date || PX_DATE };
   }
 
   /* ---------------- 小工具 ---------------- */
@@ -206,6 +258,7 @@
         "<span>持有中 <b>" + s.open + "</b> 檔</span>" +
         "<span>已結束 <b>" + s.closed + "</b> 筆</span>" +
         (PX_DATE ? "<span>報價日 <b>" + esc(PX_DATE) + "</b></span>" : "") +
+        (PX_UPDATED ? "<span>行情更新 <b>" + esc(PX_UPDATED) + "</b></span>" : "") +
         (s.unpriced ? "<span class='jn-note'>" + s.unpriced + " 檔暫無最新價</span>" : "");
     }
   }
@@ -559,4 +612,7 @@
   });
 
   render();
+
+  // 載入後再向伺服器要一次最新行情，拿到就重畫（買入紀錄不會被動到）
+  refreshPrices().then(function (ok) { if (ok) render(); });
 })();

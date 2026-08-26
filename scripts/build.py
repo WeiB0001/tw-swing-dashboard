@@ -298,6 +298,15 @@ def run_live() -> dict:
     top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows                 # 顯示順序改用綜合排名，rank 欄位不變
     add_edges(rows[: C.INITIAL_VISIBLE * 2])   # 只有會被看到的前段需要這句話
 
+    # --- 全站共用的最新行情（首頁與我的交易都讀這份）---
+    try:
+        # 名稱：上櫃股不在證交所快照裡，用 Extended 清單補上
+        name_all = {u["symbol"]: u.get("name", "") for u in (extended or [])}
+        name_all.update(name_map)
+        _write_latest_prices(snapshot, hist_map, data_date, now, name_all)
+    except Exception as e:
+        log.warning("最新行情輸出失敗（不影響首頁）：%s", e)
+
     # --- 明日強勢預測：獨立分頁，只用既有 history 快取，不額外下載 ---
     try:
         fc = momentum_mod.build_forecast(snapshot, hist_map, extended, data_date)
@@ -687,6 +696,89 @@ def _data_date(hist_map: dict, now) -> str:
     except Exception:
         pass
     return now.strftime("%Y-%m-%d")
+
+
+def _write_latest_prices(snapshot, hist_map: dict, data_date: str, now,
+                         names: dict | None = None) -> None:
+    """
+    產生 data/latest_prices.json —— 首頁與「我的交易」共用的唯一一份最新行情。
+
+    來源全部重用這次已經抓好的資料，**不會多打任何一次 API**：
+      1. 證交所當日快照（上市，最完整）
+      2. data/history 快取的最後一根 K 棒（補上快照沒有的，例如上櫃股）
+      3. 前一次的 latest_prices.json（這次沒出現的股票沿用最後有效價）
+
+    每一檔都帶自己的 market_date，所以非交易日或某檔停牌時，
+    畫面看到的是「那一檔最後一個有效交易日的收盤價」，
+    不會用 0 或舊資料假裝成今天的價格。
+    """
+    out: dict[str, dict] = {}
+
+    # --- 先把上一次的結果讀進來當底，行情失敗時才有東西可以沿用 ---
+    path = ROOT / C.LATEST_PRICES_JSON
+    try:
+        if path.exists():
+            old = json.loads(path.read_text(encoding="utf-8"))
+            for k, v in (old.get("prices") or {}).items():
+                if isinstance(v, dict) and v.get("price"):
+                    out[k] = v
+    except Exception as e:
+        log.warning("舊的 latest_prices 讀取失敗（忽略）：%s", e)
+
+    names = names or {}
+
+    def put(code, name, price, prev, mdate):
+        name = name or names.get(code) or out.get(code, {}).get("name", "")
+        try:
+            price = float(price)
+        except Exception:
+            return
+        if not (price > 0):          # 0 或負數一律不寫入，寧可沿用舊價
+            return
+        try:
+            prev = float(prev) if prev else None
+        except Exception:
+            prev = None
+        rec = {"symbol": code, "name": name or "", "price": round(price, 2),
+               "prev_close": round(prev, 2) if prev else None,
+               "change_pct": round((price / prev - 1) * 100, 2) if prev else None,
+               "market_date": mdate}
+        out[code] = rec
+
+    # --- 2) 歷史快取（先寫，之後會被當日快照覆蓋）---
+    for code, hist in (hist_map or {}).items():
+        try:
+            if hist is None or len(hist) < 2:
+                continue
+            last = hist.iloc[-1]
+            put(code, out.get(code, {}).get("name", ""), last["close"],
+                hist["close"].iloc[-2], str(hist.index[-1])[:10])
+        except Exception:
+            continue
+
+    # --- 1) 證交所當日快照（最準，覆蓋上面的）---
+    n_snap = 0
+    if snapshot is not None and len(snapshot):
+        for _, r in snapshot.iterrows():
+            put(r["code"], r.get("name", ""), r.get("close"),
+                r.get("prev_close"), data_date)
+            n_snap += 1
+
+    payload = {
+        "market_date": data_date,                       # 這次行情的交易日
+        "updated_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+        "count": len(out),
+        "source": "證交所 OpenAPI 當日行情 ＋ data/history 快取",
+        "prices": out,
+    }
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
+                        encoding="utf-8")
+        log.info("已寫出 %s：%d 檔（當日快照 %d、其餘沿用快取或上次結果）",
+                 C.LATEST_PRICES_JSON, len(out), n_snap)
+    except Exception as e:
+        log.warning("latest_prices 寫入失敗：%s", e)
 
 
 def _write_universe(core, extended: list, radar_rows: list,
