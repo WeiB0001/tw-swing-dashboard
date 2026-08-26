@@ -17,6 +17,54 @@
   var KEY = "tw_swing_trade_journal_v1";        // 交易明細（兩頁共用，只有這一份）
   var SNAP = "tw_swing_trade_snapshots_v1";     // 每日累積報酬快照
   var PXKEY = "tw_swing_latest_prices_v1";      // 最新價快取（首頁寫、交易頁讀）
+  var FEEKEY = "tw_swing_fee_settings_v1";      // 手續費與交易稅設定
+
+  /* ---------------------------------------------------------------
+     台股交易成本：費率集中在這裡，不散落各處。
+     使用者可以在「我的交易」頁改，改完存在 LocalStorage。
+     --------------------------------------------------------------- */
+  var FEE_DEFAULT = {
+    fee_rate: 0.1425,      // 券商手續費率 %（法定上限）
+    discount: 0.6,         // 手續費折扣，0.6 = 6 折；不打折就填 1
+    min_fee: 20,           // 單筆最低手續費（元）；多數券商是 20，電子下單有的更低
+    tax_stock: 0.3,        // 股票賣出證交稅 %
+    tax_etf: 0.1           // ETF 賣出證交稅 %（現行稅率）
+  };
+
+  function feeSettings() {
+    var s = {};
+    try { s = JSON.parse(localStorage.getItem(FEEKEY) || "{}") || {}; } catch (e) { s = {}; }
+    var out = {};
+    for (var k in FEE_DEFAULT) {
+      if (!FEE_DEFAULT.hasOwnProperty(k)) continue;
+      var v = parseFloat(s[k]);
+      out[k] = (isFinite(v) && v >= 0) ? v : FEE_DEFAULT[k];
+    }
+    return out;
+  }
+  function saveFeeSettings(o) {
+    try { localStorage.setItem(FEEKEY, JSON.stringify(o)); } catch (e) {}
+  }
+
+  function isETF(symbol) {
+    return String(symbol || "").indexOf("00") === 0;   // 台股 ETF 代號都是 00 開頭
+  }
+
+  /* 券商手續費：成交金額 × 費率 × 折扣，並套用最低收費 */
+  function brokerFee(amount) {
+    var s = feeSettings();
+    if (!(amount > 0)) return 0;
+    var f = amount * (s.fee_rate / 100) * s.discount;
+    return Math.max(Math.round(f), Math.round(s.min_fee));
+  }
+
+  /* 證交稅：只有賣出才課，ETF 稅率與一般股票不同 */
+  function sellTax(symbol, amount) {
+    var s = feeSettings();
+    if (!(amount > 0)) return 0;
+    var rate = isETF(symbol) ? s.tax_etf : s.tax_stock;
+    return Math.round(amount * (rate / 100));
+  }
 
   /* ---------------------------------------------------------------
      最新價：首頁與這一頁共用同一份 data/latest_prices.json。
@@ -149,23 +197,39 @@
   /* ---------------- 單筆計算 ---------------- */
   function calc(t) {
     var shares = num(t.shares) || 0;
-    var cost = (num(t.buy_price) || 0) * shares + (num(t.buy_fee) || 0);
-    var o = { cost: cost, shares: shares, open: t.status !== "CLOSED" };
+    var buyAmt = (num(t.buy_price) || 0) * shares;
+    // 使用者有自己填金額就尊重他填的，沒填才自動算
+    var buyFee = num(t.buy_fee) > 0 ? num(t.buy_fee) : brokerFee(buyAmt);
+    var cost = buyAmt + buyFee;                 // 成本 = 成交金額 + 買入手續費
+    var o = { cost: cost, shares: shares, open: t.status !== "CLOSED",
+              buy_amount: buyAmt, buy_fee: buyFee };
 
     if (o.open) {
       var p = px(t.symbol);
       o.last = p ? p.last : null;
       o.prev = p ? p.prev : null;
       o.mv = o.last === null ? null : o.last * shares;
-      o.pnl = o.mv === null ? null : o.mv - cost;
+      // 未實現損益也扣掉「現在賣掉會付的」手續費與證交稅，才是真的落袋數字
+      o.exit_fee = o.mv === null ? 0 : brokerFee(o.mv);
+      o.exit_tax = o.mv === null ? 0 : sellTax(t.symbol, o.mv);
+      o.exit_cost = o.exit_fee + o.exit_tax;
+      o.total_cost_fee = buyFee + o.exit_cost;
+      o.pnl = o.mv === null ? null : o.mv - cost - o.exit_cost;
       o.ret = (o.pnl === null || cost <= 0) ? null : o.pnl / cost * 100;
       // 今日損益：沒有昨收就是 null，不猜
       o.today = (o.last === null || o.prev === null) ? null : (o.last - o.prev) * shares;
       o.today_pct = (o.last === null || !o.prev) ? null : (o.last / o.prev - 1) * 100;
       o.held = days(t.buy_date);
     } else {
-      var proceeds = (num(t.sell_price) || 0) * shares - (num(t.sell_fee) || 0);
-      o.pnl = proceeds - cost;
+      var sellAmt = (num(t.sell_price) || 0) * shares;
+      var sellFee = num(t.sell_fee) > 0 ? num(t.sell_fee) : brokerFee(sellAmt);
+      var tax = num(t.sell_tax) > 0 ? num(t.sell_tax) : sellTax(t.symbol, sellAmt);
+      var proceeds = sellAmt - sellFee - tax;   // 賣出實拿 = 成交金額 − 手續費 − 證交稅
+      o.sell_amount = sellAmt;
+      o.sell_fee = sellFee;
+      o.tax = tax;
+      o.total_cost_fee = buyFee + sellFee + tax;
+      o.pnl = proceeds - cost;                  // 稅後淨損益
       o.ret = cost > 0 ? o.pnl / cost * 100 : null;
       o.held = days(t.buy_date, t.sell_date);
       o.proceeds = proceeds;
@@ -197,10 +261,15 @@
   function summarize(list) {
     var s = { total_cost: 0, market_value: 0, unrealized: 0, realized: 0,
               today: null, trades: list.length, closed: 0, open: 0,
-              wins: 0, win_sum: 0, losses: 0, loss_sum: 0, unpriced: 0 };
+              wins: 0, win_sum: 0, losses: 0, loss_sum: 0, unpriced: 0,
+              buy_fee: 0, sell_fee: 0, tax: 0, fee_total: 0 };
     list.forEach(function (t) {
       var c = calc(t);
       s.total_cost += c.cost;
+      s.buy_fee += c.buy_fee || 0;
+      s.sell_fee += (c.sell_fee || 0) + (c.exit_fee || 0);
+      s.tax += (c.tax || 0) + (c.exit_tax || 0);
+      s.fee_total += c.total_cost_fee || 0;
       if (c.open) {
         s.open++;
         if (c.mv === null) { s.unpriced++; return; }
@@ -257,6 +326,7 @@
           (s.today === null ? "--" : money(s.today, true)) + "</b></span>" +
         "<span>持有中 <b>" + s.open + "</b> 檔</span>" +
         "<span>已結束 <b>" + s.closed + "</b> 筆</span>" +
+        "<span>累積交易成本 <b>" + money(s.fee_total) + "</b></span>" +
         (PX_DATE ? "<span>報價日 <b>" + esc(PX_DATE) + "</b></span>" : "") +
         (PX_UPDATED ? "<span>行情更新 <b>" + esc(PX_UPDATED) + "</b></span>" : "") +
         (s.unpriced ? "<span class='jn-note'>" + s.unpriced + " 檔暫無最新價</span>" : "");
@@ -294,6 +364,10 @@
           "<span>總損益 <b class='" + (c.pnl === null ? "" : cls(c.pnl)) + "'>" +
             (c.pnl === null ? "--" : money(c.pnl, true)) + "</b></span>" +
           "<span>報酬率 <b class='" + (c.ret === null ? "" : cls(c.ret)) + "'>" + pct(c.ret) + "</b></span>" +
+          "<span>買入手續費 <b>" + money(c.buy_fee) + "</b></span>" +
+          (c.mv === null ? "" :
+            "<span>預估賣出成本 <b>" + money(c.exit_cost) + "</b>" +
+            "<span class='sub'>（手續費 " + money(c.exit_fee) + "＋稅 " + money(c.exit_tax) + "）</span></span>") +
           "<span>持有 <b>" + (c.held === null ? "--" : c.held + " 天") + "</b></span>" +
         "</div>" +
         (t.note ? '<div class="jn-note">' + esc(t.note) + "</div>" : "") +
@@ -333,6 +407,18 @@
           "<span>股數 <b>" + c.shares + "</b></span>" +
           "<span>持有 <b>" + (c.held === null ? "--" : c.held + " 天") + "</b></span>" +
         "</div>" +
+        '<div class="jn-fee">' +
+          "<span>買入手續費 <b>" + money(c.buy_fee) + "</b></span>" +
+          "<span>" + (closed ? "賣出手續費" : "預估賣出手續費") + " <b>" +
+            money(closed ? c.sell_fee : c.exit_fee) + "</b></span>" +
+          "<span>" + (closed ? "交易稅" : "預估交易稅") + " <b>" +
+            money(closed ? c.tax : c.exit_tax) + "</b></span>" +
+          "<span>總交易成本 <b>" + money(c.total_cost_fee) + "</b></span>" +
+          "<span>稅後淨損益 <b class='" + (c.pnl === null ? "" : cls(c.pnl)) + "'>" +
+            (c.pnl === null ? "--" : money(c.pnl, true)) + "</b></span>" +
+          "<span>稅後報酬率 <b class='" + (c.ret === null ? "" : cls(c.ret)) + "'>" +
+            pct(c.ret) + "</b></span>" +
+        "</div>" +
         (t.note ? '<div class="jn-note">' + esc(t.note) + "</div>" : "") +
         '<div class="jn-ops">' +
           (closed ? "" : '<button type="button" class="sell" data-act="sell" data-id="' + t.id + '">賣出</button>') +
@@ -352,6 +438,10 @@
       cell("累積總收益", '<b class="' + cls(s.total_pnl) + '">' + money(s.total_pnl, true) + "</b>") +
       cell("勝率", "<b>" + (s.win_rate === null ? "--" : s.win_rate.toFixed(0) + "%") + "</b>") +
       cell("完成交易數", "<b>" + s.closed + "</b>") +
+      cell("買入手續費", "<b>" + money(s.buy_fee) + "</b>") +
+      cell("賣出手續費", "<b>" + money(s.sell_fee) + "</b>") +
+      cell("證交稅", "<b>" + money(s.tax) + "</b>") +
+      cell("總交易成本", "<b>" + money(s.fee_total) + "</b>") +
       cell("平均獲利", '<b class="up">' + (s.avg_win === null ? "--" : money(s.avg_win)) + "</b>") +
       cell("平均虧損", '<b class="down">' + (s.avg_loss === null ? "--" : money(s.avg_loss)) + "</b>");
   }
@@ -432,7 +522,10 @@
       formBox.innerHTML =
         field("sell_date", "賣出日期", "date", t.sell_date || today()) +
         field("sell_price", "賣出價格", "number", t.sell_price || (p ? p.last : "")) +
-        field("sell_fee", "賣出手續費（含稅，可留 0）", "number", t.sell_fee || 0, true);
+        field("sell_fee", "賣出手續費（留空自動計算）", "number", t.sell_fee || "") +
+        field("sell_tax", "證交稅（留空自動計算）", "number", t.sell_tax || "", true) +
+        '<div class="jn-field full"><div class="fee-hint" id="fee-hint"></div></div>';
+      bindFeeHint("sell", t.symbol);
     } else {
       titleEl.textContent = kind === "edit" ? "編輯交易" : "新增買入";
       formBox.innerHTML =
@@ -441,8 +534,10 @@
         field("buy_date", "買入日期", "date", t.buy_date || today()) +
         field("buy_price", "買入價格", "number", t.buy_price || "") +
         field("shares", "股數（一張＝1000 股）", "number", t.shares || "", false, "1") +
-        field("buy_fee", "手續費（可留 0）", "number", t.buy_fee == null ? 0 : t.buy_fee) +
-        field("note", "備註（可留空）", "text", t.note || "", true);
+        field("buy_fee", "手續費（留空自動計算）", "number", t.buy_fee || "") +
+        field("note", "備註（可留空）", "text", t.note || "", true) +
+        '<div class="jn-field full"><div class="fee-hint" id="fee-hint"></div></div>';
+      bindFeeHint("buy", t.symbol);
       if (kind === "edit" && t.status === "CLOSED") {
         formBox.innerHTML +=
           field("sell_date", "賣出日期", "date", t.sell_date || "") +
@@ -454,6 +549,40 @@
     var first = formBox.querySelector("input");
     if (first) setTimeout(function () { first.focus(); }, 50);
   }
+  /* 表單裡即時顯示自動算出來的手續費與稅，讓使用者知道會被扣多少 */
+  function bindFeeHint(kind, symbol) {
+    var hint = $("fee-hint");
+    if (!hint) return;
+    var s = feeSettings();
+    function upd() {
+      var sym = (val("symbol") || symbol || "").toUpperCase();
+      var price = num(val(kind === "sell" ? "sell_price" : "buy_price"));
+      var shares = num(val("shares")) || (editing ? num(editing.shares) : 0);
+      if (!(price > 0) || !(shares > 0)) {
+        hint.innerHTML = "填入價格與股數後，會依 " + s.fee_rate + "% × " +
+          s.discount + " 折（最低 " + s.min_fee + " 元）自動計算手續費。";
+        return;
+      }
+      var amt = price * shares;
+      var fee = brokerFee(amt);
+      if (kind === "sell") {
+        var tax = sellTax(sym, amt);
+        hint.innerHTML = "成交金額 " + money(amt) + "　手續費 <b>" + money(fee) +
+          "</b>　證交稅 <b>" + money(tax) + "</b>（" +
+          (isETF(sym) ? "ETF " + s.tax_etf : "股票 " + s.tax_stock) + "%）　" +
+          "實拿 <b>" + money(amt - fee - tax) + "</b>";
+      } else {
+        hint.innerHTML = "成交金額 " + money(amt) + "　手續費 <b>" + money(fee) +
+          "</b>　總支出 <b>" + money(amt + fee) + "</b>";
+      }
+    }
+    ["symbol", "buy_price", "sell_price", "shares"].forEach(function (id) {
+      var e = $("jf-" + id);
+      if (e) e.addEventListener("input", upd);
+    });
+    upd();
+  }
+
   function closeForm() { if (modal) { modal.hidden = true; } editing = null; }
   function val(id) { var e = $("jf-" + id); return e ? e.value.trim() : ""; }
   function fail(msg) { errBox.textContent = msg; errBox.hidden = false; }
@@ -463,12 +592,18 @@
     if (mode === "sell") {
       var sp = num(val("sell_price"));
       if (!(sp > 0)) return fail("賣出價格必須大於 0。");
-      var sf = num(val("sell_fee")) || 0;
-      if (sf < 0) return fail("手續費不能是負數。");
+      var sfRaw = val("sell_fee"), stRaw = val("sell_tax");
+      var sf = sfRaw === "" ? null : num(sfRaw);
+      var st = stRaw === "" ? null : num(stRaw);
+      if (sf !== null && sf < 0) return fail("手續費不能是負數。");
+      if (st !== null && st < 0) return fail("證交稅不能是負數。");
       var sd = val("sell_date") || today();
       list.forEach(function (t) {
         if (editing && t.id === editing.id) {
-          t.sell_date = sd; t.sell_price = sp; t.sell_fee = sf; t.status = "CLOSED";
+          t.sell_date = sd; t.sell_price = sp; t.status = "CLOSED";
+          // 留空就存 0，calc() 會自動依費率算；填了就照填的算
+          t.sell_fee = sf === null ? 0 : sf;
+          t.sell_tax = st === null ? 0 : st;
         }
       });
     } else {
@@ -594,6 +729,45 @@
       });
       renderHistory(load());
     });
+  });
+
+  /* ---- 費率設定面板 ---- */
+  var FEE_FIELDS = { "fee-rate": "fee_rate", "fee-discount": "discount",
+                     "fee-min": "min_fee", "fee-tax-stock": "tax_stock",
+                     "fee-tax-etf": "tax_etf" };
+  function loadFeeForm() {
+    var s = feeSettings();
+    for (var id in FEE_FIELDS) {
+      if (!FEE_FIELDS.hasOwnProperty(id)) continue;
+      var e = $(id);
+      if (e) e.value = s[FEE_FIELDS[id]];
+    }
+  }
+  var feeToggle = $("fee-toggle"), feePanel = $("fee-panel");
+  if (feeToggle && feePanel) {
+    feeToggle.addEventListener("click", function () {
+      feePanel.hidden = !feePanel.hidden;
+      if (!feePanel.hidden) loadFeeForm();
+    });
+  }
+  var feeSave = $("fee-save");
+  if (feeSave) feeSave.addEventListener("click", function () {
+    var o = {};
+    for (var id in FEE_FIELDS) {
+      if (!FEE_FIELDS.hasOwnProperty(id)) continue;
+      var v = num(($(id) || {}).value);
+      if (v === null || v < 0) { alert("費率不能是空白或負數。"); return; }
+      o[FEE_FIELDS[id]] = v;
+    }
+    saveFeeSettings(o);
+    if (feePanel) feePanel.hidden = true;
+    render();                       // 費率改了，所有損益跟著重算
+  });
+  var feeReset = $("fee-reset");
+  if (feeReset) feeReset.addEventListener("click", function () {
+    saveFeeSettings({});
+    loadFeeForm();
+    render();
   });
 
   var ex = $("jn-export"); if (ex) ex.addEventListener("click", exportJson);

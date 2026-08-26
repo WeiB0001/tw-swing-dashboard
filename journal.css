@@ -346,3 +346,14 @@ footer a{color:#7E8B9A}
 .mo-list{font-size:11.5px;line-height:1.7;margin-top:6px}
 .mo-list.ok{color:#8FD9B0}
 .mo-list.bad{color:#FF9E80}
+
+/* 交易成本明細 */
+.jn-fee{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:7px;padding-top:7px;
+  border-top:1px solid #263543;font-size:11.5px;color:#6E7A88}
+.jn-fee b{color:#B9C4D0;font-family:ui-monospace,Menlo,monospace;font-weight:700}
+.jn-r2 .sub{color:#5F6B78;font-size:11px}
+.fee-hint{font-size:11.5px;color:#8FB8CC;line-height:1.7;background:#12181F;
+  padding:8px 10px;border-radius:8px}
+.fee-hint b{color:#CFEAF5;font-family:ui-monospace,Menlo,monospace}
+.fee-panel[hidden]{display:none}
+.fee-panel h3{margin-bottom:9px}

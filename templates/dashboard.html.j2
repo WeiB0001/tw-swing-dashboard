@@ -939,23 +939,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
         {% endif %}
 
-        {% if r.momentum_icon %}
-        <div class="mom mom{{ r.momentum_tier }}">
-          <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
-            <b>動能 {{ '%.0f'|format(r.momentum_score) }}/100</b></div>
-          {% if r.momentum_hits %}
-          <div class="mom-list ok">已確認：{{ r.momentum_hits|join('、') }}</div>
-          {% endif %}
-          {% if r.momentum_warns %}
-          <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
-          {% endif %}
-          <div class="mom-note">
-            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
-            今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
-          </div>
-        </div>
-        {% endif %}
-
         {% if r.plan and r.plan.available %}
         <div class="plan plan-{{ 'go' if r.plan.status == '可觀察進場' else ('no' if r.plan.status == '禁止追價' else 'wait') }}">
           <div class="plan-head">明日交易計畫 · <b>{{ r.plan.status }}</b></div>

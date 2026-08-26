@@ -65,9 +65,35 @@
   <div class="jn">
     <div class="jn-bar">
       <button type="button" class="btn-j primary" id="jn-add">＋ 手動新增交易</button>
+      <button type="button" class="btn-j" id="fee-toggle">⚙ 費率設定</button>
       <button type="button" class="btn-j" id="jn-export">匯出 JSON</button>
       <button type="button" class="btn-j" id="jn-import">匯入 JSON</button>
       <input type="file" id="jn-file" accept="application/json,.json" hidden>
+    </div>
+
+    <div class="jn-block fee-panel" id="fee-panel" hidden>
+      <h3>手續費與交易稅</h3>
+      <div class="jn-form">
+        <div class="jn-field"><label for="fee-rate">券商手續費率 %</label>
+          <input id="fee-rate" type="number" step="0.0001" inputmode="decimal"></div>
+        <div class="jn-field"><label for="fee-discount">手續費折扣（0.6＝6折）</label>
+          <input id="fee-discount" type="number" step="0.01" inputmode="decimal"></div>
+        <div class="jn-field"><label for="fee-min">單筆最低手續費</label>
+          <input id="fee-min" type="number" step="1" inputmode="numeric"></div>
+        <div class="jn-field"><label for="fee-tax-stock">股票證交稅 %</label>
+          <input id="fee-tax-stock" type="number" step="0.01" inputmode="decimal"></div>
+        <div class="jn-field"><label for="fee-tax-etf">ETF 證交稅 %</label>
+          <input id="fee-tax-etf" type="number" step="0.01" inputmode="decimal"></div>
+      </div>
+      <div class="jn-actions">
+        <button type="button" class="btn-j" id="fee-reset">還原預設</button>
+        <button type="button" class="btn-j primary" id="fee-save">儲存費率</button>
+      </div>
+      <p class="jn-note">
+        買入成本 ＝ 成交金額 ＋ 手續費；賣出實拿 ＝ 成交金額 − 手續費 − 證交稅。
+        手續費四捨五入到整數並套用最低收費。持有中的部位，未實現損益已扣掉「現在賣掉會付的」手續費與稅。
+        當沖證交稅減半、以及各券商的最低收費差異，請自行依實際情況調整這裡的數字。
+      </p>
     </div>
 
     <div class="jn-block">
