@@ -1,5 +1,5 @@
 {
- "cash": 1511.4884999999995,
+ "cash": 31286.199340000003,
  "positions": [
   {
    "code": "2359",
@@ -10,17 +10,6 @@
    "held": 4,
    "stop": 138.23,
    "target1": 177.75,
-   "pattern": "多頭回檔"
-  },
-  {
-   "code": "3665",
-   "name": "貿聯-KY",
-   "shares": 14,
-   "entry": 2270.0,
-   "entry_date": "2026-08-23",
-   "held": 4,
-   "stop": 2129.96,
-   "target1": 2555.0,
    "pattern": "多頭回檔"
   },
   {
@@ -35,8 +24,29 @@
    "pattern": "多頭回檔"
   }
  ],
- "pending": [],
- "trades": [],
+ "pending": [
+  {
+   "code": "2357",
+   "budget": 31286.2,
+   "stop": 888.91,
+   "target1": 980.94,
+   "pattern": "多頭回檔"
+  }
+ ],
+ "trades": [
+  {
+   "code": "3665",
+   "name": "貿聯-KY",
+   "entry_date": "2026-08-23",
+   "exit_date": "2026-08-26",
+   "entry": 2270.0,
+   "exit": 2129.96,
+   "net_pct": -6.47,
+   "reason": "停損",
+   "held": 5,
+   "pattern": "多頭回檔"
+  }
+ ],
  "equity": [
   {
    "date": "2026-08-22",
@@ -67,8 +77,13 @@
    "date": "2026-08-25",
    "equity": 98041.49,
    "index": 45224.29
+  },
+  {
+   "date": "2026-08-26",
+   "equity": 97847.2,
+   "index": 45169.46
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-08-25"
+ "last_date": "2026-08-26"
 }
