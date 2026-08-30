@@ -242,10 +242,10 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "trading_days": len(usable),
         "universe_size": len(frames),
         "total_signals": len(signals),
-        "primary_hold_days": 5,
+        "primary_hold_days": C.PRIMARY_HOLD_DAYS,
         "cost_pct": cost,
         "cooldown_days": cooldown,
-        "entry_rule": "訊號日 t 收盤後產生，t+1 開盤價進場，t+h 收盤價出場",
+        "entry_rule": "訊號日 t 收盤後產生，t+1 開盤價進場，持有 h 天後收盤出場",
         "topk": stats_by_topk(signals),
         "score_buckets": stats_by_bucket(signals),
         "regime_buckets": stats_by_regime_pattern_bucket(signals),
@@ -274,7 +274,7 @@ def stats_by_topk(signals: list[dict]) -> dict:
 
 def stats_by_bucket(signals: list[dict]) -> list[dict]:
     """依技術分數級距統計（持有 5 日）。"""
-    h = 5
+    h = C.PRIMARY_HOLD_DAYS
     out = []
     for lo, hi in C.BACKTEST_SCORE_BUCKETS:
         sub = [s for s in signals if lo <= s["score"] < hi]
@@ -288,7 +288,7 @@ def stats_by_pattern_bucket(signals: list[dict]) -> list[dict]:
     依「型態 + 分數級距」統計。這是排名的第一順位依據——
     同樣 65 分，帶量突破跟低檔止跌轉強的實際勝率可能差很多。
     """
-    h = 5
+    h = C.PRIMARY_HOLD_DAYS
     out = []
     patterns = sorted(set(s["pattern"] for s in signals))
     for pat in patterns:
@@ -326,7 +326,7 @@ def walk_forward(signals: list[dict]) -> dict:
     測試方式：用前期表查每筆訊號的期望值，每日取期望值最高的前 WF_TOP_N 筆，
     記錄它們實際的 5 日淨報酬。
     """
-    h = 5
+    h = C.PRIMARY_HOLD_DAYS
     k = max(int(C.WF_FOLDS), 2)
     if len(signals) < k * 40:
         return {"available": False, "reason": "樣本不足，無法做 walk-forward 驗證"}
@@ -390,7 +390,7 @@ def walk_forward(signals: list[dict]) -> dict:
 
 def stats_by_pattern(signals: list[dict]) -> list[dict]:
     """不分級距，單看型態的整體表現。"""
-    h = 5
+    h = C.PRIMARY_HOLD_DAYS
     out = []
     for pat in sorted(set(s["pattern"] for s in signals)):
         sub = [s for s in signals if s["pattern"] == pat]

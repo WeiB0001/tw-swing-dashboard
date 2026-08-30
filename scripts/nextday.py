@@ -87,7 +87,8 @@ def bias_b(x):
     return "貼近均線"
 
 
-def _pack(rets: list[float], hits: list[int] | None = None) -> dict:
+def _pack(rets: list[float], hits: list[int] | None = None,
+          gaps: list[float] | None = None) -> dict:
     a = np.array(rets, dtype=float)
     n = len(a)
     wins = int((a > 0).sum())
@@ -107,6 +108,9 @@ def _pack(rets: list[float], hits: list[int] | None = None) -> dict:
         "median": round(float(np.median(a)), 2),
         "p10": round(float(np.percentile(a, 10)), 2),   # 最差的一成長什麼樣
         "worst": round(float(a.min()), 2),
+        # 隔夜跳空：持有過夜最主要的風險來源
+        "avg_gap": round(float(np.mean(gaps)), 2) if gaps else None,
+        "gap_down_rate": round(float((np.array(gaps) < -1).mean() * 100), 1) if gaps else None,
     }
 
 
@@ -138,13 +142,15 @@ def build_stats(hist_map: dict[str, pd.DataFrame]) -> dict:
         mh, mhp = get("macd_hist"), get("macd_hist_prev")
         vol_ma = get("vol_ma20")
 
-        for i in range(C.MIN_BARS, n - 1):
+        need = 1 + C.HOLD_DAYS
+        for i in range(C.MIN_BARS, n - need):
             if not np.isfinite(close[i]) or close[i] <= 0:
                 continue
             if close[i] * vol_ma[i] < C.NEXTDAY_MIN_TURNOVER:
                 continue                      # 太冷門的不列入統計
             entry = opn[i + 1]
-            if not np.isfinite(entry) or entry <= 0:
+            exit_px = close[i + C.HOLD_DAYS + 1]      # 持有 HOLD_DAYS 天後的收盤
+            if not np.isfinite(entry) or entry <= 0 or not np.isfinite(exit_px):
                 continue
 
             t = tier_of(close[i], ma5[i], ma20[i], vol[i], chg[i], bias[i],
@@ -155,8 +161,12 @@ def build_stats(hist_map: dict[str, pd.DataFrame]) -> dict:
                 "chg": chg_b(chg[i]),
                 "vol": vol_b(vol[i]),
                 "bias": bias_b(bias[i]),
-                "r": (close[i + 1] / entry - 1) * 100,
-                # 隔日的當日漲跌（收盤對收盤），用來跟同一天其他股票比排名
+                # 實際可執行的報酬：t+1 開盤買、t+1+HOLD 收盤賣
+                "r": (exit_px / entry - 1) * 100,
+                # 買進當天的隔夜跳空（t+2 開盤 vs t+1 收盤），持有一夜要承擔的風險
+                "gap": ((opn[i + 2] / close[i + 1] - 1) * 100
+                        if i + 2 < n and np.isfinite(opn[i + 2]) and close[i + 1] > 0 else 0.0),
+                # 用來跟同一天其他股票比排名
                 "next_chg": (close[i + 1] / close[i] - 1) * 100,
             })
 
@@ -178,7 +188,8 @@ def build_stats(hist_map: dict[str, pd.DataFrame]) -> dict:
         d = {}
         for r in rows:
             d.setdefault(keyfn(r), []).append(r)
-        return {k: _pack([x["r"] for x in v], [x["hit"] for x in v])
+        return {k: _pack([x["r"] for x in v], [x["hit"] for x in v],
+                         [x["gap"] for x in v])
                 for k, v in d.items() if len(v) >= 5}
 
     stats = {
@@ -186,11 +197,13 @@ def build_stats(hist_map: dict[str, pd.DataFrame]) -> dict:
         "full": group(lambda r: "%d|%s|%s|%s" % (r["tier"], r["chg"], r["vol"], r["bias"])),
         "tier_chg": group(lambda r: "%d|%s" % (r["tier"], r["chg"])),
         "tier": group(lambda r: str(r["tier"])),
-        "overall": _pack([r["r"] for r in rows], [r["hit"] for r in rows]),
-        "entry_rule": "第 t 日收盤判定條件，t+1 開盤買、t+1 收盤賣",
+        "overall": _pack([r["r"] for r in rows], [r["hit"] for r in rows],
+                            [r["gap"] for r in rows]),
+        "entry_rule": "第 t 日收盤判定條件，t+1 開盤買、持有 %d 天後收盤賣" % C.HOLD_DAYS,
     }
-    log.info("隔日統計：%d 筆樣本，整體上漲率 %.1f%%、大跌率 %.1f%%",
-             stats["total"], stats["overall"]["win_rate"], stats["overall"]["crash_rate"])
+    o = stats["overall"]
+    log.info("持有 %d 天統計：%d 筆樣本，上漲率 %.1f%%、大跌率 %.1f%%、平均隔夜跳空 %+.2f%%",
+             C.HOLD_DAYS, stats["total"], o["win_rate"], o["crash_rate"], o.get("avg_gap") or 0)
     return stats
 
 
@@ -255,6 +268,15 @@ def attach(rows: list[dict], stats: dict) -> None:
             hit_adj = max(-C.NEXTDAY_HIT_CAP,
                           min(C.NEXTDAY_HIT_CAP, (hit - 20.0) * C.NEXTDAY_HIT_WEIGHT))
 
-        r["crash_penalty"] = round(crash_pen - avg_adj - hit_adj, 1)
+        # 4) 隔夜低開機率。持有過夜就一定要承擔這個風險，高於基準的部分扣分。
+        gap_pen = 0.0
+        gd = d.get("gap_down_rate")
+        base_gap = (stats.get("overall") or {}).get("gap_down_rate")
+        if gd is not None and base_gap is not None:
+            gap_pen = min(C.NEXTDAY_GAP_CAP,
+                          max(0.0, gd - base_gap) * C.NEXTDAY_GAP_WEIGHT)
+
+        r["crash_penalty"] = round(crash_pen + gap_pen - avg_adj - hit_adj, 1)
+        r["nextday_gap_pen"] = round(gap_pen, 1)
         r["nextday_avg_adj"] = round(avg_adj, 1)
         r["nextday_hit_adj"] = round(hit_adj, 1)

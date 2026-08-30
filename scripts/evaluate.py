@@ -90,7 +90,7 @@ def run(hist_map: dict, days: int, use_guard: bool) -> dict:
     usable = all_dates[C.MIN_BARS: len(all_dates) - 1]
     if days > 0:
         usable = usable[-days:]
-    log.info("驗證期間：%s ～ %s（%d 個交易日）%s",
+    log.info("持有 %d 天｜驗證期間：%s ～ %s（%d 個交易日）%s", C.HOLD_DAYS,
              str(usable[0])[:10], str(usable[-1])[:10], len(usable),
              "" if use_guard else "｜已關閉隔日風險過濾")
 
@@ -102,7 +102,7 @@ def run(hist_map: dict, days: int, use_guard: bool) -> dict:
         rows, nxt = [], {}
         for code, df in frames.items():
             pos = df.index.get_indexer([day])[0]
-            if pos < C.MIN_BARS - 1 or pos + 1 >= len(df):
+            if pos < C.MIN_BARS - 1 or pos + 1 + C.HOLD_DAYS >= len(df):
                 continue
             f = indicators.features_at(df, pos)
             if not f:
@@ -118,7 +118,8 @@ def run(hist_map: dict, days: int, use_guard: bool) -> dict:
             row["prev_low"] = float(df["low"].iloc[pos - 1]) if pos > 0 else None
             rows.append(row)
             # 隔日：開盤買、收盤賣（實際可執行的做法）
-            nxt[code] = (float(df["close"].iloc[pos + 1]) / entry - 1) * 100
+            # 跟實際做法一致：t+1 開盤買、持有 HOLD_DAYS 天後收盤賣
+            nxt[code] = (float(df["close"].iloc[pos + 1 + C.HOLD_DAYS]) / entry - 1) * 100
 
         if len(rows) < 5:
             continue
@@ -157,7 +158,7 @@ def run(hist_map: dict, days: int, use_guard: bool) -> dict:
 def report(r: dict) -> None:
     print("\n" + "=" * 72)
     print(f"排名驗證：{r['days']} 個交易日｜隔日風險過濾 {'開啟' if r['guard'] else '關閉'}")
-    print("進場假設：第 t 日收盤排名，t+1 開盤買、t+1 收盤賣")
+    print(f"進場假設：第 t 日收盤排名，t+1 開盤買、持有 {C.HOLD_DAYS} 天後收盤賣")
     print("=" * 72)
     print(f"{'':<8}{'樣本':>6}{'上漲率':>8}{'平均':>8}{'中位':>8}"
           f"{'大跌率':>8}{'最差一成':>10}{'最差':>8}{'猜中強勢':>10}")
@@ -172,7 +173,7 @@ def report(r: dict) -> None:
     if d.get("n"):
         print(f"{'全體':<7}{d['n']:>6}{d['win']:>7.1f}%{d['avg']:>7.2f}%{d['med']:>7.2f}%"
               f"{d['crash']:>7.1f}%{d['p10']:>9.2f}%{d['worst']:>7.2f}%")
-    print("\n「大跌率」= 隔日跌幅超過 %.1f%% 的比例；「猜中強勢」= 隔日進入當日漲幅前 20%% 的比例。"
+    print("\n「大跌率」= 持有期間跌幅超過 %.1f%% 的比例；「猜中強勢」= 隔日進入當日漲幅前 20%% 的比例。"
           % abs(C.NEXTDAY_CRASH_PCT))
     print("要看的是：Top 1 是否優於 Top 10、Top 10 是否優於全體。三者差不多就代表排名沒有鑑別力。")
 

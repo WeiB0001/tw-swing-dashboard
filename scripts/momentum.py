@@ -97,7 +97,7 @@ def build_stats(hist_map: dict[str, pd.DataFrame]) -> dict:
 
         last_i = -99
         n = len(df)
-        for i in range(C.MIN_BARS, n - 4):        # 尾端留 4 根：t+1 進場、t+3 出場
+        for i in range(C.MIN_BARS, n - max(4, C.HOLD_DAYS + 2)):   # 尾端留夠出場的根數
             row = df.iloc[i]
             chg = _f(row.get("ret1"))
             if chg < C.MOM_MIN_CHG:
@@ -114,7 +114,8 @@ def build_stats(hist_map: dict[str, pd.DataFrame]) -> dict:
             entry = _f(df["open"].iloc[i + 1])
             if entry <= 0:
                 continue
-            r1 = (_f(df["close"].iloc[i + 1]) / entry - 1) * 100
+            # 跟全站一致：t+1 開盤買、持有 HOLD_DAYS 天後收盤賣
+            r1 = (_f(df["close"].iloc[i + 1 + C.HOLD_DAYS]) / entry - 1) * 100
             r3 = (_f(df["close"].iloc[i + 3]) / entry - 1) * 100
 
             samples.append({
@@ -151,7 +152,7 @@ def build_stats(hist_map: dict[str, pd.DataFrame]) -> dict:
         "keys": {k: pack(v) for k, v in keys.items()},
         "by_chg": {k: pack(v) for k, v in by_chg.items()},
         "overall": pack(samples),
-        "entry_rule": "第 t 日收盤選股，t+1 開盤進場，t+1 / t+3 收盤計算報酬",
+        "entry_rule": "第 t 日收盤選股，t+1 開盤進場，持有 %d 天後收盤賣（另附 3 日）" % C.HOLD_DAYS,
     }
 
 

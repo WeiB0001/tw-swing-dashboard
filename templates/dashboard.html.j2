@@ -954,7 +954,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         {% if r.nextday %}
         <div class="nd">
-          <div class="nd-head">歷史上同樣條件的股票，隔日表現
+          <div class="nd-head">歷史上同樣條件的股票，隔天買、持有 {{ hold_days }} 天賣的結果
             <span class="sub">（{{ r.nextday_source }}，{{ r.nextday.samples }} 筆）</span></div>
           <div class="nd-grid">
             <div><span>隔日上漲</span><b>{{ r.nextday.calibrated_win_rate }}%</b></div>
@@ -964,10 +964,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             {% if r.nextday.top_hit_rate %}
             <div><span>進漲幅前段</span><b>{{ r.nextday.top_hit_rate }}%</b></div>
             {% endif %}
+            {% if r.nextday.gap_down_rate is not none %}
+            <div><span>隔夜低開</span><b class="down">{{ r.nextday.gap_down_rate }}%</b></div>
+            {% endif %}
             <div><span>排序加減分</span><b>{{ '%+.1f'|format(-(r.crash_penalty or 0)) }}</b></div>
           </div>
           <div class="nd-note">
-            隔日＝t+1 開盤買、t+1 收盤賣，跟交易計畫的假設一致。
+            計算方式：排名出來的隔天開盤買進，持有 {{ hold_days }} 天後收盤賣出，跟你的做法一致。
+            「隔夜低開」是持有過夜期間開盤跳空跌超過 1% 的比例，這是不做當沖必須承擔的風險。
             「進漲幅前段」隨機挑大約就是 20%，明顯高於 20% 才算真的有預測力。
             這一層只影響排序，<b>不改 EV、勝率、PF 與回測</b>。
           </div>
@@ -981,7 +985,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         {% if r.plan and r.plan.available %}
         <div class="plan plan-{{ 'go' if r.plan.status == '可觀察進場' else ('no' if r.plan.status == '禁止追價' else 'wait') }}">
-          <div class="plan-head">明日交易計畫 · <b>{{ r.plan.status }}</b></div>
+          <div class="plan-head">明日交易計畫（持有 {{ hold_days }} 天）· <b>{{ r.plan.status }}</b></div>
           {% if r.plan.entry_status %}
           <div class="entry entry-{{ r.plan.vol_tier if r.plan.entry_icon == '⚠' else ('go' if r.plan.entry_icon == '🟢' else ('no' if r.plan.entry_icon == '⛔' else 'wait')) }}">
             <div class="entry-st">{{ r.plan.entry_icon }} {{ r.plan.entry_status }}</div>
@@ -1006,7 +1010,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             <div><span>RR</span><b class="mono">{{ r.plan.rr if r.plan.rr else '—' }}</b></div>
           </div>
           <div class="plan-note">單筆風險約 {{ r.plan.risk_pct }}%（觸發價到停損），ATR 波動 {{ r.plan.atr_pct }}%。
-            價位由 ATR 與支撐壓力換算，不保證成交也不保證獲利。</div>
+            目標與停損已依<b>持有 {{ hold_days }} 天</b>調整：目標一約 {{ plan_t1 }} 個 ATR、
+            停損最遠 {{ plan_stop }} 個 ATR。停損抓得緊比較容易被盤中雜訊掃到，
+            這是持有期短的必然取捨。價位由 ATR 與支撐壓力換算，不保證成交也不保證獲利。</div>
         </div>
         {% endif %}
 

@@ -62,10 +62,13 @@ def build_plan(f: dict, res: dict) -> dict:
     trigger = high + 0.05 * atr                      # 過今日高點才算轉強
     invalidation = low - 0.05 * atr                  # 跌破今日低點，這個型態就算失效
     stop = min(support, invalidation - 0.2 * atr)    # 停損取兩者較低，留一點緩衝
-    stop = max(stop, close - 3 * atr)                # 但不要離譜地遠
-    t1 = min(target, trigger + 1.5 * atr)            # 第一目標：近壓或 1.5 ATR
-    t1 = max(t1, trigger + 0.8 * atr)                # 目標一定要在觸發價之上，否則 RR 會變負數
-    t2 = max(target, t1 + 1.0 * atr, trigger + 2.5 * atr)
+    # 以觸發價為基準限制停損距離：買在觸發價，停損就該從觸發價往下算
+    stop = max(stop, trigger - C.PLAN_STOP_MAX_ATR * atr)
+    # 目標倍數跟持有天數綁在一起：持有 1 天就用比較近的目標，
+    # 拿波段的 1.5～2.5 ATR 當隔日沖的目標，一天多半走不到。
+    t1 = min(target, trigger + C.PLAN_T1_ATR * atr)
+    t1 = max(t1, trigger + 0.5 * atr)                # 目標一定要在觸發價之上，否則 RR 會變負數
+    t2 = max(min(target, trigger + C.PLAN_T2_ATR * atr), t1 + 0.4 * atr)
 
     # ----------------------------------------------------------------
     # 進場判定：只回答「現在適不適合進場」，不影響選股模型與排名
@@ -130,6 +133,7 @@ def build_plan(f: dict, res: dict) -> dict:
 
     return {
         "available": True,
+        "hold_days": C.HOLD_DAYS,
         "status": status,
         # --- 進場判定（只回答現在適不適合進場）---
         "entry_icon": entry_icon,
