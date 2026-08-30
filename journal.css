@@ -357,3 +357,9 @@ footer a{color:#7E8B9A}
 .fee-hint b{color:#CFEAF5;font-family:ui-monospace,Menlo,monospace}
 .fee-panel[hidden]{display:none}
 .fee-panel h3{margin-bottom:9px}
+
+/* 我的交易：更新數據 */
+.px-bar{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:11px;
+  padding-top:10px;border-top:1px solid var(--line)}
+.px-msg{font-size:12px;color:var(--muted);line-height:1.6}
+.px-msg.new{color:#6EE7A8}

@@ -33,6 +33,7 @@ import fetch
 import indicators
 import plan
 import momentum as momentum_mod
+import nextday as nextday_mod
 import radar as radar_mod
 import tracking
 import universe as universe_mod
@@ -281,8 +282,6 @@ def run_live() -> dict:
              scanned, strong, C.WEAK_SCORE, regime)
 
     data_date = _data_date(hist_map, now)
-    # 早上那班只更新海外盤與排名依據（台股還沒開盤，行情仍是前一交易日的）
-    run_type = "morning" if now.hour < 12 else "close"
     index_info = fetch.fetch_market_index()
     idx_close = (index_info or {}).get("close")
     # 用 data_date 而不是執行日：早上那班的行情日跟前一天收盤班相同，
@@ -292,6 +291,15 @@ def run_live() -> dict:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, data_date, idx_close)
     add_momentum(rows)                         # 動能確認：只用今天的價量分層
+    # 隔日風險過濾：查歷史上同樣條件的隔日表現，暴跌率偏高的往後排
+    try:
+        nd_stats = nextday_mod.build_stats(hist_map)
+        nextday_mod.attach(rows, nd_stats)
+    except Exception as e:
+        log.warning("隔日風險統計失敗（不影響排名主體）：%s", e)
+        nd_stats = {}
+        for r in rows:
+            r["nextday"], r["nextday_source"], r["crash_penalty"] = None, "統計失敗", 0.0
     add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
     rows = sort_by_final(rows)
     # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
@@ -347,7 +355,9 @@ def run_live() -> dict:
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
             "generated_iso": now.isoformat(timespec="seconds"),
             "trade_date": now.strftime("%Y-%m-%d"),      # 這次執行的日期
-            "run_type": run_type,                         # morning（海外盤）/ close（收盤）
+            "run_type": "close",                          # 這支完整流程一律標記為收盤更新
+            "close_run_at": now.strftime("%Y-%m-%d %H:%M"),   # 收盤排名產生時間
+            "premarket_at": None,                         # 盤前海外更新時間（早上那班才會填）
             "data_date": data_date,                       # 行情資料實際的交易日
             "scanned_count": scanned,
             "qualified_count": len(rows),
@@ -555,8 +565,17 @@ def sort_by_final(rows: list[dict]) -> list[dict]:
     def key(r):
         blend = (C.RANK_W_FINAL * r.get("final_score", 0)
                  + C.RANK_W_MOM * r.get("momentum_score", 0))
+        # 歷史上同條件的隔日暴跌率偏高 → 扣分往後排（不刪除）
+        blend -= float(r.get("crash_penalty") or 0)
         r["rank_score"] = round(blend, 1)
-        return (r.get("momentum_tier", 2), -blend)
+
+        tier = r.get("momentum_tier", 2)
+        nd = r.get("nextday")
+        # 暴跌率高到離譜的，直接降到最後一層，不讓它佔前排
+        if nd and nd.get("calibrated_crash_rate", 0) >= C.NEXTDAY_DEMOTE_CRASH:
+            tier = 2
+            r["demoted_by_crash"] = True
+        return (tier, -blend)
 
     out = sorted(rows, key=key)
     green = sum(1 for r in out if r.get("momentum_tier") == 0)
@@ -893,10 +912,58 @@ def run_demo() -> dict:
     return demo_data.build_demo_payload()
 
 
+def run_premarket() -> int:
+    """
+    盤前海外更新（台北 06:00）。
+
+    **只做一件事**：把美股／海外環境的區塊換成最新的，然後重新產生頁面。
+    不重新下載台股歷史資料、不重跑技術排名、不動 radar / momentum / 模擬組合 /
+    訊號追蹤，也不會產生新的交易日——台股收盤排名原封不動保留上一次 20:00 的結果。
+    """
+    now = datetime.now(C.TZ)
+    path = ROOT / C.OUTPUT_JSON
+    if not path.exists():
+        log.error("找不到 %s，請先跑一次完整的收盤更新（不加參數執行）", C.OUTPUT_JSON)
+        return 1
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        log.error("%s 讀取失敗：%s", C.OUTPUT_JSON, e)
+        return 1
+
+    # 台股是休市日就不要硬跑，避免製造出新的時間戳讓人以為有新資料
+    if now.weekday() >= 5:
+        log.info("週末休市，盤前更新略過")
+        return 0
+
+    us = _us_snapshot()
+    if us:
+        payload["us"] = us
+        log.info("盤前海外資料已更新")
+    else:
+        log.warning("海外資料取得失敗，保留上一次的內容")
+
+    meta = payload.setdefault("meta", {})
+    meta["premarket_at"] = now.strftime("%Y-%m-%d %H:%M")
+    meta["generated_at"] = now.strftime("%Y-%m-%d %H:%M")
+    meta["generated_iso"] = now.isoformat(timespec="seconds")
+    meta["run_type"] = "morning"
+    # trade_date / data_date / close_run_at 一律沿用，不動台股的部分
+
+    render.write_outputs(payload)
+    log.info("盤前海外更新完成（台股收盤排名維持 %s）", meta.get("close_run_at", "上一次"))
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="台股價差機會儀表板")
     ap.add_argument("--demo", action="store_true", help="用模擬資料產生版面預覽（不連網）")
+    ap.add_argument("--premarket", action="store_true",
+                    help="盤前海外更新（只換美股區塊，不重跑台股排名）")
     args = ap.parse_args()
+
+    if args.premarket:
+        return run_premarket()
 
     try:
         payload = run_demo() if args.demo else run_live()

@@ -1,12 +1,13 @@
-name: 每日更新（06:00 海外盤 / 16:00 收盤）
+name: 每日更新（20:00 收盤 / 06:00 盤前海外）
 
 on:
   schedule:
     # GitHub Actions 的 cron 一律使用 UTC，台北時間 = UTC + 8
-    # 早上 06:00：美股已收盤，更新海外盤結論與排名依據（台股行情仍是前一交易日）
+    # 晚上 20:00：完整的台股收盤更新（行情 → 排名 → 雷達 → 明日強勢 → 模擬組合）
+    - cron: "0 12 * * 1-5"    # 台北 20:00（週一～週五）
+    # 早上 06:00：只更新美股／海外資料與盤前風險提示
+    #   不重新下載台股歷史資料，也不重跑技術排名
     - cron: "0 22 * * 0-4"    # 台北 06:00（週一～週五）
-    # 下午 16:00：台股收盤後，更新當日收盤數據
-    - cron: "0 8 * * 1-5"     # 台北 16:00
   workflow_dispatch:           # 允許手動點按鈕立刻執行
 
 # 讓 workflow 有權限寫回 repo 並發布 GitHub Pages
@@ -60,11 +61,21 @@ jobs:
             echo "已有 data/backtest.json，略過"
           fi
 
+      # 依觸發時間決定要跑哪一種：
+      #   台北 06:00（UTC 22:00）→ 盤前，只換海外區塊
+      #   其餘（含手動觸發）→ 完整的台股收盤更新
       - name: 產生儀表板
         env:
-          # 選用：設了 FINMIND_TOKEN 會用你的額度，沒設就用免費額度（速度較慢）
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
-        run: python scripts/build.py
+        run: |
+          HOUR=$(date -u +%H)
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$HOUR" = "22" ]; then
+            echo "台北 06:00 → 盤前海外更新（不重跑台股排名）"
+            python scripts/build.py --premarket
+          else
+            echo "完整台股收盤更新"
+            python scripts/build.py
+          fi
 
       - name: 提交更新結果
         run: |

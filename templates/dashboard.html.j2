@@ -211,6 +211,8 @@ header{padding:20px 0 14px}
   font-size:12.5px;color:var(--muted);margin-top:10px;
 }
 .stamp b{color:#B9C4D0;font-weight:600}
+.stamp .pre{color:#7FA8BE}
+.stamp .pre b{color:#9FD6EA}
 .btn-refresh{
   font:inherit;font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;
   background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;
@@ -328,6 +330,14 @@ header{padding:20px 0 14px}
 .mom-list{font-size:12px;line-height:1.7;margin-top:6px;clear:both}
 .mom-list.ok{color:#8FD9B0}.mom-list.bad{color:#FF9E80}
 .mom-note{font-size:11px;color:#6E7A88;line-height:1.65;margin-top:7px}
+.nd{margin:0 0 13px;padding:10px 12px;border-radius:10px;background:#12181F;border-left:3px solid #3A5568}
+.nd-head{font-size:12.5px;font-weight:700;color:#9FC4D4}
+.nd-head .sub{color:#6E7A88;font-weight:600;font-size:11px}
+.nd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px 10px;margin-top:8px}
+.nd-grid div{display:flex;flex-direction:column;gap:1px}
+.nd-grid span{font-size:10.5px;color:var(--muted)}
+.nd-grid b{font-size:14px;font-weight:700;font-family:ui-monospace,Menlo,monospace}
+.nd-note{font-size:11px;color:#6E7A88;line-height:1.65;margin-top:7px}
 .final .sub{color:#5F6B78}
 .swing{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:9px;
   font-size:12.5px;color:var(--muted)}
@@ -699,6 +709,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         {{ (us.forecast.r2 * 100)|round|int }}% 的波動，其餘來自台股自身的籌碼與消息面。
         <b>這是統計相關性，不是預測，更不是投資建議。</b>
         個股排名以大盤狀態與歷史期望值為準，這個燈號不參與排序。
+        盤前（06:00）只會更新這一區，<b>不會重跑台股收盤排名</b>——上方名次仍是前一晚 20:00 算出來的。
       </p>
       {% elif us.forecast %}
       <p class="us-note">{{ us.forecast.reason }}</p>
@@ -714,8 +725,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="stamp">
       <span id="freshness">更新時間 <b class="mono">{{ meta.generated_at }}</b></span>
       <span>行情資料日 <b class="mono">{{ meta.data_date or meta.trade_date }}</b></span>
-      <span>{{ '06:00 海外盤更新' if meta.run_type == 'morning' else '16:00 收盤更新' }}
-        <b class="mono">{{ meta.generated_at }}</b></span>
+      <span>收盤排名 <b class="mono">{{ meta.close_run_at or meta.generated_at }}</b></span>
+      {% if meta.premarket_at %}
+      <span class="pre">盤前海外更新 <b class="mono">{{ meta.premarket_at }}</b></span>
+      {% endif %}
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
       <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
     </div>
@@ -936,6 +949,33 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
             今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
           </div>
+        </div>
+        {% endif %}
+
+        {% if r.nextday %}
+        <div class="nd">
+          <div class="nd-head">歷史上同樣條件的股票，隔日表現
+            <span class="sub">（{{ r.nextday_source }}，{{ r.nextday.samples }} 筆）</span></div>
+          <div class="nd-grid">
+            <div><span>隔日上漲</span><b>{{ r.nextday.calibrated_win_rate }}%</b></div>
+            <div><span>隔日大跌</span><b class="down">{{ r.nextday.calibrated_crash_rate }}%</b></div>
+            <div><span>平均</span><b class="{{ 'up' if r.nextday.avg > 0 else 'down' }}">{{ '%+.2f'|format(r.nextday.avg) }}%</b></div>
+            <div><span>最差一成</span><b class="down">{{ '%.2f'|format(r.nextday.p10) }}%</b></div>
+            {% if r.nextday.top_hit_rate %}
+            <div><span>進漲幅前段</span><b>{{ r.nextday.top_hit_rate }}%</b></div>
+            {% endif %}
+            <div><span>排序加減分</span><b>{{ '%+.1f'|format(-(r.crash_penalty or 0)) }}</b></div>
+          </div>
+          <div class="nd-note">
+            隔日＝t+1 開盤買、t+1 收盤賣，跟交易計畫的假設一致。
+            「進漲幅前段」隨機挑大約就是 20%，明顯高於 20% 才算真的有預測力。
+            這一層只影響排序，<b>不改 EV、勝率、PF 與回測</b>。
+          </div>
+        </div>
+        {% elif r.nextday_source %}
+        <div class="nd">
+          <div class="nd-head">隔日統計：{{ r.nextday_source }}</div>
+          <div class="nd-note">歷史樣本不足，這一檔沒有做隔日風險調整。</div>
         </div>
         {% endif %}
 
@@ -1263,7 +1303,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   }
 
   function nextRunHint() {
-    // 排程是台北時間，不能用裝置本地時區算，否則人在國外會顯示錯誤
+    // 排程是台北時間（20:00 收盤更新 / 06:00 盤前海外），不能用裝置本地時區算
     var h;
     try {
       h = parseInt(new Intl.DateTimeFormat("en-US", {
@@ -1272,9 +1312,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     } catch (e) {
       h = new Date().getHours();
     }
-    if (h < 6) return "下一次更新：今天 06:00（海外盤）";
-    if (h < 16) return "下一次更新：今天 16:00（台股收盤）";
-    return "下一次更新：明天 06:00（海外盤）";
+    if (h < 6) return "下一次更新：今天 06:00（盤前海外）";
+    if (h < 20) return "下一次更新：今天 20:00（台股收盤排名）";
+    return "下一次更新：明天 06:00（盤前海外）";
   }
 
   /* 盤中／收盤價的來源：GitHub Pages 部署有頻率限制，不可能每 5 分鐘重新部署，
@@ -1364,7 +1404,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             return;
           }
           // 排行沒有重算，但價格可以用盤中／收盤那支抓到的最新價即時更新
-          var kind = (j.meta && j.meta.run_type) === "morning" ? "06:00 海外盤" : "16:00 收盤";
+          var kind = (j.meta && j.meta.run_type) === "morning"
+                     ? "06:00 盤前海外" : "20:00 收盤排名";
           fetchIntraday().then(function (q) {
             var n = applyLivePrices(q);
             if (n) {

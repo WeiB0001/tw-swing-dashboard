@@ -780,6 +780,47 @@
     });
   }
 
+  /* ---- 更新數據：重讀共用的最新行情，不會多打任何一次股票 API ---- */
+  var pxBtn = $("px-refresh"), pxMsg = $("px-msg");
+  function pxSay(text, isNew) {
+    if (!pxMsg) return;
+    pxMsg.textContent = text;
+    pxMsg.classList.toggle("new", !!isNew);
+  }
+  if (pxBtn) {
+    pxBtn.addEventListener("click", function () {
+      var before = PX_UPDATED;
+      pxBtn.disabled = true;
+      pxBtn.textContent = "🔄 讀取中…";
+      pxSay("正在讀取最新行情…", false);
+      refreshPrices().then(function (ok) {
+        pxBtn.disabled = false;
+        pxBtn.textContent = "🔄 更新數據";
+        if (!ok) {
+          // 讀不到就沿用最後有效價，不會清空也不會變成 0
+          pxSay("讀不到最新行情，仍顯示最後有效價" +
+                (PX_DATE ? "（行情日期 " + PX_DATE + "）" : "") + "。", false);
+          return;
+        }
+        render();          // 最新價、今日損益、市值、未實現、總收益一起重算
+        pxSay((PX_UPDATED && PX_UPDATED !== before ? "已更新：" : "已是最新：") +
+              "行情日期 " + (PX_DATE || "--") +
+              "　最後更新 " + (PX_UPDATED || "--"),
+              PX_UPDATED !== before);
+      }).catch(function () {
+        // 保底：任何意外都要把按鈕放開，不能卡在「讀取中」
+        pxBtn.disabled = false;
+        pxBtn.textContent = "🔄 更新數據";
+        pxSay("更新時發生問題，仍顯示最後有效價" +
+              (PX_DATE ? "（行情日期 " + PX_DATE + "）" : "") + "。", false);
+      });
+    });
+    // 一進頁面就把目前的行情日期寫出來
+    setTimeout(function () {
+      pxSay("行情日期 " + (PX_DATE || "--") + "　最後更新 " + (PX_UPDATED || "--"), false);
+    }, 400);
+  }
+
   // 另一個分頁改了資料就同步（例如首頁加了一筆，交易頁自動更新）
   window.addEventListener("storage", function (e) {
     if (e.key === KEY || e.key === SNAP) render();

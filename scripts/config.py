@@ -202,6 +202,22 @@ STRONG_HISTORY_JSON = "data/strong_history.json"
 STRONG_HISTORY_DAYS = 120     # 每日強勢榜保留幾天
 MOMENTUM_JSON = "data/momentum_forecast.json"
 
+# --- 隔日風險過濾（只影響最終排序，不改任何模型）---
+NEXTDAY_CRASH_PCT = -3.0        # 隔日跌幅低於此值算「大跌」
+NEXTDAY_MIN_SAMPLES = 30        # 樣本不足就往上退一層
+NEXTDAY_MIN_TURNOVER = 20_000_000
+NEXTDAY_CRASH_WEIGHT = 1.2      # 暴跌率每高出基準 1 個百分點，扣幾分
+NEXTDAY_MAX_PENALTY = 25        # 扣分上限，避免單一因素主導排序
+NEXTDAY_DEMOTE_CRASH = 25.0     # 暴跌率高於此值直接降到最後一層
+# 歷史上同條件的隔日平均報酬，每 1% 換算成幾分加減到排序分數。
+# 這是為了修正「排名前段隔日表現反而比全體差」的實測問題：
+# 光扣暴跌率不夠，均值回歸造成的普遍性小虧也要反映在排序上。
+NEXTDAY_AVG_WEIGHT = 12.0
+NEXTDAY_AVG_CAP = 30.0          # 加減分上限
+# 「隔日進入官方漲幅排行前 20%」的命中率，高於隨機基準的部分才加分
+NEXTDAY_HIT_WEIGHT = 0.8
+NEXTDAY_HIT_CAP = 20.0
+
 # --- 卡片展開的迷你價量圖 ---
 SPARK_BARS = 40                   # 取最近幾根日 K
 

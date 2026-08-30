@@ -226,6 +226,8 @@ def build_demo_payload() -> dict:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), 23456.78)
     add_momentum(rows)
+    import nextday as nextday_mod
+    nextday_mod.attach(rows, nextday_mod.build_stats(hist_map))
     add_final_score(rows)
     rows = sort_by_final(rows)
     # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
@@ -239,6 +241,8 @@ def build_demo_payload() -> dict:
             "trade_date": now.strftime("%Y-%m-%d"),
             "data_date": now.strftime("%Y-%m-%d"),
             "run_type": "close",
+            "close_run_at": now.strftime("%Y-%m-%d %H:%M"),
+            "premarket_at": None,
             "scanned_count": len(rows),
             "qualified_count": len(rows),
             "universe_count": len(DEMO_STOCKS),
