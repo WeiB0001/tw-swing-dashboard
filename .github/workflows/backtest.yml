@@ -40,6 +40,13 @@ jobs:
           restore-keys: |
             tw-history-
 
+      # 用真實資料重新調校參數。只有 out-of-sample 贏過基準才會寫入
+      # data/tuned_params.json，贏不了就什麼都不寫，維持預設值。
+      - name: 自動調校參數
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: python scripts/autotune.py --days 250 || echo "調校未通過驗證，維持預設參數"
+
       - name: 執行回測
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}

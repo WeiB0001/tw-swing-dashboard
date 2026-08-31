@@ -34,7 +34,7 @@ import build as build_mod
 import config as C
 import indicators
 import nextday as nextday_mod
-import plan as plan_mod
+import plan as plan_mod  # noqa: F401
 import scoring
 
 logging.basicConfig(level=logging.INFO,
@@ -70,7 +70,12 @@ def describe(rets: list[float]) -> dict:
     }
 
 
-def run(hist_map: dict, days: int, use_guard: bool) -> dict:
+def run(hist_map: dict, days: int, use_guard: bool, w_mom: float | None = None,
+        by_plan: bool = False) -> dict:
+    # 允許暫時覆寫動能權重，用來測「動能到底幫忙還是幫倒忙」
+    if w_mom is not None:
+        C.RANK_W_MOM = float(w_mom)
+        C.RANK_W_FINAL = 1.0 - float(w_mom)
     frames = {}
     for code, h in hist_map.items():
         if h is None or len(h) < C.MIN_BARS + 3:
@@ -117,9 +122,39 @@ def run(hist_map: dict, days: int, use_guard: bool) -> dict:
             row = build_mod.build_row(code, code, f, res)
             row["prev_low"] = float(df["low"].iloc[pos - 1]) if pos > 0 else None
             rows.append(row)
-            # 隔日：開盤買、收盤賣（實際可執行的做法）
-            # 跟實際做法一致：t+1 開盤買、持有 HOLD_DAYS 天後收盤賣
-            nxt[code] = (float(df["close"].iloc[pos + 1 + C.HOLD_DAYS]) / entry - 1) * 100
+
+            if not by_plan:
+                # 做法 A：隔天開盤無條件買進，持有 HOLD_DAYS 天後收盤賣
+                nxt[code] = (float(df["close"].iloc[pos + 1 + C.HOLD_DAYS]) / entry - 1) * 100
+                continue
+
+            # 做法 B：照卡片上的交易計畫走
+            #   只有價格真的突破觸發價才進場（跳空開低沒碰到就不買，這一天就不交易）
+            #   進場後碰到停損先停損、碰到目標一先了結，都沒碰到就持有到期收盤賣
+            pl = row.get("plan") or {}
+            trig, stop, t1 = pl.get("trigger"), pl.get("stop"), pl.get("target1")
+            if not (trig and stop and t1):
+                continue
+            entry_px = None
+            for d in range(1, C.HOLD_DAYS + 2):
+                j = pos + d
+                if j >= len(df):
+                    break
+                hi = float(df["high"].iloc[j])
+                lo = float(df["low"].iloc[j])
+                op = float(df["open"].iloc[j])
+                if entry_px is None:
+                    if hi < trig:
+                        continue                      # 沒過觸發價，今天不進場
+                    entry_px = max(op, trig)          # 跳空開高就以開盤價成交
+                if lo <= stop:
+                    nxt[code] = (stop / entry_px - 1) * 100
+                    break
+                if hi >= t1:
+                    nxt[code] = (t1 / entry_px - 1) * 100
+                    break
+                if d == C.HOLD_DAYS + 1:
+                    nxt[code] = (float(df["close"].iloc[j]) / entry_px - 1) * 100
 
         if len(rows) < 5:
             continue
@@ -148,7 +183,7 @@ def run(hist_map: dict, days: int, use_guard: bool) -> dict:
                         hits[k] += 1
         every.extend(nxt.get(r["code"]) for r in ranked if nxt.get(r["code"]) is not None)
 
-    out = {"days": day_count, "guard": use_guard,
+    out = {"days": day_count, "guard": use_guard, "by_plan": by_plan,
            "top": {k: describe(v) for k, v in topk.items()},
            "all": describe(every),
            "hit": {k: (round(hits[k] / max(1, len(topk[k])) * 100, 1)) for k in topk}}
@@ -157,7 +192,8 @@ def run(hist_map: dict, days: int, use_guard: bool) -> dict:
 
 def report(r: dict) -> None:
     print("\n" + "=" * 72)
-    print(f"排名驗證：{r['days']} 個交易日｜隔日風險過濾 {'開啟' if r['guard'] else '關閉'}")
+    print(f"排名驗證：{r['days']} 個交易日｜隔日風險過濾 {'開啟' if r['guard'] else '關閉'}"
+          f"｜進場方式：{'照交易計畫（觸發價才買、有停損）' if r.get('by_plan') else '隔天開盤無條件買進'}")
     print(f"進場假設：第 t 日收盤排名，t+1 開盤買、持有 {C.HOLD_DAYS} 天後收盤賣")
     print("=" * 72)
     print(f"{'':<8}{'樣本':>6}{'上漲率':>8}{'平均':>8}{'中位':>8}"
@@ -184,14 +220,40 @@ def main() -> int:
     ap.add_argument("--days", type=int, default=120, help="驗證最近幾個交易日")
     ap.add_argument("--no-guard", action="store_true", help="關閉隔日風險過濾以做對照")
     ap.add_argument("--compare", action="store_true", help="同時跑開／關兩種，直接比較")
+    ap.add_argument("--by-plan", action="store_true",
+                    help="照卡片上的交易計畫模擬：觸發價才進場、有停損與目標一")
+    ap.add_argument("--sweep", action="store_true",
+                    help="掃描動能權重 0～0.6，找出對你的資料最合適的值")
     args = ap.parse_args()
 
     hist_map = load_history(args.demo)
+
+    if args.sweep:
+        # 動能權重 0 = 完全不看今日動能，純用模型分數排序
+        print("\n動能權重掃描（0 = 純模型分數，數字越大越看重今日動能）")
+        print(f"{'權重':>6}{'Top1上漲率':>11}{'Top1平均':>10}{'Top1大跌率':>11}"
+              f"{'Top5平均':>10}{'全體平均':>10}")
+        rows = []
+        for w in (0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6):
+            r = run(hist_map, args.days, True, w)
+            t1, t5, al = r["top"][1], r["top"][5], r["all"]
+            rows.append((w, t1, t5, al))
+            print(f"{w:>6.1f}{t1.get('win', 0):>10.1f}%{t1.get('avg', 0):>9.2f}%"
+                  f"{t1.get('crash', 0):>10.1f}%{t5.get('avg', 0):>9.2f}%"
+                  f"{al.get('avg', 0):>9.2f}%")
+        best = max(rows, key=lambda x: x[1].get("avg", -99))
+        print(f"\nTop1 平均報酬最好的權重是 {best[0]:.1f}"
+              f"（{best[1].get('avg', 0):+.2f}%），全體平均 {best[3].get('avg', 0):+.2f}%")
+        print("如果所有權重的 Top1 都輸給全體，代表這套排序在你的資料上不成立，"
+              "把 RANK_W_MOM 設為 0 讓排序回到純模型分數，或先別照它下單。")
+        return 0
+
     if args.compare:
-        report(run(hist_map, args.days, False))
-        report(run(hist_map, args.days, True))
+        # 直接對照：無條件開盤買 vs 照交易計畫走
+        report(run(hist_map, args.days, True, None, False))
+        report(run(hist_map, args.days, True, None, True))
     else:
-        report(run(hist_map, args.days, not args.no_guard))
+        report(run(hist_map, args.days, not args.no_guard, None, args.by_plan))
     return 0
 
 

@@ -556,3 +556,31 @@ FINMIND_BACKOFF_MAX = 30.0
 
 # yfinance 只留給美股指數與美股期貨，不再負責台股個股歷史
 YF_RETRY = 3
+
+
+# ---------------------------------------------------------------------------
+# 自動調校結果（scripts/autotune.py 用真實資料跑出來的）
+# 有 data/tuned_params.json 就套用，刪掉檔案即回到上面的預設值。
+# 只有 out-of-sample 真的贏過基準才會被寫入，所以這裡看到的一定是驗證過的。
+# ---------------------------------------------------------------------------
+def _load_tuned():
+    import json as _json
+    from pathlib import Path as _Path
+    p = _Path(__file__).resolve().parent.parent / "data/tuned_params.json"
+    if not p.exists():
+        return {}
+    try:
+        d = _json.loads(p.read_text(encoding="utf-8"))
+        return d.get("params", {}) if isinstance(d, dict) else {}
+    except Exception:
+        return {}
+
+
+TUNED = _load_tuned()
+for _k, _v in TUNED.items():
+    if _k in globals() and isinstance(_v, (int, float)):
+        globals()[_k] = _v
+
+# 跟著調校值連動的衍生設定
+PRIMARY_HOLD_DAYS = HOLD_DAYS
+RANK_W_FINAL = 1.0 - RANK_W_MOM

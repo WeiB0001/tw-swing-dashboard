@@ -111,6 +111,42 @@ t+1+HOLD_DAYS 收盤賣出
 
 實測回報「排名前幾名隔日下跌機率偏高、甚至暴跌」，所以加了兩樣東西。
 
+### 自動調校（用你的真實資料）
+
+```bash
+python scripts/autotune.py --days 250            # 調校並寫入
+python scripts/autotune.py --days 250 --dry-run  # 只看結果
+```
+
+逐項座標下降調 `HOLD_DAYS`、`PLAN_STOP_MAX_ATR`、`PLAN_T1_ATR`、`RANK_W_MOM`。時間切前 70% 校準、後 30% 只做驗證（out-of-sample，沒有參與調校）。
+
+**三道防呆**：
+1. 驗證期的 Top5 沒贏過「全體平均」→ 直接判定這套排序不成立，**不寫入任何參數**
+2. 調校後沒比預設更好 → 維持預設，不寫入
+3. 寫入的是 `data/tuned_params.json`，`config.py` 啟動時自動套用；**刪掉檔案就回到預設值**
+
+`.github/workflows/backtest.yml` 每週日會自動跑一次，沒通過驗證就什麼都不改。
+
+### ⚠️ 先驗證再下單
+
+實測回報「前 5 名全部大跌」。這跟驗證結果一致——**排名前段在模擬資料上輸給隨機挑選**。
+在你用自己的資料驗證過、且 Top 段確實優於全體之前，**請不要照這個排名下單**。
+
+```bash
+python scripts/evaluate.py --days 120 --compare   # 無條件開盤買 vs 照交易計畫走
+python scripts/evaluate.py --days 120 --sweep     # 掃描動能權重 0～0.6
+```
+
+三種可能的結論與對應處置：
+
+| 驗證結果 | 該做什麼 |
+|---|---|
+| Top 1 > Top 10 > 全體 | 排名有效，可以用 |
+| Top 段與全體差不多 | 排名沒有鑑別力，只當觀察清單，別照名次下單 |
+| Top 段輸給全體 | **排名在幫倒忙**。把 `RANK_W_MOM` 設為 0 回到純模型分數；若仍輸，代表這套訊號在台股隔日沖不成立 |
+
+`--sweep` 會直接告訴你哪個動能權重最好。如果每個權重的 Top 1 都輸給全體，工具會明說「這套排序在你的資料上不成立」。
+
 ### `scripts/evaluate.py` — 把排序邏輯逐日重放，量出真實表現
 
 ```bash
