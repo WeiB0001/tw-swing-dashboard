@@ -1,5 +1,5 @@
 {
- "cash": 781.5108400000026,
+ "cash": 33103.974310000005,
  "positions": [
   {
    "code": "2359",
@@ -18,24 +18,21 @@
    "shares": 66,
    "entry": 505.0,
    "entry_date": "2026-08-23",
-   "held": 0,
+   "held": 1,
    "stop": 501.62,
    "target1": 539.94,
    "pattern": "多頭回檔"
-  },
-  {
-   "code": "2357",
-   "name": "華碩",
-   "shares": 33,
-   "entry": 923.0,
-   "entry_date": "2026-08-27",
-   "held": 1,
-   "stop": 888.91,
-   "target1": 980.94,
-   "pattern": "多頭回檔"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "3231",
+   "budget": 33103.97,
+   "stop": 175.68,
+   "target1": 193.79,
+   "pattern": "低檔止跌轉強"
+  }
+ ],
  "trades": [
   {
    "code": "3665",
@@ -47,6 +44,18 @@
    "net_pct": -6.47,
    "reason": "停損",
    "held": 5,
+   "pattern": "多頭回檔"
+  },
+  {
+   "code": "2357",
+   "name": "華碩",
+   "entry_date": "2026-08-27",
+   "exit_date": "2026-08-31",
+   "entry": 923.0,
+   "exit": 980.94,
+   "net_pct": 5.98,
+   "reason": "達標",
+   "held": 2,
    "pattern": "多頭回檔"
   }
  ],
@@ -95,8 +104,13 @@
    "date": "2026-08-28",
    "equity": 99286.51,
    "index": 45975.22
+  },
+  {
+   "date": "2026-08-31",
+   "equity": 100654.97,
+   "index": 46331.45
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-08-28"
+ "last_date": "2026-08-31"
 }
