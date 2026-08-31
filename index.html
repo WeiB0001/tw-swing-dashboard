@@ -687,24 +687,24 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <h3>美股連動</h3>
       <div class="us-grid">
         <div><span>那斯達克</span>
-          <b class="down">-0.42%</b></div>
+          <b class="down">-0.50%</b></div>
         <div><span>費城半導體</span>
-          <b class="up">+0.14%</b></div>
+          <b class="up">+0.07%</b></div>
         <div><span>S&P 500</span>
-          <b class="down">-0.48%</b></div>
+          <b class="down">-0.52%</b></div>
         <div><span>道瓊</span>
-          <b class="down">-0.67%</b></div>
+          <b class="down">-0.68%</b></div>
       </div>
       <div class="us-grid us-sub">
         <div><span>那斯達克期貨（此刻）</span>
-          <b class="down">-0.30%</b></div>
+          <b class="down">-0.32%</b></div>
         <div><span>S&P 500 期貨（此刻）</span>
           <b class="down">-0.51%</b></div>
       </div>
 
       <div class="us-fc">
-<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 -0.03%
-          · 區間 -1.42% ～ +1.36%
+<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 -0.04%
+          · 區間 -1.43% ～ +1.35%
           · R² 0.328 · N 250</div>
       </div>
       <p class="us-note">
@@ -721,9 +721,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="refresh-msg" id="refresh-msg" hidden></div>
     <div class="recalc-box" id="recalc-box" hidden></div>
     <div class="stamp">
-      <span id="freshness">更新時間 <b class="mono">2026-09-01 01:33</b></span>
+      <span id="freshness">更新時間 <b class="mono">2026-09-01 02:45</b></span>
       <span>行情資料日 <b class="mono">2026-08-31</b></span>
-      <span>排名算出 <b class="mono">2026-09-01 01:33:16</b></span>
+      <span>排名算出 <b class="mono">2026-09-01 02:45:16</b></span>
       <span class="apply">適用交易日 <b class="mono">2026-09-01</b></span>
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
       <button type="button" class="btn-refresh recalc" id="btn-recalc">⟳ 抓最新資料並重算排名</button>
@@ -39198,7 +39198,7 @@ data-trigger="99.55" data-stop="92.59" data-t1="103.03" data-t2="105.81" data-ty
 
   <footer>
     台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
-    <span class="mono">2026-09-01 01:33</span>
+    <span class="mono">2026-09-01 02:45</span>
   </footer>
 </div>
 
@@ -39209,7 +39209,7 @@ data-trigger="99.55" data-stop="92.59" data-t1="103.03" data-t2="105.81" data-ty
 (function () {
   "use strict";
 
-  var GENERATED = "2026-09-01T01:33:16+08:00";
+  var GENERATED = "2026-09-01T02:45:16+08:00";
   var TRADE_DATE = "2026-09-01";
 
   /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
@@ -39230,7 +39230,7 @@ data-trigger="99.55" data-stop="92.59" data-t1="103.03" data-t2="105.81" data-ty
     else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
     else word = Math.floor(mins / 1440) + " 天前更新";
     freshness.innerHTML = '<b>' + word + '</b>';
-    freshness.title = "更新時間 2026-09-01 01:33";
+    freshness.title = "更新時間 2026-09-01 02:45";
   }
   renderFreshness();
   setInterval(renderFreshness, 60000);
@@ -39253,7 +39253,7 @@ data-trigger="99.55" data-stop="92.59" data-t1="103.03" data-t2="105.81" data-ty
      ---------------------------------------------------------------------- */
   var refreshBtn = document.getElementById("btn-refresh");
   var refreshMsg = document.getElementById("refresh-msg");
-  var CURRENT_STAMP = "2026-09-01 01:33";
+  var CURRENT_STAMP = "2026-09-01 02:45";
 
   function showMsg(text, isNew) {
     if (!refreshMsg) return;
