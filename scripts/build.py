@@ -75,6 +75,7 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
         "code": code,
         "name": name,
         "sector": C.sector_of(code),        # 產業分類（卡片上顯示）
+        "group": C.group_of(C.sector_of(code), C.asset_type(code)),   # Tab 用的產業大類
         "asset_type": C.asset_type(code),   # etf / tech / other，供網頁篩選
         # --- 原始指標（UI 展開後顯示，一個都沒刪） ---
         "close": f["close"],

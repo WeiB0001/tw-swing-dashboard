@@ -785,12 +785,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     <div class="budget-result" id="budget-result"></div>
 
-    <div class="panel-row scroll" role="group" aria-label="類別">
-      <span class="lbl">類別</span>
+    <div class="panel-row scroll" role="group" aria-label="產業">
+      <span class="lbl">產業</span>
       <button type="button" class="type-btn" data-type="all" aria-pressed="true">全部</button>
-      <button type="button" class="type-btn" data-type="tech" aria-pressed="false">電子科技</button>
-      <button type="button" class="type-btn" data-type="etf" aria-pressed="false">ETF</button>
-      <button type="button" class="type-btn" data-type="other" aria-pressed="false">其他</button>
+      {% for g in groups %}
+      <button type="button" class="type-btn" data-type="{{ g.name }}"
+              aria-pressed="false">{{ g.name }} {{ g.count }}</button>
+      {% endfor %}
     </div>
 
     <div class="band-note" id="band-count"></div>
@@ -804,7 +805,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% if rows %}
     {% for r in rows %}
     <details class="card" data-code="{{ r.code }}" data-rank="{{ r.rank }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.score }}"
-             {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.asset_type }}">
+             {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
         <div class="row1">
           <div class="rank {{ 'top' if (r.final_rank or r.rank) <= 3 }}">{{ r.final_rank or r.rank }}</div>
@@ -1227,7 +1228,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     共掃描 {{ meta.scanned_count }} 檔，全部列出並保留完整名次，
     切換類別時看到的名次是<b>總排名</b>——ETF 的第一名如果是總排名第 47 名，顯示的就是 47。<br>
-    掃描池為當日成交金額前 {{ meta.top_n }} 名 + 主要權值股 + 電子科技股 + 台股 ETF；
+    掃描池為當日成交金額前 {{ meta.top_n }} 名 + 主要權值股 + 電子科技股 + 台股 ETF，
+    <b>不限產業</b>——航運、塑化、生技、傳產一律納入總排名，上方的產業 Tab 只是分類顯示，
+    不影響名次；
     股價低於 {{ thresholds.min_price }} 元或成交金額低於 {{ thresholds.min_turnover }} 的不納入。
     槓桿型（L）、反向型（R）、債券型（B）ETF 排除。<br>
     本週預算與類別只影響顯示與配置試算，<b>不影響排名</b>。<br>
@@ -1681,9 +1684,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     if (countEl) {
       var bits = [];
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
-      if (st.type !== "all") {
-        bits.push({ tech: "電子科技", etf: "ETF", other: "其他" }[st.type]);
-      }
+      if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
       var head = bits.length ? bits.join("、") + "：" : "全部：";
       var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";

@@ -62,6 +62,22 @@ def _price_map_json(rows: list) -> str:
     return json.dumps(m, ensure_ascii=False, separators=(",", ":"))
 
 
+def _groups(rows: list) -> list:
+    """
+    這次排行裡實際出現的產業大類與檔數，用來產生 Tab。
+    只列出真的有標的的分類，不會出現點了沒東西的空 Tab。
+    """
+    from collections import Counter
+    c = Counter(r.get("group") or "其他" for r in rows)
+    # 常看的排前面，其餘依檔數多寡
+    order = ["半導體", "電腦週邊", "光電", "網通", "電子零件", "其他電子",
+             "電子通路", "資訊服務", "金融", "ETF"]
+    head = [(g, c[g]) for g in order if c.get(g)]
+    tail = sorted([(g, n) for g, n in c.items() if g not in order],
+                  key=lambda x: -x[1])
+    return [{"name": g, "count": n} for g, n in head + tail]
+
+
 def render_html(payload: dict) -> str:
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATE_DIR)),
@@ -79,6 +95,7 @@ def render_html(payload: dict) -> str:
         portfolio=payload.get("portfolio") or None,
         pattern_min_samples=C.PATTERN_MIN_SAMPLES,
         top_slots=C.TOP_SLOTS,
+        groups=_groups(payload["rows"]),
         hold_days=C.HOLD_DAYS,
         plan_t1=C.PLAN_T1_ATR,
         plan_stop=C.PLAN_STOP_MAX_ATR,

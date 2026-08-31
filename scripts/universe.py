@@ -51,15 +51,15 @@ def classify(code: str, category: str = "", market: str = "") -> tuple[str | Non
             return "tech", cat
         if cat in C.FINANCE_CATEGORIES:
             return "finance", cat
-        # 有分類但不屬於指定三類 → 明確不收
-        return None, cat
+        # 總排行不限種類：其他產業一樣收，只是歸到 other，Tab 上分開顯示
+        return "other", cat
 
     # 沒有分類資料 → 退回手動清單
     if code in C.TECH_SECTORS:
         return "tech", C.TECH_SECTORS[code]
     if code in C.FINANCE_STOCKS:
         return "finance", C.FINANCE_STOCKS[code]
-    return None, ""
+    return "other", ""
 
 
 def _is_leveraged_etf(code: str) -> bool:
@@ -88,6 +88,7 @@ def build_core(snapshot: pd.DataFrame, info: pd.DataFrame | None) -> pd.DataFram
         if kind == "etf" and not C.ETF_ALLOW_LEVERAGED and _is_leveraged_etf(code):
             continue
         rows.append({**r.to_dict(), "kind": kind, "sector": sector,
+                     "group": C.group_of(sector, kind),
                      "market": cat_map.get(code, ("", "TWSE"))[1]})
     if not rows:
         return snapshot.iloc[0:0]
@@ -105,9 +106,10 @@ def build_core(snapshot: pd.DataFrame, info: pd.DataFrame | None) -> pd.DataFram
     core = pd.concat([top, listed]).drop_duplicates(subset="code")
     core = core.sort_values("turnover", ascending=False).head(C.CORE_MAX_UNIVERSE)
 
-    n = {k: int((core["kind"] == k).sum()) for k in ("tech", "finance", "etf")}
-    log.info("Core 股票池：%d 檔（科技 %d、金融 %d、ETF %d）",
-             len(core), n["tech"], n["finance"], n["etf"])
+    from collections import Counter
+    g = Counter(core["group"]) if "group" in core.columns else {}
+    log.info("Core 股票池：%d 檔｜產業分布：%s", len(core),
+             "、".join("%s %d" % (k, v) for k, v in g.most_common(10)))
     return core.reset_index(drop=True)
 
 
@@ -134,8 +136,8 @@ def build_extended(snapshot: pd.DataFrame, info: pd.DataFrame | None,
         if kind == "etf" and not C.ETF_ALLOW_LEVERAGED and _is_leveraged_etf(code):
             return
         out[code] = {"symbol": code, "name": name or "", "sector": sector or "",
-                     "kind": kind, "market": market,
-                     "is_core": code in core_codes}
+                     "kind": kind, "group": C.group_of(sector, kind),
+                     "market": market, "is_core": code in core_codes}
 
     # 1) 基本資料（這是上櫃股票唯一的來源）
     if info is not None and len(info):
