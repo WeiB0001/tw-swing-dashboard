@@ -1,0 +1,65 @@
+name: 參數調校（手動執行）
+
+# 用你的真實台股資料調校排名參數。
+# 只有 out-of-sample 驗證贏過基準才會寫入 data/tuned_params.json；
+# 沒通過就什麼都不改，維持預設值。
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "回看幾個交易日（建議 250，資料不夠就填 120）"
+        required: false
+        default: "250"
+      dry_run:
+        description: "只看結果不寫入（true / false）"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+
+jobs:
+  tune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # 沿用日更留下的歷史快取，不會重抓 14 個月
+      - name: 還原歷史資料快取
+        uses: actions/cache@v4
+        with:
+          path: data/history
+          key: tw-history-${{ github.run_id }}
+          restore-keys: |
+            tw-history-
+
+      - name: 執行調校
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python scripts/autotune.py --days ${{ github.event.inputs.days }} --dry-run
+          else
+            python scripts/autotune.py --days ${{ github.event.inputs.days }}
+          fi
+
+      - name: 提交調校結果
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/tuned_params.json || true
+          if git diff --staged --quiet; then
+            echo "沒有寫入新參數（未通過驗證，或本來就是最好的設定）"
+          else
+            git commit -m "參數調校 $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
+            git pull --rebase --autostash || true
+            git push
+          fi

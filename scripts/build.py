@@ -21,7 +21,7 @@ import argparse
 import json
 import logging
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -358,6 +358,8 @@ def run_live() -> dict:
             "trade_date": now.strftime("%Y-%m-%d"),      # 這次執行的日期
             "run_type": "close",                          # 這支完整流程一律標記為收盤更新
             "close_run_at": now.strftime("%Y-%m-%d %H:%M"),   # 收盤排名產生時間
+            "ranked_at": now.strftime("%Y-%m-%d %H:%M:%S"),   # 這份排名算完的時間
+            "applies_to": _next_trading_day(data_date),       # 這份排名適用的交易日
             "premarket_at": None,                         # 盤前海外更新時間（早上那班才會填）
             "data_date": data_date,                       # 行情資料實際的交易日
             "scanned_count": scanned,
@@ -701,6 +703,21 @@ def add_edges(rows: list[dict]) -> None:
                          "沒有明顯優於同榜其他標的的地方。"
                          % (float(r.get("rsi") or 0), vol,
                             float(r.get("pct_below_high20") or 0), rr))
+
+
+def _next_trading_day(data_date: str) -> str:
+    """
+    這份排名適用的交易日＝行情資料日的下一個交易日。
+    只跳過週末，遇到國定假日會順延，頁面上會註明。
+    """
+    try:
+        d = datetime.strptime(data_date, "%Y-%m-%d")
+    except Exception:
+        return ""
+    d += timedelta(days=1)
+    while d.weekday() >= 5:
+        d += timedelta(days=1)
+    return d.strftime("%Y-%m-%d")
 
 
 def _data_date(hist_map: dict, now) -> str:

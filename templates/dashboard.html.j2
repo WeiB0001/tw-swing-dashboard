@@ -211,6 +211,23 @@ header{padding:20px 0 14px}
   font-size:12.5px;color:var(--muted);margin-top:10px;
 }
 .stamp b{color:#B9C4D0;font-weight:600}
+.stamp .apply{color:#F2C14E}
+.stamp .apply b{color:#FFD782}
+.btn-refresh.recalc{border-color:#3A5568;color:#9FD6EA}
+.recalc-box{
+  margin-top:8px;padding:10px 12px;border-radius:10px;
+  background:#12181F;border:1px solid #263543;font-size:12.5px;
+  color:#9FACBA;line-height:1.7;
+}
+.recalc-box[hidden]{display:none}
+.recalc-box b{color:#CFEAF5}
+.recalc-box a{color:#7FD1E8}
+.recalc-box input{
+  width:100%;margin-top:7px;background:var(--panel-2);border:1px solid #2E3846;
+  border-radius:8px;padding:8px 10px;color:var(--text);font:inherit;font-size:13px;outline:none;
+}
+.recalc-box input:focus{border-color:var(--signal)}
+.recalc-row{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
 .stamp .pre{color:#7FA8BE}
 .stamp .pre b{color:#9FD6EA}
 .btn-refresh{
@@ -722,14 +739,19 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% endif %}
 
     <div class="refresh-msg" id="refresh-msg" hidden></div>
+    <div class="recalc-box" id="recalc-box" hidden></div>
     <div class="stamp">
       <span id="freshness">更新時間 <b class="mono">{{ meta.generated_at }}</b></span>
       <span>行情資料日 <b class="mono">{{ meta.data_date or meta.trade_date }}</b></span>
-      <span>收盤排名 <b class="mono">{{ meta.close_run_at or meta.generated_at }}</b></span>
+      <span>排名算出 <b class="mono">{{ meta.ranked_at or meta.close_run_at or meta.generated_at }}</b></span>
+      {% if meta.applies_to %}
+      <span class="apply">適用交易日 <b class="mono">{{ meta.applies_to }}</b></span>
+      {% endif %}
       {% if meta.premarket_at %}
       <span class="pre">盤前海外更新 <b class="mono">{{ meta.premarket_at }}</b></span>
       {% endif %}
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
+      <button type="button" class="btn-refresh recalc" id="btn-recalc">⟳ 抓最新資料並重算排名</button>
       <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
     </div>
 
@@ -1440,6 +1462,159 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           refreshBtn.disabled = false;
           refreshBtn.textContent = "↻ 更新數據";
         });
+    });
+  }
+
+
+  /* ---- 3.6) 抓最新資料並重算排名 ------------------------------------------
+     這是靜態網頁，排名要在伺服器端重算，瀏覽器裡做不到。
+     所以按鈕做的是「觸發 GitHub Actions 的每日更新流程」：
+
+       有存 token → 直接呼叫 GitHub API 觸發，並在頁面上顯示進度，跑完自動重載
+       沒有 token → 開一個新分頁到 Actions 頁面，你按一下 Run workflow 就好
+
+     token 只存在這個瀏覽器（LocalStorage），不會傳到任何第三方；
+     權限只需要 repo + workflow，會用來觸發你自己的 repo。
+     ---------------------------------------------------------------------- */
+  var TOKKEY = "tw_swing_gh_token_v1";
+  var recalcBtn = document.getElementById("btn-recalc");
+  var recalcBox = document.getElementById("recalc-box");
+
+  function repoInfo() {
+    var m = (location.hostname || "").match(/^([^.]+)\.github\.io$/);
+    if (!m) return null;
+    var repo = (location.pathname.split("/").filter(Boolean)[0]) || "";
+    if (!repo || repo.indexOf(".html") >= 0) return null;
+    return { owner: m[1], repo: repo };
+  }
+  function getTok() { try { return localStorage.getItem(TOKKEY) || ""; } catch (e) { return ""; } }
+  function box(html) {
+    if (!recalcBox) return;
+    recalcBox.hidden = false;
+    recalcBox.innerHTML = html;
+  }
+
+  function askToken(info) {
+    box('要一鍵重算，需要一組 GitHub 權杖（權限勾 <b>repo</b> 與 <b>workflow</b>）。' +
+        '它只會存在這個瀏覽器，用來觸發你自己的更新流程。<br>' +
+        '<a href="https://github.com/settings/tokens/new?scopes=repo,workflow" target="_blank" rel="noopener">' +
+        '前往產生權杖</a>，貼在下面：' +
+        '<input id="gh-tok" type="password" placeholder="ghp_..." autocomplete="off">' +
+        '<div class="recalc-row">' +
+        '<button type="button" class="btn-j primary" id="tok-save">儲存並重算</button>' +
+        '<button type="button" class="btn-j" id="tok-skip">改用 Actions 頁面</button>' +
+        '</div>');
+    var save = document.getElementById("tok-save");
+    var skip = document.getElementById("tok-skip");
+    if (save) save.addEventListener("click", function () {
+      var v = (document.getElementById("gh-tok") || {}).value || "";
+      v = v.trim();
+      if (!v) { box("沒有讀到權杖，請再貼一次。"); return; }
+      try { localStorage.setItem(TOKKEY, v); } catch (e) {}
+      trigger(info);
+    });
+    if (skip) skip.addEventListener("click", function () { openActions(info); });
+  }
+
+  function openActions(info) {
+    var url = "https://github.com/" + info.owner + "/" + info.repo +
+              "/actions/workflows/daily.yml";
+    box('已幫你開啟 Actions 頁面（若被擋住請<a href="' + url + '" target="_blank" ' +
+        'rel="noopener">點這裡</a>）。<br>在右上角按 <b>Run workflow</b> → ' +
+        '<b>Run workflow</b>，約 3～6 分鐘跑完，回來按「↻ 更新數據」就會看到新排名。');
+    window.open(url, "_blank", "noopener");
+  }
+
+  function poll(info, tok, tries) {
+    if (tries <= 0) {
+      box("等太久了。到 Actions 頁面看執行狀態，跑完回來按「↻ 更新數據」。");
+      recalcBtn.disabled = false;
+      recalcBtn.textContent = "⟳ 抓最新資料並重算排名";
+      return;
+    }
+    fetch("https://api.github.com/repos/" + info.owner + "/" + info.repo +
+          "/actions/runs?per_page=1", { headers: { Authorization: "Bearer " + tok } })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var run = (j.workflow_runs || [])[0];
+        if (!run) { setTimeout(function () { poll(info, tok, tries - 1); }, 10000); return; }
+        if (run.status !== "completed") {
+          box("執行中（" + run.status + "）… 通常 3～6 分鐘，這一頁會自己更新。");
+          setTimeout(function () { poll(info, tok, tries - 1); }, 10000);
+          return;
+        }
+        if (run.conclusion === "success") {
+          box("重算完成，正在載入新排名…");
+          if (window.caches && caches.keys) {
+            caches.keys().then(function (ks) {
+              return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+            }).then(function () { location.reload(); });
+          } else { location.reload(); }
+        } else {
+          box("這次執行失敗（" + run.conclusion + "）。到 Actions 頁面看 log，" +
+              "原本的排名沒有被覆蓋。");
+          recalcBtn.disabled = false;
+          recalcBtn.textContent = "⟳ 抓最新資料並重算排名";
+        }
+      })
+      .catch(function () { setTimeout(function () { poll(info, tok, tries - 1); }, 10000); });
+  }
+
+  function trigger(info) {
+    var tok = getTok();
+    recalcBtn.disabled = true;
+    recalcBtn.textContent = "⟳ 觸發中…";
+    box("正在觸發更新流程…");
+    fetch("https://api.github.com/repos/" + info.owner + "/" + info.repo +
+          "/actions/workflows/daily.yml/dispatches", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json" },
+      body: JSON.stringify({ ref: "main" })
+    }).then(function (r) {
+      if (r.status === 204) {
+        box("已開始重算，約 3～6 分鐘。跑完這一頁會自動載入新排名，不用一直等在這裡。");
+        setTimeout(function () { poll(info, getTok(), 60); }, 12000);
+        return;
+      }
+      if (r.status === 401 || r.status === 403) {
+        try { localStorage.removeItem(TOKKEY); } catch (e) {}
+        recalcBtn.disabled = false;
+        recalcBtn.textContent = "⟳ 抓最新資料並重算排名";
+        box("權杖無效或權限不足（需要 repo + workflow）。已清除，請重新輸入。");
+        return;
+      }
+      // 分支可能叫 master，再試一次
+      return fetch("https://api.github.com/repos/" + info.owner + "/" + info.repo +
+                   "/actions/workflows/daily.yml/dispatches", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json" },
+        body: JSON.stringify({ ref: "master" })
+      }).then(function (r2) {
+        if (r2.status === 204) {
+          box("已開始重算，約 3～6 分鐘。");
+          setTimeout(function () { poll(info, getTok(), 60); }, 12000);
+        } else {
+          recalcBtn.disabled = false;
+          recalcBtn.textContent = "⟳ 抓最新資料並重算排名";
+          box("觸發失敗（HTTP " + r2.status + "）。改用 Actions 頁面手動執行。");
+        }
+      });
+    }).catch(function () {
+      recalcBtn.disabled = false;
+      recalcBtn.textContent = "⟳ 抓最新資料並重算排名";
+      box("連不到 GitHub。改用 Actions 頁面手動執行。");
+    });
+  }
+
+  if (recalcBtn) {
+    recalcBtn.addEventListener("click", function () {
+      var info = repoInfo();
+      if (!info) {
+        box("這個功能只在 GitHub Pages 上有效（本機預覽沒有可以觸發的流程）。" +
+            "重算請執行 <b>python scripts/build.py</b>。");
+        return;
+      }
+      if (getTok()) { trigger(info); } else { askToken(info); }
     });
   }
 

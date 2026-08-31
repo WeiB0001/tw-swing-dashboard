@@ -242,6 +242,8 @@ def build_demo_payload() -> dict:
             "data_date": now.strftime("%Y-%m-%d"),
             "run_type": "close",
             "close_run_at": now.strftime("%Y-%m-%d %H:%M"),
+            "ranked_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+            "applies_to": __import__("build")._next_trading_day(now.strftime("%Y-%m-%d")),
             "premarket_at": None,
             "scanned_count": len(rows),
             "qualified_count": len(rows),
