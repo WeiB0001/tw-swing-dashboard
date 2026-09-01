@@ -1,23 +1,23 @@
 {
   "meta": {
-    "generated_at": "2026-09-02 00:03",
-    "generated_iso": "2026-09-02T00:03:17+08:00",
+    "generated_at": "2026-09-02 01:30",
+    "generated_iso": "2026-09-02T01:30:05+08:00",
     "trade_date": "2026-09-02",
     "run_type": "close",
-    "close_run_at": "2026-09-02 00:03",
-    "ranked_at": "2026-09-02 00:03:17",
+    "close_run_at": "2026-09-02 01:30",
+    "ranked_at": "2026-09-02 01:30:05",
     "applies_to": "2026-09-02",
     "premarket_at": null,
     "data_date": "2026-09-01",
-    "scanned_count": 166,
-    "qualified_count": 166,
+    "scanned_count": 167,
+    "qualified_count": 167,
     "universe_count": 167,
     "has_backtest": true,
     "has_winrate": true,
     "regime": "bull",
     "top_n": 100,
     "weak_score": 30,
-    "strong_count": 166,
+    "strong_count": 167,
     "source_note": "證交所 OpenAPI（當日行情）＋ FinMind（歷史日線）",
     "mode": "live"
   },
@@ -32,41 +32,41 @@
     "last_night": [
       {
         "label": "那斯達克",
-        "chg_pct": -0.58,
+        "chg_pct": -0.89,
         "date": "2026-09-01"
       },
       {
         "label": "費城半導體",
-        "chg_pct": -1.59,
+        "chg_pct": -2.19,
         "date": "2026-09-01"
       },
       {
         "label": "S&P 500",
-        "chg_pct": -0.38,
+        "chg_pct": -0.62,
         "date": "2026-09-01"
       },
       {
         "label": "道瓊",
-        "chg_pct": -0.4,
+        "chg_pct": -0.75,
         "date": "2026-09-01"
       }
     ],
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": -0.79
+        "chg_pct": -1.25
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": -0.41
+        "chg_pct": -0.71
       }
     ],
     "forecast": {
       "available": true,
-      "point": -0.35,
-      "low": -1.74,
-      "high": 1.04,
-      "basis": "以那斯達克期貨 -0.79% 代入",
+      "point": -0.65,
+      "low": -2.04,
+      "high": 0.75,
+      "basis": "以那斯達克期貨 -1.25% 代入",
       "r2": 0.327,
       "samples": 250
     },
@@ -1663,7 +1663,7 @@
       },
       "prev_low": 90.1,
       "regime": "bull",
-      "rank": 166,
+      "rank": 167,
       "mark": {},
       "momentum_score": 87.5,
       "momentum_hits": [
@@ -3036,7 +3036,7 @@
       },
       "prev_low": 57.5,
       "regime": "bull",
-      "rank": 165,
+      "rank": 166,
       "mark": {},
       "momentum_score": 63.0,
       "momentum_hits": [
@@ -4126,7 +4126,7 @@
       },
       "prev_low": 1610.0,
       "regime": "bull",
-      "rank": 148,
+      "rank": 149,
       "mark": {},
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -7446,7 +7446,7 @@
       },
       "prev_low": 61.85,
       "regime": "bull",
-      "rank": 151,
+      "rank": 152,
       "mark": {},
       "momentum_score": 37.5,
       "momentum_hits": [
@@ -8268,7 +8268,7 @@
       },
       "prev_low": 64.8,
       "regime": "bull",
-      "rank": 156,
+      "rank": 157,
       "mark": {},
       "momentum_score": 25.0,
       "momentum_hits": [
@@ -11649,7 +11649,7 @@
       },
       "prev_low": 54.6,
       "regime": "bull",
-      "rank": 150,
+      "rank": 151,
       "mark": {},
       "momentum_score": 63.0,
       "momentum_hits": [
@@ -13038,7 +13038,7 @@
       },
       "prev_low": 32.06,
       "regime": "bull",
-      "rank": 154,
+      "rank": 155,
       "mark": {},
       "momentum_score": 63.0,
       "momentum_hits": [
@@ -20007,7 +20007,7 @@
       },
       "prev_low": 208.0,
       "regime": "bull",
-      "rank": 149,
+      "rank": 150,
       "mark": {},
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -30986,7 +30986,7 @@
       },
       "prev_low": 31.88,
       "regime": "bull",
-      "rank": 155,
+      "rank": 156,
       "mark": {},
       "momentum_score": 13.0,
       "momentum_hits": [
@@ -31803,7 +31803,7 @@
       },
       "prev_low": 158.5,
       "regime": "bull",
-      "rank": 161,
+      "rank": 162,
       "mark": {},
       "momentum_score": 13.5,
       "momentum_hits": [
@@ -39017,7 +39017,7 @@
       },
       "prev_low": 67.7,
       "regime": "bull",
-      "rank": 157,
+      "rank": 158,
       "mark": {},
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -39294,7 +39294,7 @@
       },
       "prev_low": 2390.0,
       "regime": "bull",
-      "rank": 153,
+      "rank": 154,
       "mark": {},
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -39573,7 +39573,7 @@
       },
       "prev_low": 279.5,
       "regime": "bull",
-      "rank": 162,
+      "rank": 163,
       "mark": {},
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -39854,7 +39854,7 @@
       },
       "prev_low": 757.0,
       "regime": "bull",
-      "rank": 158,
+      "rank": 159,
       "mark": {},
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -42122,6 +42122,282 @@
       "top_fill": false
     },
     {
+      "code": "00403A",
+      "name": "主動統一升級50",
+      "sector": "ETF",
+      "group": "ETF",
+      "asset_type": "etf",
+      "close": 10.22,
+      "prev_close": 10.45,
+      "day_open": 10.08,
+      "day_high": 10.22,
+      "day_low": 10.04,
+      "lot_cost": 10220,
+      "chg_pct": -2.2009569377990257,
+      "rsi": 52.76257888930065,
+      "vol_ratio": 0.9131123759870441,
+      "volume": 212128589.0,
+      "vol_ma20": 232313781.5,
+      "ma5": 10.3,
+      "ma10": 10.142,
+      "ma20": 10.107,
+      "ma60": 10.188500000000001,
+      "ma20_slope": 2.5570776255707584,
+      "ma60_slope": -0.7484738277698244,
+      "bias20": 1.1180370040566157,
+      "pos20": 0.6627906976744193,
+      "pct_above_low20": 5.9067357512953444,
+      "pct_below_high20": 2.837573385518577,
+      "pct_below_high5": 2.837573385518577,
+      "pct_below_high60": 12.035225048923671,
+      "atr": 0.29777263171361024,
+      "atr_pct": 2.913626533401274,
+      "macd_hist": 0.04006759560847048,
+      "macd_hist_prev": 0.05242785586093662,
+      "ma5_slope": 1.1191831926173235,
+      "target": 10.51,
+      "support": 9.922227368286391,
+      "score": 42.3,
+      "opportunity": 42.4,
+      "risk": 0.7,
+      "breakdown": {
+        "entry": {
+          "points": 18.1,
+          "max": 25,
+          "ratio": 0.723
+        },
+        "trend": {
+          "points": 16.2,
+          "max": 20,
+          "ratio": 0.812
+        },
+        "reversal": {
+          "points": 3.9,
+          "max": 15,
+          "ratio": 0.26
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        }
+      },
+      "risk_items": [
+        {
+          "key": "near_high",
+          "level": 0.054,
+          "weight": 0.14,
+          "label": "距 20 日高點僅 2.8%，追高空間有限"
+        }
+      ],
+      "stars": {
+        "trend": "★★★★☆",
+        "entry": "★★★★☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "多頭回檔",
+      "headline": "多頭回檔至支撐（乖離 +1.1%）",
+      "why": "進場位置好、趨勢結構強；距前高僅剩 2.8%；風險項目輕微。",
+      "main_risk": "距 20 日高點僅 2.8%，追高空間有限",
+      "swing_low": 1.3,
+      "swing_high": 2.8,
+      "upside_pct": 2.84,
+      "downside_pct": 2.91,
+      "rr_ratio": 0.97,
+      "reasons": [
+        "位置 66%、距前高 2.8%、乖離 +1.1%，進場點普通",
+        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +2.6%）",
+        "MA5 開始上彎、近期低點未再破",
+        "量能 0.9 倍，低於 20 日均量，買盤不足",
+        "上檔至 10.5 約 +2.8%，下檔支撐 9.9 約 −2.9%，風險報酬比 1.0:1"
+      ],
+      "flags": [],
+      "hist_calibrated": 48.8,
+      "hist_raw": 48.7,
+      "hist_samples": 460,
+      "hist_avg_return": 0.42,
+      "hist_pf": 1.17,
+      "hist_mdd": -4.55,
+      "hist_source": "regime",
+      "hist_expectancy": 0.417,
+      "hist_confidence": 5,
+      "plan": {
+        "available": true,
+        "hold_days": 1,
+        "status": "可觀察進場",
+        "entry_icon": "🟡",
+        "entry_status": "等待確認，不建議立即進場",
+        "entry_note": "收盤 10.22 尚未站上MA5 10.30",
+        "ref_price": 10.3,
+        "ref_label": "MA5",
+        "vol_ratio": 0.91,
+        "vol_tier": "weak",
+        "rr_tier": "poor",
+        "rr_tag": "⚠ 風報偏差（0.92），不追價",
+        "dist_trigger_pct": 0.15,
+        "intraday_checked": false,
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 10.23,
+        "invalidation": 10.03,
+        "stop": 9.94,
+        "target1": 10.51,
+        "target2": 10.63,
+        "rr": 0.92,
+        "risk_pct": 2.9,
+        "atr_pct": 2.9
+      },
+      "spark": {
+        "c": [
+          10.41,
+          10.48,
+          10.38,
+          10.11,
+          10.41,
+          10.28,
+          9.52,
+          9.28,
+          9.75,
+          9.99,
+          9.97,
+          9.63,
+          9.62,
+          9.0,
+          8.46,
+          8.47,
+          9.25,
+          9.39,
+          9.54,
+          9.81,
+          9.91,
+          9.72,
+          9.9,
+          9.94,
+          10.1,
+          10.3,
+          10.32,
+          10.4,
+          10.16,
+          9.97,
+          10.03,
+          9.92,
+          9.87,
+          9.94,
+          10.16,
+          10.25,
+          10.36,
+          10.22,
+          10.45,
+          10.22
+        ],
+        "v": [
+          241549106,
+          163473334,
+          152276689,
+          752371033,
+          225147525,
+          182317095,
+          1314260417,
+          461738249,
+          223287368,
+          349917296,
+          164301751,
+          268175573,
+          211405438,
+          726297492,
+          774402591,
+          436120282,
+          547213802,
+          352344521,
+          206742476,
+          337665326,
+          183979179,
+          151708727,
+          164823149,
+          117115557,
+          320226172,
+          372511476,
+          353553268,
+          270983203,
+          181249394,
+          194875891,
+          124696057,
+          100144786,
+          105562721,
+          200157642,
+          248628961,
+          259650324,
+          429927703,
+          212128589,
+          442224242,
+          212128589
+        ]
+      },
+      "prev_low": 10.29,
+      "regime": "bull",
+      "rank": 148,
+      "mark": {},
+      "momentum_score": 0.0,
+      "momentum_hits": [
+        "MA5 上彎"
+      ],
+      "momentum_warns": [
+        "收盤跌破 MA5",
+        "收盤跌破昨日低點"
+      ],
+      "momentum_tier": 2,
+      "momentum_label": "轉弱／追高風險",
+      "momentum_icon": "🔴",
+      "nextday": {
+        "top_hit_rate": 17.3,
+        "samples": 6433,
+        "win_rate": 48.7,
+        "calibrated_win_rate": 48.7,
+        "crash_rate": 16.8,
+        "calibrated_crash_rate": 16.8,
+        "avg": 0.16,
+        "median": 0.0,
+        "p10": -4.55,
+        "worst": -18.29,
+        "avg_gap": 0.49,
+        "gap_down_rate": 13.3
+      },
+      "nextday_source": "完整條件",
+      "crash_penalty": 0.2,
+      "nextday_gap_pen": 0.0,
+      "nextday_avg_adj": 1.9,
+      "nextday_hit_adj": -2.2,
+      "final_score": 38.1,
+      "model_quality": 39.8,
+      "entry_quality": 35.0,
+      "final_parts": {
+        "model": {
+          "ev": 47.2,
+          "winrate": 35.2,
+          "pf": 30.8,
+          "mdd": 43.1,
+          "tech": 42.3
+        },
+        "entry": {
+          "confirm": 45.0,
+          "volume": 22.1,
+          "rr": 7.1,
+          "distance": 97.0
+        }
+      },
+      "entry_tier": 1,
+      "rank_score": 22.7,
+      "final_rank": 152,
+      "top_fill": false
+    },
+    {
       "code": "3702",
       "name": "大聯大",
       "sector": "電子通路",
@@ -42344,7 +42620,7 @@
       },
       "prev_low": 100.0,
       "regime": "bull",
-      "rank": 160,
+      "rank": 161,
       "mark": {},
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -42397,7 +42673,7 @@
       },
       "entry_tier": 1,
       "rank_score": 22.3,
-      "final_rank": 152,
+      "final_rank": 153,
       "top_fill": false
     },
     {
@@ -42623,7 +42899,7 @@
       },
       "prev_low": 18.9,
       "regime": "bull",
-      "rank": 159,
+      "rank": 160,
       "mark": {},
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -42675,7 +42951,7 @@
       },
       "entry_tier": 1,
       "rank_score": 22.2,
-      "final_rank": 153,
+      "final_rank": 154,
       "top_fill": false
     },
     {
@@ -42901,7 +43177,7 @@
       },
       "prev_low": 30.6,
       "regime": "bull",
-      "rank": 163,
+      "rank": 164,
       "mark": {},
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -42953,7 +43229,7 @@
       },
       "entry_tier": 1,
       "rank_score": 22.1,
-      "final_rank": 154,
+      "final_rank": 155,
       "top_fill": false
     },
     {
@@ -43231,7 +43507,7 @@
       },
       "entry_tier": 1,
       "rank_score": 22.0,
-      "final_rank": 155,
+      "final_rank": 156,
       "top_fill": false
     },
     {
@@ -43524,7 +43800,7 @@
       "entry_tier": 2,
       "rank_score": 21.9,
       "demoted_by_crash": true,
-      "final_rank": 156,
+      "final_rank": 157,
       "top_fill": false
     },
     {
@@ -43813,7 +44089,7 @@
       "entry_tier": 2,
       "rank_score": 20.8,
       "demoted_by_crash": true,
-      "final_rank": 157,
+      "final_rank": 158,
       "top_fill": false
     },
     {
@@ -44091,7 +44367,7 @@
       "entry_tier": 1,
       "rank_score": 20.4,
       "demoted_by_crash": true,
-      "final_rank": 158,
+      "final_rank": 159,
       "top_fill": false
     },
     {
@@ -44371,7 +44647,7 @@
       "entry_tier": 2,
       "rank_score": 19.8,
       "demoted_by_crash": true,
-      "final_rank": 159,
+      "final_rank": 160,
       "top_fill": false
     },
     {
@@ -44597,7 +44873,7 @@
       },
       "prev_low": 136.0,
       "regime": "bull",
-      "rank": 164,
+      "rank": 165,
       "mark": {},
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -44649,7 +44925,7 @@
       },
       "entry_tier": 1,
       "rank_score": 19.8,
-      "final_rank": 160,
+      "final_rank": 161,
       "top_fill": false
     },
     {
@@ -44937,7 +45213,7 @@
       "entry_tier": 2,
       "rank_score": 19.6,
       "demoted_by_crash": true,
-      "final_rank": 161,
+      "final_rank": 162,
       "top_fill": false
     },
     {
@@ -45215,7 +45491,7 @@
       "entry_tier": 2,
       "rank_score": 19.2,
       "demoted_by_crash": true,
-      "final_rank": 162,
+      "final_rank": 163,
       "top_fill": false
     },
     {
@@ -45499,7 +45775,7 @@
       "entry_tier": 2,
       "rank_score": 18.0,
       "demoted_by_crash": true,
-      "final_rank": 163,
+      "final_rank": 164,
       "top_fill": false
     },
     {
@@ -45771,7 +46047,7 @@
       "entry_tier": 1,
       "rank_score": 17.6,
       "demoted_by_crash": true,
-      "final_rank": 164,
+      "final_rank": 165,
       "top_fill": false
     },
     {
@@ -46001,7 +46277,7 @@
       },
       "prev_low": 81.0,
       "regime": "bull",
-      "rank": 152,
+      "rank": 153,
       "mark": {},
       "momentum_score": 13.5,
       "momentum_hits": [
@@ -46056,7 +46332,7 @@
       "entry_tier": 2,
       "rank_score": 17.2,
       "demoted_by_crash": true,
-      "final_rank": 165,
+      "final_rank": 166,
       "top_fill": false
     },
     {
@@ -46336,7 +46612,7 @@
       "entry_tier": 2,
       "rank_score": 11.7,
       "demoted_by_crash": true,
-      "final_rank": 166,
+      "final_rank": 167,
       "top_fill": false
     }
   ]
