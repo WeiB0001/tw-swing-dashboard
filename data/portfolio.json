@@ -1,5 +1,5 @@
 {
- "cash": 33103.974310000005,
+ "cash": 142.60631000000285,
  "positions": [
   {
    "code": "2359",
@@ -18,21 +18,24 @@
    "shares": 66,
    "entry": 505.0,
    "entry_date": "2026-08-23",
-   "held": 1,
+   "held": 2,
    "stop": 501.62,
    "target1": 539.94,
    "pattern": "多頭回檔"
-  }
- ],
- "pending": [
+  },
   {
    "code": "3231",
-   "budget": 33103.97,
+   "name": "緯創",
+   "shares": 187,
+   "entry": 176.0,
+   "entry_date": "2026-09-01",
+   "held": 0,
    "stop": 175.68,
    "target1": 193.79,
    "pattern": "低檔止跌轉強"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "3665",
@@ -109,8 +112,13 @@
    "date": "2026-08-31",
    "equity": 100654.97,
    "index": 46331.45
+  },
+  {
+   "date": "2026-09-01",
+   "equity": 100517.61,
+   "index": 46128.47
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-08-31"
+ "last_date": "2026-09-01"
 }
