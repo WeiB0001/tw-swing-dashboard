@@ -246,7 +246,19 @@ def run_live() -> dict:
     if not hist_map:
         raise RuntimeError("歷史日線全部取得失敗，無法計算指標。")
 
-    trade_date = pd.Timestamp(now.date())
+    # 交易日以大盤指數回報的日期為準。用執行日的話，
+    # 在非交易日或盤後跑會插進一根不存在的 K 棒，價格就會對不上。
+    index_info = fetch.fetch_market_index()
+    idx_date = (index_info or {}).get("date") or ""
+    try:
+        trade_date = pd.Timestamp(idx_date) if idx_date else pd.Timestamp(now.date())
+    except Exception:
+        trade_date = pd.Timestamp(now.date())
+    while trade_date.weekday() >= 5:            # 落在週末就退回最近的工作日
+        trade_date -= pd.Timedelta(days=1)
+    log.info("本次採用的交易日：%s（大盤指數回報 %s）",
+             str(trade_date)[:10], idx_date or "無")
+
     rows = []
     for _, srow in universe.iterrows():
         code = srow["code"]
@@ -255,10 +267,13 @@ def run_live() -> dict:
             continue
         try:
             hist = fetch.merge_today_bar(hist, srow, trade_date)
+            hist_map[code] = hist          # 寫回去，後面算資料日與雷達才會用到同一份
             feats = indicators.compute_features(hist)
             if not feats:
                 continue
             row = build_row(code, name_map.get(code, code), feats, scoring.score_stock(feats))
+            # 這一檔的價格實際是哪一天的，跟全站資料日不同時會在卡片上標示
+            row["quote_date"] = str(hist.index[-1])[:10]
             row["spark"] = make_spark(hist)
             try:
                 row["prev_low"] = float(hist["low"].iloc[-2])   # 判斷是否跌破昨日低點
@@ -282,8 +297,7 @@ def run_live() -> dict:
     log.info("完成計算：%d 檔，其中 %d 檔分數 >= %d｜大盤狀態 %s",
              scanned, strong, C.WEAK_SCORE, regime)
 
-    data_date = _data_date(hist_map, now)
-    index_info = fetch.fetch_market_index()
+    data_date = _row_data_date(rows) or _data_date(hist_map, now)
     idx_close = (index_info or {}).get("close")
     # 用 data_date 而不是執行日：早上那班的行情日跟前一天收盤班相同，
     # tracking 會判定為同一天而不重複記錄、也不會用舊開盤價成交
@@ -291,6 +305,8 @@ def run_live() -> dict:
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, data_date, idx_close)
+    us_data = _us_snapshot()
+    add_overseas(rows, us_data)                # 海外趨勢：依產業敏感度差異化調整
     add_momentum(rows)                         # 動能確認：只用今天的價量分層
     # 隔日風險過濾：查歷史上同樣條件的隔日表現，暴跌率偏高的往後排
     try:
@@ -376,7 +392,7 @@ def run_live() -> dict:
             "mode": "live",
         },
         "index": index_info,
-        "us": _us_snapshot(),
+        "us": us_data,
         "signals": signals,
         "portfolio": portfolio,
         "backtest": _backtest_summary(bt),
@@ -403,6 +419,48 @@ def _scale(x, lo, hi) -> float:
         return _clamp100((x - lo) / (hi - lo) * 100)
     except Exception:
         return 0.0
+
+
+def add_overseas(rows: list[dict], us: dict | None) -> None:
+    """
+    把海外環境納入排名。
+
+    重點是**差異化**：全部股票一起加減分不會改變任何名次，所以要看產業對海外的
+    敏感度。海外偏多時，半導體、電腦週邊這類跟著美股走的加分；海外偏空時，
+    電信、金融、食品這種防禦型相對往前。
+
+    只有迴歸 R² 夠高才採用——關聯性太弱就是拿雜訊當訊號，寧可不調。
+    """
+    fc = ((us or {}).get("forecast") or {})
+    ok = (C.OVERSEAS_ENABLED and fc.get("available")
+          and (fc.get("r2") or 0) >= C.OVERSEAS_MIN_R2)
+    point = float(fc.get("point") or 0) if ok else 0.0
+    r2 = float(fc.get("r2") or 0) if ok else 0.0
+
+    for r in rows:
+        if not ok:
+            r["overseas_adj"] = 0.0
+            r["overseas_note"] = ""
+            continue
+        beta = C.OVERSEAS_BETA.get(r.get("group") or "其他", C.OVERSEAS_BETA["其他"])
+        rel = beta - C.OVERSEAS_BETA_BASE          # 相對敏感度，可正可負
+        # R² 當信心度：關聯越強，調整幅度越大
+        adj = point * rel * C.OVERSEAS_WEIGHT * min(1.0, r2 / 0.4)
+        adj = max(-C.OVERSEAS_CAP, min(C.OVERSEAS_CAP, adj))
+        r["overseas_adj"] = round(adj, 1)
+        if abs(adj) < 0.5:
+            r["overseas_note"] = ""
+        elif adj > 0:
+            r["overseas_note"] = ("海外偏多（推估 %+.2f%%），%s 對美股敏感（β %.2f），加 %.1f 分"
+                                  % (point, r.get("group") or "其他", beta, adj))
+        else:
+            r["overseas_note"] = ("海外%s（推估 %+.2f%%），%s 的敏感度 β %.2f，%.1f 分"
+                                  % ("偏空" if point < 0 else "偏多", point,
+                                     r.get("group") or "其他", beta, adj))
+    if ok:
+        log.info("海外調整已套用：推估 %+.2f%%、R² %.2f", point, r2)
+    else:
+        log.info("海外調整未套用（無預估值或 R² 過低）")
 
 
 def add_momentum(rows: list[dict]) -> None:
@@ -570,6 +628,8 @@ def sort_by_final(rows: list[dict]) -> list[dict]:
                  + C.RANK_W_MOM * r.get("momentum_score", 0))
         # 歷史上同條件的隔日暴跌率偏高 → 扣分往後排（不刪除）
         blend -= float(r.get("crash_penalty") or 0)
+        # 海外環境：依產業對美股的敏感度做差異化加減
+        blend += float(r.get("overseas_adj") or 0)
         r["rank_score"] = round(blend, 1)
 
         tier = r.get("momentum_tier", 2)
@@ -718,6 +778,22 @@ def _next_trading_day(data_date: str) -> str:
     while d.weekday() >= 5:
         d += timedelta(days=1)
     return d.strftime("%Y-%m-%d")
+
+
+def _row_data_date(rows: list) -> str:
+    """
+    資料日＝這次實際用來算指標的最後一根 K 棒日期（取眾數）。
+    以前是直接看 FinMind 快取的最後日期，但當日行情是靠證交所快照覆蓋上去的，
+    兩邊會差一天，於是「資料日」顯示前一天、價格卻是當天，對不上。
+    """
+    try:
+        from collections import Counter
+        ds = [r.get("quote_date") for r in rows if r.get("quote_date")]
+        if ds:
+            return Counter(ds).most_common(1)[0][0]
+    except Exception:
+        pass
+    return ""
 
 
 def _data_date(hist_map: dict, now) -> str:

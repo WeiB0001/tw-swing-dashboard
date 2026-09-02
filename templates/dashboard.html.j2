@@ -170,6 +170,7 @@ body{
 .more:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 /* 一張成本 */
 .lot{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px}
+.stale{display:block;font-size:10.5px;color:#F2C14E;font-weight:700;margin-top:2px}
 /* 配置金額 */
 .alloc{
   flex:1 1 200px;padding:8px 11px;border-radius:9px;
@@ -347,6 +348,8 @@ header{padding:20px 0 14px}
 .mom-list{font-size:12px;line-height:1.7;margin-top:6px;clear:both}
 .mom-list.ok{color:#8FD9B0}.mom-list.bad{color:#FF9E80}
 .mom-note{font-size:11px;color:#6E7A88;line-height:1.65;margin-top:7px}
+.ov{margin:0 0 11px;padding:8px 11px;border-radius:9px;background:#12181F;
+  border-left:3px solid #3A5568;font-size:12px;color:#9FC4D4;line-height:1.65}
 .nd{margin:0 0 13px;padding:10px 12px;border-radius:10px;background:#12181F;border-left:3px solid #3A5568}
 .nd-head{font-size:12.5px;font-weight:700;color:#9FC4D4}
 .nd-head .sub{color:#6E7A88;font-weight:600;font-size:11px}
@@ -725,7 +728,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         用現在的美股期貨代替今晚尚未發生的美股。R² {{ us.forecast.r2 }} 代表美股只能解釋台股約
         {{ (us.forecast.r2 * 100)|round|int }}% 的波動，其餘來自台股自身的籌碼與消息面。
         <b>這是統計相關性，不是預測，更不是投資建議。</b>
-        個股排名以大盤狀態與歷史期望值為準，這個燈號不參與排序。
+        這個推估<b>會依產業對美股的敏感度影響排名</b>：偏多時半導體、電腦週邊這類跟著美股走的往前，
+        偏空時電信、金融、食品這種防禦型相對往前。全部一起加減分不會改變名次，所以只做差異化。
+        R² 低於 {{ ov_min_r2 }} 就完全不採用。
         盤前（06:00）只會更新這一區，<b>不會重跑台股收盤排名</b>——上方名次仍是前一晚 20:00 算出來的。
       </p>
       {% elif us.forecast %}
@@ -842,6 +847,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
               {{ '%+.2f'|format(r.chg_pct) }}%
             </div>
             <span class="lot mono">一張 {{ '%.1f'|format(r.lot_cost / 10000) }} 萬</span>
+            {% if r.quote_date and meta.data_date and r.quote_date != meta.data_date %}
+            <span class="stale mono" title="這一檔的最新價停在 {{ r.quote_date }}，比全站資料日舊">
+              報價 {{ r.quote_date }}</span>
+            {% endif %}
           </div>
         </div>
 
@@ -973,6 +982,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
           </div>
         </div>
+        {% endif %}
+
+        {% if r.overseas_note %}
+        <div class="ov">🌐 {{ r.overseas_note }}</div>
         {% endif %}
 
         {% if r.nextday %}

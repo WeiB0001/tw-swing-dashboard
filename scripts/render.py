@@ -97,6 +97,7 @@ def render_html(payload: dict) -> str:
         top_slots=C.TOP_SLOTS,
         groups=_groups(payload["rows"]),
         hold_days=C.HOLD_DAYS,
+        ov_min_r2=C.OVERSEAS_MIN_R2,
         plan_t1=C.PLAN_T1_ATR,
         plan_stop=C.PLAN_STOP_MAX_ATR,
         mom_high=C.MOM_GOOD_CHG_HIGH,

@@ -161,6 +161,7 @@ def build_demo_payload() -> dict:
             from build import make_spark
             row = build_row(code, name, feats, scoring.score_stock(feats))
             row["spark"] = make_spark(hist)
+            row["quote_date"] = str(hist.index[-1])[:10]
             try:
                 row["prev_low"] = float(hist["low"].iloc[-2])   # 判斷是否跌破昨日低點
             except Exception:
@@ -225,6 +226,8 @@ def build_demo_payload() -> dict:
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
     portfolio = tracking.update_portfolio(rows, now.strftime("%Y-%m-%d"), 23456.78)
+    from build import add_overseas
+    add_overseas(rows, {"forecast": {"available": True, "point": 0.46, "r2": 0.38}})
     add_momentum(rows)
     import nextday as nextday_mod
     nextday_mod.attach(rows, nextday_mod.build_stats(hist_map))
@@ -239,11 +242,12 @@ def build_demo_payload() -> dict:
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
             "generated_iso": now.isoformat(timespec="seconds"),
             "trade_date": now.strftime("%Y-%m-%d"),
-            "data_date": now.strftime("%Y-%m-%d"),
+            "data_date": __import__("build")._row_data_date(rows) or now.strftime("%Y-%m-%d"),
             "run_type": "close",
             "close_run_at": now.strftime("%Y-%m-%d %H:%M"),
             "ranked_at": now.strftime("%Y-%m-%d %H:%M:%S"),
-            "applies_to": __import__("build")._next_trading_day(now.strftime("%Y-%m-%d")),
+            "applies_to": __import__("build")._next_trading_day(
+                __import__("build")._row_data_date(rows) or now.strftime("%Y-%m-%d")),
             "premarket_at": None,
             "scanned_count": len(rows),
             "qualified_count": len(rows),
