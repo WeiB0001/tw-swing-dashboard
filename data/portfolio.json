@@ -1,5 +1,5 @@
 {
- "cash": 142.60631000000285,
+ "cash": 36326.978215,
  "positions": [
   {
    "code": "2359",
@@ -18,24 +18,21 @@
    "shares": 66,
    "entry": 505.0,
    "entry_date": "2026-08-23",
-   "held": 3,
+   "held": 4,
    "stop": 501.62,
    "target1": 539.94,
    "pattern": "多頭回檔"
-  },
+  }
+ ],
+ "pending": [
   {
-   "code": "3231",
-   "name": "緯創",
-   "shares": 187,
-   "entry": 176.0,
-   "entry_date": "2026-09-01",
-   "held": 1,
-   "stop": 175.68,
-   "target1": 193.79,
+   "code": "2360",
+   "budget": 36326.98,
+   "stop": 1971.32,
+   "target1": 2257.73,
    "pattern": "低檔止跌轉強"
   }
  ],
- "pending": [],
  "trades": [
   {
    "code": "3665",
@@ -60,6 +57,18 @@
    "reason": "達標",
    "held": 2,
    "pattern": "多頭回檔"
+  },
+  {
+   "code": "3231",
+   "name": "緯創",
+   "entry_date": "2026-09-01",
+   "exit_date": "2026-09-03",
+   "entry": 176.0,
+   "exit": 193.79,
+   "net_pct": 9.81,
+   "reason": "達標",
+   "held": 2,
+   "pattern": "低檔止跌轉強"
   }
  ],
  "equity": [
@@ -122,8 +131,13 @@
    "date": "2026-09-02",
    "equity": 101595.61,
    "index": 46164.71875
+  },
+  {
+   "date": "2026-09-03",
+   "equity": 103943.98,
+   "index": 46164.72
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-02"
+ "last_date": "2026-09-03"
 }
