@@ -1,5 +1,5 @@
 {
- "cash": 36326.978215,
+ "cash": 658.5557150000022,
  "positions": [
   {
    "code": "2359",
@@ -18,21 +18,24 @@
    "shares": 66,
    "entry": 505.0,
    "entry_date": "2026-08-23",
-   "held": 4,
+   "held": 5,
    "stop": 501.62,
    "target1": 539.94,
    "pattern": "多頭回檔"
-  }
- ],
- "pending": [
+  },
   {
    "code": "2360",
-   "budget": 36326.98,
+   "name": "致茂",
+   "shares": 17,
+   "entry": 2095.0,
+   "entry_date": "2026-09-04",
+   "held": 0,
    "stop": 1971.32,
    "target1": 2257.73,
    "pattern": "低檔止跌轉強"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "3665",
@@ -136,8 +139,13 @@
    "date": "2026-09-03",
    "equity": 103943.98,
    "index": 46164.72
+  },
+  {
+   "date": "2026-09-04",
+   "equity": 103973.56,
+   "index": 45857.66
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-03"
+ "last_date": "2026-09-04"
 }
