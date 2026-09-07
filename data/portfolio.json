@@ -1,5 +1,5 @@
 {
- "cash": 658.5557150000022,
+ "cash": 36241.14165500001,
  "positions": [
   {
    "code": "2359",
@@ -13,29 +13,26 @@
    "pattern": "多頭回檔"
   },
   {
-   "code": "2207",
-   "name": "和泰車",
-   "shares": 66,
-   "entry": 505.0,
-   "entry_date": "2026-08-23",
-   "held": 5,
-   "stop": 501.62,
-   "target1": 539.94,
-   "pattern": "多頭回檔"
-  },
-  {
    "code": "2360",
    "name": "致茂",
    "shares": 17,
    "entry": 2095.0,
    "entry_date": "2026-09-04",
-   "held": 0,
+   "held": 1,
    "stop": 1971.32,
    "target1": 2257.73,
    "pattern": "低檔止跌轉強"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "9910",
+   "budget": 36241.14,
+   "stop": 68.47,
+   "target1": 71.79,
+   "pattern": "低檔止跌轉強"
+  }
+ ],
  "trades": [
   {
    "code": "3665",
@@ -72,6 +69,18 @@
    "reason": "達標",
    "held": 2,
    "pattern": "低檔止跌轉強"
+  },
+  {
+   "code": "2207",
+   "name": "和泰車",
+   "entry_date": "2026-08-23",
+   "exit_date": "2026-09-07",
+   "entry": 505.0,
+   "exit": 539.94,
+   "net_pct": 6.62,
+   "reason": "達標",
+   "held": 6,
+   "pattern": "多頭回檔"
   }
  ],
  "equity": [
@@ -144,8 +153,13 @@
    "date": "2026-09-04",
    "equity": 103973.56,
    "index": 45857.66
+  },
+  {
+   "date": "2026-09-07",
+   "equity": 107382.14,
+   "index": 46551.13
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-04"
+ "last_date": "2026-09-07"
 }
