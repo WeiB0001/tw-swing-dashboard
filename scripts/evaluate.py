@@ -99,6 +99,8 @@ def run(hist_map: dict, days: int, use_guard: bool, w_mom: float | None = None,
              str(usable[0])[:10], str(usable[-1])[:10], len(usable),
              "" if use_guard else "｜已關閉隔日風險過濾")
 
+    deciles = {lab: [] for lab, _, _ in (("Top 10%", 0, .1), ("10–30%", .1, .3),
+                                        ("30–60%", .3, .6), ("Bottom 40%", .6, 1.01))}
     topk = {k: [] for k in (1, 3, 5, 10)}
     every, hits = [], {k: 0 for k in (1, 3, 5, 10)}
     day_count = 0
@@ -183,10 +185,24 @@ def run(hist_map: dict, days: int, use_guard: bool, w_mom: float | None = None,
                         hits[k] += 1
         every.extend(nxt.get(r["code"]) for r in ranked if nxt.get(r["code"]) is not None)
 
+        # 名次分組：驗證「排名越前，期望值越高」
+        n_day = len(ranked)
+        for i, r in enumerate(ranked):
+            v = nxt.get(r["code"])
+            if v is None:
+                continue
+            pct = i / max(1, n_day)
+            for lab, lo, hi in (("Top 10%", 0, .1), ("10–30%", .1, .3),
+                                ("30–60%", .3, .6), ("Bottom 40%", .6, 1.01)):
+                if lo <= pct < hi:
+                    deciles[lab].append(v)
+                    break
+
     out = {"days": day_count, "guard": use_guard, "by_plan": by_plan,
            "top": {k: describe(v) for k, v in topk.items()},
            "all": describe(every),
-           "hit": {k: (round(hits[k] / max(1, len(topk[k])) * 100, 1)) for k in topk}}
+           "hit": {k: (round(hits[k] / max(1, len(topk[k])) * 100, 1)) for k in topk},
+           "deciles": {k: describe(v) for k, v in deciles.items()}}
     return out
 
 
@@ -209,6 +225,23 @@ def report(r: dict) -> None:
     if d.get("n"):
         print(f"{'全體':<7}{d['n']:>6}{d['win']:>7.1f}%{d['avg']:>7.2f}%{d['med']:>7.2f}%"
               f"{d['crash']:>7.1f}%{d['p10']:>9.2f}%{d['worst']:>7.2f}%")
+    dec = r.get("deciles") or {}
+    if any(d.get("n") for d in dec.values()):
+        print("\n名次分組（驗證「排名越前，期望值越高」）")
+        print(f"{'分組':<12}{'N':>7}{'勝率':>8}{'平均':>9}{'大跌率':>8}{'最差':>9}")
+        for lab in ("Top 10%", "10–30%", "30–60%", "Bottom 40%"):
+            d = dec.get(lab) or {}
+            if not d.get("n"):
+                continue
+            print(f"{lab:<12}{d['n']:>7}{d['win']:>7.1f}%{d['avg']:>8.2f}%"
+                  f"{d['crash']:>7.1f}%{d['worst']:>8.2f}%")
+        top = (dec.get("Top 10%") or {}).get("avg")
+        bot = (dec.get("Bottom 40%") or {}).get("avg")
+        if top is not None and bot is not None:
+            print("  → " + ("✅ 排名有鑑別力：Top 10% 的平均高於 Bottom 40%"
+                            if top > bot else
+                            "❌ 排名沒有鑑別力：Top 10% 沒有優於 Bottom 40%"))
+
     print("\n「大跌率」= 持有期間跌幅超過 %.1f%% 的比例；「猜中強勢」= 隔日進入當日漲幅前 20%% 的比例。"
           % abs(C.NEXTDAY_CRASH_PCT))
     print("要看的是：Top 1 是否優於 Top 10、Top 10 是否優於全體。三者差不多就代表排名沒有鑑別力。")

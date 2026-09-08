@@ -10,7 +10,7 @@ backtest.py — 歷史回測（決定排名的依據）
   - 進場價是 **t+1 日的開盤價**，不是 t 日收盤價
     （t 日收盤價在收盤後已經買不到了，用它當進場價等於偷看）
   - 出場價是 t+h 日的收盤價
-  - 淨報酬 = 毛報酬 − 來回交易成本（config.TRADE_COST_PCT，預設 0.3%）
+  - 淨報酬 = 毛報酬 − 來回成本（手續費稅 TRADE_COST_PCT ＋ 滑價 SLIPPAGE_PCT）
   - **淨報酬 > 0 才算贏**
   - 同一檔股票出訊號後 config.SIGNAL_COOLDOWN_DAYS 個交易日內不重複採樣，
     避免同一段行情被算成好幾個獨立樣本，把樣本數灌水
@@ -134,7 +134,7 @@ def load_regimes(demo: bool) -> pd.Series | None:
 def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
                  regimes: pd.Series | None = None) -> dict:
     max_hold = max(C.BACKTEST_HOLD_DAYS)
-    cost = C.TRADE_COST_PCT
+    cost = C.TOTAL_COST_PCT   # 手續費＋證交稅＋滑價
     cooldown = C.SIGNAL_COOLDOWN_DAYS
 
     # 先把每檔的特徵一次算完（向量化），回測時只取值不重算
@@ -220,6 +220,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         day_rows.sort(key=scoring.sort_key)
 
         rank = 0
+        n_day = len(day_rows)
         for r in day_rows:
             # --- 冷卻：同一檔在 N 個交易日內只採樣一次 ---
             prev = last_signal_day.get(r["code"])
@@ -228,6 +229,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
             last_signal_day[r["code"]] = n
             rank += 1
             r["rank"] = rank
+            r["pct"] = rank / max(1, n_day)      # 名次百分位，用來做 decile 驗證
             signals.append(r)
 
         if (n + 1) % 20 == 0:
@@ -236,14 +238,28 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     if not signals:
         raise RuntimeError("回測期間沒有任何達標訊號，請放寬 MIN_SCORE_TO_SHOW 再試。")
 
+    # --- 切 in-sample / out-of-sample：後段完全不參與任何調整，只拿來驗證 ---
+    ordered = sorted(signals, key=lambda x: (x["date"], x["code"]))
+    cut = int(len(ordered) * C.OOS_SPLIT)
+    ins, oos = ordered[:cut], ordered[cut:]
+    log.info("樣本切分：in-sample %d 筆、out-of-sample %d 筆", len(ins), len(oos))
+
     return {
         "generated_at": datetime.now(C.TZ).strftime("%Y-%m-%d %H:%M"),
+        "oos_period": (f"{oos[0]['date']} ～ {oos[-1]['date']}" if oos else ""),
+        "oos_total": len(oos),
+        "oos_overall": _pack(oos, C.PRIMARY_HOLD_DAYS) if oos else None,
+        "oos_buckets": stats_by_pattern_bucket(oos),        # 排名查表優先用這個
+        "oos_score_buckets": stats_by_bucket(oos),
+        "deciles_in_sample": stats_by_decile(ins),
+        "deciles_oos": stats_by_decile(oos),
         "period": f"{str(usable[0])[:10]} ～ {str(usable[-1])[:10]}",
         "trading_days": len(usable),
         "universe_size": len(frames),
         "total_signals": len(signals),
         "primary_hold_days": C.PRIMARY_HOLD_DAYS,
         "cost_pct": cost,
+        "cost_detail": {"fee_tax": C.TRADE_COST_PCT, "slippage": C.SLIPPAGE_PCT},
         "cooldown_days": cooldown,
         "entry_rule": "訊號日 t 收盤後產生，t+1 開盤價進場，持有 h 天後收盤出場",
         "topk": stats_by_topk(signals),
@@ -252,7 +268,8 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "pattern_buckets": stats_by_pattern_bucket(signals),
         "walk_forward": walk_forward(signals),
         "patterns": stats_by_pattern(signals),
-        "note": "歷史模擬結果，不代表未來績效。已扣 %.1f%% 來回交易成本，未計滑價。" % cost,
+        "note": "歷史模擬結果，不代表未來績效。已扣 %.1f%% 來回成本（手續費稅 %.1f%% ＋ 滑價 %.1f%%）。"
+                % (cost, C.TRADE_COST_PCT, C.SLIPPAGE_PCT),
     }
 
 
@@ -388,6 +405,24 @@ def walk_forward(signals: list[dict]) -> dict:
             "period": f"{picked[0]['date']} ～ {picked[-1]['date']}", **d}
 
 
+DECILES = [("Top 10%", 0.0, 0.10), ("10–30%", 0.10, 0.30),
+           ("30–60%", 0.30, 0.60), ("Bottom 40%", 0.60, 1.01)]
+
+
+def stats_by_decile(signals: list[dict]) -> list[dict]:
+    """
+    依當日名次百分位分組。**這是驗證「排名越前，期望值越高」的核心指標**——
+    如果 Top 10% 的 EV 沒有明顯高於後段，排名就沒有價值，勝率再高也沒用。
+    """
+    h = C.PRIMARY_HOLD_DAYS
+    out = []
+    for label, lo, hi in DECILES:
+        sub = [s for s in signals if lo <= s.get("pct", 1) < hi]
+        d = _pack(sub, h) if sub else describe([], [])
+        out.append({"label": label, "lo": lo, "hi": hi, **d})
+    return out
+
+
 def stats_by_pattern(signals: list[dict]) -> list[dict]:
     """不分級距，單看型態的整體表現。"""
     h = C.PRIMARY_HOLD_DAYS
@@ -440,6 +475,29 @@ def print_report(bt: dict, demo: bool) -> None:
         print(f"  {p['pattern']:<12}樣本 {p['samples']:>5}｜勝率 {p['win_rate']:>5.1f}%"
               f"（平滑 {p['calibrated_win_rate']:>5.1f}%）｜平均 {p['avg_return']:+.2f}%"
               f"｜PF {p['profit_factor']}{flag}")
+
+    for key, title in (("deciles_in_sample", "in-sample"), ("deciles_oos", "out-of-sample")):
+        rows = bt.get(key) or []
+        if not any(d["samples"] for d in rows):
+            continue
+        print(f"\n■ 名次分組驗證（{title}）　排名越前，EV 應該越高")
+        print(f"{'分組':<12}{'N':>7}{'勝率':>8}{'EV':>9}{'PF':>7}{'最大回撤':>10}")
+        for d in rows:
+            if not d["samples"]:
+                continue
+            ev = d.get("expectancy")
+            print(f"{d['label']:<12}{d['samples']:>7}{d['win_rate']:>7.1f}%"
+                  f"{(ev if ev is not None else 0):>8.2f}%"
+                  f"{(d['profit_factor'] if d['profit_factor'] is not None else 0):>7.2f}"
+                  f"{(d['worst_mdd'] if d['worst_mdd'] is not None else 0):>9.2f}%")
+
+    o = bt.get("oos_overall")
+    if o:
+        ok = (o.get("expectancy") or 0) > C.OOS_MIN_EV and (o.get("profit_factor") or 0) > C.OOS_MIN_PF
+        print(f"\n■ OOS 整體（{bt.get('oos_period','')}）：N {o['samples']}、"
+              f"勝率 {o['win_rate']}%、EV {o['expectancy']:+.2f}%、PF {o['profit_factor']}")
+        print("   " + ("✅ OOS 呈現正期望值" if ok else
+                       "❌ 模型尚未證實正期望值——排名只能當觀察清單，不要照名次下單"))
 
     wf = bt.get("walk_forward", {})
     if wf.get("available"):

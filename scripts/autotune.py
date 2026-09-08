@@ -10,7 +10,7 @@ autotune.py — 用你的真實台股資料自動調校參數
   1. 用既有的 data/history 快取（不夠才向 FinMind 補），逐日重放整條排序邏輯
   2. 時間切兩段：前 70% 校準、後 30% 只拿來驗證（out-of-sample）
   3. 逐項座標下降，不做全網格，避免在噪音上過度擬合
-  4. 目標：out-of-sample 的 Top5 平均淨報酬（已扣 TRADE_COST_PCT 來回成本），
+  4. 目標：out-of-sample 的 Top5 平均淨報酬（已扣手續費、證交稅與滑價），
      打平時比大跌率
   5. **只有 out-of-sample 的 Top5 真的贏過「全體平均」才寫入結果**；
      贏不了就明說這套排序在你的資料上不成立，不寫任何參數
@@ -130,7 +130,7 @@ def net_return(df, pos, hold) -> float | None:
         exit_px = float(df["close"].iloc[pos + 1 + hold])
         if entry <= 0:
             return None
-        return (exit_px / entry - 1) * 100 - C.TRADE_COST_PCT
+        return (exit_px / entry - 1) * 100 - C.TOTAL_COST_PCT
     except Exception:
         return None
 

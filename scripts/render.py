@@ -94,6 +94,8 @@ def render_html(payload: dict) -> str:
         signals=payload.get("signals") or None,
         portfolio=payload.get("portfolio") or None,
         pattern_min_samples=C.PATTERN_MIN_SAMPLES,
+        min_samples=C.MIN_SAMPLES_SCORE,
+        in_sample_discount=C.IN_SAMPLE_DISCOUNT,
         top_slots=C.TOP_SLOTS,
         groups=_groups(payload["rows"]),
         hold_days=C.HOLD_DAYS,

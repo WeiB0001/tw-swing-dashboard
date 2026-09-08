@@ -293,6 +293,24 @@ header{padding:20px 0 14px}
 .score .pct{font-size:13px;font-weight:700;margin-left:1px}
 .score.nodata{color:#6E7A88}
 .wr.nodata{color:#6E7A88}
+.oos-tag{background:#122A1E;border:1px solid #1E5138;color:#6EE7A8;
+  font-size:10px;padding:1px 6px;border-radius:999px;margin-right:4px}
+.ins-tag{background:#2A2412;border:1px solid #544720;color:#F2C14E;
+  font-size:10px;padding:1px 6px;border-radius:999px;margin-right:4px}
+.oos-warn{border-radius:var(--radius);padding:11px 13px;margin:14px 0 0;
+  font-size:12.5px;line-height:1.75}
+.oos-warn.bad{background:#2A1418;border:1px solid #5A2530;color:#FF9E80}
+.oos-warn.ok{background:#122A1E;border:1px solid #1E5138;color:#8FD9B0}
+.oos-warn b{color:inherit;font-weight:800}
+.decile{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 13px;margin-top:10px}
+.decile-head{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.decile table{width:100%;border-collapse:collapse;font-size:12.5px}
+.decile th{color:var(--muted);font-weight:600;text-align:right;padding:4px 3px;
+  border-bottom:1px solid var(--line);font-size:11px}
+.decile th:first-child,.decile td:first-child{text-align:left}
+.decile td{text-align:right;padding:5px 3px;border-bottom:1px solid #1B2229;color:#B9C4D0}
+.decile-note{font-size:11px;color:#6E7A88;line-height:1.7;margin-top:8px}
 
 /* ---------- 美股連動 ---------- */
 .us{
@@ -763,6 +781,50 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </header>
 
   <!-- ===================== 排名 ===================== -->
+  {% if backtest and backtest.oos_overall %}
+  {% if not backtest.oos_proven %}
+  <div class="oos-warn bad">
+    ⚠️ <b>模型尚未證實正期望值</b><br>
+    out-of-sample（{{ backtest.oos_period }}）共 {{ backtest.oos_overall.samples }} 筆：
+    EV {{ '%+.2f'|format(backtest.oos_overall.expectancy) }}%、
+    PF {{ backtest.oos_overall.profit_factor }}、勝率 {{ backtest.oos_overall.win_rate }}%。
+    在 EV &gt; 0 且 PF &gt; 1 之前，這份排名<b>只能當觀察清單，不要照名次下單</b>。
+  </div>
+  {% else %}
+  <div class="oos-warn ok">
+    ✅ out-of-sample（{{ backtest.oos_period }}，{{ backtest.oos_overall.samples }} 筆）呈現正期望值：
+    EV {{ '%+.2f'|format(backtest.oos_overall.expectancy) }}%、PF {{ backtest.oos_overall.profit_factor }}。
+    歷史結果仍不代表未來績效。
+  </div>
+  {% endif %}
+  {% endif %}
+
+  {% if backtest and backtest.deciles_oos %}
+  <div class="decile">
+    <div class="decile-head">名次分組驗證（out-of-sample）— 排名越前，EV 應該越高</div>
+    <table>
+      <tr><th>分組</th><th>N</th><th>勝率</th><th>EV</th><th>PF</th><th>最大回撤</th></tr>
+      {% for d in backtest.deciles_oos %}
+      {% if d.samples %}
+      <tr>
+        <td>{{ d.label }}</td><td class="mono">{{ d.samples }}</td>
+        <td class="mono">{{ d.win_rate }}%</td>
+        <td class="mono {{ 'up' if (d.expectancy or 0) > 0 else 'down' }}">
+          {{ '%+.2f'|format(d.expectancy or 0) }}%</td>
+        <td class="mono">{{ d.profit_factor if d.profit_factor is not none else '--' }}</td>
+        <td class="mono down">{{ '%.2f'|format(d.worst_mdd or 0) }}%</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </table>
+    <div class="decile-note">
+      這是驗證排名有沒有價值的唯一標準：<b>Top 10% 的 EV 要明顯高於後段</b>。
+      若沒有，勝率再高也沒有意義。所有數字已扣除手續費、證交稅與滑價共
+      {{ backtest.cost_pct }}%。
+    </div>
+  </div>
+  {% endif %}
+
   <div class="section-head">
     <h2>{{ "勝率排名" if meta.has_winrate else "機會排名" }}</h2>
     <span>名次為全部標的的總排名</span>
@@ -913,13 +975,15 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="swing">
           <span>預期 Swing 空間 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
           {% if r.hist_calibrated is not none %}
-          <span class="wr">5日勝率 <b class="mono">{{ '%.0f'|format(r.hist_calibrated) }}%</b>
+          <span class="wr">
+            {% if r.hist_basis == 'OOS' %}<b class="oos-tag">OOS</b>{% else %}<b class="ins-tag">歷史</b>{% endif %}
+            勝率 <b class="mono">{{ '%.0f'|format(r.hist_calibrated) }}%</b>
             · EV <b class="mono {{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.1f'|format(r.hist_expectancy or 0) }}%</b>
             {% if r.hist_pf %}· PF <b class="mono">{{ r.hist_pf }}</b>{% endif %}
             · N=<b class="mono">{{ r.hist_samples }}</b>
             <b class="conf">{{ '★' * r.hist_confidence }}</b></span>
           {% else %}
-          <span class="wr nodata">歷史樣本不足（N&lt;{{ pattern_min_samples }}），僅供型態參考</span>
+          <span class="wr nodata">樣本不足（N&lt;{{ min_samples }}），不評分</span>
           {% endif %}
         </div>
         <div class="mainrisk">主要風險：{{ r.main_risk }}</div>
@@ -957,9 +1021,18 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <span class="muted">（風險分數 {{ '%.0f'|format(r.risk) }}／100）</span>
           <br><span class="muted">
           {% if r.hist_calibrated is not none %}
-            名次依<b>歷史平滑勝率 {{ '%.1f'|format(r.hist_calibrated) }}%</b> 決定（來源：{{ '型態＋分數級距' if r.hist_source == 'pattern' else '分數級距' }}，
-            {{ r.hist_samples }} 筆樣本，未平滑勝率 {{ r.hist_raw }}%）。
-            技術分數只用來分層，不直接決定名次；勝率相同時才比技術分數。
+            {% if r.hist_basis == 'OOS' %}
+            依 <b>out-of-sample 統計</b>排序（{{ r.hist_samples }} 筆，
+            勝率 {{ r.hist_raw }}%、平滑後 {{ '%.1f'|format(r.hist_calibrated) }}%、
+            EV {{ '%+.2f'|format(r.hist_expectancy or 0) }}%）。
+            這段期間<b>沒有參與任何參數調整</b>，是目前最接近真實表現的估計。
+            {% else %}
+            只有 <b>in-sample 統計</b>可用（{{ r.hist_samples }} 筆，
+            勝率 {{ r.hist_raw }}%、原始 EV {{ '%+.2f'|format(r.hist_expectancy_raw or 0) }}%）。
+            in-sample 天生樂觀，期望值已打 {{ (in_sample_discount * 100)|round|int }} 折
+            （{{ '%+.2f'|format(r.hist_expectancy or 0) }}%）再進排序，可信度也降一級。
+            {% endif %}
+            <b>這是過去相似訊號的統計，不是未來的成功機率。</b>
           {% else %}
             這個型態與分數級距的歷史樣本不足 {{ pattern_min_samples }} 筆，<b>沒有可信的勝率可用</b>，
             因此暫以先驗 50% 計入排名，並改用技術分數決定先後。

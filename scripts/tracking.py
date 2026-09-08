@@ -137,7 +137,10 @@ def update_signals(rows: list[dict], trade_date: str, regime: str) -> dict:
 # ---------------------------------------------------------------------------
 def _blank_portfolio() -> dict:
     return {"cash": float(C.PAPER_INITIAL_CASH), "positions": [], "pending": [],
-            "trades": [], "equity": [], "start_index": None, "last_date": None}
+            "trades": [], "equity": [], "start_index": None, "last_date": None,
+            # 前瞻測試：從這一天開始，每一筆都是當下決定、隔日成交，
+            # 沒有任何一筆是事後用歷史資料補算出來的
+            "forward_start": None, "mode": "forward_test"}
 
 
 def update_portfolio(rows: list[dict], trade_date: str, index_close: float | None) -> dict:
@@ -156,8 +159,10 @@ def update_portfolio(rows: list[dict], trade_date: str, index_close: float | Non
     for k, v in _blank_portfolio().items():
         pf.setdefault(k, v)
 
-    if pf.get("last_date") == trade_date:      # 同一天重跑（例如 18:00 那次）不重複交易
+    if pf.get("last_date") == trade_date:      # 同一天重跑（例如盤前那班）不重複交易
         return _summarize(pf, index_close)
+    if not pf.get("forward_start"):
+        pf["forward_start"] = trade_date       # 第一次跑的那天就是前瞻測試的起點
 
     by_code = {r["code"]: r for r in rows}
     cost = C.PAPER_COST_SIDE_PCT / 100
@@ -220,7 +225,7 @@ def update_portfolio(rows: list[dict], trade_date: str, index_close: float | Non
             proceeds = pos["shares"] * exit_px * (1 - cost)
             pf["cash"] += proceeds
             gross = (exit_px / pos["entry"] - 1) * 100 if pos["entry"] else 0
-            net = gross - C.TRADE_COST_PCT
+            net = gross - C.TOTAL_COST_PCT
             pf["trades"].append({
                 "code": pos["code"], "name": pos.get("name", ""),
                 "entry_date": pos.get("entry_date"), "exit_date": trade_date,
@@ -302,6 +307,9 @@ def _summarize(pf: dict, index_close: float | None) -> dict:
                           "stop": p.get("stop"), "target1": p.get("target1")})
 
     return {
+        "mode": pf.get("mode", "forward_test"),
+        "forward_start": pf.get("forward_start"),
+        "cost_pct": C.TOTAL_COST_PCT,
         "initial": init,
         "equity": round(equity, 2),
         "total_return": round((equity / init - 1) * 100, 2) if init else 0.0,

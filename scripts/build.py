@@ -144,16 +144,29 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
 # ---------------------------------------------------------------------------
 # 掛上回測結果（有跑過 scripts/backtest.py 才會有）
 # ---------------------------------------------------------------------------
-def _confidence(n) -> int:
-    """依樣本數給可信度星數；不足 30 筆回 0（頁面顯示樣本不足）。"""
+def _confidence(n, oos: bool = False) -> int:
+    """
+    依樣本數給可信度星數。
+      N < MIN_SAMPLES_SCORE（30）→ 0 顆，不評分也不參與排序調整
+      N < LOW_CONFIDENCE_N（100）→ 最多 3 顆
+      只有 in-sample 的資料再降一顆，因為它天生樂觀
+    """
     try:
         n = int(n or 0)
     except Exception:
         return 0
-    for need, stars in C.CONFIDENCE_TIERS:
+    if n < C.MIN_SAMPLES_SCORE:
+        return 0
+    stars = 0
+    for need, s in C.CONFIDENCE_TIERS:
         if n >= need:
-            return stars
-    return 0
+            stars = s
+            break
+    if n < C.LOW_CONFIDENCE_N:
+        stars = min(stars, 3)
+    if not oos:
+        stars = max(1, stars - 1)
+    return stars
 
 
 def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
@@ -176,23 +189,47 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
         return None
 
     reg_buckets = bt.get("regime_buckets", []) or []
+    # OOS 的統計優先。in-sample 只是備援，而且期望值會先打折才進排序。
+    oos_pat = bt.get("oos_buckets", []) or []
+    oos_score = bt.get("oos_score_buckets", []) or []
     pat_buckets = bt.get("pattern_buckets", []) or []
     buckets = bt.get("score_buckets", []) or []
 
-    def fill(r, d, source):
+    def fill(r, d, source, oos=False):
         r["hist_calibrated"] = d.get("calibrated_win_rate")
         r["hist_raw"] = d.get("win_rate")
         r["hist_samples"] = d.get("samples")
         r["hist_avg_return"] = d.get("avg_return")
         r["hist_pf"] = d.get("profit_factor")
         r["hist_mdd"] = d.get("avg_mdd")
-        r["hist_expectancy"] = d.get("expectancy")
-        r["hist_confidence"] = _confidence(d.get("samples"))
+        ev = d.get("expectancy")
+        # in-sample 的期望值天生樂觀，打折後才拿去排序，避免高估
+        r["hist_expectancy"] = (round(ev * C.IN_SAMPLE_DISCOUNT, 3)
+                                if (ev is not None and not oos) else ev)
+        r["hist_expectancy_raw"] = ev
+        r["hist_confidence"] = _confidence(d.get("samples"), oos)
         r["hist_source"] = source
+        r["hist_basis"] = "OOS" if oos else "IN_SAMPLE"
 
-    counts = {"regime": 0, "pattern": 0, "bucket": 0, "none": 0}
+    counts = {"oos_pattern": 0, "oos_bucket": 0, "regime": 0,
+              "pattern": 0, "bucket": 0, "none": 0}
     for r in rows:
         hit = None
+        # ① OOS：型態 + 分數級距
+        for b in oos_pat:
+            if (b.get("pattern") == r["kind"] and b["lo"] <= r["score"] < b["hi"]
+                    and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE):
+                hit = (b, "oos_pattern", True); break
+        # ② OOS：分數級距
+        if hit is None:
+            for b in oos_score:
+                if (b["lo"] <= r["score"] < b["hi"]
+                        and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE):
+                    hit = (b, "oos_bucket", True); break
+        if hit is not None:
+            fill(r, hit[0], hit[1], True)
+            counts[hit[1]] += 1
+            continue
         for b in reg_buckets:
             if (b.get("regime") == regime and b.get("pattern") == r["kind"]
                     and b["lo"] <= r["score"] < b["hi"]
@@ -209,14 +246,14 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
                         and b.get("samples", 0) >= C.BACKTEST_MIN_SAMPLES):
                     hit = (b, "bucket"); break
         if hit:
-            fill(r, hit[0], hit[1])
+            fill(r, hit[0], hit[1], False)
             counts[hit[1]] += 1
         else:
             counts["none"] += 1
 
-    log.info("歷史統計掛載：大盤層 %d、型態層 %d、級距層 %d、樣本不足 %d（回測 %s）",
-             counts["regime"], counts["pattern"], counts["bucket"], counts["none"],
-             bt.get("generated_at", "?"))
+    log.info("統計掛載：OOS 型態 %d、OOS 級距 %d｜in-sample 大盤 %d、型態 %d、級距 %d｜樣本不足 %d",
+             counts["oos_pattern"], counts["oos_bucket"], counts["regime"],
+             counts["pattern"], counts["bucket"], counts["none"])
     return bt
 
 
@@ -995,7 +1032,22 @@ def _backtest_summary(bt: dict | None) -> dict | None:
         "entry_rule": bt.get("entry_rule"),
         "samples": bt.get("total_signals"),
         "walk_forward": bt.get("walk_forward"),
+        "cost_detail": bt.get("cost_detail"),
+        "oos_period": bt.get("oos_period"),
+        "oos_overall": bt.get("oos_overall"),
+        "deciles_oos": bt.get("deciles_oos"),
+        "deciles_in_sample": bt.get("deciles_in_sample"),
+        "oos_proven": _oos_proven(bt),
     }
+
+
+def _oos_proven(bt: dict) -> bool:
+    """OOS 的整體期望值與獲利因子都及格才算「已證實正期望值」。"""
+    o = (bt or {}).get("oos_overall") or {}
+    ev, pf = o.get("expectancy"), o.get("profit_factor")
+    if ev is None or pf is None:
+        return False
+    return ev > C.OOS_MIN_EV and pf > C.OOS_MIN_PF
 
 
 # ---------------------------------------------------------------------------

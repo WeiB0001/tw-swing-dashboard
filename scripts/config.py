@@ -526,9 +526,26 @@ BACKTEST_MIN_SCORE = 0               # 回測統計全部級距（含低分區�
 BACKTEST_SCORE_BUCKETS = [(0, 30), (30, 45), (45, 55), (55, 65), (65, 75), (75, 101)]
 # --- 交易假設 ---
 TRADE_COST_PCT = 0.3          # 來回交易成本（手續費＋證交稅），單位 %
+SLIPPAGE_PCT = 0.2            # 來回滑價假設，單位 %
+                              # 隔日開盤買、收盤賣都不會剛好成交在那個價位，
+                              # 不扣滑價的回測一定過度樂觀
+TOTAL_COST_PCT = TRADE_COST_PCT + SLIPPAGE_PCT   # 所有績效統一扣這個
                               # 台股實務約 0.4～0.6%，想更保守就調高
 SIGNAL_COOLDOWN_DAYS = 5      # 同一檔股票出訊號後幾個交易日內不重複採樣
                               # 避免連續多天的同一段行情被算成好幾個獨立樣本
+
+# --- 樣本門檻與可信度 ---
+MIN_SAMPLES_SCORE = 30        # 樣本少於此數：不評分、不參與排序調整
+LOW_CONFIDENCE_N = 100        # 樣本少於此數：可信度降級（星等上限 3 顆）
+
+# --- OOS 優先的排名 ---
+# in-sample 的統計會過度樂觀，所以只有 out-of-sample 的數字能全額採用。
+# 只有 in-sample 可用時，期望值先乘上這個折扣再進排序。
+IN_SAMPLE_DISCOUNT = 0.4
+OOS_SPLIT = 0.7               # 前 70% 當 in-sample，後 30% 保留做 OOS
+# OOS 的整體表現若不及格，首頁會顯示「模型尚未證實正期望值」
+OOS_MIN_EV = 0.0
+OOS_MIN_PF = 1.0
 
 # --- 勝率統計 ---
 BACKTEST_MIN_SAMPLES = 30     # 樣本少於此值不對外顯示勝率
