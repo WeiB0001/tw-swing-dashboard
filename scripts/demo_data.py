@@ -286,6 +286,7 @@ def build_demo_payload() -> dict:
                       "beta_sox": 0.19, "resid_sd": 0.99},
         },
         "backtest": _backtest_summary(bt),
+        "livecheck": __import__("build")._load_livecheck(),
         "signals": signals,
         "portfolio": portfolio,
         "rows": top,

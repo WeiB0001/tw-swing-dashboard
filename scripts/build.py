@@ -543,6 +543,7 @@ def run_live() -> dict:
         "signals": signals,
         "portfolio": portfolio,
         "backtest": _backtest_summary(bt),
+        "livecheck": _load_livecheck(),
         "rows": top,
     }
 
@@ -1169,6 +1170,15 @@ def _us_snapshot() -> dict | None:
         return us_market.build_us_snapshot()
     except Exception as e:
         log.warning("美股區塊建立失敗：%s", e)
+        return None
+
+
+def _load_livecheck() -> dict | None:
+    """讀 livecheck 的結果（實際發布過的排名後來賺不賺）。沒有就回 None。"""
+    try:
+        p = ROOT / C.LIVECHECK_JSON
+        return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+    except Exception:
         return None
 
 

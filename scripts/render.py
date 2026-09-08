@@ -90,6 +90,7 @@ def render_html(payload: dict) -> str:
         meta=payload["meta"],
         index=payload.get("index") or None,
         backtest=payload.get("backtest") or None,
+        livecheck=payload.get("livecheck") or None,
         us=payload.get("us") or None,
         signals=payload.get("signals") or None,
         portfolio=payload.get("portfolio") or None,
@@ -175,4 +176,12 @@ def write_outputs(payload: dict) -> None:
     (archive / f"{payload['meta']['trade_date']}.json").write_text(
         json.dumps(payload, ensure_ascii=False), encoding="utf-8"
     )
-    log.info("已寫出 %s 與當日封存", C.OUTPUT_JSON)
+    # 每日排名存檔是 livecheck 的資料來源，保留久一點但不要無限膨脹
+    try:
+        files = sorted(archive.glob("20*-*-*.json"))
+        for old in files[:-C.ARCHIVE_KEEP_DAYS]:
+            old.unlink()
+    except Exception:
+        pass
+    log.info("已寫出 %s 與當日封存（存檔 %d 份）",
+             C.OUTPUT_JSON, len(list(archive.glob("20*-*-*.json"))))

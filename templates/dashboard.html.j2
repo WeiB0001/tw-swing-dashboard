@@ -312,6 +312,7 @@ header{padding:20px 0 14px}
 .decile{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
   padding:12px 13px;margin-top:10px}
 .decile-head{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.decile-head .sub{font-weight:600;color:#5F6B78}
 .decile table{width:100%;border-collapse:collapse;font-size:12.5px}
 .decile th{color:var(--muted);font-weight:600;text-align:right;padding:4px 3px;
   border-bottom:1px solid var(--line);font-size:11px}
@@ -829,6 +830,38 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       {% if backtest.reliability.reasons %}
       <ul>{% for x in backtest.reliability.reasons %}<li>{{ x }}</li>{% endfor %}</ul>
       {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if livecheck and livecheck.all and livecheck.all.n %}
+  <div class="decile">
+    <div class="decile-head">實際發布過的排名，後來賺不賺
+      <span class="sub">{{ livecheck.days }} 天（{{ livecheck.period }}）</span></div>
+    <table>
+      <tr><th>名次分組</th><th>N</th><th>獲利出場率</th><th>平均天數</th><th>EV</th><th>PF</th></tr>
+      {% for label in ["Top 3", "Top 10", "11–30", "31 名以後"] %}
+      {% set g = livecheck.groups.get(label) %}
+      {% if g and g.n %}
+      <tr>
+        <td>{{ label }}</td><td class="mono">{{ g.n }}</td>
+        <td class="mono">{{ g.success_rate }}%</td>
+        <td class="mono">{{ g.avg_days }}</td>
+        <td class="mono {{ 'up' if g.ev > 0 else 'down' }}">{{ '%+.2f'|format(g.ev) }}%</td>
+        <td class="mono">{{ g.pf if g.pf is not none else '--' }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+      <tr><td>全部</td><td class="mono">{{ livecheck.all.n }}</td>
+        <td class="mono">{{ livecheck.all.success_rate }}%</td>
+        <td class="mono">{{ livecheck.all.avg_days }}</td>
+        <td class="mono {{ 'up' if livecheck.all.ev > 0 else 'down' }}">{{ '%+.2f'|format(livecheck.all.ev) }}%</td>
+        <td class="mono">{{ livecheck.all.pf if livecheck.all.pf is not none else '--' }}</td></tr>
+    </table>
+    <div class="decile-note">
+      這不是回測，是<b>網站當天真的發布出去的排名</b>後來的實際結果，
+      用 data/history 的每日存檔比對真實價格算出來的，沒有事後諸葛的空間。
+      {% if livecheck.pending %}（另有 {{ livecheck.pending }} 筆還沒走完 {{ livecheck.exit_max_days }} 天，未列入）{% endif %}
     </div>
   </div>
   {% endif %}

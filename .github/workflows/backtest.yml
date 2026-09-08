@@ -53,6 +53,10 @@ jobs:
         run: python scripts/backtest.py --days 250
 
       # 回測完立刻用新的勝率重建頁面，不必等隔天的日更
+      # 用網站實際發布過的排名做驗證，資料來自 data/history 的每日存檔
+      - name: 追蹤實際排名表現
+        run: python scripts/livecheck.py || echo "存檔還不夠，略過"
+
       - name: 以新回測結果重建儀表板
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}

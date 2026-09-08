@@ -502,6 +502,8 @@ PORTFOLIO_JSON = "data/portfolio.json" # 模擬投資組合狀態
 
 # --- 訊號生命週期 ---
 SIGNALS_KEEP_DAYS = 40        # 排名紀錄保留幾天
+ARCHIVE_KEEP_DAYS = 400       # 每日排名存檔保留幾天（livecheck 要用，別刪太快）
+LIVECHECK_JSON = "data/livecheck.json"   # 實際排名的追蹤結果
 STREAK_HOT = 3                # 連續入榜幾日標示 🔥
 RANK_MOVE_MIN = 3             # 名次變動超過幾名才標示 ↑↓
 
