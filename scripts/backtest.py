@@ -249,6 +249,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "oos_period": (f"{oos[0]['date']} ～ {oos[-1]['date']}" if oos else ""),
         "oos_total": len(oos),
         "oos_overall": _pack(oos, C.PRIMARY_HOLD_DAYS) if oos else None,
+        "oos_regime_buckets": stats_by_regime_pattern_bucket(oos),  # OOS 的大盤分層
         "oos_buckets": stats_by_pattern_bucket(oos),        # 排名查表優先用這個
         "oos_score_buckets": stats_by_bucket(oos),
         "deciles_in_sample": stats_by_decile(ins),
@@ -379,7 +380,15 @@ def walk_forward(signals: list[dict]) -> dict:
 
     picked = []
     for i in range(1, k):
-        table = build_table([r for f in folds[:i] for r in f])
+        # 嚴格避免 leakage：建表只用「測試段第一天之前」的樣本。
+        # 光用 folds[:i] 還不夠——同一天的樣本可能被切到兩段，
+        # 那會讓當天的結果反過來影響當天的選股。
+        test_start = min(r["date"] for r in folds[i]) if folds[i] else None
+        prior = [r for f in folds[:i] for r in f
+                 if test_start is None or r["date"] < test_start]
+        if len(prior) < C.PATTERN_MIN_SAMPLES:
+            continue
+        table = build_table(prior)
         if not table:
             continue
         by_day = {}
@@ -400,9 +409,26 @@ def walk_forward(signals: list[dict]) -> dict:
     if len(picked) < 20:
         return {"available": False, "reason": "out-of-sample 樣本不足，不產出結果"}
 
+    # 每一段各自的 EV：全部為正才算穩定，忽正忽負代表只是運氣
+    fold_stats = []
+    for i in range(1, k):
+        dates = set(r["date"] for r in folds[i])
+        sub = [r for r in picked if r["date"] in dates]
+        if len(sub) >= 5:
+            fs = _pack(sub, h)
+            fold_stats.append({"fold": i, "samples": fs["samples"],
+                               "expectancy": fs["expectancy"],
+                               "profit_factor": fs["profit_factor"],
+                               "win_rate": fs["win_rate"]})
+    pos = sum(1 for f in fold_stats if (f["expectancy"] or 0) > 0)
+    stability = round(pos / len(fold_stats), 2) if fold_stats else 0.0
+
     d = _pack(picked, h)
     return {"available": True, "folds": k, "top_n": C.WF_TOP_N,
-            "period": f"{picked[0]['date']} ～ {picked[-1]['date']}", **d}
+            "period": f"{picked[0]['date']} ～ {picked[-1]['date']}",
+            "fold_stats": fold_stats,
+            "positive_folds": pos, "total_folds": len(fold_stats),
+            "stability": stability, **d}
 
 
 DECILES = [("Top 10%", 0.0, 0.10), ("10–30%", 0.10, 0.30),
@@ -502,6 +528,12 @@ def print_report(bt: dict, demo: bool) -> None:
     wf = bt.get("walk_forward", {})
     if wf.get("available"):
         print(f"\n■ Walk-forward（out-of-sample，{wf['folds']} 段、每日取前 {wf['top_n']}）")
+        if wf.get("fold_stats"):
+            print("  各段 EV：" + "、".join(
+                f"第{f['fold']}段 {f['expectancy']:+.2f}%(N{f['samples']})"
+                for f in wf["fold_stats"]))
+            print(f"  正 EV 區段：{wf['positive_folds']}/{wf['total_folds']}"
+                  f"（穩定度 {wf['stability']}）")
         print(f"  期間 {wf['period']}｜樣本 {wf['samples']}｜勝率 {wf['win_rate']}%"
               f"（平滑 {wf['calibrated_win_rate']}%）｜EV {wf['expectancy']:+.2f}%"
               f"｜PF {wf['profit_factor']}｜平均回撤 {wf['avg_mdd']}%")

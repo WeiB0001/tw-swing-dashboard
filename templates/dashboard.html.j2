@@ -302,6 +302,13 @@ header{padding:20px 0 14px}
 .oos-warn.bad{background:#2A1418;border:1px solid #5A2530;color:#FF9E80}
 .oos-warn.ok{background:#122A1E;border:1px solid #1E5138;color:#8FD9B0}
 .oos-warn b{color:inherit;font-weight:800}
+.rel-panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 13px;margin-top:10px}
+.rel-head{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:7px}
+.rel-head .rel{margin-left:6px;padding:2px 9px;border-radius:999px;font-size:11.5px}
+.rel-body{font-size:12.5px;color:#B9C4D0;line-height:1.8}
+.rel-body b{font-family:ui-monospace,Menlo,monospace}
+.rel-body ul{margin:6px 0 0;padding-left:18px;color:#8E9AA8;font-size:11.5px;line-height:1.75}
 .decile{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
   padding:12px 13px;margin-top:10px}
 .decile-head{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:8px}
@@ -351,6 +358,11 @@ header{padding:20px 0 14px}
 }
 .final b{color:var(--signal);font-weight:800;font-family:ui-monospace,Menlo,monospace}
 .final .fill{color:#F2C14E;flex-basis:100%}
+.final .rel{padding:1px 8px;border-radius:999px;font-weight:700;font-size:11px}
+.rel-高{background:#122A1E;border:1px solid #1E5138;color:#6EE7A8}
+.rel-中{background:#2A2412;border:1px solid #544720;color:#F2C14E}
+.rel-低{background:#2A1418;border:1px solid #5A2530;color:#FF8A96}
+.rel-無{background:#1E2530;border:1px solid #2E3846;color:#93A1B1}
 .mtier{
   display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;
   font-size:10.5px;font-weight:700;vertical-align:1px;
@@ -799,6 +811,28 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
   {% endif %}
 
+  {% if backtest and backtest.reliability %}
+  <div class="rel-panel">
+    <div class="rel-head">OOS 可信度
+      <span class="rel rel-{{ backtest.reliability.level }}">{{ backtest.reliability.level }}</span>
+    </div>
+    <div class="rel-body">
+      OOS 樣本 <b>{{ backtest.reliability.n }}</b> 筆 ·
+      EV <b class="{{ 'up' if (backtest.reliability.ev or 0) > 0 else 'down' }}">{{ '%+.2f'|format(backtest.reliability.ev or 0) }}%</b> ·
+      PF <b>{{ backtest.reliability.pf }}</b>
+      {% if backtest.reliability.ins_ev is not none %}
+      · in-sample EV {{ '%+.2f'|format(backtest.reliability.ins_ev) }}%
+      （落差 {{ '%+.2f'|format(backtest.reliability.gap or 0) }}）
+      {% endif %}
+      <br>in-sample 期望值折扣 <b>{{ backtest.reliability.discount }}</b>
+      （依 OOS 表現動態決定，不是固定值）
+      {% if backtest.reliability.reasons %}
+      <ul>{% for x in backtest.reliability.reasons %}<li>{{ x }}</li>{% endfor %}</ul>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
   {% if backtest and backtest.deciles_oos %}
   <div class="decile">
     <div class="decile-head">名次分組驗證（out-of-sample）— 排名越前，EV 應該越高</div>
@@ -962,8 +996,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         {% if r.final_score is defined and r.final_score is not none %}
         <div class="final">
           <span>綜合 <b>{{ '%.0f'|format(r.final_score) }}/100</b></span>
-          <span>模型品質 <b>{{ '%.0f'|format(r.model_quality) }}</b>×65%</span>
-          <span>進場品質 <b>{{ '%.0f'|format(r.entry_quality) }}</b>×35%</span>
+          <span>證據 <b>{{ '%.0f'|format(r.evidence_quality) }}</b></span>
+          <span>位置 <b>{{ '%.0f'|format(r.position_quality) }}</b></span>
+          <span>動能 <b>{{ '%.0f'|format(r.momentum_quality) }}</b></span>
+          {% if r.oos_reliability %}
+          <span class="rel rel-{{ r.oos_reliability }}">OOS 可信度 {{ r.oos_reliability }}</span>
+          {% endif %}
           <span>動能 <b>{{ '%.0f'|format(r.momentum_score) }}</b></span>
           <span class="sub">模型名次 第 {{ r.rank }} 名</span>
           {% if r.top_fill %}
@@ -1000,13 +1038,19 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         {% if r.final_parts %}
         <div class="scoreline">
           <b>綜合分數 {{ '%.0f'|format(r.final_score) }}/100</b>
-          ＝ 模型品質 {{ '%.0f'|format(r.model_quality) }} × 65% ＋ 進場品質 {{ '%.0f'|format(r.entry_quality) }} × 35%
+          ＝ 歷史證據 {{ '%.0f'|format(r.evidence_quality) }} × {{ (w_evidence*100)|round|int }}%
+          ＋ 位置風報 {{ '%.0f'|format(r.position_quality) }} × {{ (w_position*100)|round|int }}%
+          ＋ 動能確認 {{ '%.0f'|format(r.momentum_quality) }} × {{ (w_momentum*100)|round|int }}%
           <br><span class="muted">
-          模型品質：EV {{ r.final_parts.model.ev }}、勝率 {{ r.final_parts.model.winrate }}、
-          PF {{ r.final_parts.model.pf }}、回撤 {{ r.final_parts.model.mdd }}、技術分數 {{ r.final_parts.model.tech }}<br>
-          進場品質：收盤確認 {{ r.final_parts.entry.confirm }}、量能 {{ r.final_parts.entry.volume }}、
-          RR {{ r.final_parts.entry.rr }}、距觸發價 {{ r.final_parts.entry.distance }}<br>
-          全部標準化成 0～100 後加權；沒有歷史樣本的項目以中性 50 代入。
+          歷史證據 {{ '%.0f'|format(r.evidence_quality) }}（EV {{ r.final_parts.evidence.ev }}、
+          PF {{ r.final_parts.evidence.pf }}、勝率 {{ r.final_parts.evidence.winrate }}、
+          回撤 {{ r.final_parts.evidence.mdd }}、樣本 {{ r.final_parts.evidence.samples }}）<br>
+          位置風報 {{ '%.0f'|format(r.position_quality) }}（區間位置 {{ r.final_parts.position.position }}、
+          RR {{ r.final_parts.position.rr }}、距觸發價 {{ r.final_parts.position.distance }}）<br>
+          動能確認 {{ '%.0f'|format(r.momentum_quality) }}（均線、MACD、量能、收盤確認合併計一次）<br>
+          <b>三個區塊刻意不重複</b>：均線／MACD／量能／確認只算在動能區塊，
+          位置風報只放與動能不相關的項目，避免同一組指標被計三次。
+          沒有歷史樣本的項目以中性 50 代入。
           這一層<b>沒有改動任何模型</b>，EV、勝率、PF、回測、walk-forward 全部照舊。
           清單順序先分 🟢 強勢確認 → 🟡 潛力觀察 → 🔴 轉弱／追高，
           同層內再依「綜合分數 60% ＋ 動能分數 40%」排序。

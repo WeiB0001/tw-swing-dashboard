@@ -169,6 +169,88 @@ def _confidence(n, oos: bool = False) -> int:
     return stars
 
 
+def oos_reliability(bt: dict) -> dict:
+    """
+    比較 in-sample 與 OOS 的 EV / PF / 勝率，判斷這份統計有多可信，
+    並據此決定 in-sample 要打多重的折。
+
+    邏輯很簡單：OOS 跟 in-sample 落差越大，代表越可能是過度擬合；
+    OOS 本身為負，就幾乎不該相信 in-sample 的數字。
+    """
+    o = (bt or {}).get("oos_overall") or {}
+    ins = None
+    for b_ in ((bt or {}).get("topk") or {}).get("all", {}).values():
+        ins = b_
+        break
+    wf = (bt or {}).get("walk_forward") or {}
+
+    n = int(o.get("samples") or 0)
+    ev = o.get("expectancy")
+    pf = o.get("profit_factor")
+    stab = float(wf.get("stability") or 0)
+
+    reasons = []
+    if not n:
+        return {"level": "無", "discount": C.IN_SAMPLE_DISCOUNT, "n": 0,
+                "ev": None, "pf": None, "stability": stab,
+                "reasons": ["沒有 out-of-sample 統計"]}
+
+    ev = float(ev or 0)
+    pf = float(pf or 0)
+    ins_ev = float((ins or {}).get("expectancy") or 0)
+    gap = ins_ev - ev                       # in-sample 比 OOS 好多少
+
+    hi, mid = C.OOS_REL_HIGH, C.OOS_REL_MID
+    if n >= hi["n"] and ev > hi["ev"] and pf > hi["pf"]:
+        level = "高"
+    elif n >= mid["n"] and ev > mid["ev"] and pf > mid["pf"]:
+        level = "中"
+    else:
+        level = "低"
+
+    if n < mid["n"]:
+        reasons.append("OOS 樣本只有 %d 筆（建議 300 筆以上）" % n)
+    if ev <= 0:
+        reasons.append("OOS 期望值 %+.2f%% 為負" % ev)
+    if pf <= 1:
+        reasons.append("OOS 獲利因子 %.2f 未過 1" % pf)
+    if gap > 0.3:
+        reasons.append("in-sample 比 OOS 好 %.2f 個百分點，過度擬合跡象" % gap)
+    if wf.get("total_folds"):
+        if stab < 0.6:
+            reasons.append("walk-forward 只有 %d/%d 段是正 EV"
+                           % (wf.get("positive_folds", 0), wf["total_folds"]))
+        else:
+            reasons.append("walk-forward %d/%d 段正 EV"
+                           % (wf.get("positive_folds", 0), wf["total_folds"]))
+
+    # 動態折扣：OOS 越可信、與 in-sample 落差越小，in-sample 才被多採用一點
+    base = {"高": C.IN_SAMPLE_DISCOUNT_MAX, "中": 0.30, "低": C.IN_SAMPLE_DISCOUNT_MIN}[level]
+    if ev <= 0:
+        base = C.IN_SAMPLE_DISCOUNT_MIN
+    if gap > 0.5:
+        base *= 0.6
+    discount = round(max(C.IN_SAMPLE_DISCOUNT_MIN, min(C.IN_SAMPLE_DISCOUNT_MAX, base)), 3)
+
+    return {"level": level, "discount": discount, "n": n, "ev": round(ev, 3),
+            "pf": round(pf, 3), "ins_ev": round(ins_ev, 3), "gap": round(gap, 3),
+            "stability": stab, "reasons": reasons}
+
+
+def shrink(ev, n) -> float:
+    """
+    小樣本收縮：ev × N / (N + K)。
+    30 筆的期望值只採用約 37%，300 筆才 86%。
+    這樣「3 戰 3 勝、EV +5%」就不會排到 300 筆、EV +0.5% 的前面。
+    """
+    try:
+        ev = float(ev)
+        n = int(n or 0)
+    except Exception:
+        return 0.0
+    return ev * n / (n + C.SHRINK_K) if n > 0 else 0.0
+
+
 def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
     """
     掛上歷史統計。查表順序（樣本不足就往下退一層）：
@@ -190,6 +272,8 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
 
     reg_buckets = bt.get("regime_buckets", []) or []
     # OOS 的統計優先。in-sample 只是備援，而且期望值會先打折才進排序。
+    rel = oos_reliability(bt)
+    oos_reg = bt.get("oos_regime_buckets", []) or []
     oos_pat = bt.get("oos_buckets", []) or []
     oos_score = bt.get("oos_score_buckets", []) or []
     pat_buckets = bt.get("pattern_buckets", []) or []
@@ -203,24 +287,38 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
         r["hist_pf"] = d.get("profit_factor")
         r["hist_mdd"] = d.get("avg_mdd")
         ev = d.get("expectancy")
-        # in-sample 的期望值天生樂觀，打折後才拿去排序，避免高估
-        r["hist_expectancy"] = (round(ev * C.IN_SAMPLE_DISCOUNT, 3)
-                                if (ev is not None and not oos) else ev)
+        n = d.get("samples")
+        # 先做小樣本收縮，再對 in-sample 套動態折扣
+        ev_used = shrink(ev, n) if ev is not None else None
+        if ev_used is not None and not oos:
+            ev_used = ev_used * rel["discount"]
+        r["hist_expectancy"] = round(ev_used, 3) if ev_used is not None else None
         r["hist_expectancy_raw"] = ev
+        r["hist_shrunk"] = round(shrink(ev, n), 3) if ev is not None else None
+        r["oos_reliability"] = rel["level"]
+        r["oos_rel_reasons"] = rel["reasons"]
+        r["in_sample_discount"] = rel["discount"] if not oos else None
         r["hist_confidence"] = _confidence(d.get("samples"), oos)
         r["hist_source"] = source
         r["hist_basis"] = "OOS" if oos else "IN_SAMPLE"
 
-    counts = {"oos_pattern": 0, "oos_bucket": 0, "regime": 0,
+    counts = {"oos_regime": 0, "oos_pattern": 0, "oos_bucket": 0, "regime": 0,
               "pattern": 0, "bucket": 0, "none": 0}
     for r in rows:
         hit = None
-        # ① OOS：型態 + 分數級距
-        for b in oos_pat:
+        # ① OOS：大盤狀態 + 型態 + 分數級距（最精細）
+        for b in oos_reg:
+            if (b.get("regime") == regime and b.get("pattern") == r["kind"]
+                    and b["lo"] <= r["score"] < b["hi"]
+                    and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE):
+                hit = (b, "oos_regime", True); break
+        # ② OOS：型態 + 分數級距
+        if hit is None:
+          for b in oos_pat:
             if (b.get("pattern") == r["kind"] and b["lo"] <= r["score"] < b["hi"]
                     and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE):
                 hit = (b, "oos_pattern", True); break
-        # ② OOS：分數級距
+        # ③ OOS：分數級距
         if hit is None:
             for b in oos_score:
                 if (b["lo"] <= r["score"] < b["hi"]
@@ -251,9 +349,12 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
         else:
             counts["none"] += 1
 
-    log.info("統計掛載：OOS 型態 %d、OOS 級距 %d｜in-sample 大盤 %d、型態 %d、級距 %d｜樣本不足 %d",
-             counts["oos_pattern"], counts["oos_bucket"], counts["regime"],
-             counts["pattern"], counts["bucket"], counts["none"])
+    log.info("統計掛載：OOS 大盤 %d、OOS 型態 %d、OOS 級距 %d｜in-sample %d｜樣本不足 %d",
+             counts["oos_regime"], counts["oos_pattern"], counts["oos_bucket"],
+             counts["regime"] + counts["pattern"] + counts["bucket"], counts["none"])
+    log.info("OOS 可信度：%s（N=%d、EV=%s、PF=%s、穩定度 %s）→ in-sample 折扣 %.2f",
+             rel["level"], rel["n"], rel["ev"], rel["pf"], rel["stability"], rel["discount"])
+    bt["_reliability"] = rel
     return bt
 
 
@@ -590,65 +691,69 @@ def add_momentum(rows: list[dict]) -> None:
 
 def add_final_score(rows: list[dict]) -> None:
     """
-    綜合分數（0～100）＝ 65% 模型品質 ＋ 35% 進場品質。
+    綜合分數（0～100）＝ 歷史證據 45% ＋ 位置風報 30% ＋ 動能確認 25%。
 
-    **這一層完全不動任何模型**：EV、勝率、PF、MDD、技術分數、回測、walk-forward
-    全部沿用既有結果，只是把它們標準化後重新加權，回答「這檔現在整體看起來如何」。
-    原本的欄位一個都沒被覆蓋。
+    **這次重整的重點是去掉重複計分。** 原本：
+      模型品質裡的「技術分數」已經含趨勢與動能，
+      進場品質又算一次量能與收盤確認，
+      最終排序再把 momentum_score 加權進來 ——
+    同一組高度相關的指標（均線、MACD、量能、確認）被計了三次，
+    等於讓動能變相主導排名。
 
-    沒有歷史統計的（樣本不足）就用中性值 50 代入，不會因為缺資料被懲罰或加分。
+    現在把它們全部歸到「動能確認」一個區塊，只計一次；
+    「位置風報」只放跟動能不相關的東西（區間位置、RR、距觸發價）。
     """
     if not rows:
         return
 
     for r in rows:
-        # ---- 模型品質：全部來自既有欄位 ----
-        ev = r.get("hist_expectancy")
-        wr = r.get("hist_calibrated")
+        # ---- 區塊一：歷史證據（全部來自回測，OOS 優先）----
+        ev = r.get("hist_expectancy")          # 已收縮、已依 OOS 可信度折扣
         pf = r.get("hist_pf")
+        wr = r.get("hist_calibrated")
         mdd = r.get("hist_mdd")
-
-        m = {
-            # EV −1% ～ +2% 映射到 0～100；沒有樣本給中性 50
+        n = r.get("hist_samples")
+        e = {
             "ev": _scale(ev, -1.0, 2.0) if ev is not None else 50.0,
-            # 平滑勝率 40% ～ 65%
-            "winrate": _scale(wr, 40.0, 65.0) if wr is not None else 50.0,
-            # PF 0.8 ～ 2.0
             "pf": _scale(pf, 0.8, 2.0) if pf is not None else 50.0,
-            # 回撤 −8% ～ 0%（越淺越高分）
+            "winrate": _scale(wr, 40.0, 65.0) if wr is not None else 50.0,
             "mdd": _scale(mdd, -8.0, 0.0) if mdd is not None else 50.0,
-            # 技術分數本來就是 0～100
-            "tech": _clamp100(r.get("score")),
+            # 樣本數也是證據強度的一部分
+            "samples": _scale(n, 0, 400) if n else 0.0,
         }
-        model_q = sum(m[k] * w for k, w in C.FINAL_MODEL_W.items())
+        evidence = sum(e[k] * w for k, w in C.FINAL_EVIDENCE_W.items())
 
-        # ---- 進場品質：全部來自 plan 已經算好的欄位 ----
+        # ---- 區塊二：位置與風報（刻意不含量能與均線，避免與動能重複）----
         pl = r.get("plan") or {}
-        icon = pl.get("entry_icon") or ""
-        vol = pl.get("vol_ratio")
+        pos20 = r.get("pos20")
         rr = pl.get("rr")
         dist = pl.get("dist_trigger_pct")
-
-        confirm = {"🟢": 100.0, "🟡": 45.0, "⚠": 20.0, "⛔": 0.0}.get(icon, 30.0)
-        e = {
-            "confirm": confirm,
-            # 量能 0.6× ～ 2.0×
-            "volume": _scale(vol, 0.6, 2.0) if vol is not None else 30.0,
-            # RR 0.8 ～ 2.5
+        pq = {
+            # 區間位置越低越好，但太貼底代表還在破底，用區間帶處理
+            "position": _scale(100 - abs((pos20 or 0.5) * 100 - 35) * 2, 0, 100),
             "rr": _scale(rr, 0.8, 2.5) if rr is not None else 30.0,
-            # 距觸發價越近越好：0% 滿分、5% 以上 0 分
             "distance": _scale(-abs(dist), -5.0, 0.0) if dist is not None else 30.0,
         }
-        entry_q = sum(e[k] * w for k, w in C.FINAL_ENTRY_W.items())
+        position = sum(pq[k] * w for k, w in C.FINAL_POSITION_W.items())
 
-        final = C.FINAL_W_MODEL * model_q + C.FINAL_W_ENTRY * entry_q
+        # ---- 區塊三：動能確認（均線、MACD、量能、收盤確認合併，只計一次）----
+        momentum = _clamp100(r.get("momentum_score") or 0)
+
+        final = (C.FINAL_W_EVIDENCE * evidence
+                 + C.FINAL_W_POSITION * position
+                 + C.FINAL_W_MOMENTUM * momentum)
         r["final_score"] = round(_clamp100(final), 1)
-        r["model_quality"] = round(_clamp100(model_q), 1)
-        r["entry_quality"] = round(_clamp100(entry_q), 1)
-        r["final_parts"] = {"model": {k: round(v, 1) for k, v in m.items()},
-                            "entry": {k: round(v, 1) for k, v in e.items()}}
-        # 進場狀態分層：🟢 可觀察 → 🟡 等待確認 → 🔴 不追價
-        r["entry_tier"] = 0 if icon == "🟢" else (1 if icon == "🟡" else 2)
+        r["evidence_quality"] = round(_clamp100(evidence), 1)
+        r["position_quality"] = round(_clamp100(position), 1)
+        r["momentum_quality"] = round(momentum, 1)
+        # 保留舊欄位名，樣板與既有程式不用改
+        r["model_quality"] = r["evidence_quality"]
+        r["entry_quality"] = r["position_quality"]
+        r["final_parts"] = {"evidence": {k: round(v, 1) for k, v in e.items()},
+                            "position": {k: round(v, 1) for k, v in pq.items()},
+                            "momentum": momentum}
+        r["entry_tier"] = 0 if (pl.get("entry_icon") == "🟢") else (
+            1 if pl.get("entry_icon") == "🟡" else 2)
 
 
 def sort_by_final(rows: list[dict]) -> list[dict]:
@@ -661,8 +766,8 @@ def sort_by_final(rows: list[dict]) -> list[dict]:
     卡片上會明說「這一檔是因為強勢確認不足 5 檔才補進來的」。
     """
     def key(r):
-        blend = (C.RANK_W_FINAL * r.get("final_score", 0)
-                 + C.RANK_W_MOM * r.get("momentum_score", 0))
+        # 動能已經在 final_score 裡計過一次，這裡不再單獨加權，避免重複計分
+        blend = float(r.get("final_score", 0))
         # 歷史上同條件的隔日暴跌率偏高 → 扣分往後排（不刪除）
         blend -= float(r.get("crash_penalty") or 0)
         # 海外環境：依產業對美股的敏感度做差異化加減
@@ -677,7 +782,27 @@ def sort_by_final(rows: list[dict]) -> list[dict]:
             r["demoted_by_crash"] = True
         return (tier, -blend)
 
-    out = sorted(rows, key=key)
+    def full_key(r):
+        tier, neg = key(r)
+        # 有 OOS 證據的優先，然後才比綜合分數
+        ev = r.get("hist_expectancy")
+        pf = r.get("hist_pf")
+        n = r.get("hist_samples") or 0
+        mdd = r.get("hist_mdd")
+        rr = (r.get("plan") or {}).get("rr")
+        has_oos = 0 if r.get("hist_basis") == "OOS" and n >= C.MIN_SAMPLES_SCORE else 1
+        # 期望值優先，OOS 只在期望值相近時當加分項——
+        # 否則負 EV 的 OOS 標的會壓過正 EV 的標的，那沒有道理
+        return (tier,
+                -round(float(ev) if ev is not None else 0, 3),
+                has_oos,
+                -round(float(pf) if pf is not None else 1, 2),
+                -min(n, 500),
+                -round(float(mdd) if mdd is not None else -99, 1),
+                -round(float(rr) if rr is not None else 0, 2),
+                neg)
+
+    out = sorted(rows, key=full_key)
     green = sum(1 for r in out if r.get("momentum_tier") == 0)
     for i, r in enumerate(out, 1):
         r["final_rank"] = i
@@ -1038,6 +1163,7 @@ def _backtest_summary(bt: dict | None) -> dict | None:
         "deciles_oos": bt.get("deciles_oos"),
         "deciles_in_sample": bt.get("deciles_in_sample"),
         "oos_proven": _oos_proven(bt),
+        "reliability": bt.get("_reliability"),
     }
 
 

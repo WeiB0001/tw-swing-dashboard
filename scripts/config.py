@@ -232,11 +232,21 @@ OTHERS_TOP_N = 30                 # 分頁最多顯示幾檔
 OTHERS_JSON = "data/others.json"
 
 # --- 綜合分數（只是把既有數字重新加權呈現，不改任何模型）---
-FINAL_W_MODEL = 0.65      # 模型品質佔比
-FINAL_W_ENTRY = 0.35      # 進場品質佔比
-# 模型品質內部權重（總和 1.0）
+# 綜合分數改成三個「不重複」的區塊。
+# 原本的問題：模型品質裡的 tech 已經含趨勢與動能，進場品質又算一次量能與確認，
+# 最後排序再把 momentum_score 加權進去 —— 同一組高度相關的指標被計了三次。
+# 現在把「確認／量能／均線／MACD」全部歸到動能區塊，只計一次。
+FINAL_W_EVIDENCE = 0.45   # 歷史證據（OOS EV / PF / 勝率 / 回撤 / 樣本數）
+FINAL_W_POSITION = 0.30   # 位置與風報（進場位置、RR、距觸發價）—— 與動能不重複
+FINAL_W_MOMENTUM = 0.25   # 動能與確認（收盤確認、量能、均線、MACD）合併計一次
+
+FINAL_EVIDENCE_W = {"ev": 0.40, "pf": 0.20, "winrate": 0.15, "mdd": 0.10, "samples": 0.15}
+FINAL_POSITION_W = {"position": 0.45, "rr": 0.40, "distance": 0.15}
+
+# 舊的鍵保留給 autotune 相容，實際排序已不使用
+FINAL_W_MODEL = 0.65
+FINAL_W_ENTRY = 0.35
 FINAL_MODEL_W = {"ev": 0.30, "winrate": 0.25, "pf": 0.20, "mdd": 0.10, "tech": 0.15}
-# 進場品質內部權重（總和 1.0）
 FINAL_ENTRY_W = {"confirm": 0.40, "volume": 0.25, "rr": 0.25, "distance": 0.10}
 
 # --- 動能確認（只影響首頁最終排序，不碰 EV / 勝率 / 回測）---
@@ -540,8 +550,20 @@ LOW_CONFIDENCE_N = 100        # 樣本少於此數：可信度降級（星等上
 
 # --- OOS 優先的排名 ---
 # in-sample 的統計會過度樂觀，所以只有 out-of-sample 的數字能全額採用。
-# 只有 in-sample 可用時，期望值先乘上這個折扣再進排序。
-IN_SAMPLE_DISCOUNT = 0.4
+# in-sample 的折扣不再固定，改成看 OOS 的實際表現動態決定（見 build.oos_reliability）：
+#   OOS 明顯正期望值 → in-sample 可信一些，折扣較輕
+#   OOS 為負或與 in-sample 落差大 → 代表過度擬合，折扣加重
+IN_SAMPLE_DISCOUNT = 0.4          # 只在算不出 OOS 時當保底
+IN_SAMPLE_DISCOUNT_MIN = 0.10     # 最重的折扣
+IN_SAMPLE_DISCOUNT_MAX = 0.55     # 最輕的折扣
+
+# 小樣本收縮：ev_used = ev × N / (N + SHRINK_K)
+# 30 筆的 EV 只採用約 37%，300 筆才採用 86%，避免小樣本高 EV 排到前面
+SHRINK_K = 50
+
+# OOS 可信度分級門檻（樣本數 / EV / PF）
+OOS_REL_HIGH = {"n": 300, "ev": 0.0, "pf": 1.10}
+OOS_REL_MID = {"n": 100, "ev": -0.10, "pf": 0.95}
 OOS_SPLIT = 0.7               # 前 70% 當 in-sample，後 30% 保留做 OOS
 # OOS 的整體表現若不及格，首頁會顯示「模型尚未證實正期望值」
 OOS_MIN_EV = 0.0
