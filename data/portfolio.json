@@ -1,5 +1,5 @@
 {
- "cash": 36241.14165500001,
+ "cash": 38371.771040000014,
  "positions": [
   {
    "code": "2359",
@@ -13,23 +13,23 @@
    "pattern": "多頭回檔"
   },
   {
-   "code": "2360",
-   "name": "致茂",
-   "shares": 17,
-   "entry": 2095.0,
-   "entry_date": "2026-09-04",
-   "held": 1,
-   "stop": 1971.32,
-   "target1": 2257.73,
+   "code": "9910",
+   "name": "豐泰",
+   "shares": 509,
+   "entry": 71.0,
+   "entry_date": "2026-09-08",
+   "held": 0,
+   "stop": 68.47,
+   "target1": 71.79,
    "pattern": "低檔止跌轉強"
   }
  ],
  "pending": [
   {
-   "code": "9910",
-   "budget": 36241.14,
-   "stop": 68.47,
-   "target1": 71.79,
+   "code": "2337",
+   "budget": 38371.77,
+   "stop": 123.11,
+   "target1": 139.06,
    "pattern": "低檔止跌轉強"
   }
  ],
@@ -81,6 +81,18 @@
    "reason": "達標",
    "held": 6,
    "pattern": "多頭回檔"
+  },
+  {
+   "code": "2360",
+   "name": "致茂",
+   "entry_date": "2026-09-04",
+   "exit_date": "2026-09-08",
+   "entry": 2095.0,
+   "exit": 2257.73,
+   "net_pct": 7.27,
+   "reason": "達標",
+   "held": 2,
+   "pattern": "低檔止跌轉強"
   }
  ],
  "equity": [
@@ -158,8 +170,15 @@
    "date": "2026-09-07",
    "equity": 107382.14,
    "index": 46551.13
+  },
+  {
+   "date": "2026-09-08",
+   "equity": 108148.97,
+   "index": 47326.27
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-07"
+ "last_date": "2026-09-08",
+ "forward_start": "2026-09-08",
+ "mode": "forward_test"
 }
