@@ -699,7 +699,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">{{ "今日勝率排行" if meta.has_winrate else "今日機會排行" }}
+    <h1 class="title">{{ "今日獲利機率排行" if meta.has_winrate else "今日機會排行" }}
       {% if meta.regime == 'bull' %}<span class="regime bull">🟢 多頭</span>
       {% elif meta.regime == 'bear' %}<span class="regime bear">🔴 空頭</span>
       {% else %}<span class="regime side">🟡 震盪</span>{% endif %}
@@ -860,7 +860,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
 
   <div class="section-head">
-    <h2>{{ "勝率排名" if meta.has_winrate else "機會排名" }}</h2>
+    <h2>{{ exit_days ~ "日內獲利機率排名" if meta.has_winrate else "機會排名" }}</h2>
     <span>名次為全部標的的總排名</span>
   </div>
 
@@ -968,7 +968,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="row3">
           <div class="headline">{{ r.headline }}</div>
           {% if r.final_score is defined and r.final_score is not none %}
+          {% if r.hist_success is not none %}
+          <div class="score mono">{{ '%.0f'|format(r.hist_success) }}<span class="pct">%</span><em>{{ exit_days }}日內獲利</em></div>
+          {% else %}
           <div class="score mono">{{ '%.0f'|format(r.final_score) }}<span class="pct">/100</span><em>綜合分數</em></div>
+          {% endif %}
           {% elif r.hist_calibrated is not none %}
           <div class="score mono">{{ '%.0f'|format(r.hist_calibrated) }}<span class="pct">%</span><em>歷史勝率</em></div>
           {% else %}
@@ -1015,7 +1019,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           {% if r.hist_calibrated is not none %}
           <span class="wr">
             {% if r.hist_basis == 'OOS' %}<b class="oos-tag">OOS</b>{% else %}<b class="ins-tag">歷史</b>{% endif %}
+            {% if r.hist_success is not none %}
+            {{ exit_days }}日內獲利出場 <b class="mono">{{ '%.0f'|format(r.hist_success) }}%</b>
+            {% if r.hist_avg_days_win %}· 平均 <b class="mono">{{ r.hist_avg_days_win }}</b> 天{% endif %}
+            {% else %}
             勝率 <b class="mono">{{ '%.0f'|format(r.hist_calibrated) }}%</b>
+            {% endif %}
             · EV <b class="mono {{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.1f'|format(r.hist_expectancy or 0) }}%</b>
             {% if r.hist_pf %}· PF <b class="mono">{{ r.hist_pf }}</b>{% endif %}
             · N=<b class="mono">{{ r.hist_samples }}</b>
@@ -1042,7 +1051,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           ＋ 位置風報 {{ '%.0f'|format(r.position_quality) }} × {{ (w_position*100)|round|int }}%
           ＋ 動能確認 {{ '%.0f'|format(r.momentum_quality) }} × {{ (w_momentum*100)|round|int }}%
           <br><span class="muted">
-          歷史證據 {{ '%.0f'|format(r.evidence_quality) }}（EV {{ r.final_parts.evidence.ev }}、
+          歷史證據 {{ '%.0f'|format(r.evidence_quality) }}（成功率 {{ r.final_parts.evidence.success }}、
+          EV {{ r.final_parts.evidence.ev }}、
           PF {{ r.final_parts.evidence.pf }}、勝率 {{ r.final_parts.evidence.winrate }}、
           回撤 {{ r.final_parts.evidence.mdd }}、樣本 {{ r.final_parts.evidence.samples }}）<br>
           位置風報 {{ '%.0f'|format(r.position_quality) }}（區間位置 {{ r.final_parts.position.position }}、
@@ -1075,6 +1085,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             勝率 {{ r.hist_raw }}%、原始 EV {{ '%+.2f'|format(r.hist_expectancy_raw or 0) }}%）。
             in-sample 天生樂觀，期望值已打 {{ (in_sample_discount * 100)|round|int }} 折
             （{{ '%+.2f'|format(r.hist_expectancy or 0) }}%）再進排序，可信度也降一級。
+            {% endif %}
+            {% if r.hist_success is not none %}
+            <br><b>排名主鍵</b>：今天買、{{ exit_days }} 個交易日內能獲利出場的成功率
+            {{ '%.1f'|format(r.hist_success) }}%（原始 {{ r.hist_success_raw }}%，
+            收縮後排序用 {{ r.success_used }}%）。
+            出場規則：t+1 開盤買，之後每天收盤檢查，扣掉 {{ backtest.cost_pct if backtest else 0.5 }}% 成本後
+            還有獲利就出場，撐到第 {{ exit_days }} 天沒機會就認賠。
             {% endif %}
             <b>這是過去相似訊號的統計，不是未來的成功機率。</b>
           {% else %}

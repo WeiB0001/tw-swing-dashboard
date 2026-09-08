@@ -75,6 +75,44 @@ def load_universe_history(demo: bool) -> dict[str, pd.DataFrame]:
 # ---------------------------------------------------------------------------
 # 勝率平滑
 # ---------------------------------------------------------------------------
+def first_profitable_exit(df, pos: int, cost: float) -> dict | None:
+    """
+    今天買、之後 1～EXIT_MAX_DAYS 天內能不能獲利出場？
+
+      進場：t+1 開盤（收盤後才有排名，t 日收盤價已經買不到）
+      每天收盤檢查一次，扣成本後淨報酬 > EXIT_MIN_PROFIT 就出場
+      撐到最後一天還沒機會，就以那天收盤認賠
+
+    回傳 {success, days, net, mdd}。這是排名的核心指標——
+    「賺錢的成功率」問的是有沒有機會獲利離場，不是固定持有 N 天的報酬。
+    """
+    n = len(df)
+    if pos + 1 >= n:
+        return None
+    try:
+        entry = float(df["open"].iloc[pos + 1])
+    except Exception:
+        return None
+    if not entry or entry <= 0:
+        return None
+
+    worst = 0.0
+    last_net = None
+    for d in range(1, C.EXIT_MAX_DAYS + 1):
+        j = pos + d
+        if j >= n:
+            break
+        lo = float(df["low"].iloc[j])
+        worst = min(worst, (lo / entry - 1) * 100)
+        net = (float(df["close"].iloc[j]) / entry - 1) * 100 - cost
+        last_net = net
+        if net > C.EXIT_MIN_PROFIT:
+            return {"success": True, "days": d, "net": net, "mdd": worst}
+    if last_net is None:
+        return None
+    return {"success": False, "days": C.EXIT_MAX_DAYS, "net": last_net, "mdd": worst}
+
+
 def calibrate(wins: int, samples: int) -> float:
     """
     (wins + 10) / (samples + 20)，等同於加上「10 勝 10 敗」的先驗。
@@ -151,7 +189,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
 
     all_dates = sorted(set().union(*[set(df.index) for df in frames.values()]))
     # 尾端要留 max_hold + 1 根（+1 是因為進場價用的是隔日開盤）
-    usable = all_dates[C.MIN_BARS: len(all_dates) - max_hold - 1]
+    usable = all_dates[C.MIN_BARS: len(all_dates) - max(max_hold, C.EXIT_MAX_DAYS) - 1]
     if lookback_days > 0:
         usable = usable[-lookback_days:]
     log.info("回測期間：%s ～ %s（%d 個交易日）",
@@ -164,7 +202,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         day_rows = []
         for code, df in frames.items():
             pos = df.index.get_indexer([day])[0]
-            if pos < C.MIN_BARS - 1 or pos + max_hold + 1 >= len(df):
+            if pos < C.MIN_BARS - 1 or pos + max(max_hold, C.EXIT_MAX_DAYS) + 1 >= len(df):
                 continue
             f = indicators.features_at(df, pos)
             if not f:
@@ -198,7 +236,12 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
                 except Exception:
                     pass
 
+            ex = first_profitable_exit(df, pos, cost)
+            if ex is None:
+                continue
+
             day_rows.append({
+                "exit": ex,
                 "regime": reg,
                 "day_index": n,
                 "date": str(day)[:10],
@@ -262,7 +305,9 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "cost_pct": cost,
         "cost_detail": {"fee_tax": C.TRADE_COST_PCT, "slippage": C.SLIPPAGE_PCT},
         "cooldown_days": cooldown,
-        "entry_rule": "訊號日 t 收盤後產生，t+1 開盤價進場，持有 h 天後收盤出場",
+        "entry_rule": ("訊號日 t 收盤後產生，t+1 開盤進場；之後每天收盤檢查，"
+                       "扣成本後有獲利就出場，最長持有 %d 個交易日" % C.EXIT_MAX_DAYS),
+        "exit_max_days": C.EXIT_MAX_DAYS,
         "topk": stats_by_topk(signals),
         "score_buckets": stats_by_bucket(signals),
         "regime_buckets": stats_by_regime_pattern_bucket(signals),
@@ -277,7 +322,27 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
 # ---------------------------------------------------------------------------
 # 統計
 # ---------------------------------------------------------------------------
-def _pack(sub: list[dict], h: int) -> dict:
+def _pack(sub: list[dict], h: int = 0) -> dict:
+    """
+    統計一組樣本。**主指標是「N 天內獲利出場的成功率」**，
+    h 參數保留是為了相容舊呼叫，實際已不使用固定持有期。
+    """
+    ex = [s["exit"] for s in sub if s.get("exit")]
+    if ex:
+        nets = [e["net"] for e in ex]
+        mdds = [e["mdd"] for e in ex]
+        d = describe(nets, mdds)
+        wins = sum(1 for e in ex if e["success"])
+        d["success_rate"] = round(wins / len(ex) * 100, 1)
+        d["calibrated_success"] = round(calibrate(wins, len(ex)) * 100, 1)
+        d["avg_days"] = round(sum(e["days"] for e in ex) / len(ex), 1)
+        d["avg_days_win"] = (round(sum(e["days"] for e in ex if e["success"])
+                                   / max(1, wins), 1) if wins else None)
+        return d
+    return _pack_hold(sub, h or C.PRIMARY_HOLD_DAYS)
+
+
+def _pack_hold(sub: list[dict], h: int) -> dict:
     return describe([s["fwd"][h]["net"] for s in sub], [s["fwd"][h]["mdd"] for s in sub])
 
 
@@ -474,17 +539,15 @@ def print_report(bt: dict, demo: bool) -> None:
     for k in ["top1", "top3", "top5", "top10", "all"]:
         if not bt["topk"].get(k):
             continue
-        print(f"\n■ {k.upper()}（淨報酬，已扣成本）")
-        print(f"{'持有':>4} {'樣本':>6} {'勝率':>7} {'平滑勝率':>9} {'平均':>8} "
-              f"{'中位':>8} {'最大虧損':>9} {'PF':>6}")
-        for h in C.BACKTEST_HOLD_DAYS:
-            d = bt["topk"][k].get(str(h))
-            if not d or not d["samples"]:
-                continue
-            print(f"{h:>3}日 {d['samples']:>6} {d['win_rate']:>6.1f}% "
-                  f"{d['calibrated_win_rate']:>8.1f}% {d['avg_return']:>7.2f}% "
-                  f"{d['median_return']:>7.2f}% {d['max_loss']:>8.2f}% "
-                  f"{(d['profit_factor'] if d['profit_factor'] is not None else 0):>6.2f}")
+        d = bt["topk"][k].get(str(C.PRIMARY_HOLD_DAYS)) or {}
+        if not d.get("samples"):
+            continue
+        print(f"\n■ {k.upper()}　{C.EXIT_MAX_DAYS} 日內獲利出場")
+        print(f"  樣本 {d['samples']}｜成功率 {d.get('success_rate')}%"
+              f"（平滑 {d.get('calibrated_success')}%）｜平均持有 {d.get('avg_days')} 天"
+              f"（成功者 {d.get('avg_days_win')} 天）")
+        print(f"  EV {d['expectancy']:+.2f}%｜PF {d['profit_factor']}"
+              f"｜平均回撤 {d['avg_mdd']}%｜最差 {d['max_loss']}%")
 
     print("\n■ 分數級距 vs 持有 5 日")
     for b in bt["score_buckets"]:

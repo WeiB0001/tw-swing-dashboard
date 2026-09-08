@@ -128,6 +128,10 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
         "reasons": result["reasons"],
         "flags": result["flags"],
         # --- 歷史勝率（跑過 backtest.py 才有；沒有就是「樣本不足」） ---
+        "hist_success": None,       # N 天內獲利出場的成功率（平滑後）— 排名主鍵
+        "hist_success_raw": None,
+        "hist_avg_days": None,
+        "hist_avg_days_win": None,
         "hist_calibrated": None,    # 平滑後勝率 (wins+10)/(samples+20)
         "hist_raw": None,           # 未平滑勝率
         "hist_samples": None,
@@ -280,6 +284,11 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
     buckets = bt.get("score_buckets", []) or []
 
     def fill(r, d, source, oos=False):
+        # 核心指標：N 天內獲利出場的成功率（平滑後）
+        r["hist_success"] = d.get("calibrated_success")
+        r["hist_success_raw"] = d.get("success_rate")
+        r["hist_avg_days"] = d.get("avg_days")
+        r["hist_avg_days_win"] = d.get("avg_days_win")
         r["hist_calibrated"] = d.get("calibrated_win_rate")
         r["hist_raw"] = d.get("win_rate")
         r["hist_samples"] = d.get("samples")
@@ -713,7 +722,10 @@ def add_final_score(rows: list[dict]) -> None:
         wr = r.get("hist_calibrated")
         mdd = r.get("hist_mdd")
         n = r.get("hist_samples")
+        sr = r.get("hist_success")
         e = {
+            # 成功率是核心，權重最高
+            "success": _scale(sr, 40.0, 80.0) if sr is not None else 50.0,
             "ev": _scale(ev, -1.0, 2.0) if ev is not None else 50.0,
             "pf": _scale(pf, 0.8, 2.0) if pf is not None else 50.0,
             "winrate": _scale(wr, 40.0, 65.0) if wr is not None else 50.0,
@@ -783,21 +795,37 @@ def sort_by_final(rows: list[dict]) -> list[dict]:
         return (tier, -blend)
 
     def full_key(r):
+        """
+        排名的核心：**今天買，之後 1～N 天內能獲利出場的成功率**。
+
+        順位：
+          1. 動能分層（轉弱／追高的仍排後面，避免抱到破底）
+          2. 成功率（歷史統計、已做小樣本收縮；沒有樣本視為 50% 中性）
+          3. 有 OOS 證據的優先
+          4. 期望值 → 樣本數 → 平均持有天數（越快出場越好）
+          5. 最大回撤 → RR → 綜合分數
+        """
         tier, neg = key(r)
-        # 有 OOS 證據的優先，然後才比綜合分數
+        n = r.get("hist_samples") or 0
+        # 成功率同樣做小樣本收縮：N 小的往 50% 靠，不讓 3 戰 3 勝排前面
+        sr = r.get("hist_success")
+        if sr is None:
+            sr_used = 50.0
+        else:
+            sr_used = 50.0 + (float(sr) - 50.0) * n / (n + C.SHRINK_K)
         ev = r.get("hist_expectancy")
         pf = r.get("hist_pf")
-        n = r.get("hist_samples") or 0
         mdd = r.get("hist_mdd")
         rr = (r.get("plan") or {}).get("rr")
+        days = r.get("hist_avg_days_win") or r.get("hist_avg_days")
         has_oos = 0 if r.get("hist_basis") == "OOS" and n >= C.MIN_SAMPLES_SCORE else 1
-        # 期望值優先，OOS 只在期望值相近時當加分項——
-        # 否則負 EV 的 OOS 標的會壓過正 EV 的標的，那沒有道理
+        r["success_used"] = round(sr_used, 1)
         return (tier,
-                -round(float(ev) if ev is not None else 0, 3),
+                -round(sr_used, 1),
                 has_oos,
-                -round(float(pf) if pf is not None else 1, 2),
+                -round(float(ev) if ev is not None else 0, 3),
                 -min(n, 500),
+                round(float(days) if days else 99, 1),
                 -round(float(mdd) if mdd is not None else -99, 1),
                 -round(float(rr) if rr is not None else 0, 2),
                 neg)

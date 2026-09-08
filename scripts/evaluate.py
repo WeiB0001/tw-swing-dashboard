@@ -30,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import numpy as np
 import pandas as pd
 
+import backtest as bt_mod
 import build as build_mod
 import config as C
 import indicators
@@ -99,6 +100,9 @@ def run(hist_map: dict, days: int, use_guard: bool, w_mom: float | None = None,
              str(usable[0])[:10], str(usable[-1])[:10], len(usable),
              "" if use_guard else "｜已關閉隔日風險過濾")
 
+    dec_succ = {lab: [] for lab, _, _ in (("Top 10%", 0, .1), ("10–30%", .1, .3),
+                                          ("30–60%", .3, .6), ("Bottom 40%", .6, 1.01))}
+    dec_days = {k: [] for k in dec_succ}
     deciles = {lab: [] for lab, _, _ in (("Top 10%", 0, .1), ("10–30%", .1, .3),
                                         ("30–60%", .3, .6), ("Bottom 40%", .6, 1.01))}
     topk = {k: [] for k in (1, 3, 5, 10)}
@@ -106,10 +110,10 @@ def run(hist_map: dict, days: int, use_guard: bool, w_mom: float | None = None,
     day_count = 0
 
     for day in usable:
-        rows, nxt = [], {}
+        rows, nxt, succ, dayz = [], {}, {}, {}
         for code, df in frames.items():
             pos = df.index.get_indexer([day])[0]
-            if pos < C.MIN_BARS - 1 or pos + 1 + C.HOLD_DAYS >= len(df):
+            if pos < C.MIN_BARS - 1 or pos + 1 + C.EXIT_MAX_DAYS >= len(df):
                 continue
             f = indicators.features_at(df, pos)
             if not f:
@@ -126,8 +130,14 @@ def run(hist_map: dict, days: int, use_guard: bool, w_mom: float | None = None,
             rows.append(row)
 
             if not by_plan:
-                # 做法 A：隔天開盤無條件買進，持有 HOLD_DAYS 天後收盤賣
-                nxt[code] = (float(df["close"].iloc[pos + 1 + C.HOLD_DAYS]) / entry - 1) * 100
+                # 做法 A：隔天開盤買進，之後每天收盤檢查，
+                #        扣成本後有獲利就出場，最長 EXIT_MAX_DAYS 天
+                ex = bt_mod.first_profitable_exit(df, pos, C.TOTAL_COST_PCT)
+                if ex is None:
+                    continue
+                nxt[code] = ex["net"]
+                succ[code] = 1 if ex["success"] else 0
+                dayz[code] = ex["days"]
                 continue
 
             # 做法 B：照卡片上的交易計畫走
@@ -196,13 +206,20 @@ def run(hist_map: dict, days: int, use_guard: bool, w_mom: float | None = None,
                                 ("30–60%", .3, .6), ("Bottom 40%", .6, 1.01)):
                 if lo <= pct < hi:
                     deciles[lab].append(v)
+                    if r["code"] in succ:
+                        dec_succ[lab].append(succ[r["code"]])
+                        dec_days[lab].append(dayz[r["code"]])
                     break
 
     out = {"days": day_count, "guard": use_guard, "by_plan": by_plan,
            "top": {k: describe(v) for k, v in topk.items()},
            "all": describe(every),
            "hit": {k: (round(hits[k] / max(1, len(topk[k])) * 100, 1)) for k in topk},
-           "deciles": {k: describe(v) for k, v in deciles.items()}}
+           "deciles": {k: describe(v) for k, v in deciles.items()},
+           "dec_succ": {k: (round(sum(v) / len(v) * 100, 1) if v else None)
+                        for k, v in dec_succ.items()},
+           "dec_days": {k: (round(sum(v) / len(v), 1) if v else None)
+                        for k, v in dec_days.items()}}
     return out
 
 
@@ -228,19 +245,21 @@ def report(r: dict) -> None:
     dec = r.get("deciles") or {}
     if any(d.get("n") for d in dec.values()):
         print("\n名次分組（驗證「排名越前，期望值越高」）")
-        print(f"{'分組':<12}{'N':>7}{'勝率':>8}{'平均':>9}{'大跌率':>8}{'最差':>9}")
+        ds, dd = r.get("dec_succ") or {}, r.get("dec_days") or {}
+        print(f"{'分組':<12}{'N':>7}{'獲利出場率':>11}{'平均天數':>9}{'EV':>9}{'最差':>9}")
         for lab in ("Top 10%", "10–30%", "30–60%", "Bottom 40%"):
             d = dec.get(lab) or {}
             if not d.get("n"):
                 continue
-            print(f"{lab:<12}{d['n']:>7}{d['win']:>7.1f}%{d['avg']:>8.2f}%"
-                  f"{d['crash']:>7.1f}%{d['worst']:>8.2f}%")
-        top = (dec.get("Top 10%") or {}).get("avg")
-        bot = (dec.get("Bottom 40%") or {}).get("avg")
+            print(f"{lab:<12}{d['n']:>7}"
+                  f"{(ds.get(lab) if ds.get(lab) is not None else 0):>10.1f}%"
+                  f"{(dd.get(lab) if dd.get(lab) is not None else 0):>8.1f}"
+                  f"{d['avg']:>8.2f}%{d['worst']:>8.2f}%")
+        top, bot = ds.get("Top 10%"), ds.get("Bottom 40%")
         if top is not None and bot is not None:
-            print("  → " + ("✅ 排名有鑑別力：Top 10% 的平均高於 Bottom 40%"
+            print("  → " + (f"✅ 排名有鑑別力：Top 10% 的獲利出場率 {top}% 高於 Bottom 40% 的 {bot}%"
                             if top > bot else
-                            "❌ 排名沒有鑑別力：Top 10% 沒有優於 Bottom 40%"))
+                            f"❌ 排名沒有鑑別力：Top 10% {top}% 沒有優於 Bottom 40% {bot}%"))
 
     print("\n「大跌率」= 持有期間跌幅超過 %.1f%% 的比例；「猜中強勢」= 隔日進入當日漲幅前 20%% 的比例。"
           % abs(C.NEXTDAY_CRASH_PCT))

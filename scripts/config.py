@@ -240,7 +240,9 @@ FINAL_W_EVIDENCE = 0.45   # 歷史證據（OOS EV / PF / 勝率 / 回撤 / 樣�
 FINAL_W_POSITION = 0.30   # 位置與風報（進場位置、RR、距觸發價）—— 與動能不重複
 FINAL_W_MOMENTUM = 0.25   # 動能與確認（收盤確認、量能、均線、MACD）合併計一次
 
-FINAL_EVIDENCE_W = {"ev": 0.40, "pf": 0.20, "winrate": 0.15, "mdd": 0.10, "samples": 0.15}
+# 證據區塊：成功率（N 天內獲利出場）是核心，佔最大權重
+FINAL_EVIDENCE_W = {"success": 0.40, "ev": 0.20, "pf": 0.15,
+                    "winrate": 0.05, "mdd": 0.05, "samples": 0.15}
 FINAL_POSITION_W = {"position": 0.45, "rr": 0.40, "distance": 0.15}
 
 # 舊的鍵保留給 autotune 相容，實際排序已不使用
@@ -527,8 +529,16 @@ WF_TOP_N = 3                  # 每日取前幾名進行 out-of-sample 檢驗
 # HOLD_DAYS = 1 代表持有一夜，也就是隔日沖。
 # 改成 2 就是持有兩天，全站的統計與排名依據會一起跟著變。
 # ---------------------------------------------------------------------------
-HOLD_DAYS = 1
-PRIMARY_HOLD_DAYS = HOLD_DAYS          # 統計與排名以這個持有期為主
+# 核心定義：今天買、之後 1～10 個交易日內只要能「獲利出場」就算成功。
+#   進場：t+1 開盤
+#   每天收盤檢查一次，扣掉成本後還是正的就出場
+#   撐到第 EXIT_MAX_DAYS 天還沒機會，就當天收盤認賠出場
+# 排名的第一順位＝這個成功率，不是單日勝率。
+EXIT_MAX_DAYS = 10             # 最長持有幾個交易日
+EXIT_MIN_PROFIT = 0.0          # 扣成本後淨報酬超過這個值才算獲利出場（%）
+
+HOLD_DAYS = 1                  # 舊的固定持有期，仍用於部分輔助統計
+PRIMARY_HOLD_DAYS = HOLD_DAYS
 
 BACKTEST_HOLD_DAYS = [1, 2, 3, 5]      # 持有天數（第一個是主要依據）
 BACKTEST_TOP_K = [1, 3, 5, 10]         # 檢查前幾名
