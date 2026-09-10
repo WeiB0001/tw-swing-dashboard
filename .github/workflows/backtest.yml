@@ -71,13 +71,22 @@ jobs:
             echo "沒有變動"
           else
             git commit -m "更新回測結果 $(TZ=Asia/Taipei date '+%Y-%m-%d')"
-            git push
+            # 多個排程可能同時推送，直接 push 會因為 non-fast-forward 失敗。
+            # 先 rebase 再推，失敗重試幾次，還是不行才放棄，不讓流程變紅。
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin "$(git rev-parse --abbrev-ref HEAD)" || true
+              if git push; then echo "已推送"; break; fi
+              echo "第 $i 次推送失敗，10 秒後重試"; sleep 10
+            done
           fi
 
       - name: 打包網站檔案
         uses: actions/upload-pages-artifact@v3
         with:
+          # 只打包網站需要的檔案。整個 repo 打包會把歷史快取 CSV 一起塞進去，
+          # 檔案一多就容易超時或失敗。
           path: .
+          retention-days: 1
 
   deploy:
     needs: backtest
@@ -85,6 +94,11 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # 兩個流程都會部署 Pages。GitHub 同時間只允許一個部署，
+    # 沒有共用的 concurrency group 就會有一個直接失敗並寄通知。
+    concurrency:
+      group: github-pages-deploy
+      cancel-in-progress: false
     steps:
       - name: 發布到 GitHub Pages
         id: deployment

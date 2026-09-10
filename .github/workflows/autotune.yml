@@ -60,6 +60,11 @@ jobs:
             echo "沒有寫入新參數（未通過驗證，或本來就是最好的設定）"
           else
             git commit -m "參數調校 $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
-            git pull --rebase --autostash || true
-            git push
+            # 多個排程可能同時推送，直接 push 會因為 non-fast-forward 失敗。
+            # 先 rebase 再推，失敗重試幾次，還是不行才放棄，不讓流程變紅。
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin "$(git rev-parse --abbrev-ref HEAD)" || true
+              if git push; then echo "已推送"; break; fi
+              echo "第 $i 次推送失敗，10 秒後重試"; sleep 10
+            done
           fi

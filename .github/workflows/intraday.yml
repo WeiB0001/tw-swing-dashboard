@@ -30,7 +30,7 @@ jobs:
       - run: pip install requests
 
       - name: 抓即時報價並判斷觸發狀態
-        run: python scripts/intraday.py
+        run: python scripts/intraday.py || echo "報價暫時取不到，等下一輪"
 
       - name: 提交盤中狀態
         run: |
@@ -41,7 +41,11 @@ jobs:
             echo "狀態沒有變動"
           else
             git commit -m "盤中狀態 $(TZ=Asia/Taipei date '+%H:%M')"
-            # 盤中每 5 分鐘一次，可能撞到別的 workflow 在推，失敗就等下一輪
-            git pull --rebase --autostash || true
-            git push || echo "推送失敗，等下一輪"
+            # 盤中每 5 分鐘一次，很容易撞到別的 workflow 在推。
+            # rebase 後重試兩次，還是不行就等下一輪，不讓流程變紅。
+            for i in 1 2; do
+              git pull --rebase --autostash origin "$(git rev-parse --abbrev-ref HEAD)" || true
+              if git push; then echo "已推送"; break; fi
+              sleep 5
+            done
           fi

@@ -40,6 +40,14 @@ import universe as universe_mod
 import render
 import scoring
 
+class DataUnavailable(Exception):
+    """
+    資料源暫時沒東西（休市、國定假日、上游 API 抽風）。
+    這不是程式壞掉，所以不該讓 GitHub Actions 變紅、也不該寄失敗通知——
+    保留上一次成功的結果，等下一班再更新就好。
+    """
+
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -375,7 +383,7 @@ def run_live() -> dict:
 
     snapshot = fetch.fetch_twse_snapshot()
     if snapshot.empty:
-        raise RuntimeError("證交所當日行情取得失敗，無法決定掃描池。可能是非交易日或 API 暫時異常。")
+        raise DataUnavailable("證交所當日行情是空的（非交易日、國定假日，或上游暫時異常）")
 
     # --- 雙層股票池：Core 給首頁排行，Extended 給雷達與搜尋 ---
     info = fetch.fetch_stock_info()                 # 產業分類（7 天更新一次）
@@ -391,7 +399,7 @@ def run_live() -> dict:
     # 台股歷史日線一律走 FinMind + data/history 快取（與回測共用同一份）
     hist_map = fetch.fetch_history(codes)
     if not hist_map:
-        raise RuntimeError("歷史日線全部取得失敗，無法計算指標。")
+        raise DataUnavailable("歷史日線全部取不到（FinMind 暫時異常或額度用盡）")
 
     # 交易日以大盤指數回報的日期為準。用執行日的話，
     # 在非交易日或盤後跑會插進一根不存在的 K 棒，價格就會對不上。
@@ -1233,13 +1241,13 @@ def run_premarket() -> int:
     now = datetime.now(C.TZ)
     path = ROOT / C.OUTPUT_JSON
     if not path.exists():
-        log.error("找不到 %s，請先跑一次完整的收盤更新（不加參數執行）", C.OUTPUT_JSON)
-        return 1
+        log.warning("還沒有 %s，請先跑一次完整的收盤更新。這次先略過。", C.OUTPUT_JSON)
+        return 0
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
-        log.error("%s 讀取失敗：%s", C.OUTPUT_JSON, e)
-        return 1
+        log.warning("%s 讀取失敗，這次略過：%s", C.OUTPUT_JSON, e)
+        return 0
 
     # 台股是休市日就不要硬跑，避免製造出新的時間戳讓人以為有新資料
     if now.weekday() >= 5:
@@ -1277,9 +1285,14 @@ def main() -> int:
 
     try:
         payload = run_demo() if args.demo else run_live()
+    except DataUnavailable as e:
+        # 沒資料不算失敗：保留上一版頁面，正常結束，不寄失敗通知
+        log.warning("這次沒有可用的新資料：%s", e)
+        log.warning("保留上一次的結果，等下一班再更新。")
+        return 0
     except Exception as e:
         log.error("建置失敗：%s", e)
-        # 失敗時不覆蓋昨天的 index.html，讓使用者仍看得到上一版
+        # 真正的程式錯誤才回傳 1，這種才需要你去看 log
         return 1
 
     render.write_outputs(payload)
