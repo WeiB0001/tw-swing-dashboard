@@ -1,0 +1,59 @@
+{
+  "days": 18,
+  "period": "2026-08-21 ～ 2026-09-08",
+  "pending": 557,
+  "cost_pct": 0.5,
+  "exit_max_days": 10,
+  "groups": {
+    "Top 3": {
+      "n": 39,
+      "success_rate": 94.9,
+      "avg_days": 2.8,
+      "ev": 1.5,
+      "median": 1.26,
+      "pf": 5.68,
+      "avg_mdd": -3.06,
+      "worst": -9.14
+    },
+    "Top 10": {
+      "n": 136,
+      "success_rate": 91.2,
+      "avg_days": 2.9,
+      "ev": 1.2,
+      "median": 1.5,
+      "pf": 2.74,
+      "avg_mdd": -3.01,
+      "worst": -13.21
+    },
+    "11–30": {
+      "n": 281,
+      "success_rate": 96.4,
+      "avg_days": 2.2,
+      "ev": 1.71,
+      "median": 1.34,
+      "pf": 8.11,
+      "avg_mdd": -2.03,
+      "worst": -16.48
+    },
+    "31 名以後": {
+      "n": 1931,
+      "success_rate": 93.5,
+      "avg_days": 2.6,
+      "ev": 1.59,
+      "median": 1.31,
+      "pf": 4.26,
+      "avg_mdd": -2.6,
+      "worst": -24.85
+    }
+  },
+  "all": {
+    "n": 2348,
+    "success_rate": 93.7,
+    "avg_days": 2.5,
+    "ev": 1.58,
+    "median": 1.32,
+    "pf": 4.36,
+    "avg_mdd": -2.56,
+    "worst": -24.85
+  }
+}
