@@ -1,5 +1,5 @@
 {
- "cash": 34837.810945000005,
+ "cash": 39840.719150000004,
  "positions": [
   {
    "code": "2359",
@@ -13,23 +13,23 @@
    "pattern": "多頭回檔"
   },
   {
-   "code": "2337",
-   "name": "旺宏",
-   "shares": 323,
-   "entry": 118.5,
-   "entry_date": "2026-09-11",
+   "code": "3413",
+   "name": "京鼎",
+   "shares": 126,
+   "entry": 275.0,
+   "entry_date": "2026-09-14",
    "held": 0,
-   "stop": 123.11,
-   "target1": 139.06,
-   "pattern": "低檔止跌轉強"
+   "stop": 273.66,
+   "target1": 291.81,
+   "pattern": "弱勢未止跌"
   }
  ],
  "pending": [
   {
-   "code": "3413",
-   "budget": 34837.81,
-   "stop": 273.66,
-   "target1": 291.81,
+   "code": "2356",
+   "budget": 39840.72,
+   "stop": 59.85,
+   "target1": 65.53,
    "pattern": "弱勢未止跌"
   }
  ],
@@ -102,6 +102,18 @@
    "entry": 71.0,
    "exit": 68.47,
    "net_pct": -4.06,
+   "reason": "停損",
+   "held": 1,
+   "pattern": "低檔止跌轉強"
+  },
+  {
+   "code": "2337",
+   "name": "旺宏",
+   "entry_date": "2026-09-11",
+   "exit_date": "2026-09-14",
+   "entry": 118.5,
+   "exit": 123.11,
+   "net_pct": 3.39,
    "reason": "停損",
    "held": 1,
    "pattern": "低檔止跌轉強"
@@ -192,10 +204,15 @@
    "date": "2026-09-11",
    "equity": 106505.81,
    "index": 46184.85
+  },
+  {
+   "date": "2026-09-14",
+   "equity": 107784.72,
+   "index": 46184.85
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-11",
+ "last_date": "2026-09-14",
  "forward_start": "2026-09-08",
  "mode": "forward_test"
 }
