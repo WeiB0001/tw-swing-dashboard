@@ -3083,18 +3083,9 @@
      "regime": "sideways"
     },
     {
-     "symbol": "6271",
-     "date": "2026-09-16",
-     "rank": 7,
-     "ref_price": 228.0,
-     "score": 53.8,
-     "pattern": "區間整理",
-     "regime": "sideways"
-    },
-    {
      "symbol": "00692",
      "date": "2026-09-16",
-     "rank": 8,
+     "rank": 7,
      "ref_price": 91.95,
      "score": 53.7,
      "pattern": "區間整理",
@@ -3103,7 +3094,7 @@
     {
      "symbol": "3481",
      "date": "2026-09-16",
-     "rank": 9,
+     "rank": 8,
      "ref_price": 48.7,
      "score": 53.5,
      "pattern": "區間整理",
@@ -3112,7 +3103,7 @@
     {
      "symbol": "2357",
      "date": "2026-09-16",
-     "rank": 10,
+     "rank": 9,
      "ref_price": 939.0,
      "score": 53.3,
      "pattern": "區間整理",
@@ -3121,9 +3112,18 @@
     {
      "symbol": "4938",
      "date": "2026-09-16",
-     "rank": 11,
+     "rank": 10,
      "ref_price": 89.0,
      "score": 53.2,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2489",
+     "date": "2026-09-16",
+     "rank": 11,
+     "ref_price": 41.25,
+     "score": 52.8,
      "pattern": "區間整理",
      "regime": "sideways"
     },
@@ -3155,18 +3155,9 @@
      "regime": "sideways"
     },
     {
-     "symbol": "0053",
-     "date": "2026-09-16",
-     "rank": 15,
-     "ref_price": 239.5,
-     "score": 51.2,
-     "pattern": "區間整理",
-     "regime": "sideways"
-    },
-    {
      "symbol": "2207",
      "date": "2026-09-16",
-     "rank": 16,
+     "rank": 15,
      "ref_price": 520.0,
      "score": 50.2,
      "pattern": "區間整理",
@@ -3175,7 +3166,7 @@
     {
      "symbol": "6005",
      "date": "2026-09-16",
-     "rank": 17,
+     "rank": 16,
      "ref_price": 30.85,
      "score": 48.8,
      "pattern": "區間整理",
@@ -3184,9 +3175,18 @@
     {
      "symbol": "2449",
      "date": "2026-09-16",
-     "rank": 18,
+     "rank": 17,
      "ref_price": 261.5,
      "score": 48.8,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "0050",
+     "date": "2026-09-16",
+     "rank": 18,
+     "ref_price": 106.9,
+     "score": 48.5,
      "pattern": "區間整理",
      "regime": "sideways"
     }
