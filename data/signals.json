@@ -3392,63 +3392,9 @@
      "regime": "bull"
     },
     {
-     "symbol": "6414",
-     "date": "2026-09-18",
-     "rank": 4,
-     "ref_price": 372.5,
-     "score": 53.8,
-     "pattern": "低檔止跌轉強",
-     "regime": "bull"
-    },
-    {
-     "symbol": "6515",
-     "date": "2026-09-18",
-     "rank": 5,
-     "ref_price": 6435.0,
-     "score": 53.6,
-     "pattern": "低檔止跌轉強",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2002",
-     "date": "2026-09-18",
-     "rank": 6,
-     "ref_price": 18.75,
-     "score": 53.4,
-     "pattern": "低檔止跌轉強",
-     "regime": "bull"
-    },
-    {
-     "symbol": "8112",
-     "date": "2026-09-18",
-     "rank": 7,
-     "ref_price": 83.1,
-     "score": 52.6,
-     "pattern": "低檔止跌轉強",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2327",
-     "date": "2026-09-18",
-     "rank": 8,
-     "ref_price": 550.0,
-     "score": 49.4,
-     "pattern": "低檔止跌轉強",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2458",
-     "date": "2026-09-18",
-     "rank": 9,
-     "ref_price": 132.0,
-     "score": 48.7,
-     "pattern": "低檔止跌轉強",
-     "regime": "bull"
-    },
-    {
      "symbol": "8046",
      "date": "2026-09-18",
-     "rank": 10,
+     "rank": 4,
      "ref_price": 1100.0,
      "score": 62.7,
      "pattern": "低檔止跌轉強",
@@ -3457,7 +3403,7 @@
     {
      "symbol": "8039",
      "date": "2026-09-18",
-     "rank": 11,
+     "rank": 5,
      "ref_price": 269.5,
      "score": 62.0,
      "pattern": "低檔止跌轉強",
@@ -3466,7 +3412,7 @@
     {
      "symbol": "2368",
      "date": "2026-09-18",
-     "rank": 12,
+     "rank": 6,
      "ref_price": 1020.0,
      "score": 60.6,
      "pattern": "低檔止跌轉強",
@@ -3475,7 +3421,7 @@
     {
      "symbol": "2059",
      "date": "2026-09-18",
-     "rank": 13,
+     "rank": 7,
      "ref_price": 12495.0,
      "score": 60.3,
      "pattern": "低檔止跌轉強",
@@ -3484,7 +3430,7 @@
     {
      "symbol": "3450",
      "date": "2026-09-18",
-     "rank": 14,
+     "rank": 8,
      "ref_price": 538.0,
      "score": 60.0,
      "pattern": "低檔止跌轉強",
@@ -3493,7 +3439,7 @@
     {
      "symbol": "3037",
      "date": "2026-09-18",
-     "rank": 15,
+     "rank": 9,
      "ref_price": 981.0,
      "score": 59.8,
      "pattern": "低檔止跌轉強",
@@ -3502,7 +3448,7 @@
     {
      "symbol": "2324",
      "date": "2026-09-18",
-     "rank": 16,
+     "rank": 10,
      "ref_price": 37.7,
      "score": 58.7,
      "pattern": "低檔止跌轉強",
@@ -3511,7 +3457,7 @@
     {
      "symbol": "2356",
      "date": "2026-09-18",
-     "rank": 17,
+     "rank": 11,
      "ref_price": 61.7,
      "score": 57.7,
      "pattern": "低檔止跌轉強",
@@ -3520,9 +3466,63 @@
     {
      "symbol": "2451",
      "date": "2026-09-18",
-     "rank": 18,
+     "rank": 12,
      "ref_price": 283.0,
      "score": 57.6,
+     "pattern": "低檔止跌轉強",
+     "regime": "bull"
+    },
+    {
+     "symbol": "6285",
+     "date": "2026-09-18",
+     "rank": 13,
+     "ref_price": 227.5,
+     "score": 57.2,
+     "pattern": "低檔止跌轉強",
+     "regime": "bull"
+    },
+    {
+     "symbol": "2337",
+     "date": "2026-09-18",
+     "rank": 14,
+     "ref_price": 121.0,
+     "score": 56.9,
+     "pattern": "低檔止跌轉強",
+     "regime": "bull"
+    },
+    {
+     "symbol": "6442",
+     "date": "2026-09-18",
+     "rank": 15,
+     "ref_price": 1575.0,
+     "score": 56.5,
+     "pattern": "低檔止跌轉強",
+     "regime": "bull"
+    },
+    {
+     "symbol": "1802",
+     "date": "2026-09-18",
+     "rank": 16,
+     "ref_price": 58.8,
+     "score": 56.0,
+     "pattern": "低檔止跌轉強",
+     "regime": "bull"
+    },
+    {
+     "symbol": "6414",
+     "date": "2026-09-18",
+     "rank": 17,
+     "ref_price": 372.5,
+     "score": 53.8,
+     "pattern": "低檔止跌轉強",
+     "regime": "bull"
+    },
+    {
+     "symbol": "6515",
+     "date": "2026-09-18",
+     "rank": 18,
+     "ref_price": 6435.0,
+     "score": 53.6,
      "pattern": "低檔止跌轉強",
      "regime": "bull"
     }
