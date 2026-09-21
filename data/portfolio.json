@@ -18,7 +18,7 @@
    "shares": 126,
    "entry": 275.0,
    "entry_date": "2026-09-14",
-   "held": 4,
+   "held": 5,
    "stop": 273.66,
    "target1": 291.81,
    "pattern": "弱勢未止跌"
@@ -29,7 +29,7 @@
    "shares": 643,
    "entry": 61.8,
    "entry_date": "2026-09-15",
-   "held": 3,
+   "held": 4,
    "stop": 59.85,
    "target1": 65.53,
    "pattern": "弱勢未止跌"
@@ -232,10 +232,15 @@
    "date": "2026-09-18",
    "equity": 108857.81,
    "index": 46288.0
+  },
+  {
+   "date": "2026-09-21",
+   "equity": 108733.11,
+   "index": 47180.75
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-18",
+ "last_date": "2026-09-21",
  "forward_start": "2026-09-08",
  "mode": "forward_test"
 }
