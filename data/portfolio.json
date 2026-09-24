@@ -1,5 +1,5 @@
 {
- "cash": 43.713049999998475,
+ "cash": 38469.537725,
  "positions": [
   {
    "code": "2359",
@@ -18,24 +18,21 @@
    "shares": 126,
    "entry": 275.0,
    "entry_date": "2026-09-14",
-   "held": 7,
+   "held": 8,
    "stop": 273.66,
    "target1": 291.81,
    "pattern": "弱勢未止跌"
-  },
+  }
+ ],
+ "pending": [
   {
-   "code": "2356",
-   "name": "英業達",
-   "shares": 643,
-   "entry": 61.8,
-   "entry_date": "2026-09-15",
-   "held": 6,
-   "stop": 59.85,
-   "target1": 65.53,
+   "code": "6515",
+   "budget": 38469.54,
+   "stop": 5575.21,
+   "target1": 6547.36,
    "pattern": "弱勢未止跌"
   }
  ],
- "pending": [],
  "trades": [
   {
    "code": "3665",
@@ -120,6 +117,18 @@
    "reason": "停損",
    "held": 1,
    "pattern": "低檔止跌轉強"
+  },
+  {
+   "code": "2356",
+   "name": "英業達",
+   "entry_date": "2026-09-15",
+   "exit_date": "2026-09-24",
+   "entry": 61.8,
+   "exit": 59.85,
+   "net_pct": -3.66,
+   "reason": "停損",
+   "held": 7,
+   "pattern": "弱勢未止跌"
   }
  ],
  "equity": [
@@ -247,10 +256,15 @@
    "date": "2026-09-23",
    "equity": 108470.71,
    "index": 47800.17
+  },
+  {
+   "date": "2026-09-24",
+   "equity": 107988.54,
+   "index": 48157.29
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-23",
+ "last_date": "2026-09-24",
  "forward_start": "2026-09-08",
  "mode": "forward_test"
 }
