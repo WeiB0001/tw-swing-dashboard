@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated_at": "2026-09-25 08:15",
-    "generated_iso": "2026-09-25T08:15:01+08:00",
-    "trade_date": "2026-09-25",
+    "generated_at": "2026-09-26 00:30",
+    "generated_iso": "2026-09-26T00:30:47+08:00",
+    "trade_date": "2026-09-26",
     "run_type": "close",
-    "close_run_at": "2026-09-25 08:15",
-    "ranked_at": "2026-09-25 08:15:01",
+    "close_run_at": "2026-09-26 00:30",
+    "ranked_at": "2026-09-26 00:30:47",
     "applies_to": "2026-09-25",
     "premarket_at": null,
     "data_date": "2026-09-24",
@@ -32,49 +32,49 @@
     "last_night": [
       {
         "label": "那斯達克",
-        "chg_pct": 0.01,
-        "date": "2026-09-24"
+        "chg_pct": 0.61,
+        "date": "2026-09-25"
       },
       {
         "label": "費城半導體",
-        "chg_pct": -0.33,
-        "date": "2026-09-24"
+        "chg_pct": 1.78,
+        "date": "2026-09-25"
       },
       {
         "label": "S&P 500",
-        "chg_pct": -0.02,
-        "date": "2026-09-24"
+        "chg_pct": 0.55,
+        "date": "2026-09-25"
       },
       {
         "label": "道瓊",
-        "chg_pct": -0.31,
-        "date": "2026-09-24"
+        "chg_pct": 0.93,
+        "date": "2026-09-25"
       }
     ],
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": -0.19
+        "chg_pct": 0.32
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": -0.25
+        "chg_pct": 0.35
       }
     ],
     "forecast": {
       "available": true,
-      "point": 0.04,
-      "low": -1.35,
-      "high": 1.42,
-      "basis": "以那斯達克期貨 -0.19% 代入",
-      "r2": 0.33,
+      "point": 0.36,
+      "low": -1.03,
+      "high": 1.75,
+      "basis": "以那斯達克期貨 +0.32% 代入",
+      "r2": 0.327,
       "samples": 250
     },
     "model": {
       "samples": 250,
-      "r2": 0.33,
-      "beta_nasdaq": 0.374,
-      "beta_sox": 0.206,
+      "r2": 0.327,
+      "beta_nasdaq": 0.367,
+      "beta_sox": 0.207,
       "resid_sd": 1.39
     }
   },
@@ -934,7 +934,7 @@
       "hist_basis": "OOS",
       "rank": 35,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 75.0,
       "momentum_hits": [
@@ -990,7 +990,7 @@
         "momentum": 75.0
       },
       "entry_tier": 0,
-      "rank_score": 54.0,
+      "rank_score": 53.8,
       "success_used": 66.8,
       "final_rank": 1,
       "top_fill": false,
@@ -1225,7 +1225,7 @@
       "hist_basis": "OOS",
       "rank": 78,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.3,
       "overseas_note": "",
       "momentum_score": 100.0,
       "momentum_hits": [
@@ -1283,7 +1283,7 @@
         "momentum": 100.0
       },
       "entry_tier": 0,
-      "rank_score": 64.1,
+      "rank_score": 64.4,
       "success_used": 64.8,
       "final_rank": 2,
       "top_fill": false,
@@ -1518,7 +1518,7 @@
       "hist_basis": "OOS",
       "rank": 121,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -1573,7 +1573,7 @@
         "momentum": 62.5
       },
       "entry_tier": 0,
-      "rank_score": 49.4,
+      "rank_score": 49.8,
       "success_used": 64.4,
       "final_rank": 3,
       "top_fill": false,
@@ -1808,7 +1808,7 @@
       "hist_basis": "OOS",
       "rank": 77,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 87.5,
       "momentum_hits": [
@@ -1865,7 +1865,7 @@
         "momentum": 87.5
       },
       "entry_tier": 0,
-      "rank_score": 57.5,
+      "rank_score": 57.3,
       "success_used": 63.6,
       "final_rank": 4,
       "top_fill": false,
@@ -2106,7 +2106,7 @@
         "rank_delta": -3,
         "prev_rank": 13
       },
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 100.0,
       "momentum_hits": [
@@ -2164,7 +2164,7 @@
         "momentum": 100.0
       },
       "entry_tier": 0,
-      "rank_score": 73.6,
+      "rank_score": 73.4,
       "success_used": 63.3,
       "final_rank": 5,
       "top_fill": false,
@@ -2405,7 +2405,7 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -2461,7 +2461,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 67.7,
+      "rank_score": 68.1,
       "success_used": 67.2,
       "final_rank": 6,
       "top_fill": false,
@@ -2702,8 +2702,8 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 62.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -2758,7 +2758,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 66.6,
+      "rank_score": 67.0,
       "success_used": 67.2,
       "final_rank": 7,
       "top_fill": false,
@@ -2999,7 +2999,7 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.3,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -3054,7 +3054,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 62.1,
+      "rank_score": 62.4,
       "success_used": 67.2,
       "final_rank": 8,
       "top_fill": false,
@@ -3295,7 +3295,7 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -3351,7 +3351,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 61.7,
+      "rank_score": 62.1,
       "success_used": 67.2,
       "final_rank": 9,
       "top_fill": false,
@@ -3586,8 +3586,8 @@
       "hist_basis": "OOS",
       "rank": 133,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 50.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -3641,7 +3641,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 47.6,
+      "rank_score": 48.0,
       "success_used": 65.7,
       "final_rank": 10,
       "top_fill": false,
@@ -3885,7 +3885,7 @@
       "hist_basis": "OOS",
       "rank": 146,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -3940,7 +3940,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 37.4,
+      "rank_score": 37.3,
       "success_used": 65.7,
       "final_rank": 11,
       "top_fill": false,
@@ -4184,7 +4184,7 @@
       "hist_basis": "OOS",
       "rank": 144,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -4239,7 +4239,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 36.6,
+      "rank_score": 36.7,
       "success_used": 65.7,
       "final_rank": 12,
       "top_fill": false,
@@ -4474,7 +4474,7 @@
       "hist_basis": "OOS",
       "rank": 135,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 37.5,
       "momentum_hits": [
@@ -4528,7 +4528,7 @@
         "momentum": 37.5
       },
       "entry_tier": 1,
-      "rank_score": 36.0,
+      "rank_score": 35.8,
       "success_used": 65.7,
       "final_rank": 13,
       "top_fill": false,
@@ -4763,7 +4763,7 @@
       "hist_basis": "OOS",
       "rank": 55,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -4818,7 +4818,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 54.9,
+      "rank_score": 55.3,
       "success_used": 65.0,
       "final_rank": 14,
       "top_fill": false,
@@ -5053,8 +5053,8 @@
       "hist_basis": "OOS",
       "rank": 49,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 50.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -5108,7 +5108,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 54.6,
+      "rank_score": 55.0,
       "success_used": 65.0,
       "final_rank": 15,
       "top_fill": false,
@@ -5350,8 +5350,8 @@
       "hist_basis": "OOS",
       "rank": 61,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 50.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -5405,7 +5405,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 52.2,
+      "rank_score": 52.8,
       "success_used": 65.0,
       "final_rank": 16,
       "top_fill": false,
@@ -5655,7 +5655,7 @@
       "hist_basis": "OOS",
       "rank": 58,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -5710,7 +5710,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 46.3,
+      "rank_score": 46.4,
       "success_used": 65.0,
       "final_rank": 17,
       "top_fill": false,
@@ -5952,7 +5952,7 @@
       "hist_basis": "OOS",
       "rank": 68,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -6007,7 +6007,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 43.8,
+      "rank_score": 44.2,
       "success_used": 65.0,
       "final_rank": 18,
       "top_fill": false,
@@ -6242,8 +6242,8 @@
       "hist_basis": "OOS",
       "rank": 117,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 50.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -6297,7 +6297,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 45.7,
+      "rank_score": 46.1,
       "success_used": 64.4,
       "final_rank": 19,
       "top_fill": false,
@@ -6532,8 +6532,8 @@
       "hist_basis": "OOS",
       "rank": 124,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 50.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -6587,7 +6587,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 42.4,
+      "rank_score": 43.0,
       "success_used": 64.4,
       "final_rank": 20,
       "top_fill": false,
@@ -6837,7 +6837,7 @@
       "hist_basis": "OOS",
       "rank": 162,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 75.0,
       "momentum_hits": [
@@ -6894,7 +6894,7 @@
         "momentum": 75.0
       },
       "entry_tier": 2,
-      "rank_score": 41.7,
+      "rank_score": 41.8,
       "success_used": 63.8,
       "final_rank": 21,
       "top_fill": false,
@@ -7151,7 +7151,7 @@
       "hist_basis": "OOS",
       "rank": 165,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -7207,7 +7207,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 39.9,
+      "rank_score": 40.0,
       "success_used": 63.8,
       "final_rank": 22,
       "top_fill": false,
@@ -7457,7 +7457,7 @@
       "hist_basis": "OOS",
       "rank": 167,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -7512,7 +7512,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 36.9,
+      "rank_score": 37.0,
       "success_used": 63.8,
       "final_rank": 23,
       "top_fill": false,
@@ -7762,7 +7762,7 @@
       "hist_basis": "OOS",
       "rank": 170,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -7817,7 +7817,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 36.9,
+      "rank_score": 37.0,
       "success_used": 63.8,
       "final_rank": 24,
       "top_fill": false,
@@ -8061,7 +8061,7 @@
       "hist_basis": "OOS",
       "rank": 169,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -8116,7 +8116,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 36.7,
+      "rank_score": 36.8,
       "success_used": 63.8,
       "final_rank": 25,
       "top_fill": false,
@@ -8360,7 +8360,7 @@
       "hist_basis": "OOS",
       "rank": 166,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -8415,7 +8415,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 34.2,
+      "rank_score": 34.3,
       "success_used": 63.8,
       "final_rank": 26,
       "top_fill": false,
@@ -8665,7 +8665,7 @@
       "hist_basis": "OOS",
       "rank": 171,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 37.5,
       "momentum_hits": [
@@ -8719,7 +8719,7 @@
         "momentum": 37.5
       },
       "entry_tier": 2,
-      "rank_score": 31.9,
+      "rank_score": 32.0,
       "success_used": 63.8,
       "final_rank": 27,
       "top_fill": false,
@@ -8954,8 +8954,8 @@
       "hist_basis": "OOS",
       "rank": 69,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 62.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -9010,7 +9010,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 55.1,
+      "rank_score": 55.5,
       "success_used": 63.6,
       "final_rank": 28,
       "top_fill": false,
@@ -9245,7 +9245,7 @@
       "hist_basis": "OOS",
       "rank": 75,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -9300,7 +9300,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 52.8,
+      "rank_score": 52.6,
       "success_used": 63.6,
       "final_rank": 29,
       "top_fill": false,
@@ -9535,7 +9535,7 @@
       "hist_basis": "OOS",
       "rank": 70,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -9591,7 +9591,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 50.3,
+      "rank_score": 50.7,
       "success_used": 63.6,
       "final_rank": 30,
       "top_fill": false,
@@ -9841,7 +9841,7 @@
       "hist_basis": "OOS",
       "rank": 110,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -9896,7 +9896,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 39.0,
+      "rank_score": 39.1,
       "success_used": 63.4,
       "final_rank": 31,
       "top_fill": false,
@@ -10140,8 +10140,8 @@
       "hist_basis": "OOS",
       "rank": 91,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 37.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -10194,7 +10194,7 @@
         "momentum": 37.5
       },
       "entry_tier": 2,
-      "rank_score": 37.3,
+      "rank_score": 37.9,
       "success_used": 63.4,
       "final_rank": 32,
       "top_fill": false,
@@ -10438,7 +10438,7 @@
       "hist_basis": "OOS",
       "rank": 107,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -10493,7 +10493,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 36.6,
+      "rank_score": 36.7,
       "success_used": 63.4,
       "final_rank": 33,
       "top_fill": false,
@@ -10737,7 +10737,7 @@
       "hist_basis": "OOS",
       "rank": 108,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -10792,7 +10792,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 36.5,
+      "rank_score": 36.6,
       "success_used": 63.4,
       "final_rank": 34,
       "top_fill": false,
@@ -11036,7 +11036,7 @@
       "hist_basis": "OOS",
       "rank": 95,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -11091,7 +11091,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 36.4,
+      "rank_score": 36.5,
       "success_used": 63.4,
       "final_rank": 35,
       "top_fill": false,
@@ -11335,7 +11335,7 @@
       "hist_basis": "OOS",
       "rank": 112,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 37.5,
       "momentum_hits": [
@@ -11389,7 +11389,7 @@
         "momentum": 37.5
       },
       "entry_tier": 1,
-      "rank_score": 33.3,
+      "rank_score": 33.4,
       "success_used": 63.4,
       "final_rank": 36,
       "top_fill": false,
@@ -11624,8 +11624,8 @@
       "hist_basis": "OOS",
       "rank": 89,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），水泥 的敏感度 β 0.65，-0.5 分",
       "momentum_score": 37.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -11678,7 +11678,7 @@
         "momentum": 37.5
       },
       "entry_tier": 2,
-      "rank_score": 35.9,
+      "rank_score": 35.5,
       "success_used": 63.4,
       "final_rank": 37,
       "top_fill": false,
@@ -11926,7 +11926,7 @@
       "hist_basis": "OOS",
       "rank": 101,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -11981,7 +11981,7 @@
         "momentum": 50.0
       },
       "entry_tier": 1,
-      "rank_score": 35.0,
+      "rank_score": 35.4,
       "success_used": 63.4,
       "final_rank": 38,
       "top_fill": false,
@@ -12223,7 +12223,7 @@
       "hist_basis": "OOS",
       "rank": 113,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 25.0,
       "momentum_hits": [
@@ -12276,7 +12276,7 @@
         "momentum": 25.0
       },
       "entry_tier": 2,
-      "rank_score": 26.5,
+      "rank_score": 26.9,
       "success_used": 63.4,
       "final_rank": 39,
       "top_fill": false,
@@ -12511,7 +12511,7 @@
       "hist_basis": "OOS",
       "rank": 19,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.3,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -12567,7 +12567,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 65.1,
+      "rank_score": 64.8,
       "success_used": 63.3,
       "final_rank": 40,
       "top_fill": false,
@@ -12808,7 +12808,7 @@
         "rank_delta": -1,
         "prev_rank": 16
       },
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.3,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -12864,7 +12864,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 63.3,
+      "rank_score": 63.6,
       "success_used": 63.3,
       "final_rank": 41,
       "top_fill": false
@@ -13113,7 +13113,7 @@
         "rank_delta": -14,
         "prev_rank": 1
       },
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -13169,7 +13169,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 60.4,
+      "rank_score": 60.5,
       "success_used": 63.3,
       "final_rank": 42,
       "top_fill": false
@@ -13409,7 +13409,7 @@
         "rank_delta": 0,
         "prev_rank": 18
       },
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.3,
       "overseas_note": "",
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -13464,7 +13464,7 @@
         "momentum": 50.0
       },
       "entry_tier": 2,
-      "rank_score": 59.1,
+      "rank_score": 58.8,
       "success_used": 63.3,
       "final_rank": 43,
       "top_fill": false
@@ -13707,8 +13707,8 @@
       "hist_basis": "OOS",
       "rank": 84,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 62.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -13763,7 +13763,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 42.5,
+      "rank_score": 42.9,
       "success_used": 60.2,
       "final_rank": 44,
       "top_fill": false
@@ -14006,7 +14006,7 @@
       "hist_basis": "OOS",
       "rank": 82,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 62.5,
       "momentum_hits": [
@@ -14062,7 +14062,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 42.0,
+      "rank_score": 42.4,
       "success_used": 60.2,
       "final_rank": 45,
       "top_fill": false
@@ -14305,8 +14305,8 @@
       "hist_basis": "OOS",
       "rank": 85,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 62.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -14361,7 +14361,7 @@
         "momentum": 62.5
       },
       "entry_tier": 2,
-      "rank_score": 41.4,
+      "rank_score": 42.0,
       "success_used": 60.2,
       "final_rank": 46,
       "top_fill": false
@@ -14604,7 +14604,7 @@
       "hist_basis": "OOS",
       "rank": 81,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 37.5,
       "momentum_hits": [
@@ -14658,7 +14658,7 @@
         "momentum": 37.5
       },
       "entry_tier": 2,
-      "rank_score": 36.8,
+      "rank_score": 36.6,
       "success_used": 60.2,
       "final_rank": 47,
       "top_fill": false
@@ -14914,7 +14914,7 @@
       "hist_basis": "OOS",
       "rank": 33,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -14972,7 +14972,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 46.4,
+      "rank_score": 46.2,
       "demoted_by_crash": true,
       "success_used": 77.8,
       "final_rank": 48,
@@ -15222,7 +15222,7 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -15278,7 +15278,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 55.1,
+      "rank_score": 55.2,
       "success_used": 77.4,
       "final_rank": 49,
       "top_fill": false
@@ -15527,8 +15527,8 @@
         "rank_delta": -4,
         "prev_rank": 3
       },
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -15582,7 +15582,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 52.2,
+      "rank_score": 51.7,
       "success_used": 77.4,
       "final_rank": 50,
       "top_fill": false
@@ -15831,7 +15831,7 @@
         "rank_delta": 0,
         "prev_rank": 9
       },
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 13.0,
       "momentum_hits": [
@@ -15886,7 +15886,7 @@
         "momentum": 13.0
       },
       "entry_tier": 1,
-      "rank_score": 51.9,
+      "rank_score": 51.7,
       "success_used": 77.4,
       "final_rank": 51,
       "top_fill": false
@@ -16135,7 +16135,7 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 13.0,
       "momentum_hits": [
@@ -16190,7 +16190,7 @@
         "momentum": 13.0
       },
       "entry_tier": 1,
-      "rank_score": 51.6,
+      "rank_score": 51.4,
       "success_used": 77.4,
       "final_rank": 52,
       "top_fill": false
@@ -16746,8 +16746,8 @@
         "rank_delta": -1,
         "prev_rank": 7
       },
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 13.0,
       "momentum_hits": [
         "MACD 柱未轉弱",
@@ -16801,7 +16801,7 @@
         "momentum": 13.0
       },
       "entry_tier": 1,
-      "rank_score": 48.9,
+      "rank_score": 49.3,
       "success_used": 77.4,
       "final_rank": 54,
       "top_fill": false
@@ -17050,8 +17050,8 @@
         "rank_delta": 2,
         "prev_rank": 5
       },
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 1.0,
       "momentum_hits": [
         "MACD 柱未轉弱",
@@ -17106,7 +17106,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 48.2,
+      "rank_score": 48.6,
       "success_used": 77.4,
       "final_rank": 55,
       "top_fill": false
@@ -17355,8 +17355,8 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -17411,7 +17411,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 48.1,
+      "rank_score": 48.5,
       "success_used": 77.4,
       "final_rank": 56,
       "top_fill": false
@@ -17660,7 +17660,7 @@
         "rank_delta": null,
         "prev_rank": null
       },
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -17718,7 +17718,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 47.8,
+      "rank_score": 47.6,
       "success_used": 77.4,
       "final_rank": 57,
       "top_fill": false
@@ -17980,7 +17980,7 @@
       "hist_basis": "OOS",
       "rank": 88,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -18038,7 +18038,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 44.8,
+      "rank_score": 45.2,
       "demoted_by_crash": true,
       "success_used": 76.0,
       "final_rank": 58,
@@ -18294,7 +18294,7 @@
       "hist_basis": "OOS",
       "rank": 86,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -18352,7 +18352,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 43.8,
+      "rank_score": 43.6,
       "demoted_by_crash": true,
       "success_used": 76.0,
       "final_rank": 59,
@@ -18609,7 +18609,7 @@
       "hist_basis": "OOS",
       "rank": 87,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 63.0,
       "momentum_hits": [
@@ -18668,7 +18668,7 @@
         "momentum": 63.0
       },
       "entry_tier": 2,
-      "rank_score": 40.8,
+      "rank_score": 40.6,
       "demoted_by_crash": true,
       "success_used": 76.0,
       "final_rank": 60,
@@ -18909,8 +18909,8 @@
         "rank_delta": 1,
         "prev_rank": 14
       },
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 38.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -18966,7 +18966,7 @@
         "momentum": 38.0
       },
       "entry_tier": 1,
-      "rank_score": 60.7,
+      "rank_score": 61.3,
       "success_used": 67.2,
       "final_rank": 61,
       "top_fill": false
@@ -19200,8 +19200,8 @@
       "hist_basis": "OOS",
       "rank": 34,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 25.5,
       "momentum_hits": [
         "MA5 上彎",
@@ -19256,7 +19256,7 @@
         "momentum": 25.5
       },
       "entry_tier": 1,
-      "rank_score": 49.8,
+      "rank_score": 50.4,
       "success_used": 66.8,
       "final_rank": 62,
       "top_fill": false
@@ -19490,8 +19490,8 @@
       "hist_basis": "OOS",
       "rank": 37,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 1.0,
       "momentum_hits": [
         "量能 1.12×",
@@ -19546,7 +19546,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 47.7,
+      "rank_score": 48.3,
       "success_used": 66.8,
       "final_rank": 63,
       "top_fill": false
@@ -19780,7 +19780,7 @@
       "hist_basis": "OOS",
       "rank": 36,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -19836,7 +19836,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 47.0,
+      "rank_score": 47.4,
       "success_used": 66.8,
       "final_rank": 64,
       "top_fill": false
@@ -20070,7 +20070,7 @@
       "hist_basis": "OOS",
       "rank": 46,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -20127,7 +20127,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 46.7,
+      "rank_score": 46.5,
       "success_used": 66.8,
       "final_rank": 65,
       "top_fill": false
@@ -20361,7 +20361,7 @@
       "hist_basis": "OOS",
       "rank": 47,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -20417,7 +20417,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 45.6,
+      "rank_score": 45.4,
       "success_used": 66.8,
       "final_rank": 66,
       "top_fill": false
@@ -20651,7 +20651,7 @@
       "hist_basis": "OOS",
       "rank": 40,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -20707,299 +20707,9 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 44.6,
+      "rank_score": 44.4,
       "success_used": 66.8,
       "final_rank": 67,
-      "top_fill": false
-    },
-    {
-      "code": "00713",
-      "name": "元大台灣高息低波",
-      "sector": "ETF·高股息",
-      "group": "ETF",
-      "asset_type": "etf",
-      "close": 63.2,
-      "prev_close": 63.65,
-      "day_open": 63.35,
-      "day_high": 63.4,
-      "day_low": 63.1,
-      "lot_cost": 63200,
-      "chg_pct": -0.706991358994491,
-      "rsi": 51.052100619551965,
-      "vol_ratio": 0.9071231224803162,
-      "volume": 4273408.0,
-      "vol_ma20": 4710945.95,
-      "ma5": 63.879999999999995,
-      "ma10": 64.12,
-      "ma20": 63.5375,
-      "ma60": 61.74333333333334,
-      "ma20_slope": 0.9172490470139794,
-      "ma60_slope": 0.9840534278315438,
-      "bias20": -0.5311823726145914,
-      "pos20": 0.48051948051948074,
-      "pct_above_low20": 3.0154849225753955,
-      "pct_below_high20": 3.164556962025311,
-      "pct_below_high5": 3.164556962025311,
-      "pct_below_high60": 3.164556962025311,
-      "atr": 0.5928927906015581,
-      "atr_pct": 0.9381215041163894,
-      "macd_hist": -0.15126386368349443,
-      "macd_hist_prev": -0.08474373257301082,
-      "ma5_slope": -0.776638707673194,
-      "target": 65.2,
-      "support": 62.01421441879689,
-      "score": 37.1,
-      "opportunity": 37.1,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 20.9,
-          "max": 25,
-          "ratio": 0.836
-        },
-        "trend": {
-          "points": 7.6,
-          "max": 20,
-          "ratio": 0.378
-        },
-        "reversal": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 5.0,
-          "max": 15,
-          "ratio": 0.331
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★☆☆☆",
-        "entry": "★★★★☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "☆☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好；距前高仍有 3.2% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 1.4,
-      "swing_high": 3.2,
-      "upside_pct": 3.16,
-      "downside_pct": 1.88,
-      "rr_ratio": 1.69,
-      "reasons": [
-        "位置 48%、距前高 3.2%、乖離 -0.5%，進場點普通",
-        "均線仍偏空排列，MA20 斜率 +0.9%",
-        "尚未出現明確的轉強訊號",
-        "量能 0.9 倍，低於 20 日均量，買盤不足",
-        "上檔至 65.2 約 +3.2%，下檔支撐 62.0 約 −1.9%，風險報酬比 1.7:1"
-      ],
-      "flags": [],
-      "hist_success": 75.4,
-      "hist_success_raw": 80.6,
-      "hist_avg_days": 4.0,
-      "hist_avg_days_win": 2.6,
-      "hist_calibrated": 75.4,
-      "hist_raw": 80.6,
-      "hist_samples": 98,
-      "hist_avg_return": 0.34,
-      "hist_pf": 1.36,
-      "hist_mdd": -4.07,
-      "hist_source": "oos_pattern",
-      "hist_expectancy": 0.224,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "hold_days": 1,
-        "status": "等待確認",
-        "entry_icon": "🟡",
-        "entry_status": "等待確認，不建議立即進場",
-        "entry_note": "收盤 63.20 尚未站上MA5 63.88",
-        "ref_price": 63.88,
-        "ref_label": "MA5",
-        "vol_ratio": 0.91,
-        "vol_tier": "weak",
-        "rr_tier": "fair",
-        "rr_tag": "⚠ 風報普通（1.20）",
-        "dist_trigger_pct": 0.36,
-        "intraday_checked": false,
-        "note": "型態尚未完成，先觀察",
-        "trigger": 63.43,
-        "invalidation": 63.07,
-        "stop": 62.84,
-        "target1": 64.14,
-        "target2": 64.62,
-        "rr": 1.2,
-        "risk_pct": 0.9,
-        "atr_pct": 0.9
-      },
-      "quote_date": "2026-09-24",
-      "spark": {
-        "c": [
-          61.2,
-          60.85,
-          60.8,
-          61.1,
-          61.1,
-          61.3,
-          61.25,
-          61.05,
-          61.2,
-          61.1,
-          60.85,
-          60.65,
-          60.65,
-          60.85,
-          61.15,
-          61.55,
-          61.4,
-          61.65,
-          61.65,
-          61.6,
-          61.55,
-          61.9,
-          62.35,
-          62.8,
-          63.1,
-          63.45,
-          63.45,
-          63.65,
-          63.65,
-          63.65,
-          63.85,
-          64.35,
-          64.25,
-          64.4,
-          64.95,
-          65.1,
-          63.75,
-          63.7,
-          63.65,
-          63.2
-        ],
-        "v": [
-          9143288,
-          5162131,
-          3107622,
-          2853013,
-          2621944,
-          2288310,
-          3899648,
-          3583115,
-          2229223,
-          4323476,
-          7989902,
-          9362692,
-          2414887,
-          7184419,
-          6622507,
-          4071259,
-          6304054,
-          8389189,
-          5793258,
-          4412512,
-          2253218,
-          3030069,
-          4518106,
-          5163364,
-          4101987,
-          4445604,
-          5686034,
-          7443679,
-          3338042,
-          4051568,
-          5922546,
-          4473487,
-          2437498,
-          3346015,
-          4431446,
-          7560837,
-          7049546,
-          5409079,
-          5283386,
-          4273408
-        ]
-      },
-      "prev_low": 63.4,
-      "regime": "bull",
-      "hist_expectancy_raw": 0.338,
-      "hist_shrunk": 0.224,
-      "oos_reliability": "中",
-      "oos_rel_reasons": [
-        "walk-forward 3/3 段正 EV"
-      ],
-      "in_sample_discount": null,
-      "hist_basis": "OOS",
-      "rank": 44,
-      "mark": {},
-      "overseas_adj": 0.0,
-      "overseas_note": "",
-      "momentum_score": 0.0,
-      "momentum_hits": [
-        "RR 1.20"
-      ],
-      "momentum_warns": [
-        "收盤跌破 MA5",
-        "收盤跌破昨日低點",
-        "MACD 柱明顯轉弱"
-      ],
-      "momentum_tier": 2,
-      "momentum_label": "轉弱／追高風險",
-      "momentum_icon": "🔴",
-      "nextday": {
-        "top_hit_rate": 17.2,
-        "samples": 7395,
-        "win_rate": 48.6,
-        "calibrated_win_rate": 48.6,
-        "crash_rate": 17.0,
-        "calibrated_crash_rate": 17.0,
-        "avg": 0.14,
-        "median": 0.0,
-        "p10": -4.56,
-        "worst": -19.04,
-        "avg_gap": 0.49,
-        "gap_down_rate": 13.9
-      },
-      "nextday_source": "完整條件",
-      "crash_penalty": 0.6,
-      "nextday_gap_pen": 0.0,
-      "nextday_avg_adj": 1.7,
-      "nextday_hit_adj": -2.2,
-      "final_score": 44.7,
-      "evidence_quality": 61.7,
-      "position_quality": 56.6,
-      "momentum_quality": 0.0,
-      "model_quality": 61.7,
-      "entry_quality": 56.6,
-      "final_parts": {
-        "evidence": {
-          "success": 88.5,
-          "ev": 40.8,
-          "pf": 46.7,
-          "winrate": 100.0,
-          "mdd": 49.1,
-          "samples": 24.5
-        },
-        "position": {
-          "position": 73.9,
-          "rr": 23.5,
-          "distance": 92.8
-        },
-        "momentum": 0.0
-      },
-      "entry_tier": 1,
-      "rank_score": 44.1,
-      "success_used": 66.8,
-      "final_rank": 68,
       "top_fill": false
     },
     {
@@ -21231,8 +20941,8 @@
       "hist_basis": "OOS",
       "rank": 42,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -21287,7 +20997,297 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 43.9,
+      "rank_score": 44.3,
+      "success_used": 66.8,
+      "final_rank": 68,
+      "top_fill": false
+    },
+    {
+      "code": "00713",
+      "name": "元大台灣高息低波",
+      "sector": "ETF·高股息",
+      "group": "ETF",
+      "asset_type": "etf",
+      "close": 63.2,
+      "prev_close": 63.65,
+      "day_open": 63.35,
+      "day_high": 63.4,
+      "day_low": 63.1,
+      "lot_cost": 63200,
+      "chg_pct": -0.706991358994491,
+      "rsi": 51.052100619551965,
+      "vol_ratio": 0.9071231224803162,
+      "volume": 4273408.0,
+      "vol_ma20": 4710945.95,
+      "ma5": 63.879999999999995,
+      "ma10": 64.12,
+      "ma20": 63.5375,
+      "ma60": 61.74333333333334,
+      "ma20_slope": 0.9172490470139794,
+      "ma60_slope": 0.9840534278315438,
+      "bias20": -0.5311823726145914,
+      "pos20": 0.48051948051948074,
+      "pct_above_low20": 3.0154849225753955,
+      "pct_below_high20": 3.164556962025311,
+      "pct_below_high5": 3.164556962025311,
+      "pct_below_high60": 3.164556962025311,
+      "atr": 0.5928927906015581,
+      "atr_pct": 0.9381215041163894,
+      "macd_hist": -0.15126386368349443,
+      "macd_hist_prev": -0.08474373257301082,
+      "ma5_slope": -0.776638707673194,
+      "target": 65.2,
+      "support": 62.01421441879689,
+      "score": 37.1,
+      "opportunity": 37.1,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 20.9,
+          "max": 25,
+          "ratio": 0.836
+        },
+        "trend": {
+          "points": 7.6,
+          "max": 20,
+          "ratio": 0.378
+        },
+        "reversal": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 5.0,
+          "max": 15,
+          "ratio": 0.331
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★★☆☆☆",
+        "entry": "★★★★☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "☆☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好；距前高仍有 3.2% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 1.4,
+      "swing_high": 3.2,
+      "upside_pct": 3.16,
+      "downside_pct": 1.88,
+      "rr_ratio": 1.69,
+      "reasons": [
+        "位置 48%、距前高 3.2%、乖離 -0.5%，進場點普通",
+        "均線仍偏空排列，MA20 斜率 +0.9%",
+        "尚未出現明確的轉強訊號",
+        "量能 0.9 倍，低於 20 日均量，買盤不足",
+        "上檔至 65.2 約 +3.2%，下檔支撐 62.0 約 −1.9%，風險報酬比 1.7:1"
+      ],
+      "flags": [],
+      "hist_success": 75.4,
+      "hist_success_raw": 80.6,
+      "hist_avg_days": 4.0,
+      "hist_avg_days_win": 2.6,
+      "hist_calibrated": 75.4,
+      "hist_raw": 80.6,
+      "hist_samples": 98,
+      "hist_avg_return": 0.34,
+      "hist_pf": 1.36,
+      "hist_mdd": -4.07,
+      "hist_source": "oos_pattern",
+      "hist_expectancy": 0.224,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "hold_days": 1,
+        "status": "等待確認",
+        "entry_icon": "🟡",
+        "entry_status": "等待確認，不建議立即進場",
+        "entry_note": "收盤 63.20 尚未站上MA5 63.88",
+        "ref_price": 63.88,
+        "ref_label": "MA5",
+        "vol_ratio": 0.91,
+        "vol_tier": "weak",
+        "rr_tier": "fair",
+        "rr_tag": "⚠ 風報普通（1.20）",
+        "dist_trigger_pct": 0.36,
+        "intraday_checked": false,
+        "note": "型態尚未完成，先觀察",
+        "trigger": 63.43,
+        "invalidation": 63.07,
+        "stop": 62.84,
+        "target1": 64.14,
+        "target2": 64.62,
+        "rr": 1.2,
+        "risk_pct": 0.9,
+        "atr_pct": 0.9
+      },
+      "quote_date": "2026-09-24",
+      "spark": {
+        "c": [
+          61.2,
+          60.85,
+          60.8,
+          61.1,
+          61.1,
+          61.3,
+          61.25,
+          61.05,
+          61.2,
+          61.1,
+          60.85,
+          60.65,
+          60.65,
+          60.85,
+          61.15,
+          61.55,
+          61.4,
+          61.65,
+          61.65,
+          61.6,
+          61.55,
+          61.9,
+          62.35,
+          62.8,
+          63.1,
+          63.45,
+          63.45,
+          63.65,
+          63.65,
+          63.65,
+          63.85,
+          64.35,
+          64.25,
+          64.4,
+          64.95,
+          65.1,
+          63.75,
+          63.7,
+          63.65,
+          63.2
+        ],
+        "v": [
+          9143288,
+          5162131,
+          3107622,
+          2853013,
+          2621944,
+          2288310,
+          3899648,
+          3583115,
+          2229223,
+          4323476,
+          7989902,
+          9362692,
+          2414887,
+          7184419,
+          6622507,
+          4071259,
+          6304054,
+          8389189,
+          5793258,
+          4412512,
+          2253218,
+          3030069,
+          4518106,
+          5163364,
+          4101987,
+          4445604,
+          5686034,
+          7443679,
+          3338042,
+          4051568,
+          5922546,
+          4473487,
+          2437498,
+          3346015,
+          4431446,
+          7560837,
+          7049546,
+          5409079,
+          5283386,
+          4273408
+        ]
+      },
+      "prev_low": 63.4,
+      "regime": "bull",
+      "hist_expectancy_raw": 0.338,
+      "hist_shrunk": 0.224,
+      "oos_reliability": "中",
+      "oos_rel_reasons": [
+        "walk-forward 3/3 段正 EV"
+      ],
+      "in_sample_discount": null,
+      "hist_basis": "OOS",
+      "rank": 44,
+      "mark": {},
+      "overseas_adj": 0.1,
+      "overseas_note": "",
+      "momentum_score": 0.0,
+      "momentum_hits": [
+        "RR 1.20"
+      ],
+      "momentum_warns": [
+        "收盤跌破 MA5",
+        "收盤跌破昨日低點",
+        "MACD 柱明顯轉弱"
+      ],
+      "momentum_tier": 2,
+      "momentum_label": "轉弱／追高風險",
+      "momentum_icon": "🔴",
+      "nextday": {
+        "top_hit_rate": 17.2,
+        "samples": 7395,
+        "win_rate": 48.6,
+        "calibrated_win_rate": 48.6,
+        "crash_rate": 17.0,
+        "calibrated_crash_rate": 17.0,
+        "avg": 0.14,
+        "median": 0.0,
+        "p10": -4.56,
+        "worst": -19.04,
+        "avg_gap": 0.49,
+        "gap_down_rate": 13.9
+      },
+      "nextday_source": "完整條件",
+      "crash_penalty": 0.6,
+      "nextday_gap_pen": 0.0,
+      "nextday_avg_adj": 1.7,
+      "nextday_hit_adj": -2.2,
+      "final_score": 44.7,
+      "evidence_quality": 61.7,
+      "position_quality": 56.6,
+      "momentum_quality": 0.0,
+      "model_quality": 61.7,
+      "entry_quality": 56.6,
+      "final_parts": {
+        "evidence": {
+          "success": 88.5,
+          "ev": 40.8,
+          "pf": 46.7,
+          "winrate": 100.0,
+          "mdd": 49.1,
+          "samples": 24.5
+        },
+        "position": {
+          "position": 73.9,
+          "rr": 23.5,
+          "distance": 92.8
+        },
+        "momentum": 0.0
+      },
+      "entry_tier": 1,
+      "rank_score": 44.2,
       "success_used": 66.8,
       "final_rank": 69,
       "top_fill": false
@@ -21521,7 +21521,7 @@
       "hist_basis": "OOS",
       "rank": 39,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -21577,7 +21577,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 43.7,
+      "rank_score": 44.1,
       "success_used": 66.8,
       "final_rank": 70,
       "top_fill": false
@@ -21811,8 +21811,8 @@
       "hist_basis": "OOS",
       "rank": 45,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），食品 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -21866,7 +21866,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 43.6,
+      "rank_score": 43.1,
       "success_used": 66.8,
       "final_rank": 71,
       "top_fill": false
@@ -22100,8 +22100,8 @@
       "hist_basis": "OOS",
       "rank": 43,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -22156,7 +22156,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 41.4,
+      "rank_score": 40.9,
       "success_used": 66.8,
       "final_rank": 72,
       "top_fill": false
@@ -22390,8 +22390,8 @@
       "hist_basis": "OOS",
       "rank": 41,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 1.0,
       "momentum_hits": [
         "量能 1.10×",
@@ -22446,7 +22446,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 47.0,
+      "rank_score": 47.4,
       "success_used": 66.8,
       "final_rank": 73,
       "top_fill": false
@@ -22680,7 +22680,7 @@
       "hist_basis": "OOS",
       "rank": 38,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -22735,7 +22735,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 40.9,
+      "rank_score": 40.7,
       "success_used": 66.8,
       "final_rank": 74,
       "top_fill": false
@@ -22976,8 +22976,8 @@
       "hist_basis": "OOS",
       "rank": 48,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.9,
+      "overseas_note": "海外偏多（推估 +0.36%），電信 的敏感度 β 0.45，-0.9 分",
       "momentum_score": 0.0,
       "momentum_hits": [],
       "momentum_warns": [
@@ -23029,7 +23029,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 32.8,
+      "rank_score": 32.0,
       "success_used": 66.8,
       "final_rank": 75,
       "top_fill": false
@@ -23272,7 +23272,7 @@
       "hist_basis": "IN_SAMPLE",
       "rank": 32,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.4,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -23329,7 +23329,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 46.5,
+      "rank_score": 46.1,
       "success_used": 66.5,
       "final_rank": 76,
       "top_fill": false
@@ -23570,7 +23570,7 @@
       "hist_basis": "IN_SAMPLE",
       "rank": 31,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.1,
       "overseas_note": "",
       "momentum_score": 13.0,
       "momentum_hits": [
@@ -23625,7 +23625,7 @@
         "momentum": 13.0
       },
       "entry_tier": 1,
-      "rank_score": 50.0,
+      "rank_score": 49.9,
       "success_used": 66.5,
       "final_rank": 77,
       "top_fill": false
@@ -23859,7 +23859,7 @@
       "hist_basis": "OOS",
       "rank": 131,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.1,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -23914,7 +23914,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 35.1,
+      "rank_score": 35.0,
       "success_used": 65.7,
       "final_rank": 78,
       "top_fill": false
@@ -24148,7 +24148,7 @@
       "hist_basis": "OOS",
       "rank": 132,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -24203,7 +24203,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 33.6,
+      "rank_score": 33.4,
       "success_used": 65.7,
       "final_rank": 79,
       "top_fill": false
@@ -24437,8 +24437,8 @@
       "hist_basis": "OOS",
       "rank": 139,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -24493,7 +24493,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 33.4,
+      "rank_score": 32.9,
       "success_used": 65.7,
       "final_rank": 80,
       "top_fill": false
@@ -24748,7 +24748,7 @@
       "hist_basis": "OOS",
       "rank": 142,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -24806,7 +24806,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 31.7,
+      "rank_score": 32.1,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 81,
@@ -25041,8 +25041,8 @@
       "hist_basis": "OOS",
       "rank": 151,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -25098,7 +25098,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 30.8,
+      "rank_score": 30.3,
       "success_used": 65.7,
       "final_rank": 82,
       "top_fill": false
@@ -25332,8 +25332,8 @@
       "hist_basis": "OOS",
       "rank": 136,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -25387,7 +25387,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 29.9,
+      "rank_score": 29.4,
       "success_used": 65.7,
       "final_rank": 83,
       "top_fill": false
@@ -25621,8 +25621,8 @@
       "hist_basis": "OOS",
       "rank": 149,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -25676,7 +25676,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 29.9,
+      "rank_score": 29.4,
       "success_used": 65.7,
       "final_rank": 84,
       "top_fill": false
@@ -25910,8 +25910,8 @@
       "hist_basis": "OOS",
       "rank": 154,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -25965,7 +25965,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 26.4,
+      "rank_score": 25.9,
       "success_used": 65.7,
       "final_rank": 85,
       "top_fill": false
@@ -26199,8 +26199,8 @@
       "hist_basis": "OOS",
       "rank": 137,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -26257,7 +26257,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 23.4,
+      "rank_score": 24.0,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 86,
@@ -26492,7 +26492,7 @@
       "hist_basis": "OOS",
       "rank": 138,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -26547,7 +26547,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 21.7,
+      "rank_score": 21.5,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 87,
@@ -26782,8 +26782,8 @@
       "hist_basis": "OOS",
       "rank": 143,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 0.5,
       "momentum_hits": [
         "MA5 上彎"
@@ -26836,7 +26836,7 @@
         "momentum": 0.5
       },
       "entry_tier": 1,
-      "rank_score": 30.1,
+      "rank_score": 30.7,
       "success_used": 65.7,
       "final_rank": 88,
       "top_fill": false
@@ -27070,8 +27070,8 @@
       "hist_basis": "OOS",
       "rank": 152,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "MA5 上彎"
@@ -27125,7 +27125,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 31.7,
+      "rank_score": 32.1,
       "success_used": 65.7,
       "final_rank": 89,
       "top_fill": false
@@ -27359,7 +27359,7 @@
       "hist_basis": "OOS",
       "rank": 156,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -27414,7 +27414,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 31.2,
+      "rank_score": 31.0,
       "success_used": 65.7,
       "final_rank": 90,
       "top_fill": false
@@ -27661,8 +27661,8 @@
       "hist_basis": "OOS",
       "rank": 157,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 38.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -27718,7 +27718,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 31.3,
+      "rank_score": 31.9,
       "success_used": 65.7,
       "final_rank": 91,
       "top_fill": false
@@ -27967,7 +27967,7 @@
       "hist_basis": "OOS",
       "rank": 134,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -28023,7 +28023,7 @@
         "momentum": 25.5
       },
       "entry_tier": 2,
-      "rank_score": 25.8,
+      "rank_score": 25.6,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 92,
@@ -28286,7 +28286,7 @@
       "hist_basis": "OOS",
       "rank": 148,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -28344,7 +28344,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 21.5,
+      "rank_score": 21.3,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 93,
@@ -28579,8 +28579,8 @@
       "hist_basis": "OOS",
       "rank": 147,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [],
       "momentum_warns": [
@@ -28633,7 +28633,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 29.4,
+      "rank_score": 28.9,
       "success_used": 65.7,
       "final_rank": 94,
       "top_fill": false
@@ -28880,7 +28880,7 @@
       "hist_basis": "OOS",
       "rank": 140,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -28938,7 +28938,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 32.6,
+      "rank_score": 33.0,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 95,
@@ -29173,8 +29173,8 @@
       "hist_basis": "OOS",
       "rank": 153,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 38.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -29230,7 +29230,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 30.8,
+      "rank_score": 31.4,
       "success_used": 65.7,
       "final_rank": 96,
       "top_fill": false
@@ -29479,7 +29479,7 @@
       "hist_basis": "OOS",
       "rank": 141,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 26.0,
       "momentum_hits": [
@@ -29537,7 +29537,7 @@
         "momentum": 26.0
       },
       "entry_tier": 2,
-      "rank_score": 28.2,
+      "rank_score": 28.0,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 97,
@@ -29785,7 +29785,7 @@
       "hist_basis": "OOS",
       "rank": 150,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -29842,7 +29842,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 24.9,
+      "rank_score": 24.7,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 98,
@@ -30096,7 +30096,7 @@
       "hist_basis": "OOS",
       "rank": 158,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -30152,7 +30152,7 @@
         "momentum": 25.5
       },
       "entry_tier": 2,
-      "rank_score": 17.4,
+      "rank_score": 17.8,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 99,
@@ -30408,7 +30408,7 @@
       "hist_basis": "OOS",
       "rank": 155,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -30464,7 +30464,7 @@
         "momentum": 25.5
       },
       "entry_tier": 2,
-      "rank_score": 15.2,
+      "rank_score": 15.0,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 100,
@@ -30721,7 +30721,7 @@
       "hist_basis": "OOS",
       "rank": 145,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -30778,7 +30778,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 14.1,
+      "rank_score": 13.9,
       "demoted_by_crash": true,
       "success_used": 65.7,
       "final_rank": 101,
@@ -31013,7 +31013,7 @@
       "hist_basis": "OOS",
       "rank": 62,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -31070,7 +31070,7 @@
         "momentum": 38.0
       },
       "entry_tier": 1,
-      "rank_score": 51.3,
+      "rank_score": 51.7,
       "success_used": 65.0,
       "final_rank": 102,
       "top_fill": false
@@ -31304,8 +31304,8 @@
       "hist_basis": "OOS",
       "rank": 50,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 25.5,
       "momentum_hits": [
         "MA5 上彎",
@@ -31360,7 +31360,7 @@
         "momentum": 25.5
       },
       "entry_tier": 1,
-      "rank_score": 49.7,
+      "rank_score": 50.1,
       "success_used": 65.0,
       "final_rank": 103,
       "top_fill": false
@@ -31594,7 +31594,7 @@
       "hist_basis": "OOS",
       "rank": 54,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 13.5,
       "momentum_hits": [
@@ -31651,9 +31651,300 @@
         "momentum": 13.5
       },
       "entry_tier": 1,
-      "rank_score": 48.4,
+      "rank_score": 48.5,
       "success_used": 65.0,
       "final_rank": 104,
+      "top_fill": false
+    },
+    {
+      "code": "2344",
+      "name": "華邦電",
+      "sector": "記憶體",
+      "group": "半導體",
+      "asset_type": "tech",
+      "close": 171.5,
+      "prev_close": 172.5,
+      "day_open": 169.0,
+      "day_high": 171.5,
+      "day_low": 166.5,
+      "lot_cost": 171500,
+      "chg_pct": -0.5797101449275366,
+      "rsi": 48.784503051085466,
+      "vol_ratio": 0.4210222776208702,
+      "volume": 51225813.0,
+      "vol_ma20": 121670077.15,
+      "ma5": 173.7,
+      "ma10": 169.85,
+      "ma20": 174.55,
+      "ma60": 169.68333333333334,
+      "ma20_slope": -1.0206974766090116,
+      "ma60_slope": -3.634642688121159,
+      "bias20": -1.7473503294185067,
+      "pos20": 0.3880597014925373,
+      "pct_above_low20": 8.201892744479489,
+      "pct_below_high20": 11.953352769679304,
+      "pct_below_high5": 5.247813411078717,
+      "pct_below_high60": 16.618075801749278,
+      "atr": 9.432584171758409,
+      "atr_pct": 5.500049079742513,
+      "macd_hist": -0.5120439184373579,
+      "macd_hist_prev": -0.5652511122640769,
+      "ma5_slope": 0.579038795599307,
+      "target": 192.0,
+      "support": 158.5,
+      "score": 47.4,
+      "opportunity": 47.4,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 25.0,
+          "max": 25,
+          "ratio": 1.0
+        },
+        "trend": {
+          "points": 4.9,
+          "max": 20,
+          "ratio": 0.247
+        },
+        "reversal": {
+          "points": 4.2,
+          "max": 15,
+          "ratio": 0.28
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 8.5,
+          "max": 15,
+          "ratio": 0.569
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★☆☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 12.0% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 5.4,
+      "swing_high": 12.0,
+      "upside_pct": 11.95,
+      "downside_pct": 7.58,
+      "rr_ratio": 1.58,
+      "reasons": [
+        "位於近 20 日區間 39% 位置，距前高還有 12.0% 空間，距 MA20 乖離 -1.7%",
+        "均線仍偏空排列，MA20 斜率 -1.0%",
+        "MA5 開始上彎、MACD 柱狀體改善",
+        "量能 0.4 倍，低於 20 日均量，買盤不足",
+        "上檔至 192.0 約 +12.0%，下檔支撐 158.5 約 −7.6%，風險報酬比 1.6:1"
+      ],
+      "flags": [],
+      "hist_success": 74.0,
+      "hist_success_raw": 79.8,
+      "hist_avg_days": 3.5,
+      "hist_avg_days_win": 1.9,
+      "hist_calibrated": 74.0,
+      "hist_raw": 79.8,
+      "hist_samples": 84,
+      "hist_avg_return": 0.27,
+      "hist_pf": 1.13,
+      "hist_mdd": -3.97,
+      "hist_source": "oos_regime",
+      "hist_expectancy": 0.169,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "hold_days": 1,
+        "status": "等待確認",
+        "entry_icon": "🟡",
+        "entry_status": "等待確認，不建議立即進場",
+        "entry_note": "收盤 171.50 尚未站上MA5 173.70",
+        "ref_price": 173.7,
+        "ref_label": "MA5",
+        "vol_ratio": 0.42,
+        "vol_tier": "bad",
+        "rr_tier": "fair",
+        "rr_tag": "⚠ 風報普通（1.20）",
+        "dist_trigger_pct": 0.28,
+        "intraday_checked": false,
+        "note": "型態尚未完成，先觀察",
+        "trigger": 171.97,
+        "invalidation": 166.03,
+        "stop": 162.54,
+        "target1": 183.29,
+        "target2": 190.84,
+        "rr": 1.2,
+        "risk_pct": 5.5,
+        "atr_pct": 5.5
+      },
+      "quote_date": "2026-09-24",
+      "spark": {
+        "c": [
+          130.0,
+          143.0,
+          157.0,
+          169.0,
+          171.0,
+          163.5,
+          179.5,
+          178.0,
+          177.0,
+          177.0,
+          183.5,
+          181.5,
+          176.5,
+          168.0,
+          176.5,
+          181.0,
+          177.0,
+          179.0,
+          181.5,
+          186.0,
+          181.5,
+          182.5,
+          176.0,
+          179.0,
+          169.0,
+          174.0,
+          180.0,
+          188.0,
+          183.0,
+          179.5,
+          171.5,
+          160.0,
+          159.5,
+          169.0,
+          170.0,
+          179.5,
+          174.0,
+          171.0,
+          172.5,
+          171.5
+        ],
+        "v": [
+          21043331,
+          77515412,
+          121631665,
+          232656923,
+          185766803,
+          176709453,
+          154758322,
+          194693938,
+          207363846,
+          227421621,
+          241145687,
+          128521974,
+          183343610,
+          113062347,
+          149809828,
+          114128808,
+          99392300,
+          92923853,
+          85770151,
+          139732644,
+          153443947,
+          341273210,
+          136605515,
+          83567943,
+          161434224,
+          100505993,
+          118922555,
+          222260653,
+          140400625,
+          67914754,
+          74789115,
+          123411883,
+          71179694,
+          83218538,
+          120007010,
+          138585216,
+          76635914,
+          97424949,
+          70593992,
+          51225813
+        ]
+      },
+      "prev_low": 172.0,
+      "regime": "bull",
+      "hist_expectancy_raw": 0.27,
+      "hist_shrunk": 0.169,
+      "oos_reliability": "中",
+      "oos_rel_reasons": [
+        "walk-forward 3/3 段正 EV"
+      ],
+      "in_sample_discount": null,
+      "hist_basis": "OOS",
+      "rank": 66,
+      "mark": {},
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
+      "momentum_score": 13.5,
+      "momentum_hits": [
+        "MA5 上彎",
+        "MACD 柱未轉弱",
+        "RR 1.20"
+      ],
+      "momentum_warns": [
+        "收盤跌破 MA5",
+        "收盤跌破昨日低點"
+      ],
+      "momentum_tier": 2,
+      "momentum_label": "轉弱／追高風險",
+      "momentum_icon": "🔴",
+      "nextday": {
+        "top_hit_rate": 17.2,
+        "samples": 7395,
+        "win_rate": 48.6,
+        "calibrated_win_rate": 48.6,
+        "crash_rate": 17.0,
+        "calibrated_crash_rate": 17.0,
+        "avg": 0.14,
+        "median": 0.0,
+        "p10": -4.56,
+        "worst": -19.04,
+        "avg_gap": 0.49,
+        "gap_down_rate": 13.9
+      },
+      "nextday_source": "完整條件",
+      "crash_penalty": 0.6,
+      "nextday_gap_pen": 0.0,
+      "nextday_avg_adj": 1.7,
+      "nextday_hit_adj": -2.2,
+      "final_score": 48.4,
+      "evidence_quality": 56.6,
+      "position_quality": 65.1,
+      "momentum_quality": 13.5,
+      "model_quality": 56.6,
+      "entry_quality": 65.1,
+      "final_parts": {
+        "evidence": {
+          "success": 85.0,
+          "ev": 39.0,
+          "pf": 27.5,
+          "winrate": 100.0,
+          "mdd": 50.4,
+          "samples": 21.0
+        },
+        "position": {
+          "position": 92.4,
+          "rr": 23.5,
+          "distance": 94.4
+        },
+        "momentum": 13.5
+      },
+      "entry_tier": 1,
+      "rank_score": 48.5,
+      "success_used": 65.0,
+      "final_rank": 105,
       "top_fill": false
     },
     {
@@ -31894,7 +32185,7 @@
       "hist_basis": "OOS",
       "rank": 53,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.3,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -31951,298 +32242,7 @@
         "momentum": 38.0
       },
       "entry_tier": 1,
-      "rank_score": 48.0,
-      "success_used": 65.0,
-      "final_rank": 105,
-      "top_fill": false
-    },
-    {
-      "code": "2344",
-      "name": "華邦電",
-      "sector": "記憶體",
-      "group": "半導體",
-      "asset_type": "tech",
-      "close": 171.5,
-      "prev_close": 172.5,
-      "day_open": 169.0,
-      "day_high": 171.5,
-      "day_low": 166.5,
-      "lot_cost": 171500,
-      "chg_pct": -0.5797101449275366,
-      "rsi": 48.784503051085466,
-      "vol_ratio": 0.4210222776208702,
-      "volume": 51225813.0,
-      "vol_ma20": 121670077.15,
-      "ma5": 173.7,
-      "ma10": 169.85,
-      "ma20": 174.55,
-      "ma60": 169.68333333333334,
-      "ma20_slope": -1.0206974766090116,
-      "ma60_slope": -3.634642688121159,
-      "bias20": -1.7473503294185067,
-      "pos20": 0.3880597014925373,
-      "pct_above_low20": 8.201892744479489,
-      "pct_below_high20": 11.953352769679304,
-      "pct_below_high5": 5.247813411078717,
-      "pct_below_high60": 16.618075801749278,
-      "atr": 9.432584171758409,
-      "atr_pct": 5.500049079742513,
-      "macd_hist": -0.5120439184373579,
-      "macd_hist_prev": -0.5652511122640769,
-      "ma5_slope": 0.579038795599307,
-      "target": 192.0,
-      "support": 158.5,
-      "score": 47.4,
-      "opportunity": 47.4,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 25.0,
-          "max": 25,
-          "ratio": 1.0
-        },
-        "trend": {
-          "points": 4.9,
-          "max": 20,
-          "ratio": 0.247
-        },
-        "reversal": {
-          "points": 4.2,
-          "max": 15,
-          "ratio": 0.28
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 8.5,
-          "max": 15,
-          "ratio": 0.569
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★☆☆☆☆",
-        "entry": "★★★★★",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好、風險報酬比佳；距前高仍有 12.0% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 5.4,
-      "swing_high": 12.0,
-      "upside_pct": 11.95,
-      "downside_pct": 7.58,
-      "rr_ratio": 1.58,
-      "reasons": [
-        "位於近 20 日區間 39% 位置，距前高還有 12.0% 空間，距 MA20 乖離 -1.7%",
-        "均線仍偏空排列，MA20 斜率 -1.0%",
-        "MA5 開始上彎、MACD 柱狀體改善",
-        "量能 0.4 倍，低於 20 日均量，買盤不足",
-        "上檔至 192.0 約 +12.0%，下檔支撐 158.5 約 −7.6%，風險報酬比 1.6:1"
-      ],
-      "flags": [],
-      "hist_success": 74.0,
-      "hist_success_raw": 79.8,
-      "hist_avg_days": 3.5,
-      "hist_avg_days_win": 1.9,
-      "hist_calibrated": 74.0,
-      "hist_raw": 79.8,
-      "hist_samples": 84,
-      "hist_avg_return": 0.27,
-      "hist_pf": 1.13,
-      "hist_mdd": -3.97,
-      "hist_source": "oos_regime",
-      "hist_expectancy": 0.169,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "hold_days": 1,
-        "status": "等待確認",
-        "entry_icon": "🟡",
-        "entry_status": "等待確認，不建議立即進場",
-        "entry_note": "收盤 171.50 尚未站上MA5 173.70",
-        "ref_price": 173.7,
-        "ref_label": "MA5",
-        "vol_ratio": 0.42,
-        "vol_tier": "bad",
-        "rr_tier": "fair",
-        "rr_tag": "⚠ 風報普通（1.20）",
-        "dist_trigger_pct": 0.28,
-        "intraday_checked": false,
-        "note": "型態尚未完成，先觀察",
-        "trigger": 171.97,
-        "invalidation": 166.03,
-        "stop": 162.54,
-        "target1": 183.29,
-        "target2": 190.84,
-        "rr": 1.2,
-        "risk_pct": 5.5,
-        "atr_pct": 5.5
-      },
-      "quote_date": "2026-09-24",
-      "spark": {
-        "c": [
-          130.0,
-          143.0,
-          157.0,
-          169.0,
-          171.0,
-          163.5,
-          179.5,
-          178.0,
-          177.0,
-          177.0,
-          183.5,
-          181.5,
-          176.5,
-          168.0,
-          176.5,
-          181.0,
-          177.0,
-          179.0,
-          181.5,
-          186.0,
-          181.5,
-          182.5,
-          176.0,
-          179.0,
-          169.0,
-          174.0,
-          180.0,
-          188.0,
-          183.0,
-          179.5,
-          171.5,
-          160.0,
-          159.5,
-          169.0,
-          170.0,
-          179.5,
-          174.0,
-          171.0,
-          172.5,
-          171.5
-        ],
-        "v": [
-          21043331,
-          77515412,
-          121631665,
-          232656923,
-          185766803,
-          176709453,
-          154758322,
-          194693938,
-          207363846,
-          227421621,
-          241145687,
-          128521974,
-          183343610,
-          113062347,
-          149809828,
-          114128808,
-          99392300,
-          92923853,
-          85770151,
-          139732644,
-          153443947,
-          341273210,
-          136605515,
-          83567943,
-          161434224,
-          100505993,
-          118922555,
-          222260653,
-          140400625,
-          67914754,
-          74789115,
-          123411883,
-          71179694,
-          83218538,
-          120007010,
-          138585216,
-          76635914,
-          97424949,
-          70593992,
-          51225813
-        ]
-      },
-      "prev_low": 172.0,
-      "regime": "bull",
-      "hist_expectancy_raw": 0.27,
-      "hist_shrunk": 0.169,
-      "oos_reliability": "中",
-      "oos_rel_reasons": [
-        "walk-forward 3/3 段正 EV"
-      ],
-      "in_sample_discount": null,
-      "hist_basis": "OOS",
-      "rank": 66,
-      "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
-      "momentum_score": 13.5,
-      "momentum_hits": [
-        "MA5 上彎",
-        "MACD 柱未轉弱",
-        "RR 1.20"
-      ],
-      "momentum_warns": [
-        "收盤跌破 MA5",
-        "收盤跌破昨日低點"
-      ],
-      "momentum_tier": 2,
-      "momentum_label": "轉弱／追高風險",
-      "momentum_icon": "🔴",
-      "nextday": {
-        "top_hit_rate": 17.2,
-        "samples": 7395,
-        "win_rate": 48.6,
-        "calibrated_win_rate": 48.6,
-        "crash_rate": 17.0,
-        "calibrated_crash_rate": 17.0,
-        "avg": 0.14,
-        "median": 0.0,
-        "p10": -4.56,
-        "worst": -19.04,
-        "avg_gap": 0.49,
-        "gap_down_rate": 13.9
-      },
-      "nextday_source": "完整條件",
-      "crash_penalty": 0.6,
-      "nextday_gap_pen": 0.0,
-      "nextday_avg_adj": 1.7,
-      "nextday_hit_adj": -2.2,
-      "final_score": 48.4,
-      "evidence_quality": 56.6,
-      "position_quality": 65.1,
-      "momentum_quality": 13.5,
-      "model_quality": 56.6,
-      "entry_quality": 65.1,
-      "final_parts": {
-        "evidence": {
-          "success": 85.0,
-          "ev": 39.0,
-          "pf": 27.5,
-          "winrate": 100.0,
-          "mdd": 50.4,
-          "samples": 21.0
-        },
-        "position": {
-          "position": 92.4,
-          "rr": 23.5,
-          "distance": 94.4
-        },
-        "momentum": 13.5
-      },
-      "entry_tier": 1,
-      "rank_score": 47.9,
+      "rank_score": 48.3,
       "success_used": 65.0,
       "final_rank": 106,
       "top_fill": false
@@ -32476,8 +32476,8 @@
       "hist_basis": "OOS",
       "rank": 57,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -32533,7 +32533,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 44.1,
+      "rank_score": 44.7,
       "success_used": 65.0,
       "final_rank": 107,
       "top_fill": false
@@ -32767,8 +32767,8 @@
       "hist_basis": "OOS",
       "rank": 60,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.5,
+      "overseas_note": "海外偏多（推估 +0.36%），電腦週邊 對美股敏感（β 1.25），加 0.5 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -32822,299 +32822,9 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 43.6,
+      "rank_score": 44.0,
       "success_used": 65.0,
       "final_rank": 108,
-      "top_fill": false
-    },
-    {
-      "code": "2886",
-      "name": "兆豐金",
-      "sector": "金融",
-      "group": "金融",
-      "asset_type": "other",
-      "close": 49.6,
-      "prev_close": 50.0,
-      "day_open": 49.4,
-      "day_high": 49.85,
-      "day_low": 49.35,
-      "lot_cost": 49600,
-      "chg_pct": -0.8000000000000007,
-      "rsi": 48.38526399747462,
-      "vol_ratio": 0.30269798894607763,
-      "volume": 8333068.0,
-      "vol_ma20": 27529314.05,
-      "ma5": 50.46,
-      "ma10": 51.11,
-      "ma20": 50.315,
-      "ma60": 48.85083333333333,
-      "ma20_slope": 1.8986380436433636,
-      "ma60_slope": 1.9034871188679858,
-      "bias20": -1.4210474013713559,
-      "pos20": 0.48031496062992185,
-      "pct_above_low20": 6.552094522019347,
-      "pct_below_high20": 6.653225806451601,
-      "pct_below_high5": 4.63709677419355,
-      "pct_below_high60": 8.266129032258075,
-      "atr": 1.3406872323287091,
-      "atr_pct": 2.702998452275623,
-      "macd_hist": -0.17560359344716658,
-      "macd_hist_prev": -0.08555505025677546,
-      "ma5_slope": -1.2524461839530376,
-      "target": 52.9,
-      "support": 48.25931276767129,
-      "score": 53.5,
-      "opportunity": 53.5,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 25.0,
-          "max": 25,
-          "ratio": 1.0
-        },
-        "trend": {
-          "points": 9.3,
-          "max": 20,
-          "ratio": 0.464
-        },
-        "reversal": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 13.9,
-          "max": 15,
-          "ratio": 0.926
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★☆☆☆",
-        "entry": "★★★★★",
-        "volume": "☆☆☆☆☆",
-        "reversal": "☆☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "區間整理",
-      "headline": "區間整理，訊號中性",
-      "why": "進場位置好、風險報酬比佳；距前高仍有 6.7% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 3.0,
-      "swing_high": 6.7,
-      "upside_pct": 6.65,
-      "downside_pct": 2.7,
-      "rr_ratio": 2.46,
-      "reasons": [
-        "位於近 20 日區間 48% 位置，距前高還有 6.7% 空間，距 MA20 乖離 -1.4%",
-        "中期趨勢中性偏多，MA20 斜率 +1.9%",
-        "尚未出現明確的轉強訊號",
-        "量能 0.3 倍，低於 20 日均量，買盤不足",
-        "上檔至 52.9 約 +6.7%，下檔支撐 48.3 約 −2.7%，風險報酬比 2.5:1"
-      ],
-      "flags": [],
-      "hist_success": 74.0,
-      "hist_success_raw": 79.8,
-      "hist_avg_days": 3.5,
-      "hist_avg_days_win": 1.9,
-      "hist_calibrated": 74.0,
-      "hist_raw": 79.8,
-      "hist_samples": 84,
-      "hist_avg_return": 0.27,
-      "hist_pf": 1.13,
-      "hist_mdd": -3.97,
-      "hist_source": "oos_regime",
-      "hist_expectancy": 0.169,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "hold_days": 1,
-        "status": "等待確認",
-        "entry_icon": "🟡",
-        "entry_status": "等待確認，不建議立即進場",
-        "entry_note": "收盤 49.60 尚未站上MA5 50.46",
-        "ref_price": 50.46,
-        "ref_label": "MA5",
-        "vol_ratio": 0.3,
-        "vol_tier": "bad",
-        "rr_tier": "fair",
-        "rr_tag": "⚠ 風報普通（1.20）",
-        "dist_trigger_pct": 0.64,
-        "intraday_checked": false,
-        "note": "型態尚未完成，先觀察",
-        "trigger": 49.92,
-        "invalidation": 49.28,
-        "stop": 48.58,
-        "target1": 51.53,
-        "target2": 52.6,
-        "rr": 1.2,
-        "risk_pct": 2.7,
-        "atr_pct": 2.7
-      },
-      "quote_date": "2026-09-24",
-      "spark": {
-        "c": [
-          53.1,
-          51.6,
-          50.7,
-          51.2,
-          50.3,
-          50.9,
-          51.0,
-          49.4,
-          48.7,
-          45.85,
-          47.35,
-          46.6,
-          46.9,
-          47.05,
-          46.4,
-          46.95,
-          46.85,
-          47.0,
-          46.6,
-          46.15,
-          48.2,
-          48.55,
-          48.5,
-          49.0,
-          50.4,
-          49.55,
-          50.2,
-          50.6,
-          50.3,
-          49.9,
-          51.7,
-          52.5,
-          51.8,
-          50.9,
-          51.9,
-          51.1,
-          51.1,
-          50.5,
-          50.0,
-          49.6
-        ],
-        "v": [
-          43556932,
-          38166294,
-          35883860,
-          30109399,
-          31315601,
-          22565910,
-          23274176,
-          32199270,
-          31601725,
-          71796604,
-          50705240,
-          53106734,
-          41758491,
-          25322496,
-          31911647,
-          27479375,
-          20203847,
-          23421654,
-          23809379,
-          22503030,
-          62205583,
-          33911276,
-          30744770,
-          33784817,
-          37830876,
-          31950981,
-          20349647,
-          24420363,
-          14872293,
-          20888846,
-          35912878,
-          22519207,
-          20370352,
-          26462696,
-          24220366,
-          47531956,
-          12052512,
-          21285539,
-          20938255,
-          8333068
-        ]
-      },
-      "prev_low": 49.65,
-      "regime": "bull",
-      "hist_expectancy_raw": 0.27,
-      "hist_shrunk": 0.169,
-      "oos_reliability": "中",
-      "oos_rel_reasons": [
-        "walk-forward 3/3 段正 EV"
-      ],
-      "in_sample_discount": null,
-      "hist_basis": "OOS",
-      "rank": 51,
-      "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
-      "momentum_score": 0.0,
-      "momentum_hits": [
-        "RR 1.20"
-      ],
-      "momentum_warns": [
-        "收盤跌破 MA5",
-        "收盤跌破昨日低點",
-        "MACD 柱明顯轉弱"
-      ],
-      "momentum_tier": 2,
-      "momentum_label": "轉弱／追高風險",
-      "momentum_icon": "🔴",
-      "nextday": {
-        "top_hit_rate": 17.2,
-        "samples": 7395,
-        "win_rate": 48.6,
-        "calibrated_win_rate": 48.6,
-        "crash_rate": 17.0,
-        "calibrated_crash_rate": 17.0,
-        "avg": 0.14,
-        "median": 0.0,
-        "p10": -4.56,
-        "worst": -19.04,
-        "avg_gap": 0.49,
-        "gap_down_rate": 13.9
-      },
-      "nextday_source": "完整條件",
-      "crash_penalty": 0.6,
-      "nextday_gap_pen": 0.0,
-      "nextday_avg_adj": 1.7,
-      "nextday_hit_adj": -2.2,
-      "final_score": 42.2,
-      "evidence_quality": 56.6,
-      "position_quality": 55.8,
-      "momentum_quality": 0.0,
-      "model_quality": 56.6,
-      "entry_quality": 55.8,
-      "final_parts": {
-        "evidence": {
-          "success": 85.0,
-          "ev": 39.0,
-          "pf": 27.5,
-          "winrate": 100.0,
-          "mdd": 50.4,
-          "samples": 21.0
-        },
-        "position": {
-          "position": 73.9,
-          "rr": 23.5,
-          "distance": 87.2
-        },
-        "momentum": 0.0
-      },
-      "entry_tier": 1,
-      "rank_score": 41.5,
-      "success_used": 65.0,
-      "final_rank": 109,
       "top_fill": false
     },
     {
@@ -33346,8 +33056,8 @@
       "hist_basis": "OOS",
       "rank": 67,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -33403,7 +33113,297 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 40.8,
+      "rank_score": 41.4,
+      "success_used": 65.0,
+      "final_rank": 109,
+      "top_fill": false
+    },
+    {
+      "code": "2886",
+      "name": "兆豐金",
+      "sector": "金融",
+      "group": "金融",
+      "asset_type": "other",
+      "close": 49.6,
+      "prev_close": 50.0,
+      "day_open": 49.4,
+      "day_high": 49.85,
+      "day_low": 49.35,
+      "lot_cost": 49600,
+      "chg_pct": -0.8000000000000007,
+      "rsi": 48.38526399747462,
+      "vol_ratio": 0.30269798894607763,
+      "volume": 8333068.0,
+      "vol_ma20": 27529314.05,
+      "ma5": 50.46,
+      "ma10": 51.11,
+      "ma20": 50.315,
+      "ma60": 48.85083333333333,
+      "ma20_slope": 1.8986380436433636,
+      "ma60_slope": 1.9034871188679858,
+      "bias20": -1.4210474013713559,
+      "pos20": 0.48031496062992185,
+      "pct_above_low20": 6.552094522019347,
+      "pct_below_high20": 6.653225806451601,
+      "pct_below_high5": 4.63709677419355,
+      "pct_below_high60": 8.266129032258075,
+      "atr": 1.3406872323287091,
+      "atr_pct": 2.702998452275623,
+      "macd_hist": -0.17560359344716658,
+      "macd_hist_prev": -0.08555505025677546,
+      "ma5_slope": -1.2524461839530376,
+      "target": 52.9,
+      "support": 48.25931276767129,
+      "score": 53.5,
+      "opportunity": 53.5,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 25.0,
+          "max": 25,
+          "ratio": 1.0
+        },
+        "trend": {
+          "points": 9.3,
+          "max": 20,
+          "ratio": 0.464
+        },
+        "reversal": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 13.9,
+          "max": 15,
+          "ratio": 0.926
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★★☆☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "☆☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "區間整理",
+      "headline": "區間整理，訊號中性",
+      "why": "進場位置好、風險報酬比佳；距前高仍有 6.7% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 3.0,
+      "swing_high": 6.7,
+      "upside_pct": 6.65,
+      "downside_pct": 2.7,
+      "rr_ratio": 2.46,
+      "reasons": [
+        "位於近 20 日區間 48% 位置，距前高還有 6.7% 空間，距 MA20 乖離 -1.4%",
+        "中期趨勢中性偏多，MA20 斜率 +1.9%",
+        "尚未出現明確的轉強訊號",
+        "量能 0.3 倍，低於 20 日均量，買盤不足",
+        "上檔至 52.9 約 +6.7%，下檔支撐 48.3 約 −2.7%，風險報酬比 2.5:1"
+      ],
+      "flags": [],
+      "hist_success": 74.0,
+      "hist_success_raw": 79.8,
+      "hist_avg_days": 3.5,
+      "hist_avg_days_win": 1.9,
+      "hist_calibrated": 74.0,
+      "hist_raw": 79.8,
+      "hist_samples": 84,
+      "hist_avg_return": 0.27,
+      "hist_pf": 1.13,
+      "hist_mdd": -3.97,
+      "hist_source": "oos_regime",
+      "hist_expectancy": 0.169,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "hold_days": 1,
+        "status": "等待確認",
+        "entry_icon": "🟡",
+        "entry_status": "等待確認，不建議立即進場",
+        "entry_note": "收盤 49.60 尚未站上MA5 50.46",
+        "ref_price": 50.46,
+        "ref_label": "MA5",
+        "vol_ratio": 0.3,
+        "vol_tier": "bad",
+        "rr_tier": "fair",
+        "rr_tag": "⚠ 風報普通（1.20）",
+        "dist_trigger_pct": 0.64,
+        "intraday_checked": false,
+        "note": "型態尚未完成，先觀察",
+        "trigger": 49.92,
+        "invalidation": 49.28,
+        "stop": 48.58,
+        "target1": 51.53,
+        "target2": 52.6,
+        "rr": 1.2,
+        "risk_pct": 2.7,
+        "atr_pct": 2.7
+      },
+      "quote_date": "2026-09-24",
+      "spark": {
+        "c": [
+          53.1,
+          51.6,
+          50.7,
+          51.2,
+          50.3,
+          50.9,
+          51.0,
+          49.4,
+          48.7,
+          45.85,
+          47.35,
+          46.6,
+          46.9,
+          47.05,
+          46.4,
+          46.95,
+          46.85,
+          47.0,
+          46.6,
+          46.15,
+          48.2,
+          48.55,
+          48.5,
+          49.0,
+          50.4,
+          49.55,
+          50.2,
+          50.6,
+          50.3,
+          49.9,
+          51.7,
+          52.5,
+          51.8,
+          50.9,
+          51.9,
+          51.1,
+          51.1,
+          50.5,
+          50.0,
+          49.6
+        ],
+        "v": [
+          43556932,
+          38166294,
+          35883860,
+          30109399,
+          31315601,
+          22565910,
+          23274176,
+          32199270,
+          31601725,
+          71796604,
+          50705240,
+          53106734,
+          41758491,
+          25322496,
+          31911647,
+          27479375,
+          20203847,
+          23421654,
+          23809379,
+          22503030,
+          62205583,
+          33911276,
+          30744770,
+          33784817,
+          37830876,
+          31950981,
+          20349647,
+          24420363,
+          14872293,
+          20888846,
+          35912878,
+          22519207,
+          20370352,
+          26462696,
+          24220366,
+          47531956,
+          12052512,
+          21285539,
+          20938255,
+          8333068
+        ]
+      },
+      "prev_low": 49.65,
+      "regime": "bull",
+      "hist_expectancy_raw": 0.27,
+      "hist_shrunk": 0.169,
+      "oos_reliability": "中",
+      "oos_rel_reasons": [
+        "walk-forward 3/3 段正 EV"
+      ],
+      "in_sample_discount": null,
+      "hist_basis": "OOS",
+      "rank": 51,
+      "mark": {},
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
+      "momentum_score": 0.0,
+      "momentum_hits": [
+        "RR 1.20"
+      ],
+      "momentum_warns": [
+        "收盤跌破 MA5",
+        "收盤跌破昨日低點",
+        "MACD 柱明顯轉弱"
+      ],
+      "momentum_tier": 2,
+      "momentum_label": "轉弱／追高風險",
+      "momentum_icon": "🔴",
+      "nextday": {
+        "top_hit_rate": 17.2,
+        "samples": 7395,
+        "win_rate": 48.6,
+        "calibrated_win_rate": 48.6,
+        "crash_rate": 17.0,
+        "calibrated_crash_rate": 17.0,
+        "avg": 0.14,
+        "median": 0.0,
+        "p10": -4.56,
+        "worst": -19.04,
+        "avg_gap": 0.49,
+        "gap_down_rate": 13.9
+      },
+      "nextday_source": "完整條件",
+      "crash_penalty": 0.6,
+      "nextday_gap_pen": 0.0,
+      "nextday_avg_adj": 1.7,
+      "nextday_hit_adj": -2.2,
+      "final_score": 42.2,
+      "evidence_quality": 56.6,
+      "position_quality": 55.8,
+      "momentum_quality": 0.0,
+      "model_quality": 56.6,
+      "entry_quality": 55.8,
+      "final_parts": {
+        "evidence": {
+          "success": 85.0,
+          "ev": 39.0,
+          "pf": 27.5,
+          "winrate": 100.0,
+          "mdd": 50.4,
+          "samples": 21.0
+        },
+        "position": {
+          "position": 73.9,
+          "rr": 23.5,
+          "distance": 87.2
+        },
+        "momentum": 0.0
+      },
+      "entry_tier": 1,
+      "rank_score": 41.0,
       "success_used": 65.0,
       "final_rank": 110,
       "top_fill": false
@@ -33637,8 +33637,8 @@
       "hist_basis": "OOS",
       "rank": 63,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -33692,7 +33692,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 39.6,
+      "rank_score": 39.1,
       "success_used": 65.0,
       "final_rank": 111,
       "top_fill": false
@@ -33926,7 +33926,7 @@
       "hist_basis": "OOS",
       "rank": 52,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -33982,7 +33982,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 38.3,
+      "rank_score": 38.1,
       "success_used": 65.0,
       "final_rank": 112,
       "top_fill": false
@@ -34216,7 +34216,7 @@
       "hist_basis": "OOS",
       "rank": 59,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -34272,7 +34272,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 38.3,
+      "rank_score": 38.1,
       "success_used": 65.0,
       "final_rank": 113,
       "top_fill": false
@@ -34506,7 +34506,7 @@
       "hist_basis": "OOS",
       "rank": 65,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.3,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -34562,7 +34562,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 38.0,
+      "rank_score": 37.7,
       "success_used": 65.0,
       "final_rank": 114,
       "top_fill": false
@@ -34803,8 +34803,8 @@
       "hist_basis": "OOS",
       "rank": 56,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 75.0,
       "momentum_hits": [
         "收盤站上基準價",
@@ -34859,7 +34859,7 @@
         "momentum": 75.0
       },
       "entry_tier": 0,
-      "rank_score": 61.1,
+      "rank_score": 61.7,
       "demoted_by_crash": true,
       "success_used": 65.0,
       "final_rank": 115,
@@ -35094,7 +35094,7 @@
       "hist_basis": "OOS",
       "rank": 64,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 0.5,
       "momentum_hits": [
@@ -35148,7 +35148,7 @@
         "momentum": 0.5
       },
       "entry_tier": 1,
-      "rank_score": 35.5,
+      "rank_score": 35.9,
       "success_used": 65.0,
       "final_rank": 116,
       "top_fill": false
@@ -35382,7 +35382,7 @@
       "hist_basis": "OOS",
       "rank": 79,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -35439,7 +35439,7 @@
         "momentum": 38.0
       },
       "entry_tier": 1,
-      "rank_score": 46.3,
+      "rank_score": 46.7,
       "success_used": 64.8,
       "final_rank": 117,
       "top_fill": false
@@ -35680,7 +35680,7 @@
       "hist_basis": "OOS",
       "rank": 118,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 63.5,
       "momentum_hits": [
@@ -35740,7 +35740,7 @@
         "momentum": 63.5
       },
       "entry_tier": 0,
-      "rank_score": 49.9,
+      "rank_score": 49.7,
       "success_used": 64.4,
       "final_rank": 118,
       "top_fill": false
@@ -35974,7 +35974,7 @@
       "hist_basis": "OOS",
       "rank": 120,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.3,
       "overseas_note": "",
       "momentum_score": 13.0,
       "momentum_hits": [
@@ -36029,7 +36029,7 @@
         "momentum": 13.0
       },
       "entry_tier": 1,
-      "rank_score": 39.0,
+      "rank_score": 39.3,
       "success_used": 64.4,
       "final_rank": 119,
       "top_fill": false
@@ -36263,8 +36263,8 @@
       "hist_basis": "OOS",
       "rank": 128,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 25.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -36319,299 +36319,9 @@
         "momentum": 25.5
       },
       "entry_tier": 1,
-      "rank_score": 37.6,
+      "rank_score": 38.2,
       "success_used": 64.4,
       "final_rank": 120,
-      "top_fill": false
-    },
-    {
-      "code": "2426",
-      "name": "鼎元",
-      "sector": "其他",
-      "group": "其他",
-      "asset_type": "other",
-      "close": 96.9,
-      "prev_close": 97.8,
-      "day_open": 97.8,
-      "day_high": 101.0,
-      "day_low": 96.5,
-      "lot_cost": 96900,
-      "chg_pct": -0.9202453987730008,
-      "rsi": 54.600881284453926,
-      "vol_ratio": 0.5857983676329105,
-      "volume": 28496177.0,
-      "vol_ma20": 48645026.3,
-      "ma5": 99.05999999999999,
-      "ma10": 97.23,
-      "ma20": 98.49499999999999,
-      "ma60": 77.83583333333333,
-      "ma20_slope": 2.2474826118550784,
-      "ma60_slope": 3.3207597261092126,
-      "bias20": -1.6193715417026078,
-      "pos20": 0.37610619469026557,
-      "pct_above_low20": 9.615384615384626,
-      "pct_below_high20": 14.55108359133126,
-      "pct_below_high5": 6.811145510835903,
-      "pct_below_high60": 14.55108359133126,
-      "atr": 6.727271171616177,
-      "atr_pct": 6.942488309201421,
-      "macd_hist": -1.1935391467096697,
-      "macd_hist_prev": -1.0881699731603067,
-      "ma5_slope": -0.2215954875100845,
-      "target": 111.0,
-      "support": 90.17272882838382,
-      "score": 57.0,
-      "opportunity": 57.0,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 25.0,
-          "max": 25,
-          "ratio": 1.0
-        },
-        "trend": {
-          "points": 12.3,
-          "max": 20,
-          "ratio": 0.615
-        },
-        "reversal": {
-          "points": 1.8,
-          "max": 15,
-          "ratio": 0.12
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 12.2,
-          "max": 15,
-          "ratio": 0.811
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★☆☆",
-        "entry": "★★★★★",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 -1.6%）",
-      "why": "進場位置好、趨勢結構強；距前高仍有 14.6% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 6.5,
-      "swing_high": 14.6,
-      "upside_pct": 14.55,
-      "downside_pct": 6.94,
-      "rr_ratio": 2.1,
-      "reasons": [
-        "位於近 20 日區間 38% 位置，距前高還有 14.6% 空間，距 MA20 乖離 -1.6%",
-        "中期趨勢中性偏多，MA20 斜率 +2.2%",
-        "近期低點未再破",
-        "量能 0.6 倍，低於 20 日均量，買盤不足",
-        "上檔至 111.0 約 +14.6%，下檔支撐 90.2 約 −6.9%，風險報酬比 2.1:1"
-      ],
-      "flags": [],
-      "hist_success": 72.3,
-      "hist_success_raw": 77.2,
-      "hist_avg_days": 4.2,
-      "hist_avg_days_win": 2.5,
-      "hist_calibrated": 72.3,
-      "hist_raw": 77.2,
-      "hist_samples": 92,
-      "hist_avg_return": -0.73,
-      "hist_pf": 0.73,
-      "hist_mdd": -7.07,
-      "hist_source": "oos_regime",
-      "hist_expectancy": -0.47,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "hold_days": 1,
-        "status": "可觀察進場",
-        "entry_icon": "🟡",
-        "entry_status": "等待確認，不建議立即進場",
-        "entry_note": "收盤 96.90 尚未站上MA5 99.06",
-        "ref_price": 99.06,
-        "ref_label": "MA5",
-        "vol_ratio": 0.59,
-        "vol_tier": "bad",
-        "rr_tier": "fair",
-        "rr_tag": "⚠ 風報普通（1.20）",
-        "dist_trigger_pct": 4.58,
-        "intraday_checked": false,
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 101.34,
-        "invalidation": 96.16,
-        "stop": 94.61,
-        "target1": 109.41,
-        "target2": 112.1,
-        "rr": 1.2,
-        "risk_pct": 6.6,
-        "atr_pct": 6.9
-      },
-      "quote_date": "2026-09-24",
-      "spark": {
-        "c": [
-          50.3,
-          55.3,
-          60.8,
-          62.5,
-          63.9,
-          67.8,
-          67.6,
-          64.7,
-          68.9,
-          68.6,
-          66.6,
-          73.2,
-          67.1,
-          68.0,
-          74.8,
-          82.2,
-          82.6,
-          90.8,
-          99.8,
-          96.6,
-          96.1,
-          97.8,
-          107.5,
-          104.5,
-          95.0,
-          104.5,
-          99.1,
-          97.5,
-          99.5,
-          96.1,
-          97.1,
-          93.3,
-          90.8,
-          99.8,
-          96.0,
-          102.0,
-          99.8,
-          98.8,
-          97.8,
-          96.9
-        ],
-        "v": [
-          11055934,
-          8272891,
-          12273675,
-          18384326,
-          16913151,
-          16804940,
-          22368989,
-          10892529,
-          17392815,
-          23304459,
-          11683320,
-          24340496,
-          21819339,
-          10941512,
-          29241700,
-          28510396,
-          63455238,
-          60848796,
-          82191163,
-          96713278,
-          61918218,
-          86618154,
-          68553081,
-          78465633,
-          52236548,
-          62192930,
-          61028043,
-          39992731,
-          56170188,
-          27182324,
-          50681192,
-          29582354,
-          26180761,
-          50843543,
-          62010959,
-          51478754,
-          21381046,
-          32316192,
-          25571698,
-          28496177
-        ]
-      },
-      "prev_low": 97.6,
-      "regime": "bull",
-      "hist_expectancy_raw": -0.725,
-      "hist_shrunk": -0.47,
-      "oos_reliability": "中",
-      "oos_rel_reasons": [
-        "walk-forward 3/3 段正 EV"
-      ],
-      "in_sample_discount": null,
-      "hist_basis": "OOS",
-      "rank": 125,
-      "mark": {},
-      "overseas_adj": -0.0,
-      "overseas_note": "",
-      "momentum_score": 0.0,
-      "momentum_hits": [
-        "RR 1.20"
-      ],
-      "momentum_warns": [
-        "收盤跌破 MA5",
-        "收盤跌破昨日低點",
-        "MACD 柱明顯轉弱"
-      ],
-      "momentum_tier": 2,
-      "momentum_label": "轉弱／追高風險",
-      "momentum_icon": "🔴",
-      "nextday": {
-        "top_hit_rate": 17.2,
-        "samples": 7395,
-        "win_rate": 48.6,
-        "calibrated_win_rate": 48.6,
-        "crash_rate": 17.0,
-        "calibrated_crash_rate": 17.0,
-        "avg": 0.14,
-        "median": 0.0,
-        "p10": -4.56,
-        "worst": -19.04,
-        "avg_gap": 0.49,
-        "gap_down_rate": 13.9
-      },
-      "nextday_source": "完整條件",
-      "crash_penalty": 0.6,
-      "nextday_gap_pen": 0.0,
-      "nextday_avg_adj": 1.7,
-      "nextday_hit_adj": -2.2,
-      "final_score": 36.2,
-      "evidence_quality": 44.9,
-      "position_quality": 53.3,
-      "momentum_quality": 0.0,
-      "model_quality": 44.9,
-      "entry_quality": 53.3,
-      "final_parts": {
-        "evidence": {
-          "success": 80.7,
-          "ev": 17.7,
-          "pf": 0.0,
-          "winrate": 100.0,
-          "mdd": 11.6,
-          "samples": 23.0
-        },
-        "position": {
-          "position": 94.8,
-          "rr": 23.5,
-          "distance": 8.4
-        },
-        "momentum": 0.0
-      },
-      "entry_tier": 1,
-      "rank_score": 35.6,
-      "success_used": 64.4,
-      "final_rank": 121,
       "top_fill": false
     },
     {
@@ -36843,7 +36553,7 @@
       "hist_basis": "OOS",
       "rank": 127,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.1,
       "overseas_note": "",
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -36899,7 +36609,297 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 35.6,
+      "rank_score": 35.5,
+      "success_used": 64.4,
+      "final_rank": 121,
+      "top_fill": false
+    },
+    {
+      "code": "2426",
+      "name": "鼎元",
+      "sector": "其他",
+      "group": "其他",
+      "asset_type": "other",
+      "close": 96.9,
+      "prev_close": 97.8,
+      "day_open": 97.8,
+      "day_high": 101.0,
+      "day_low": 96.5,
+      "lot_cost": 96900,
+      "chg_pct": -0.9202453987730008,
+      "rsi": 54.600881284453926,
+      "vol_ratio": 0.5857983676329105,
+      "volume": 28496177.0,
+      "vol_ma20": 48645026.3,
+      "ma5": 99.05999999999999,
+      "ma10": 97.23,
+      "ma20": 98.49499999999999,
+      "ma60": 77.83583333333333,
+      "ma20_slope": 2.2474826118550784,
+      "ma60_slope": 3.3207597261092126,
+      "bias20": -1.6193715417026078,
+      "pos20": 0.37610619469026557,
+      "pct_above_low20": 9.615384615384626,
+      "pct_below_high20": 14.55108359133126,
+      "pct_below_high5": 6.811145510835903,
+      "pct_below_high60": 14.55108359133126,
+      "atr": 6.727271171616177,
+      "atr_pct": 6.942488309201421,
+      "macd_hist": -1.1935391467096697,
+      "macd_hist_prev": -1.0881699731603067,
+      "ma5_slope": -0.2215954875100845,
+      "target": 111.0,
+      "support": 90.17272882838382,
+      "score": 57.0,
+      "opportunity": 57.0,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 25.0,
+          "max": 25,
+          "ratio": 1.0
+        },
+        "trend": {
+          "points": 12.3,
+          "max": 20,
+          "ratio": 0.615
+        },
+        "reversal": {
+          "points": 1.8,
+          "max": 15,
+          "ratio": 0.12
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 12.2,
+          "max": 15,
+          "ratio": 0.811
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★★★☆☆",
+        "entry": "★★★★★",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "多頭回檔",
+      "headline": "多頭回檔至支撐（乖離 -1.6%）",
+      "why": "進場位置好、趨勢結構強；距前高仍有 14.6% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 6.5,
+      "swing_high": 14.6,
+      "upside_pct": 14.55,
+      "downside_pct": 6.94,
+      "rr_ratio": 2.1,
+      "reasons": [
+        "位於近 20 日區間 38% 位置，距前高還有 14.6% 空間，距 MA20 乖離 -1.6%",
+        "中期趨勢中性偏多，MA20 斜率 +2.2%",
+        "近期低點未再破",
+        "量能 0.6 倍，低於 20 日均量，買盤不足",
+        "上檔至 111.0 約 +14.6%，下檔支撐 90.2 約 −6.9%，風險報酬比 2.1:1"
+      ],
+      "flags": [],
+      "hist_success": 72.3,
+      "hist_success_raw": 77.2,
+      "hist_avg_days": 4.2,
+      "hist_avg_days_win": 2.5,
+      "hist_calibrated": 72.3,
+      "hist_raw": 77.2,
+      "hist_samples": 92,
+      "hist_avg_return": -0.73,
+      "hist_pf": 0.73,
+      "hist_mdd": -7.07,
+      "hist_source": "oos_regime",
+      "hist_expectancy": -0.47,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "hold_days": 1,
+        "status": "可觀察進場",
+        "entry_icon": "🟡",
+        "entry_status": "等待確認，不建議立即進場",
+        "entry_note": "收盤 96.90 尚未站上MA5 99.06",
+        "ref_price": 99.06,
+        "ref_label": "MA5",
+        "vol_ratio": 0.59,
+        "vol_tier": "bad",
+        "rr_tier": "fair",
+        "rr_tag": "⚠ 風報普通（1.20）",
+        "dist_trigger_pct": 4.58,
+        "intraday_checked": false,
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 101.34,
+        "invalidation": 96.16,
+        "stop": 94.61,
+        "target1": 109.41,
+        "target2": 112.1,
+        "rr": 1.2,
+        "risk_pct": 6.6,
+        "atr_pct": 6.9
+      },
+      "quote_date": "2026-09-24",
+      "spark": {
+        "c": [
+          50.3,
+          55.3,
+          60.8,
+          62.5,
+          63.9,
+          67.8,
+          67.6,
+          64.7,
+          68.9,
+          68.6,
+          66.6,
+          73.2,
+          67.1,
+          68.0,
+          74.8,
+          82.2,
+          82.6,
+          90.8,
+          99.8,
+          96.6,
+          96.1,
+          97.8,
+          107.5,
+          104.5,
+          95.0,
+          104.5,
+          99.1,
+          97.5,
+          99.5,
+          96.1,
+          97.1,
+          93.3,
+          90.8,
+          99.8,
+          96.0,
+          102.0,
+          99.8,
+          98.8,
+          97.8,
+          96.9
+        ],
+        "v": [
+          11055934,
+          8272891,
+          12273675,
+          18384326,
+          16913151,
+          16804940,
+          22368989,
+          10892529,
+          17392815,
+          23304459,
+          11683320,
+          24340496,
+          21819339,
+          10941512,
+          29241700,
+          28510396,
+          63455238,
+          60848796,
+          82191163,
+          96713278,
+          61918218,
+          86618154,
+          68553081,
+          78465633,
+          52236548,
+          62192930,
+          61028043,
+          39992731,
+          56170188,
+          27182324,
+          50681192,
+          29582354,
+          26180761,
+          50843543,
+          62010959,
+          51478754,
+          21381046,
+          32316192,
+          25571698,
+          28496177
+        ]
+      },
+      "prev_low": 97.6,
+      "regime": "bull",
+      "hist_expectancy_raw": -0.725,
+      "hist_shrunk": -0.47,
+      "oos_reliability": "中",
+      "oos_rel_reasons": [
+        "walk-forward 3/3 段正 EV"
+      ],
+      "in_sample_discount": null,
+      "hist_basis": "OOS",
+      "rank": 125,
+      "mark": {},
+      "overseas_adj": -0.2,
+      "overseas_note": "",
+      "momentum_score": 0.0,
+      "momentum_hits": [
+        "RR 1.20"
+      ],
+      "momentum_warns": [
+        "收盤跌破 MA5",
+        "收盤跌破昨日低點",
+        "MACD 柱明顯轉弱"
+      ],
+      "momentum_tier": 2,
+      "momentum_label": "轉弱／追高風險",
+      "momentum_icon": "🔴",
+      "nextday": {
+        "top_hit_rate": 17.2,
+        "samples": 7395,
+        "win_rate": 48.6,
+        "calibrated_win_rate": 48.6,
+        "crash_rate": 17.0,
+        "calibrated_crash_rate": 17.0,
+        "avg": 0.14,
+        "median": 0.0,
+        "p10": -4.56,
+        "worst": -19.04,
+        "avg_gap": 0.49,
+        "gap_down_rate": 13.9
+      },
+      "nextday_source": "完整條件",
+      "crash_penalty": 0.6,
+      "nextday_gap_pen": 0.0,
+      "nextday_avg_adj": 1.7,
+      "nextday_hit_adj": -2.2,
+      "final_score": 36.2,
+      "evidence_quality": 44.9,
+      "position_quality": 53.3,
+      "momentum_quality": 0.0,
+      "model_quality": 44.9,
+      "entry_quality": 53.3,
+      "final_parts": {
+        "evidence": {
+          "success": 80.7,
+          "ev": 17.7,
+          "pf": 0.0,
+          "winrate": 100.0,
+          "mdd": 11.6,
+          "samples": 23.0
+        },
+        "position": {
+          "position": 94.8,
+          "rr": 23.5,
+          "distance": 8.4
+        },
+        "momentum": 0.0
+      },
+      "entry_tier": 1,
+      "rank_score": 35.4,
       "success_used": 64.4,
       "final_rank": 122,
       "top_fill": false
@@ -37133,8 +37133,8 @@
       "hist_basis": "OOS",
       "rank": 122,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -37188,7 +37188,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 32.4,
+      "rank_score": 31.9,
       "success_used": 64.4,
       "final_rank": 123,
       "top_fill": false
@@ -37422,8 +37422,8 @@
       "hist_basis": "OOS",
       "rank": 123,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 1.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -37478,7 +37478,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 29.7,
+      "rank_score": 30.3,
       "success_used": 64.4,
       "final_rank": 124,
       "top_fill": false
@@ -37725,7 +37725,7 @@
       "hist_basis": "OOS",
       "rank": 126,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -37785,7 +37785,7 @@
         "momentum": 0.0
       },
       "entry_tier": 2,
-      "rank_score": 13.1,
+      "rank_score": 12.9,
       "demoted_by_crash": true,
       "success_used": 64.4,
       "final_rank": 125,
@@ -38041,7 +38041,7 @@
       "hist_basis": "OOS",
       "rank": 129,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -38099,7 +38099,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 34.2,
+      "rank_score": 34.0,
       "demoted_by_crash": true,
       "success_used": 64.4,
       "final_rank": 126,
@@ -38347,8 +38347,8 @@
       "hist_basis": "OOS",
       "rank": 119,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 50.5,
       "momentum_hits": [
         "量能 1.88×",
@@ -38405,7 +38405,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 25.1,
+      "rank_score": 25.7,
       "demoted_by_crash": true,
       "success_used": 64.4,
       "final_rank": 127,
@@ -38640,7 +38640,7 @@
       "hist_basis": "OOS",
       "rank": 130,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 63.0,
       "momentum_hits": [
@@ -38698,7 +38698,7 @@
         "momentum": 63.0
       },
       "entry_tier": 0,
-      "rank_score": 30.3,
+      "rank_score": 30.1,
       "demoted_by_crash": true,
       "success_used": 64.4,
       "final_rank": 128,
@@ -38967,8 +38967,8 @@
       "hist_basis": "IN_SAMPLE",
       "rank": 21,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 50.5,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -39025,7 +39025,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 44.6,
+      "rank_score": 45.2,
       "success_used": 64.0,
       "final_rank": 129,
       "top_fill": false
@@ -39292,7 +39292,7 @@
       "hist_basis": "IN_SAMPLE",
       "rank": 20,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -39350,7 +39350,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 40.0,
+      "rank_score": 39.8,
       "demoted_by_crash": true,
       "success_used": 64.0,
       "final_rank": 130,
@@ -39619,7 +39619,7 @@
       "hist_basis": "IN_SAMPLE",
       "rank": 23,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -39676,7 +39676,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 38.1,
+      "rank_score": 37.9,
       "demoted_by_crash": true,
       "success_used": 64.0,
       "final_rank": 131,
@@ -39945,7 +39945,7 @@
       "hist_basis": "IN_SAMPLE",
       "rank": 22,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -40002,7 +40002,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 37.3,
+      "rank_score": 37.1,
       "success_used": 64.0,
       "final_rank": 132,
       "top_fill": false
@@ -40258,7 +40258,7 @@
       "hist_basis": "OOS",
       "rank": 164,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -40316,7 +40316,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 40.9,
+      "rank_score": 40.7,
       "demoted_by_crash": true,
       "success_used": 63.8,
       "final_rank": 133,
@@ -40579,7 +40579,7 @@
       "hist_basis": "OOS",
       "rank": 159,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 63.0,
       "momentum_hits": [
@@ -40638,7 +40638,7 @@
         "momentum": 63.0
       },
       "entry_tier": 2,
-      "rank_score": 35.1,
+      "rank_score": 34.9,
       "demoted_by_crash": true,
       "success_used": 63.8,
       "final_rank": 134,
@@ -40913,7 +40913,7 @@
       "hist_basis": "OOS",
       "rank": 173,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -40971,7 +40971,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 31.5,
+      "rank_score": 31.3,
       "demoted_by_crash": true,
       "success_used": 63.8,
       "final_rank": 135,
@@ -41222,7 +41222,7 @@
       "hist_basis": "OOS",
       "rank": 161,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -41280,7 +41280,7 @@
         "momentum": 50.5
       },
       "entry_tier": 2,
-      "rank_score": 30.8,
+      "rank_score": 30.9,
       "demoted_by_crash": true,
       "success_used": 63.8,
       "final_rank": 136,
@@ -41524,8 +41524,8 @@
       "hist_basis": "OOS",
       "rank": 174,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.9,
+      "overseas_note": "海外偏多（推估 +0.36%），電信 的敏感度 β 0.45，-0.9 分",
       "momentum_score": 13.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -41579,7 +41579,7 @@
         "momentum": 13.0
       },
       "entry_tier": 2,
-      "rank_score": 27.4,
+      "rank_score": 26.6,
       "success_used": 63.8,
       "final_rank": 137,
       "top_fill": false
@@ -41832,8 +41832,8 @@
       "hist_basis": "OOS",
       "rank": 172,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 38.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -41889,7 +41889,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 27.3,
+      "rank_score": 27.9,
       "success_used": 63.8,
       "final_rank": 138,
       "top_fill": false
@@ -42142,8 +42142,8 @@
       "hist_basis": "OOS",
       "rank": 168,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 38.0,
       "momentum_hits": [
         "收盤站上 MA5",
@@ -42199,7 +42199,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 26.0,
+      "rank_score": 26.6,
       "success_used": 63.8,
       "final_rank": 139,
       "top_fill": false
@@ -42458,7 +42458,7 @@
       "hist_basis": "OOS",
       "rank": 160,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -42515,7 +42515,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 24.8,
+      "rank_score": 24.6,
       "demoted_by_crash": true,
       "success_used": 63.8,
       "final_rank": 140,
@@ -42757,7 +42757,7 @@
       "hist_basis": "OOS",
       "rank": 163,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -42813,7 +42813,7 @@
         "momentum": 25.5
       },
       "entry_tier": 2,
-      "rank_score": 22.1,
+      "rank_score": 21.9,
       "success_used": 63.8,
       "final_rank": 141,
       "top_fill": false
@@ -43047,7 +43047,7 @@
       "hist_basis": "OOS",
       "rank": 71,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -43104,7 +43104,7 @@
         "momentum": 38.0
       },
       "entry_tier": 1,
-      "rank_score": 50.2,
+      "rank_score": 50.0,
       "success_used": 63.6,
       "final_rank": 142,
       "top_fill": false
@@ -43338,7 +43338,7 @@
       "hist_basis": "OOS",
       "rank": 72,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -43394,7 +43394,7 @@
         "momentum": 25.5
       },
       "entry_tier": 1,
-      "rank_score": 45.9,
+      "rank_score": 46.3,
       "success_used": 63.6,
       "final_rank": 143,
       "top_fill": false
@@ -43628,8 +43628,8 @@
       "hist_basis": "OOS",
       "rank": 76,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 13.0,
       "momentum_hits": [
         "MA5 上彎",
@@ -43683,7 +43683,7 @@
         "momentum": 13.0
       },
       "entry_tier": 1,
-      "rank_score": 45.2,
+      "rank_score": 45.8,
       "success_used": 63.6,
       "final_rank": 144,
       "top_fill": false
@@ -43917,7 +43917,7 @@
       "hist_basis": "OOS",
       "rank": 73,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -43973,7 +43973,7 @@
         "momentum": 25.5
       },
       "entry_tier": 1,
-      "rank_score": 44.7,
+      "rank_score": 45.1,
       "success_used": 63.6,
       "final_rank": 145,
       "top_fill": false
@@ -44207,8 +44207,8 @@
       "hist_basis": "OOS",
       "rank": 74,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 0.0,
       "momentum_hits": [
         "RR 1.20"
@@ -44262,7 +44262,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 39.3,
+      "rank_score": 39.9,
       "success_used": 63.6,
       "final_rank": 146,
       "top_fill": false
@@ -44503,7 +44503,7 @@
       "hist_basis": "OOS",
       "rank": 96,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -44559,7 +44559,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 29.9,
+      "rank_score": 30.0,
       "success_used": 63.4,
       "final_rank": 147,
       "top_fill": false
@@ -44800,7 +44800,7 @@
       "hist_basis": "OOS",
       "rank": 103,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -44856,7 +44856,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 29.3,
+      "rank_score": 29.4,
       "success_used": 63.4,
       "final_rank": 148,
       "top_fill": false
@@ -45099,7 +45099,7 @@
       "hist_basis": "OOS",
       "rank": 100,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -45155,7 +45155,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 28.2,
+      "rank_score": 28.3,
       "success_used": 63.4,
       "final_rank": 149,
       "top_fill": false
@@ -45411,7 +45411,7 @@
       "hist_basis": "OOS",
       "rank": 94,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 26.0,
       "momentum_hits": [
@@ -45469,7 +45469,7 @@
         "momentum": 26.0
       },
       "entry_tier": 2,
-      "rank_score": 21.3,
+      "rank_score": 21.1,
       "demoted_by_crash": true,
       "success_used": 63.4,
       "final_rank": 150,
@@ -45704,8 +45704,8 @@
       "hist_basis": "OOS",
       "rank": 102,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [],
       "momentum_warns": [
@@ -45757,7 +45757,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 24.9,
+      "rank_score": 24.4,
       "success_used": 63.4,
       "final_rank": 151,
       "top_fill": false
@@ -45998,7 +45998,7 @@
       "hist_basis": "OOS",
       "rank": 106,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -46055,7 +46055,7 @@
         "momentum": 50.5
       },
       "entry_tier": 0,
-      "rank_score": 40.9,
+      "rank_score": 41.0,
       "success_used": 63.4,
       "final_rank": 152,
       "top_fill": false
@@ -46289,8 +46289,8 @@
       "hist_basis": "OOS",
       "rank": 98,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.6,
+      "overseas_note": "海外偏多（推估 +0.36%），金融 的敏感度 β 0.60，-0.6 分",
       "momentum_score": 0.0,
       "momentum_hits": [],
       "momentum_warns": [
@@ -46342,7 +46342,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 25.4,
+      "rank_score": 24.9,
       "success_used": 63.4,
       "final_rank": 153,
       "top_fill": false
@@ -46583,8 +46583,8 @@
       "hist_basis": "OOS",
       "rank": 104,
       "mark": {},
-      "overseas_adj": -0.1,
-      "overseas_note": "",
+      "overseas_adj": -0.9,
+      "overseas_note": "海外偏多（推估 +0.36%），電信 的敏感度 β 0.45，-0.9 分",
       "momentum_score": 0.0,
       "momentum_hits": [],
       "momentum_warns": [
@@ -46636,7 +46636,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 27.3,
+      "rank_score": 26.5,
       "success_used": 63.4,
       "final_rank": 154,
       "top_fill": false
@@ -46877,7 +46877,7 @@
       "hist_basis": "OOS",
       "rank": 116,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [],
@@ -46930,7 +46930,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 24.9,
+      "rank_score": 24.7,
       "success_used": 63.4,
       "final_rank": 155,
       "top_fill": false
@@ -47183,7 +47183,7 @@
       "hist_basis": "OOS",
       "rank": 93,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -47238,7 +47238,7 @@
         "momentum": 0.0
       },
       "entry_tier": 2,
-      "rank_score": 18.9,
+      "rank_score": 18.7,
       "demoted_by_crash": true,
       "success_used": 63.4,
       "final_rank": 156,
@@ -47480,7 +47480,7 @@
       "hist_basis": "OOS",
       "rank": 109,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [],
@@ -47533,7 +47533,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 23.6,
+      "rank_score": 23.4,
       "success_used": 63.4,
       "final_rank": 157,
       "top_fill": false
@@ -47774,7 +47774,7 @@
       "hist_basis": "OOS",
       "rank": 111,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 50.5,
       "momentum_hits": [
@@ -47831,7 +47831,7 @@
         "momentum": 50.5
       },
       "entry_tier": 0,
-      "rank_score": 37.9,
+      "rank_score": 38.0,
       "success_used": 63.4,
       "final_rank": 158,
       "top_fill": false
@@ -48087,7 +48087,7 @@
       "hist_basis": "OOS",
       "rank": 114,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -48144,7 +48144,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 28.9,
+      "rank_score": 29.3,
       "success_used": 63.4,
       "final_rank": 159,
       "top_fill": false
@@ -48391,7 +48391,7 @@
       "hist_basis": "OOS",
       "rank": 90,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 75.5,
       "momentum_hits": [
@@ -48450,7 +48450,7 @@
         "momentum": 75.5
       },
       "entry_tier": 0,
-      "rank_score": 36.2,
+      "rank_score": 36.0,
       "demoted_by_crash": true,
       "success_used": 63.4,
       "final_rank": 160,
@@ -48692,7 +48692,7 @@
       "hist_basis": "OOS",
       "rank": 97,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -48747,299 +48747,9 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 25.1,
+      "rank_score": 24.9,
       "success_used": 63.4,
       "final_rank": 161,
-      "top_fill": false
-    },
-    {
-      "code": "2481",
-      "name": "強茂",
-      "sector": "其他",
-      "group": "其他",
-      "asset_type": "other",
-      "close": 174.5,
-      "prev_close": 173.0,
-      "day_open": 173.0,
-      "day_high": 181.0,
-      "day_low": 172.0,
-      "lot_cost": 174500,
-      "chg_pct": 0.8670520231213841,
-      "rsi": 63.290351835575905,
-      "vol_ratio": 0.8336037653263562,
-      "volume": 35754052.0,
-      "vol_ma20": 42890943.5,
-      "ma5": 171.0,
-      "ma10": 164.9,
-      "ma20": 159.4,
-      "ma60": 154.75,
-      "ma20_slope": 5.07580751483192,
-      "ma60_slope": -1.391248937977907,
-      "bias20": 9.473023839397744,
-      "pos20": 0.8142857142857143,
-      "pct_above_low20": 19.52054794520548,
-      "pct_below_high20": 3.72492836676217,
-      "pct_below_high5": 3.72492836676217,
-      "pct_below_high60": 33.2378223495702,
-      "atr": 10.775293987990256,
-      "atr_pct": 6.174953574779517,
-      "macd_hist": 1.7481090834227802,
-      "macd_hist_prev": 1.7541449819449815,
-      "ma5_slope": 1.9070321811680557,
-      "target": 181.0,
-      "support": 159.4,
-      "score": 39.0,
-      "opportunity": 39.0,
-      "risk": 0.0,
-      "breakdown": {
-        "entry": {
-          "points": 13.6,
-          "max": 25,
-          "ratio": 0.544
-        },
-        "trend": {
-          "points": 16.9,
-          "max": 20,
-          "ratio": 0.844
-        },
-        "reversal": {
-          "points": 3.9,
-          "max": 15,
-          "ratio": 0.26
-        },
-        "volume": {
-          "points": 0.0,
-          "max": 15,
-          "ratio": 0.0
-        },
-        "rr": {
-          "points": 0.7,
-          "max": 15,
-          "ratio": 0.048
-        }
-      },
-      "risk_items": [],
-      "stars": {
-        "trend": "★★★★☆",
-        "entry": "★★★☆☆",
-        "volume": "☆☆☆☆☆",
-        "reversal": "★☆☆☆☆",
-        "risk": "☆☆☆☆☆"
-      },
-      "risk_level": "低",
-      "kind": "多頭回檔",
-      "headline": "多頭回檔至支撐（乖離 +9.5%）",
-      "why": "趨勢結構強、進場位置好；距前高仍有 3.7% 空間；目前追高風險低。",
-      "main_risk": "目前未偵測到明顯的追高或破底風險",
-      "swing_low": 1.7,
-      "swing_high": 3.7,
-      "upside_pct": 3.72,
-      "downside_pct": 8.65,
-      "rr_ratio": 0.43,
-      "reasons": [
-        "位置 81%、距前高 3.7%、乖離 +9.5%，進場點普通",
-        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +5.1%）",
-        "MA5 開始上彎、近期低點未再破",
-        "量能 0.8 倍，低於 20 日均量，買盤不足",
-        "上檔至 181.0 約 +3.7%，下檔支撐 159.4 約 −8.7%，風險報酬比 0.4:1"
-      ],
-      "flags": [],
-      "hist_success": 70.3,
-      "hist_success_raw": 74.5,
-      "hist_avg_days": 4.4,
-      "hist_avg_days_win": 2.4,
-      "hist_calibrated": 70.3,
-      "hist_raw": 74.5,
-      "hist_samples": 98,
-      "hist_avg_return": -0.52,
-      "hist_pf": 0.77,
-      "hist_mdd": -4.66,
-      "hist_source": "oos_regime",
-      "hist_expectancy": -0.346,
-      "hist_confidence": 3,
-      "plan": {
-        "available": true,
-        "hold_days": 1,
-        "status": "可觀察進場",
-        "entry_icon": "🟡",
-        "entry_status": "等待確認，不建議立即進場",
-        "entry_note": "收盤站回MA5 171.00，但量能普通（0.83×）",
-        "ref_price": 171.0,
-        "ref_label": "MA5",
-        "vol_ratio": 0.83,
-        "vol_tier": "weak",
-        "rr_tier": "poor",
-        "rr_tag": "⚠ 風報偏差（0.50），不追價",
-        "dist_trigger_pct": 4.03,
-        "intraday_checked": false,
-        "note": "型態成立，明天站上觸發價可留意",
-        "trigger": 181.54,
-        "invalidation": 171.46,
-        "stop": 170.76,
-        "target1": 186.93,
-        "target2": 191.24,
-        "rr": 0.5,
-        "risk_pct": 5.9,
-        "atr_pct": 6.2
-      },
-      "quote_date": "2026-09-24",
-      "spark": {
-        "c": [
-          117.5,
-          129.0,
-          130.0,
-          134.0,
-          139.0,
-          133.0,
-          137.5,
-          141.5,
-          139.0,
-          143.0,
-          138.0,
-          144.5,
-          139.5,
-          136.5,
-          138.5,
-          133.0,
-          134.0,
-          137.0,
-          150.5,
-          146.5,
-          154.0,
-          151.0,
-          157.0,
-          148.0,
-          156.0,
-          156.0,
-          158.0,
-          152.5,
-          152.0,
-          154.5,
-          150.0,
-          159.0,
-          153.5,
-          168.5,
-          163.0,
-          168.5,
-          168.0,
-          171.0,
-          173.0,
-          174.5
-        ],
-        "v": [
-          21268953,
-          8024306,
-          33192372,
-          28619327,
-          25571545,
-          17378333,
-          11814605,
-          24344208,
-          15270465,
-          36136883,
-          16627710,
-          23354044,
-          42148201,
-          45689068,
-          32700481,
-          16032556,
-          9411577,
-          7980226,
-          40353759,
-          36320492,
-          42606146,
-          22082974,
-          36387336,
-          21327766,
-          66498096,
-          71771734,
-          60890518,
-          26855469,
-          23255435,
-          42970542,
-          27272517,
-          61139738,
-          58386182,
-          62194518,
-          67322321,
-          39944652,
-          19412600,
-          32263968,
-          39482306,
-          35754052
-        ]
-      },
-      "prev_low": 172.0,
-      "regime": "bull",
-      "hist_expectancy_raw": -0.522,
-      "hist_shrunk": -0.346,
-      "oos_reliability": "中",
-      "oos_rel_reasons": [
-        "walk-forward 3/3 段正 EV"
-      ],
-      "in_sample_discount": null,
-      "hist_basis": "OOS",
-      "rank": 105,
-      "mark": {},
-      "overseas_adj": -0.0,
-      "overseas_note": "",
-      "momentum_score": 25.5,
-      "momentum_hits": [
-        "收盤站上 MA5",
-        "MA5 上彎",
-        "今日 +0.87% 在合理帶"
-      ],
-      "momentum_warns": [
-        "距 MA20 乖離 +9.5%，追高風險"
-      ],
-      "momentum_tier": 2,
-      "momentum_label": "轉弱／追高風險",
-      "momentum_icon": "🔴",
-      "nextday": {
-        "top_hit_rate": 24.0,
-        "samples": 1029,
-        "win_rate": 49.9,
-        "calibrated_win_rate": 49.9,
-        "crash_rate": 24.8,
-        "calibrated_crash_rate": 24.5,
-        "avg": 0.17,
-        "median": 0.0,
-        "p10": -6.52,
-        "worst": -19.27,
-        "avg_gap": 0.55,
-        "gap_down_rate": 18.8
-      },
-      "nextday_source": "完整條件",
-      "crash_penalty": 4.9,
-      "nextday_gap_pen": 2.2,
-      "nextday_avg_adj": 2.0,
-      "nextday_hit_adj": 3.2,
-      "final_score": 28.7,
-      "evidence_quality": 45.4,
-      "position_quality": 6.1,
-      "momentum_quality": 25.5,
-      "model_quality": 45.4,
-      "entry_quality": 6.1,
-      "final_parts": {
-        "evidence": {
-          "success": 75.8,
-          "ev": 21.8,
-          "pf": 0.0,
-          "winrate": 100.0,
-          "mdd": 41.8,
-          "samples": 24.5
-        },
-        "position": {
-          "position": 7.1,
-          "rr": 0.0,
-          "distance": 19.4
-        },
-        "momentum": 25.5
-      },
-      "entry_tier": 1,
-      "rank_score": 23.8,
-      "success_used": 63.4,
-      "final_rank": 162,
       "top_fill": false
     },
     {
@@ -49278,8 +48988,8 @@
       "hist_basis": "OOS",
       "rank": 115,
       "mark": {},
-      "overseas_adj": 0.1,
-      "overseas_note": "",
+      "overseas_adj": 0.7,
+      "overseas_note": "海外偏多（推估 +0.36%），半導體 對美股敏感（β 1.35），加 0.7 分",
       "momentum_score": 0.5,
       "momentum_hits": [
         "MA5 上彎"
@@ -49332,7 +49042,297 @@
         "momentum": 0.5
       },
       "entry_tier": 1,
-      "rank_score": 23.7,
+      "rank_score": 24.3,
+      "success_used": 63.4,
+      "final_rank": 162,
+      "top_fill": false
+    },
+    {
+      "code": "2481",
+      "name": "強茂",
+      "sector": "其他",
+      "group": "其他",
+      "asset_type": "other",
+      "close": 174.5,
+      "prev_close": 173.0,
+      "day_open": 173.0,
+      "day_high": 181.0,
+      "day_low": 172.0,
+      "lot_cost": 174500,
+      "chg_pct": 0.8670520231213841,
+      "rsi": 63.290351835575905,
+      "vol_ratio": 0.8336037653263562,
+      "volume": 35754052.0,
+      "vol_ma20": 42890943.5,
+      "ma5": 171.0,
+      "ma10": 164.9,
+      "ma20": 159.4,
+      "ma60": 154.75,
+      "ma20_slope": 5.07580751483192,
+      "ma60_slope": -1.391248937977907,
+      "bias20": 9.473023839397744,
+      "pos20": 0.8142857142857143,
+      "pct_above_low20": 19.52054794520548,
+      "pct_below_high20": 3.72492836676217,
+      "pct_below_high5": 3.72492836676217,
+      "pct_below_high60": 33.2378223495702,
+      "atr": 10.775293987990256,
+      "atr_pct": 6.174953574779517,
+      "macd_hist": 1.7481090834227802,
+      "macd_hist_prev": 1.7541449819449815,
+      "ma5_slope": 1.9070321811680557,
+      "target": 181.0,
+      "support": 159.4,
+      "score": 39.0,
+      "opportunity": 39.0,
+      "risk": 0.0,
+      "breakdown": {
+        "entry": {
+          "points": 13.6,
+          "max": 25,
+          "ratio": 0.544
+        },
+        "trend": {
+          "points": 16.9,
+          "max": 20,
+          "ratio": 0.844
+        },
+        "reversal": {
+          "points": 3.9,
+          "max": 15,
+          "ratio": 0.26
+        },
+        "volume": {
+          "points": 0.0,
+          "max": 15,
+          "ratio": 0.0
+        },
+        "rr": {
+          "points": 0.7,
+          "max": 15,
+          "ratio": 0.048
+        }
+      },
+      "risk_items": [],
+      "stars": {
+        "trend": "★★★★☆",
+        "entry": "★★★☆☆",
+        "volume": "☆☆☆☆☆",
+        "reversal": "★☆☆☆☆",
+        "risk": "☆☆☆☆☆"
+      },
+      "risk_level": "低",
+      "kind": "多頭回檔",
+      "headline": "多頭回檔至支撐（乖離 +9.5%）",
+      "why": "趨勢結構強、進場位置好；距前高仍有 3.7% 空間；目前追高風險低。",
+      "main_risk": "目前未偵測到明顯的追高或破底風險",
+      "swing_low": 1.7,
+      "swing_high": 3.7,
+      "upside_pct": 3.72,
+      "downside_pct": 8.65,
+      "rr_ratio": 0.43,
+      "reasons": [
+        "位置 81%、距前高 3.7%、乖離 +9.5%，進場點普通",
+        "多頭排列且 MA20／MA60 同步向上（MA20 斜率 +5.1%）",
+        "MA5 開始上彎、近期低點未再破",
+        "量能 0.8 倍，低於 20 日均量，買盤不足",
+        "上檔至 181.0 約 +3.7%，下檔支撐 159.4 約 −8.7%，風險報酬比 0.4:1"
+      ],
+      "flags": [],
+      "hist_success": 70.3,
+      "hist_success_raw": 74.5,
+      "hist_avg_days": 4.4,
+      "hist_avg_days_win": 2.4,
+      "hist_calibrated": 70.3,
+      "hist_raw": 74.5,
+      "hist_samples": 98,
+      "hist_avg_return": -0.52,
+      "hist_pf": 0.77,
+      "hist_mdd": -4.66,
+      "hist_source": "oos_regime",
+      "hist_expectancy": -0.346,
+      "hist_confidence": 3,
+      "plan": {
+        "available": true,
+        "hold_days": 1,
+        "status": "可觀察進場",
+        "entry_icon": "🟡",
+        "entry_status": "等待確認，不建議立即進場",
+        "entry_note": "收盤站回MA5 171.00，但量能普通（0.83×）",
+        "ref_price": 171.0,
+        "ref_label": "MA5",
+        "vol_ratio": 0.83,
+        "vol_tier": "weak",
+        "rr_tier": "poor",
+        "rr_tag": "⚠ 風報偏差（0.50），不追價",
+        "dist_trigger_pct": 4.03,
+        "intraday_checked": false,
+        "note": "型態成立，明天站上觸發價可留意",
+        "trigger": 181.54,
+        "invalidation": 171.46,
+        "stop": 170.76,
+        "target1": 186.93,
+        "target2": 191.24,
+        "rr": 0.5,
+        "risk_pct": 5.9,
+        "atr_pct": 6.2
+      },
+      "quote_date": "2026-09-24",
+      "spark": {
+        "c": [
+          117.5,
+          129.0,
+          130.0,
+          134.0,
+          139.0,
+          133.0,
+          137.5,
+          141.5,
+          139.0,
+          143.0,
+          138.0,
+          144.5,
+          139.5,
+          136.5,
+          138.5,
+          133.0,
+          134.0,
+          137.0,
+          150.5,
+          146.5,
+          154.0,
+          151.0,
+          157.0,
+          148.0,
+          156.0,
+          156.0,
+          158.0,
+          152.5,
+          152.0,
+          154.5,
+          150.0,
+          159.0,
+          153.5,
+          168.5,
+          163.0,
+          168.5,
+          168.0,
+          171.0,
+          173.0,
+          174.5
+        ],
+        "v": [
+          21268953,
+          8024306,
+          33192372,
+          28619327,
+          25571545,
+          17378333,
+          11814605,
+          24344208,
+          15270465,
+          36136883,
+          16627710,
+          23354044,
+          42148201,
+          45689068,
+          32700481,
+          16032556,
+          9411577,
+          7980226,
+          40353759,
+          36320492,
+          42606146,
+          22082974,
+          36387336,
+          21327766,
+          66498096,
+          71771734,
+          60890518,
+          26855469,
+          23255435,
+          42970542,
+          27272517,
+          61139738,
+          58386182,
+          62194518,
+          67322321,
+          39944652,
+          19412600,
+          32263968,
+          39482306,
+          35754052
+        ]
+      },
+      "prev_low": 172.0,
+      "regime": "bull",
+      "hist_expectancy_raw": -0.522,
+      "hist_shrunk": -0.346,
+      "oos_reliability": "中",
+      "oos_rel_reasons": [
+        "walk-forward 3/3 段正 EV"
+      ],
+      "in_sample_discount": null,
+      "hist_basis": "OOS",
+      "rank": 105,
+      "mark": {},
+      "overseas_adj": -0.2,
+      "overseas_note": "",
+      "momentum_score": 25.5,
+      "momentum_hits": [
+        "收盤站上 MA5",
+        "MA5 上彎",
+        "今日 +0.87% 在合理帶"
+      ],
+      "momentum_warns": [
+        "距 MA20 乖離 +9.5%，追高風險"
+      ],
+      "momentum_tier": 2,
+      "momentum_label": "轉弱／追高風險",
+      "momentum_icon": "🔴",
+      "nextday": {
+        "top_hit_rate": 24.0,
+        "samples": 1029,
+        "win_rate": 49.9,
+        "calibrated_win_rate": 49.9,
+        "crash_rate": 24.8,
+        "calibrated_crash_rate": 24.5,
+        "avg": 0.17,
+        "median": 0.0,
+        "p10": -6.52,
+        "worst": -19.27,
+        "avg_gap": 0.55,
+        "gap_down_rate": 18.8
+      },
+      "nextday_source": "完整條件",
+      "crash_penalty": 4.9,
+      "nextday_gap_pen": 2.2,
+      "nextday_avg_adj": 2.0,
+      "nextday_hit_adj": 3.2,
+      "final_score": 28.7,
+      "evidence_quality": 45.4,
+      "position_quality": 6.1,
+      "momentum_quality": 25.5,
+      "model_quality": 45.4,
+      "entry_quality": 6.1,
+      "final_parts": {
+        "evidence": {
+          "success": 75.8,
+          "ev": 21.8,
+          "pf": 0.0,
+          "winrate": 100.0,
+          "mdd": 41.8,
+          "samples": 24.5
+        },
+        "position": {
+          "position": 7.1,
+          "rr": 0.0,
+          "distance": 19.4
+        },
+        "momentum": 25.5
+      },
+      "entry_tier": 1,
+      "rank_score": 23.6,
       "success_used": 63.4,
       "final_rank": 163,
       "top_fill": false
@@ -49566,7 +49566,7 @@
       "hist_basis": "OOS",
       "rank": 92,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 0.5,
       "momentum_hits": [
@@ -49620,7 +49620,7 @@
         "momentum": 0.5
       },
       "entry_tier": 1,
-      "rank_score": 21.7,
+      "rank_score": 21.5,
       "success_used": 63.4,
       "final_rank": 164,
       "top_fill": false
@@ -49870,7 +49870,7 @@
       "hist_basis": "OOS",
       "rank": 99,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -49926,7 +49926,7 @@
         "momentum": 25.5
       },
       "entry_tier": 2,
-      "rank_score": 15.5,
+      "rank_score": 15.3,
       "demoted_by_crash": true,
       "success_used": 63.4,
       "final_rank": 165,
@@ -50168,7 +50168,7 @@
       "hist_basis": "OOS",
       "rank": 83,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -50225,7 +50225,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 28.9,
+      "rank_score": 28.7,
       "demoted_by_crash": true,
       "success_used": 60.2,
       "final_rank": 166,
@@ -50473,7 +50473,7 @@
       "hist_basis": "OOS",
       "rank": 80,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -50530,7 +50530,7 @@
         "momentum": 38.0
       },
       "entry_tier": 2,
-      "rank_score": 15.5,
+      "rank_score": 15.3,
       "demoted_by_crash": true,
       "success_used": 60.2,
       "final_rank": 167,
@@ -51073,7 +51073,7 @@
       "hist_basis": "OOS",
       "rank": 26,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -51129,7 +51129,7 @@
         "momentum": 25.5
       },
       "entry_tier": 1,
-      "rank_score": 43.5,
+      "rank_score": 43.3,
       "success_used": 58.9,
       "final_rank": 169,
       "top_fill": false
@@ -51372,7 +51372,7 @@
       "hist_basis": "OOS",
       "rank": 28,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -51428,7 +51428,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 41.6,
+      "rank_score": 42.0,
       "success_used": 58.9,
       "final_rank": 170,
       "top_fill": false
@@ -51671,7 +51671,7 @@
       "hist_basis": "OOS",
       "rank": 24,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -51727,7 +51727,7 @@
         "momentum": 25.5
       },
       "entry_tier": 1,
-      "rank_score": 41.5,
+      "rank_score": 41.3,
       "success_used": 58.9,
       "final_rank": 171,
       "top_fill": false
@@ -51970,7 +51970,7 @@
       "hist_basis": "OOS",
       "rank": 25,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.4,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -52026,7 +52026,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 40.5,
+      "rank_score": 40.9,
       "success_used": 58.9,
       "final_rank": 172,
       "top_fill": false
@@ -52269,7 +52269,7 @@
       "hist_basis": "OOS",
       "rank": 29,
       "mark": {},
-      "overseas_adj": 0.0,
+      "overseas_adj": 0.1,
       "overseas_note": "",
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -52325,7 +52325,7 @@
         "momentum": 0.0
       },
       "entry_tier": 1,
-      "rank_score": 38.0,
+      "rank_score": 38.1,
       "success_used": 58.9,
       "final_rank": 173,
       "top_fill": false
@@ -52568,7 +52568,7 @@
       "hist_basis": "OOS",
       "rank": 30,
       "mark": {},
-      "overseas_adj": -0.0,
+      "overseas_adj": -0.2,
       "overseas_note": "",
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -52624,7 +52624,7 @@
         "momentum": 1.0
       },
       "entry_tier": 1,
-      "rank_score": 35.0,
+      "rank_score": 34.8,
       "success_used": 58.9,
       "final_rank": 174,
       "top_fill": false
