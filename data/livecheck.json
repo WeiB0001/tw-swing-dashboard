@@ -1,59 +1,59 @@
 {
-  "days": 24,
-  "period": "2026-08-21 ～ 2026-09-18",
-  "pending": 268,
+  "days": 31,
+  "period": "2026-08-21 ～ 2026-09-24",
+  "pending": 737,
   "cost_pct": 0.5,
   "exit_max_days": 10,
   "groups": {
     "Top 3": {
-      "n": 52,
-      "success_rate": 90.4,
-      "avg_days": 3.0,
-      "ev": 0.87,
-      "median": 0.58,
-      "pf": 2.48,
-      "avg_mdd": -2.99,
+      "n": 64,
+      "success_rate": 89.1,
+      "avg_days": 3.1,
+      "ev": 0.82,
+      "median": 0.69,
+      "pf": 2.22,
+      "avg_mdd": -2.93,
       "worst": -10.03
     },
     "Top 10": {
-      "n": 197,
+      "n": 236,
       "success_rate": 84.3,
       "avg_days": 3.4,
-      "ev": 0.51,
-      "median": 0.89,
-      "pf": 1.51,
-      "avg_mdd": -3.02,
-      "worst": -14.92
+      "ev": 0.45,
+      "median": 0.77,
+      "pf": 1.44,
+      "avg_mdd": -2.96,
+      "worst": -17.35
     },
     "11–30": {
-      "n": 421,
-      "success_rate": 88.4,
-      "avg_days": 3.1,
-      "ev": 1.05,
-      "median": 0.9,
-      "pf": 2.73,
-      "avg_mdd": -2.43,
+      "n": 498,
+      "success_rate": 89.8,
+      "avg_days": 3.0,
+      "ev": 1.09,
+      "median": 0.86,
+      "pf": 3.06,
+      "avg_mdd": -2.32,
       "worst": -17.13
     },
     "31 名以後": {
-      "n": 2888,
-      "success_rate": 86.2,
+      "n": 3368,
+      "success_rate": 86.9,
       "avg_days": 3.2,
-      "ev": 0.82,
-      "median": 1.13,
-      "pf": 1.81,
-      "avg_mdd": -3.23,
-      "worst": -27.02
+      "ev": 0.88,
+      "median": 1.11,
+      "pf": 1.93,
+      "avg_mdd": -3.13,
+      "worst": -27.06
     }
   },
   "all": {
-    "n": 3506,
-    "success_rate": 86.3,
+    "n": 4102,
+    "success_rate": 87.1,
     "avg_days": 3.2,
-    "ev": 0.83,
-    "median": 1.1,
-    "pf": 1.87,
-    "avg_mdd": -3.12,
-    "worst": -27.02
+    "ev": 0.88,
+    "median": 1.06,
+    "pf": 1.98,
+    "avg_mdd": -3.02,
+    "worst": -27.06
   }
 }
