@@ -1,5 +1,5 @@
 {
- "cash": 40810.965635,
+ "cash": 6.100009999994654,
  "positions": [
   {
    "code": "2359",
@@ -18,21 +18,24 @@
    "shares": 6,
    "entry": 5720.0,
    "entry_date": "2026-09-29",
-   "held": 0,
+   "held": 1,
    "stop": 5575.21,
    "target1": 6547.36,
    "pattern": "弱勢未止跌"
-  }
- ],
- "pending": [
+  },
   {
    "code": "2845",
-   "budget": 40810.97,
+   "name": "遠東銀",
+   "shares": 3075,
+   "entry": 13.25,
+   "entry_date": "2026-09-30",
+   "held": 0,
    "stop": 13.07,
    "target1": 13.61,
    "pattern": "弱勢未止跌"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "3665",
@@ -278,10 +281,15 @@
    "date": "2026-09-29",
    "equity": 108091.97,
    "index": 48024.6
+  },
+  {
+   "date": "2026-09-30",
+   "equity": 109099.6,
+   "index": 47631.96
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-09-29",
+ "last_date": "2026-09-30",
  "forward_start": "2026-09-08",
  "mode": "forward_test"
 }
