@@ -1,5 +1,5 @@
 {
- "cash": 40136.064634999995,
+ "cash": 641.9121349999914,
  "positions": [
   {
    "code": "2359",
@@ -18,21 +18,24 @@
    "shares": 6,
    "entry": 5720.0,
    "entry_date": "2026-09-29",
-   "held": 2,
+   "held": 3,
    "stop": 5575.21,
    "target1": 6547.36,
    "pattern": "弱勢未止跌"
-  }
- ],
- "pending": [
+  },
   {
    "code": "1590",
-   "budget": 40136.06,
+   "name": "亞德客-KY",
+   "shares": 33,
+   "entry": 1195.0,
+   "entry_date": "2026-10-02",
+   "held": 0,
    "stop": 1148.35,
    "target1": 1267.95,
    "pattern": "弱勢未止跌"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "3665",
@@ -300,10 +303,15 @@
    "date": "2026-10-01",
    "equity": 107987.06,
    "index": 47940.13
+  },
+  {
+   "date": "2026-10-02",
+   "equity": 107597.91,
+   "index": null
   }
  ],
  "start_index": 45224.29,
- "last_date": "2026-10-01",
+ "last_date": "2026-10-02",
  "forward_start": "2026-09-08",
  "mode": "forward_test"
 }
