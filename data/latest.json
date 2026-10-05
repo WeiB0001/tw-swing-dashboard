@@ -44,12 +44,12 @@
       "bootstrap_block_days": 10,
       "bootstrap_reps": 500
     },
-    "generated_at": "2026-10-05 20:07",
-    "generated_iso": "2026-10-05T20:07:15+08:00",
+    "generated_at": "2026-10-05 20:39",
+    "generated_iso": "2026-10-05T20:39:11+08:00",
     "trade_date": "2026-10-05",
     "run_type": "close",
-    "close_run_at": "2026-10-05 20:07",
-    "ranked_at": "2026-10-05 20:07:15",
+    "close_run_at": "2026-10-05 20:39",
+    "ranked_at": "2026-10-05 20:39:11",
     "applies_to": "2026-10-06",
     "premarket_at": null,
     "data_date": "2026-10-05",
@@ -98,19 +98,19 @@
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": -0.12
+        "chg_pct": -0.21
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": -0.04
+        "chg_pct": -0.02
       }
     ],
     "forecast": {
       "available": true,
-      "point": 0.08,
-      "low": -1.31,
-      "high": 1.47,
-      "basis": "以那斯達克期貨 -0.12% 代入",
+      "point": 0.02,
+      "low": -1.37,
+      "high": 1.41,
+      "basis": "以那斯達克期貨 -0.21% 代入",
       "r2": 0.328,
       "samples": 250
     },
