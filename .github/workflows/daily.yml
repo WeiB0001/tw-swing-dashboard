@@ -1,6 +1,13 @@
 name: 每日更新（20:00 收盤 / 06:00 盤前海外）
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - "templates/dashboard.html.j2"
+      - "tests/**"
+      - ".github/workflows/daily.yml"
   schedule:
     # GitHub Actions 的 cron 一律使用 UTC，台北時間 = UTC + 8
     # 晚上 20:00：完整的台股收盤更新（行情 → 排名 → 雷達 → 明日強勢 → 模擬組合）
@@ -48,17 +55,15 @@ jobs:
           restore-keys: |
             tw-history-
 
-      # 第一次部署（或回測檔遺失）時先補跑一次回測，
-      # 否則要等到週日排程才會有勝率，頁面會一直顯示「樣本不足」。
-      - name: 首次補跑回測（僅在 data/backtest.json 不存在時）
+      - name: 驗證淨利目標與排序規則
+        run: python -m unittest discover -s tests -v
+
+      - name: 回測口徑檢查（目標或規則改變時重算）
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
         run: |
-          if [ ! -f data/backtest.json ]; then
-            echo "找不到 data/backtest.json，先補跑一次回測（約 10～20 分鐘）"
-            python scripts/backtest.py --days 180 || echo "回測失敗，本次先以技術分數排名"
-          else
-            echo "已有 data/backtest.json，略過"
+          if ! python scripts/strategy.py; then
+            python scripts/backtest.py --days 250
           fi
 
       # 依觸發時間決定要跑哪一種：

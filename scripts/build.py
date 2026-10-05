@@ -39,6 +39,8 @@ import tracking
 import universe as universe_mod
 import render
 import scoring
+import strategy
+import ranking
 
 class DataUnavailable(Exception):
     """
@@ -182,71 +184,28 @@ def _confidence(n, oos: bool = False) -> int:
 
 
 def oos_reliability(bt: dict) -> dict:
-    """
-    比較 in-sample 與 OOS 的 EV / PF / 勝率，判斷這份統計有多可信，
-    並據此決定 in-sample 要打多重的折。
-
-    邏輯很簡單：OOS 跟 in-sample 落差越大，代表越可能是過度擬合；
-    OOS 本身為負，就幾乎不該相信 in-sample 的數字。
-    """
-    o = (bt or {}).get("oos_overall") or {}
-    ins = None
-    for b_ in ((bt or {}).get("topk") or {}).get("all", {}).values():
-        ins = b_
-        break
+    """Describe chronological replay evidence without comparing different pools."""
     wf = (bt or {}).get("walk_forward") or {}
-
-    n = int(o.get("samples") or 0)
-    ev = o.get("expectancy")
-    pf = o.get("profit_factor")
-    stab = float(wf.get("stability") or 0)
-
-    reasons = []
-    if not n:
-        return {"level": "無", "discount": C.IN_SAMPLE_DISCOUNT, "n": 0,
-                "ev": None, "pf": None, "stability": stab,
-                "reasons": ["沒有 out-of-sample 統計"]}
-
-    ev = float(ev or 0)
-    pf = float(pf or 0)
-    ins_ev = float((ins or {}).get("expectancy") or 0)
-    gap = ins_ev - ev                       # in-sample 比 OOS 好多少
-
-    hi, mid = C.OOS_REL_HIGH, C.OOS_REL_MID
-    if n >= hi["n"] and ev > hi["ev"] and pf > hi["pf"]:
-        level = "高"
-    elif n >= mid["n"] and ev > mid["ev"] and pf > mid["pf"]:
-        level = "中"
-    else:
-        level = "低"
-
-    if n < mid["n"]:
-        reasons.append("OOS 樣本只有 %d 筆（建議 300 筆以上）" % n)
-    if ev <= 0:
-        reasons.append("OOS 期望值 %+.2f%% 為負" % ev)
-    if pf <= 1:
-        reasons.append("OOS 獲利因子 %.2f 未過 1" % pf)
-    if gap > 0.3:
-        reasons.append("in-sample 比 OOS 好 %.2f 個百分點，過度擬合跡象" % gap)
+    n = int(wf.get("samples") or 0)
+    ev, pf, lift = wf.get("expectancy"), wf.get("profit_factor"), wf.get("lift_ev")
+    reasons = ["同日及連續日結果相關，筆數不等於獨立樣本數"]
+    if not wf.get("available"):
+        reasons.append(wf.get("reason") or "尚無可用樣本外結果")
+    if n < 100:
+        reasons.append("樣本不足 100 筆")
+    if (ev or 0) <= 0:
+        reasons.append("樣本外平均報酬尚未轉正")
+    if (pf or 0) <= 1:
+        reasons.append("樣本外 PF 尚未超過 1")
+    if (lift or 0) <= 0:
+        reasons.append("同日候選報酬尚未優於股票池平均")
+    if (wf.get("lift_success_pp") or 0) <= 0:
+        reasons.append("同日候選達標率尚未優於股票池平均")
     if wf.get("total_folds"):
-        if stab < 0.6:
-            reasons.append("walk-forward 只有 %d/%d 段是正 EV"
-                           % (wf.get("positive_folds", 0), wf["total_folds"]))
-        else:
-            reasons.append("walk-forward %d/%d 段正 EV"
-                           % (wf.get("positive_folds", 0), wf["total_folds"]))
-
-    # 動態折扣：OOS 越可信、與 in-sample 落差越小，in-sample 才被多採用一點
-    base = {"高": C.IN_SAMPLE_DISCOUNT_MAX, "中": 0.30, "低": C.IN_SAMPLE_DISCOUNT_MIN}[level]
-    if ev <= 0:
-        base = C.IN_SAMPLE_DISCOUNT_MIN
-    if gap > 0.5:
-        base *= 0.6
-    discount = round(max(C.IN_SAMPLE_DISCOUNT_MIN, min(C.IN_SAMPLE_DISCOUNT_MAX, base)), 3)
-
-    return {"level": level, "discount": discount, "n": n, "ev": round(ev, 3),
-            "pf": round(pf, 3), "ins_ev": round(ins_ev, 3), "gap": round(gap, 3),
-            "stability": stab, "reasons": reasons}
+        reasons.append("%d/%d 段為正 EV" % (wf.get("positive_folds", 0), wf["total_folds"]))
+    return {"level": "中" if _oos_proven(bt) else "低" if n else "無",
+            "n": n, "ev": ev, "pf": pf, "ins_ev": None, "gap": None,
+            "stability": wf.get("stability", 0), "reasons": reasons}
 
 
 def shrink(ev, n) -> float:
@@ -264,114 +223,17 @@ def shrink(ev, n) -> float:
 
 
 def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
-    """
-    掛上歷史統計。查表順序（樣本不足就往下退一層）：
-
-      1. 大盤狀態 + 型態 + 分數級距   ← 最精細
-      2. 型態 + 分數級距
-      3. 分數級距
-      4. 都不足 → 全部留空，UI 顯示「樣本不足」。絕不生假數字。
-    """
-    path = ROOT / C.BACKTEST_JSON
-    if not path.exists():
-        log.info("沒有 %s，本次排名只能用技術分數（頁面會標示樣本不足）", C.BACKTEST_JSON)
-        return None
+    """Never reuse statistics produced for a different target, horizon or cost."""
+    ranking.attach(rows, {}, regime)
     try:
-        bt = json.loads(path.read_text(encoding="utf-8"))
-    except Exception as e:
-        log.warning("回測檔讀取失敗：%s", e)
+        bt = json.loads((ROOT / C.BACKTEST_JSON).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
         return None
-
-    reg_buckets = bt.get("regime_buckets", []) or []
-    # OOS 的統計優先。in-sample 只是備援，而且期望值會先打折才進排序。
-    rel = oos_reliability(bt)
-    oos_reg = bt.get("oos_regime_buckets", []) or []
-    oos_pat = bt.get("oos_buckets", []) or []
-    oos_score = bt.get("oos_score_buckets", []) or []
-    pat_buckets = bt.get("pattern_buckets", []) or []
-    buckets = bt.get("score_buckets", []) or []
-
-    def fill(r, d, source, oos=False):
-        # 核心指標：N 天內獲利出場的成功率（平滑後）
-        r["hist_success"] = d.get("calibrated_success")
-        r["hist_success_raw"] = d.get("success_rate")
-        r["hist_avg_days"] = d.get("avg_days")
-        r["hist_avg_days_win"] = d.get("avg_days_win")
-        r["hist_calibrated"] = d.get("calibrated_win_rate")
-        r["hist_raw"] = d.get("win_rate")
-        r["hist_samples"] = d.get("samples")
-        r["hist_avg_return"] = d.get("avg_return")
-        r["hist_pf"] = d.get("profit_factor")
-        r["hist_mdd"] = d.get("avg_mdd")
-        ev = d.get("expectancy")
-        n = d.get("samples")
-        # 先做小樣本收縮，再對 in-sample 套動態折扣
-        ev_used = shrink(ev, n) if ev is not None else None
-        if ev_used is not None and not oos:
-            ev_used = ev_used * rel["discount"]
-        r["hist_expectancy"] = round(ev_used, 3) if ev_used is not None else None
-        r["hist_expectancy_raw"] = ev
-        r["hist_shrunk"] = round(shrink(ev, n), 3) if ev is not None else None
-        r["oos_reliability"] = rel["level"]
-        r["oos_rel_reasons"] = rel["reasons"]
-        r["in_sample_discount"] = rel["discount"] if not oos else None
-        r["hist_confidence"] = _confidence(d.get("samples"), oos)
-        r["hist_source"] = source
-        r["hist_basis"] = "OOS" if oos else "IN_SAMPLE"
-
-    counts = {"oos_regime": 0, "oos_pattern": 0, "oos_bucket": 0, "regime": 0,
-              "pattern": 0, "bucket": 0, "none": 0}
-    for r in rows:
-        hit = None
-        # ① OOS：大盤狀態 + 型態 + 分數級距（最精細）
-        for b in oos_reg:
-            if (b.get("regime") == regime and b.get("pattern") == r["kind"]
-                    and b["lo"] <= r["score"] < b["hi"]
-                    and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE):
-                hit = (b, "oos_regime", True); break
-        # ② OOS：型態 + 分數級距
-        if hit is None:
-          for b in oos_pat:
-            if (b.get("pattern") == r["kind"] and b["lo"] <= r["score"] < b["hi"]
-                    and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE):
-                hit = (b, "oos_pattern", True); break
-        # ③ OOS：分數級距
-        if hit is None:
-            for b in oos_score:
-                if (b["lo"] <= r["score"] < b["hi"]
-                        and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE):
-                    hit = (b, "oos_bucket", True); break
-        if hit is not None:
-            fill(r, hit[0], hit[1], True)
-            counts[hit[1]] += 1
-            continue
-        for b in reg_buckets:
-            if (b.get("regime") == regime and b.get("pattern") == r["kind"]
-                    and b["lo"] <= r["score"] < b["hi"]
-                    and b.get("samples", 0) >= C.PATTERN_MIN_SAMPLES):
-                hit = (b, "regime"); break
-        if hit is None:
-            for b in pat_buckets:
-                if (b.get("pattern") == r["kind"] and b["lo"] <= r["score"] < b["hi"]
-                        and b.get("samples", 0) >= C.PATTERN_MIN_SAMPLES):
-                    hit = (b, "pattern"); break
-        if hit is None:
-            for b in buckets:
-                if (b["lo"] <= r["score"] < b["hi"]
-                        and b.get("samples", 0) >= C.BACKTEST_MIN_SAMPLES):
-                    hit = (b, "bucket"); break
-        if hit:
-            fill(r, hit[0], hit[1], False)
-            counts[hit[1]] += 1
-        else:
-            counts["none"] += 1
-
-    log.info("統計掛載：OOS 大盤 %d、OOS 型態 %d、OOS 級距 %d｜in-sample %d｜樣本不足 %d",
-             counts["oos_regime"], counts["oos_pattern"], counts["oos_bucket"],
-             counts["regime"] + counts["pattern"] + counts["bucket"], counts["none"])
-    log.info("OOS 可信度：%s（N=%d、EV=%s、PF=%s、穩定度 %s）→ in-sample 折扣 %.2f",
-             rel["level"], rel["n"], rel["ev"], rel["pf"], rel["stability"], rel["discount"])
-    bt["_reliability"] = rel
+    if not strategy.compatible(bt) or bt.get("mode") != "live":
+        log.warning("回測口徑已變更或非真實資料，需重跑；不沿用舊成功率")
+        return None
+    ranking.attach(rows, bt.get("calibration") or {}, regime)
+    bt["_reliability"] = oos_reliability(bt)
     return bt
 
 
@@ -397,7 +259,9 @@ def run_live() -> dict:
     extended = universe_mod.build_extended(snapshot, info, core_codes)
 
     # 台股歷史日線一律走 FinMind + data/history 快取（與回測共用同一份）
-    hist_map = fetch.fetch_history(codes)
+    paper = tracking._load(C.PORTFOLIO_JSON, {})
+    held_codes = [x["code"] for x in paper.get("positions", []) + paper.get("pending", [])]
+    hist_map = fetch.fetch_history(list(dict.fromkeys(codes + held_codes)))
     if not hist_map:
         raise DataUnavailable("歷史日線全部取不到（FinMind 暫時異常或額度用盡）")
 
@@ -456,26 +320,18 @@ def run_live() -> dict:
     idx_close = (index_info or {}).get("close")
     # 用 data_date 而不是執行日：早上那班的行情日跟前一天收盤班相同，
     # tracking 會判定為同一天而不重複記錄、也不會用舊開盤價成交
+    us_data = _us_snapshot()
+    add_momentum(rows)
+    # Overseas/next-day tables are informational only: historical replay lacks
+    # point-in-time snapshots for those models, so they cannot alter target rank.
+    add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
+    rows = sort_by_final(rows)
     signals = tracking.update_signals(rows, data_date, regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
-    portfolio = tracking.update_portfolio(rows, data_date, idx_close)
-    us_data = _us_snapshot()
-    add_overseas(rows, us_data)                # 海外趨勢：依產業敏感度差異化調整
-    add_momentum(rows)                         # 動能確認：只用今天的價量分層
-    # 隔日風險過濾：查歷史上同樣條件的隔日表現，暴跌率偏高的往後排
-    try:
-        nd_stats = nextday_mod.build_stats(hist_map)
-        nextday_mod.attach(rows, nd_stats)
-    except Exception as e:
-        log.warning("隔日風險統計失敗（不影響排名主體）：%s", e)
-        nd_stats = {}
-        for r in rows:
-            r["nextday"], r["nextday_source"], r["crash_penalty"] = None, "統計失敗", 0.0
-    add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
-    rows = sort_by_final(rows)
-    # 排序改變了，要重新取要輸出的那一段（模擬組合與訊號追蹤已在前面用模型名次跑完）
-    top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows                 # 顯示順序改用綜合排名，rank 欄位不變
+    portfolio = tracking.update_portfolio(rows, data_date, idx_close, hist_map)
+    # 排名、訊號追蹤與模擬組合使用同一份排序
+    top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows                 # final_rank 為主策略名次
     add_edges(rows[: C.INITIAL_VISIBLE * 2])   # 只有會被看到的前段需要這句話
 
     # --- 全站共用的最新行情（首頁與我的交易都讀這份）---
@@ -524,6 +380,7 @@ def run_live() -> dict:
 
     return {
         "meta": {
+            "strategy": strategy.contract(),
             "generated_at": now.strftime("%Y-%m-%d %H:%M"),
             "generated_iso": now.isoformat(timespec="seconds"),
             "trade_date": now.strftime("%Y-%m-%d"),      # 這次執行的日期
@@ -538,7 +395,7 @@ def run_live() -> dict:
             "universe_count": len(universe),
             "has_backtest": bt is not None,
             # 只要有任何一檔查到可信勝率，標題才叫「勝率排行」；否則叫「機會排行」
-            "has_winrate": any(r.get("hist_calibrated") is not None for r in rows),
+            "has_winrate": any(r.get("hist_success") is not None for r in rows),
             "regime": regime,
             "top_n": C.TOP_N_BY_TURNOVER,
             "weak_score": C.WEAK_SCORE,
@@ -725,8 +582,8 @@ def add_final_score(rows: list[dict]) -> None:
         return
 
     for r in rows:
-        # ---- 區塊一：歷史證據（全部來自回測，OOS 優先）----
-        ev = r.get("hist_expectancy")          # 已收縮、已依 OOS 可信度折扣
+        # ---- 區塊一：歷史證據（只用已成熟歷史樣本校準）----
+        ev = r.get("hist_expectancy")          # 只做一次樣本量收縮
         pf = r.get("hist_pf")
         wr = r.get("hist_calibrated")
         mdd = r.get("hist_mdd")
@@ -734,7 +591,7 @@ def add_final_score(rows: list[dict]) -> None:
         sr = r.get("hist_success")
         e = {
             # 成功率是核心，權重最高
-            "success": _scale(sr, 40.0, 80.0) if sr is not None else 50.0,
+            "success": _scale(sr, 0.0, 100.0) if sr is not None else 50.0,
             "ev": _scale(ev, -1.0, 2.0) if ev is not None else 50.0,
             "pf": _scale(pf, 0.8, 2.0) if pf is not None else 50.0,
             "winrate": _scale(wr, 40.0, 65.0) if wr is not None else 50.0,
@@ -778,77 +635,8 @@ def add_final_score(rows: list[dict]) -> None:
 
 
 def sort_by_final(rows: list[dict]) -> list[dict]:
-    """
-    先依動能三層（🟢 強勢確認 → 🟡 潛力觀察 → 🔴 轉弱／追高），
-    同一層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
-
-    **原本的 rank（模型名次）保持不變**，這只是最終進場排序。
-    前 TOP_SLOTS 名優先只從 🟢 挑；不足才由 🟡 補入，並標記 top_fill，
-    卡片上會明說「這一檔是因為強勢確認不足 5 檔才補進來的」。
-    """
-    def key(r):
-        # 動能已經在 final_score 裡計過一次，這裡不再單獨加權，避免重複計分
-        blend = float(r.get("final_score", 0))
-        # 歷史上同條件的隔日暴跌率偏高 → 扣分往後排（不刪除）
-        blend -= float(r.get("crash_penalty") or 0)
-        # 海外環境：依產業對美股的敏感度做差異化加減
-        blend += float(r.get("overseas_adj") or 0)
-        r["rank_score"] = round(blend, 1)
-
-        tier = r.get("momentum_tier", 2)
-        nd = r.get("nextday")
-        # 暴跌率高到離譜的，直接降到最後一層，不讓它佔前排
-        if nd and nd.get("calibrated_crash_rate", 0) >= C.NEXTDAY_DEMOTE_CRASH:
-            tier = 2
-            r["demoted_by_crash"] = True
-        return (tier, -blend)
-
-    def full_key(r):
-        """
-        排名的核心：**今天買，之後 1～N 天內能獲利出場的成功率**。
-
-        順位：
-          1. 動能分層（轉弱／追高的仍排後面，避免抱到破底）
-          2. 成功率（歷史統計、已做小樣本收縮；沒有樣本視為 50% 中性）
-          3. 有 OOS 證據的優先
-          4. 期望值 → 樣本數 → 平均持有天數（越快出場越好）
-          5. 最大回撤 → RR → 綜合分數
-        """
-        tier, neg = key(r)
-        n = r.get("hist_samples") or 0
-        # 成功率同樣做小樣本收縮：N 小的往 50% 靠，不讓 3 戰 3 勝排前面
-        sr = r.get("hist_success")
-        if sr is None:
-            sr_used = 50.0
-        else:
-            sr_used = 50.0 + (float(sr) - 50.0) * n / (n + C.SHRINK_K)
-        ev = r.get("hist_expectancy")
-        pf = r.get("hist_pf")
-        mdd = r.get("hist_mdd")
-        rr = (r.get("plan") or {}).get("rr")
-        days = r.get("hist_avg_days_win") or r.get("hist_avg_days")
-        has_oos = 0 if r.get("hist_basis") == "OOS" and n >= C.MIN_SAMPLES_SCORE else 1
-        r["success_used"] = round(sr_used, 1)
-        return (tier,
-                -round(sr_used, 1),
-                has_oos,
-                -round(float(ev) if ev is not None else 0, 3),
-                -min(n, 500),
-                round(float(days) if days else 99, 1),
-                -round(float(mdd) if mdd is not None else -99, 1),
-                -round(float(rr) if rr is not None else 0, 2),
-                neg)
-
-    out = sorted(rows, key=full_key)
-    green = sum(1 for r in out if r.get("momentum_tier") == 0)
-    for i, r in enumerate(out, 1):
-        r["final_rank"] = i
-        # 前幾名裡不是 🟢 的，就是因為強勢確認檔數不足才補上來
-        r["top_fill"] = bool(i <= C.TOP_SLOTS and r.get("momentum_tier", 2) != 0)
-    if green < C.TOP_SLOTS:
-        log.info("強勢確認只有 %d 檔，前 %d 名由潛力觀察補入 %d 檔",
-                 green, C.TOP_SLOTS, min(C.TOP_SLOTS, len(out)) - green)
-    return out
+    """Shared target-eligibility and conservative target-rate ranking."""
+    return ranking.sort(rows)
 
 
 def add_edges(rows: list[dict]) -> None:
@@ -1185,7 +973,8 @@ def _load_livecheck() -> dict | None:
     """讀 livecheck 的結果（實際發布過的排名後來賺不賺）。沒有就回 None。"""
     try:
         p = ROOT / C.LIVECHECK_JSON
-        return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+        result = json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+        return result if strategy.compatible(result) else None
     except Exception:
         return None
 
@@ -1204,8 +993,9 @@ def _backtest_summary(bt: dict | None) -> dict | None:
         "samples": bt.get("total_signals"),
         "walk_forward": bt.get("walk_forward"),
         "cost_detail": bt.get("cost_detail"),
-        "oos_period": bt.get("oos_period"),
-        "oos_overall": bt.get("oos_overall"),
+        "oos_period": (bt.get("walk_forward") or {}).get("period"),
+        "oos_overall": bt.get("walk_forward") if (bt.get("walk_forward") or {}).get("available") else None,
+        "strategy": bt.get("strategy"),
         "deciles_oos": bt.get("deciles_oos"),
         "deciles_in_sample": bt.get("deciles_in_sample"),
         "oos_proven": _oos_proven(bt),
@@ -1214,12 +1004,14 @@ def _backtest_summary(bt: dict | None) -> dict | None:
 
 
 def _oos_proven(bt: dict) -> bool:
-    """OOS 的整體期望值與獲利因子都及格才算「已證實正期望值」。"""
-    o = (bt or {}).get("oos_overall") or {}
-    ev, pf = o.get("expectancy"), o.get("profit_factor")
-    if ev is None or pf is None:
-        return False
-    return ev > C.OOS_MIN_EV and pf > C.OOS_MIN_PF
+    """Only describe preliminary rank evidence after matched-date validation."""
+    wf = (bt or {}).get("walk_forward") or {}
+    return bool(wf.get("available") and (wf.get("samples") or 0) >= 100
+                and (wf.get("expectancy") or 0) > 0
+                and (wf.get("profit_factor") or 0) > 1
+                and (wf.get("lift_ev") or 0) > 0
+                and (wf.get("lift_success_pp") or 0) > 0
+                and (wf.get("positive_folds") or 0) >= 2)
 
 
 # ---------------------------------------------------------------------------
@@ -1247,6 +1039,10 @@ def run_premarket() -> int:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except Exception as e:
         log.warning("%s 讀取失敗，這次略過：%s", C.OUTPUT_JSON, e)
+        return 0
+
+    if payload.get("meta", {}).get("strategy") != strategy.contract():
+        log.warning("舊頁面與目前策略口徑不同，需先完整更新")
         return 0
 
     # 台股是休市日就不要硬跑，避免製造出新的時間戳讓人以為有新資料

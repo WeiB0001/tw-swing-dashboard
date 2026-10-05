@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0E1116">
 <meta name="description" content="台股短線價差機會掃描：每日收盤後自動更新，僅供技術分析參考。">
-<title>台股{{ "勝率" if meta.has_winrate else "機會" }}排行 · {{ meta.trade_date }}</title>
+<title>台股淨利達標排行 · {{ meta.trade_date }}</title>
 
 <!-- ===== PWA：讓這頁可以「加到主畫面」，開起來像一個 app ===== -->
 <link rel="manifest" href="manifest.webmanifest">
@@ -700,7 +700,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">{{ "今日獲利機率排行" if meta.has_winrate else "今日機會排行" }}
+    <h1 class="title">{{ "今日淨利達標排行" if meta.has_winrate else "今日機會排行" }}
       {% if meta.regime == 'bull' %}<span class="regime bull">🟢 多頭</span>
       {% elif meta.regime == 'bear' %}<span class="regime bear">🔴 空頭</span>
       {% else %}<span class="regime side">🟡 震盪</span>{% endif %}
@@ -759,9 +759,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         用現在的美股期貨代替今晚尚未發生的美股。R² {{ us.forecast.r2 }} 代表美股只能解釋台股約
         {{ (us.forecast.r2 * 100)|round|int }}% 的波動，其餘來自台股自身的籌碼與消息面。
         <b>這是統計相關性，不是預測，更不是投資建議。</b>
-        這個推估<b>會依產業對美股的敏感度影響排名</b>：偏多時半導體、電腦週邊這類跟著美股走的往前，
-        偏空時電信、金融、食品這種防禦型相對往前。全部一起加減分不會改變名次，所以只做差異化。
-        R² 低於 {{ ov_min_r2 }} 就完全不採用。
+        這個推估僅供海外環境觀察，不介入本頁淨利達標排名。
         盤前（06:00）只會更新這一區，<b>不會重跑台股收盤排名</b>——上方名次仍是前一晚 20:00 算出來的。
       </p>
       {% elif us.forecast %}
@@ -794,20 +792,29 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </header>
 
   <!-- ===================== 排名 ===================== -->
+  <div class="note" id="target-rule">
+    <b>目標：扣成本後淨利至少 +{{ '%g'|format(profit_target) }}%</b><br>
+    訊號發布後下一個可交易日開盤買進，第 {{ min_exit_days }}～{{ exit_days }} 個交易日收盤檢查；
+    達標即模擬出場，未達標在第 {{ exit_days }} 日出場。買進日算第 1 日。
+    來回成本含滑價 {{ cost_pct }}%；小賺但未達目標不算成功。收盤成交為模擬假設。<br>
+    目前 <b>{{ eligible_count }}</b> 檔通過樣本數、正 EV、PF &gt; 1 與技術風險門檻。
+    {% if not eligible_count %}<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>{% endif %}
+    {% if not backtest %}<br>此目標的回測尚待重算，暫不顯示達標率。{% endif %}
+  </div>
   {% if backtest and backtest.oos_overall %}
   {% if not backtest.oos_proven %}
   <div class="oos-warn bad">
-    ⚠️ <b>模型尚未證實正期望值</b><br>
+    ⚠️ <b>排名尚未通過獨立驗證</b><br>
     out-of-sample（{{ backtest.oos_period }}）共 {{ backtest.oos_overall.samples }} 筆：
     EV {{ '%+.2f'|format(backtest.oos_overall.expectancy) }}%、
-    PF {{ backtest.oos_overall.profit_factor }}、勝率 {{ backtest.oos_overall.win_rate }}%。
-    在 EV &gt; 0 且 PF &gt; 1 之前，這份排名<b>只能當觀察清單，不要照名次下單</b>。
+    PF {{ backtest.oos_overall.profit_factor }}、淨利達標率 {{ backtest.oos_overall.success_rate }}%。
+    驗證還需同日達標率與平均報酬優於股票池基準、足夠樣本與跨期穩定性。
   </div>
   {% else %}
   <div class="oos-warn ok">
-    ✅ out-of-sample（{{ backtest.oos_period }}，{{ backtest.oos_overall.samples }} 筆）呈現正期望值：
+    ✅ 排名初步通過樣本外檢查（{{ backtest.oos_period }}，{{ backtest.oos_overall.samples }} 筆）前段候選呈現正期望值：
     EV {{ '%+.2f'|format(backtest.oos_overall.expectancy) }}%、PF {{ backtest.oos_overall.profit_factor }}。
-    歷史結果仍不代表未來績效。
+    同日達標率比股票池平均高 {{ backtest.oos_overall.lift_success_pp }} 個百分點；歷史結果仍不代表未來績效。
   </div>
   {% endif %}
   {% endif %}
@@ -825,8 +832,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       · in-sample EV {{ '%+.2f'|format(backtest.reliability.ins_ev) }}%
       （落差 {{ '%+.2f'|format(backtest.reliability.gap or 0) }}）
       {% endif %}
-      <br>in-sample 期望值折扣 <b>{{ backtest.reliability.discount }}</b>
-      （依 OOS 表現動態決定，不是固定值）
+      <br>同日相對股票池平均報酬差：{{ backtest.walk_forward.lift_ev }} 個百分點。訊號筆數不等於獨立樣本數。
       {% if backtest.reliability.reasons %}
       <ul>{% for x in backtest.reliability.reasons %}<li>{{ x }}</li>{% endfor %}</ul>
       {% endif %}
@@ -839,7 +845,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="decile-head">實際發布過的排名，後來賺不賺
       <span class="sub">{{ livecheck.days }} 天（{{ livecheck.period }}）</span></div>
     <table>
-      <tr><th>名次分組</th><th>N</th><th>獲利出場率</th><th>平均天數</th><th>EV</th><th>PF</th></tr>
+      <tr><th>名次分組</th><th>N</th><th>淨利達標率</th><th>平均天數</th><th>EV</th><th>PF</th></tr>
       {% for label in ["Top 3", "Top 10", "11–30", "31 名以後"] %}
       {% set g = livecheck.groups.get(label) %}
       {% if g and g.n %}
@@ -859,8 +865,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <td class="mono">{{ livecheck.all.pf if livecheck.all.pf is not none else '--' }}</td></tr>
     </table>
     <div class="decile-note">
-      這不是回測，是<b>網站當天真的發布出去的排名</b>後來的實際結果，
-      用 data/history 的每日存檔比對真實價格算出來的，沒有事後諸葛的空間。
+      依<b>同版本已發布排名</b>與後續價格模擬，非實際成交；同一訊號日去重，且整批訊號完整經過持有上限後才納入。
       {% if livecheck.pending %}（另有 {{ livecheck.pending }} 筆還沒走完 {{ livecheck.exit_max_days }} 天，未列入）{% endif %}
     </div>
   </div>
@@ -868,14 +873,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   {% if backtest and backtest.deciles_oos %}
   <div class="decile">
-    <div class="decile-head">名次分組驗證（out-of-sample）— 排名越前，EV 應該越高</div>
+    <div class="decile-head">最終排序的逐段樣本外驗證</div>
     <table>
-      <tr><th>分組</th><th>N</th><th>勝率</th><th>EV</th><th>PF</th><th>最大回撤</th></tr>
+      <tr><th>分組</th><th>N</th><th>達標率</th><th>EV</th><th>PF</th><th>最差持有跌幅</th></tr>
       {% for d in backtest.deciles_oos %}
       {% if d.samples %}
       <tr>
         <td>{{ d.label }}</td><td class="mono">{{ d.samples }}</td>
-        <td class="mono">{{ d.win_rate }}%</td>
+        <td class="mono">{{ d.success_rate }}%</td>
         <td class="mono {{ 'up' if (d.expectancy or 0) > 0 else 'down' }}">
           {{ '%+.2f'|format(d.expectancy or 0) }}%</td>
         <td class="mono">{{ d.profit_factor if d.profit_factor is not none else '--' }}</td>
@@ -885,7 +890,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       {% endfor %}
     </table>
     <div class="decile-note">
-      這是驗證排名有沒有價值的唯一標準：<b>Top 10% 的 EV 要明顯高於後段</b>。
+      訓練只用測試開始前已完整成熟的樣本，重播與首頁相同的排序。<b>前段應優於後段及同日基準</b>。
       若沒有，勝率再高也沒有意義。所有數字已扣除手續費、證交稅與滑價共
       {{ backtest.cost_pct }}%。
     </div>
@@ -893,7 +898,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
 
   <div class="section-head">
-    <h2>{{ exit_days ~ "日內獲利機率排名" if meta.has_winrate else "機會排名" }}</h2>
+    <h2>{{ exit_days ~ "日內淨利達標排名" if meta.has_winrate else "機會排名" }}</h2>
     <span>名次為全部標的的總排名</span>
   </div>
 
@@ -952,7 +957,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     <div class="band-note" id="band-count"></div>
     <p class="budget-note">
-      自動分配是把預算按獲利可能性分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）；
+      自動分配僅使用通過候選門檻的標的，按保守達標排序分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）；
       自己挑則是在你選的標的之間平均分配。不是建議你買進，也沒有計入手續費與證交稅。
       台股一張＝1000 股，{% if allow_odd_lot %}一張買不起時會改用零股試算（需券商支援盤中零股交易）。{% endif %}
     </p>
@@ -960,7 +965,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   {% if rows %}
     {% for r in rows %}
-    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.rank }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.score }}"
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-eligible="{{ 1 if r.rank_eligible else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.success_used or 0 }}"
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
         <div class="row1">
@@ -968,7 +973,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="ident">
             <div class="code mono">{{ r.code }}{% if r.momentum_icon %}<span class="mtier m{{ r.momentum_tier }}">{{ r.momentum_icon }} {{ r.momentum_label }}</span>{% endif %}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
               {% if r.mark and r.mark.badge %}<span class="mark" title="{{ r.mark.label }}">{{ r.mark.badge }}{% if r.mark.badge in ['🔥','↑','↓'] %}{{ r.mark.streak if r.mark.badge == '🔥' else (r.mark.rank_delta|abs) }}{% endif %}</span>{% endif %}</div>
-            <div class="name">{{ r.name }}</div>
+            <div class="name">{{ r.name }}</div><span class="{{ 'up' if r.rank_eligible else 'muted' }}">{{ r.rank_status or '僅供觀察' }}</span>
           </div>
           <div class="px">
             <div class="close mono">{{ '%.2f'|format(r.close) }}</div>
@@ -1002,12 +1007,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="headline">{{ r.headline }}</div>
           {% if r.final_score is defined and r.final_score is not none %}
           {% if r.hist_success is not none %}
-          <div class="score mono">{{ '%.0f'|format(r.hist_success) }}<span class="pct">%</span><em>{{ exit_days }}日內獲利</em></div>
+          <div class="score mono">{{ '%.0f'|format(r.hist_success) }}<span class="pct">%</span><em>淨利 ≥{{ '%g'|format(profit_target) }}% 達標率</em></div>
           {% else %}
           <div class="score mono">{{ '%.0f'|format(r.final_score) }}<span class="pct">/100</span><em>綜合分數</em></div>
           {% endif %}
-          {% elif r.hist_calibrated is not none %}
-          <div class="score mono">{{ '%.0f'|format(r.hist_calibrated) }}<span class="pct">%</span><em>歷史勝率</em></div>
           {% else %}
           <div class="score mono nodata">{{ '%.0f'|format(r.score) }}<em>技術分數</em></div>
           {% endif %}
@@ -1027,7 +1030,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           {% for k, label in star_rows %}
           <div><dt>{{ label }}</dt><dd>{{ r.stars[k] }}</dd></div>
           {% endfor %}
-          <div class="risk-star"><dt>風險</dt><dd>{{ r.stars.risk }} {{ r.risk_level }}</dd></div>
+          <div class="risk-star"><dt>技術風險</dt><dd>{{ r.stars.risk }} {{ r.risk_level }}</dd></div>
         </dl>
 
         {% if r.final_score is defined and r.final_score is not none %}
@@ -1040,7 +1043,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <span class="rel rel-{{ r.oos_reliability }}">OOS 可信度 {{ r.oos_reliability }}</span>
           {% endif %}
           <span>動能 <b>{{ '%.0f'|format(r.momentum_score) }}</b></span>
-          <span class="sub">模型名次 第 {{ r.rank }} 名</span>
+
           {% if r.top_fill %}
           <span class="fill">強勢確認不足 {{ top_slots }} 檔，這一檔是由潛力觀察補入</span>
           {% endif %}
@@ -1048,90 +1051,33 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         {% endif %}
 
         <div class="swing">
-          <span>預期 Swing 空間 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
-          {% if r.hist_calibrated is not none %}
-          <span class="wr">
-            {% if r.hist_basis == 'OOS' %}<b class="oos-tag">OOS</b>{% else %}<b class="ins-tag">歷史</b>{% endif %}
-            {% if r.hist_success is not none %}
-            {{ exit_days }}日內獲利出場 <b class="mono">{{ '%.0f'|format(r.hist_success) }}%</b>
-            {% if r.hist_avg_days_win %}· 平均 <b class="mono">{{ r.hist_avg_days_win }}</b> 天{% endif %}
-            {% else %}
-            勝率 <b class="mono">{{ '%.0f'|format(r.hist_calibrated) }}%</b>
-            {% endif %}
-            · EV <b class="mono {{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.1f'|format(r.hist_expectancy or 0) }}%</b>
-            {% if r.hist_pf %}· PF <b class="mono">{{ r.hist_pf }}</b>{% endif %}
-            · N=<b class="mono">{{ r.hist_samples }}</b>
-            <b class="conf">{{ '★' * r.hist_confidence }}</b></span>
-          {% else %}
-          <span class="wr nodata">樣本不足（N&lt;{{ min_samples }}），不評分</span>
-          {% endif %}
+          <span>技術目標距離 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
+          {% if r.hist_success is not none %}
+          <span class="wr">歷史達標率 <b>{{ r.hist_success }}%</b>
+            · 收縮 EV <b class="{{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.2f'|format(r.hist_expectancy or 0) }}%</b>
+            · PF {{ r.hist_pf if r.hist_pf is not none else '—' }} · N={{ r.hist_samples }}</span>
+          {% else %}<span class="wr nodata">目標統計待重算或樣本不足，不報達標率</span>{% endif %}
         </div>
-        <div class="mainrisk">主要風險：{{ r.main_risk }}</div>
-
+        <div class="mainrisk">主要技術風險：{{ r.main_risk }}</div>
         {% for f in r.flags %}<span class="chip">{{ f }}</span>{% endfor %}
       </summary>
-
       <div class="detail">
-        <div class="why"><b>為什麼是它？</b>{{ r.edge or r.why }}</div>
-        {% if r.spark %}
-        <div class="spark" data-spark='{{ r.spark|tojson }}'></div>
-        {% endif %}
-
-        {% if r.final_parts %}
+        <div class="why"><b>觀察依據</b>{{ r.edge or r.why }}</div>
+        {% if r.spark %}<div class="spark" data-spark='{{ r.spark|tojson }}'></div>{% endif %}
         <div class="scoreline">
-          <b>綜合分數 {{ '%.0f'|format(r.final_score) }}/100</b>
-          ＝ 歷史證據 {{ '%.0f'|format(r.evidence_quality) }} × {{ (w_evidence*100)|round|int }}%
-          ＋ 位置風報 {{ '%.0f'|format(r.position_quality) }} × {{ (w_position*100)|round|int }}%
-          ＋ 動能確認 {{ '%.0f'|format(r.momentum_quality) }} × {{ (w_momentum*100)|round|int }}%
-          <br><span class="muted">
-          歷史證據 {{ '%.0f'|format(r.evidence_quality) }}（成功率 {{ r.final_parts.evidence.success }}、
-          EV {{ r.final_parts.evidence.ev }}、
-          PF {{ r.final_parts.evidence.pf }}、勝率 {{ r.final_parts.evidence.winrate }}、
-          回撤 {{ r.final_parts.evidence.mdd }}、樣本 {{ r.final_parts.evidence.samples }}）<br>
-          位置風報 {{ '%.0f'|format(r.position_quality) }}（區間位置 {{ r.final_parts.position.position }}、
-          RR {{ r.final_parts.position.rr }}、距觸發價 {{ r.final_parts.position.distance }}）<br>
-          動能確認 {{ '%.0f'|format(r.momentum_quality) }}（均線、MACD、量能、收盤確認合併計一次）<br>
-          <b>三個區塊刻意不重複</b>：均線／MACD／量能／確認只算在動能區塊，
-          位置風報只放與動能不相關的項目，避免同一組指標被計三次。
-          沒有歷史樣本的項目以中性 50 代入。
-          這一層<b>沒有改動任何模型</b>，EV、勝率、PF、回測、walk-forward 全部照舊。
-          清單順序先分 🟢 強勢確認 → 🟡 潛力觀察 → 🔴 轉弱／追高，
-          同層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
-          </span>
-        </div>
-        {% endif %}
-
-        <div class="scoreline">
-          機會分數 <b class="mono">{{ '%.0f'|format(r.opportunity) }}</b>
-          × 風險調整 <b class="mono">{{ '%.2f'|format(1 - (thresholds.risk_cut/100) * r.risk/100) }}</b>
-          ＝ 技術分數 <b class="mono sig">{{ '%.0f'|format(r.score) }}</b>
-          <span class="muted">（風險分數 {{ '%.0f'|format(r.risk) }}／100）</span>
-          <br><span class="muted">
-          {% if r.hist_calibrated is not none %}
-            {% if r.hist_basis == 'OOS' %}
-            依 <b>out-of-sample 統計</b>排序（{{ r.hist_samples }} 筆，
-            勝率 {{ r.hist_raw }}%、平滑後 {{ '%.1f'|format(r.hist_calibrated) }}%、
-            EV {{ '%+.2f'|format(r.hist_expectancy or 0) }}%）。
-            這段期間<b>沒有參與任何參數調整</b>，是目前最接近真實表現的估計。
-            {% else %}
-            只有 <b>in-sample 統計</b>可用（{{ r.hist_samples }} 筆，
-            勝率 {{ r.hist_raw }}%、原始 EV {{ '%+.2f'|format(r.hist_expectancy_raw or 0) }}%）。
-            in-sample 天生樂觀，期望值已打 {{ (in_sample_discount * 100)|round|int }} 折
-            （{{ '%+.2f'|format(r.hist_expectancy or 0) }}%）再進排序，可信度也降一級。
-            {% endif %}
-            {% if r.hist_success is not none %}
-            <br><b>排名主鍵</b>：今天買、{{ exit_days }} 個交易日內能獲利出場的成功率
-            {{ '%.1f'|format(r.hist_success) }}%（原始 {{ r.hist_success_raw }}%，
-            收縮後排序用 {{ r.success_used }}%）。
-            出場規則：t+1 開盤買，之後每天收盤檢查，扣掉 {{ backtest.cost_pct if backtest else 0.5 }}% 成本後
-            還有獲利就出場，撐到第 {{ exit_days }} 天沒機會就認賠。
-            {% endif %}
-            <b>這是過去相似訊號的統計，不是未來的成功機率。</b>
+          綜合分數＝歷史證據 {{ (w_evidence*100)|round|int }}%＋位置風報 {{ (w_position*100)|round|int }}%＋動能 {{ (w_momentum*100)|round|int }}%。
+          實際排序先檢查候選門檻，再比較保守達標分數、收縮 EV 與綜合分數。<br>
+          {% if r.hist_success is not none %}
+            歷史同類訊號 {{ r.hist_samples }} 筆；原始達標率 {{ r.hist_success_raw }}%，
+            向訓練股票池基準收縮後 {{ r.hist_success }}%。
+            排序使用 Wilson 保守下界 {{ r.success_used }}%，不是未來機率保證。<br>
+            第 {{ min_exit_days }}～{{ exit_days }} 日扣除 {{ cost_pct }}% 成本後，淨利至少 {{ profit_target }}% 才算達標。
+            未達標的小額獲利仍如實計入 EV 與 PF。<br>
+            平均獲利 {{ r.hist_avg_win }}%、平均虧損 {{ r.hist_avg_loss }}%。
+            這些歷史資料用於查表排名，獨立驗證請看上方 Walk-forward。
           {% else %}
-            這個型態與分數級距的歷史樣本不足 {{ pattern_min_samples }} 筆，<b>沒有可信的勝率可用</b>，
-            因此暫以先驗 50% 計入排名，並改用技術分數決定先後。
+            樣本不足或目標統計尚未重算，僅列觀察，不參與自動配置。
           {% endif %}
-          </span>
         </div>
 
         {% if r.momentum_icon %}
@@ -1145,7 +1091,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
           {% endif %}
           <div class="mom-note">
-            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
+            動能用當日價量作風險篩選，並納入相同規則的回測重播。
             今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
           </div>
         </div>
@@ -1176,7 +1122,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             計算方式：排名出來的隔天開盤買進，持有 {{ hold_days }} 天後收盤賣出，跟你的做法一致。
             「隔夜低開」是持有過夜期間開盤跳空跌超過 1% 的比例，這是不做當沖必須承擔的風險。
             「進漲幅前段」隨機挑大約就是 20%，明顯高於 20% 才算真的有預測力。
-            這一層只影響排序，<b>不改 EV、勝率、PF 與回測</b>。
+            此資訊獨立展示，不影響淨利目標排序與驗證。
           </div>
         </div>
         {% elif r.nextday_source %}
@@ -1188,7 +1134,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         {% if r.plan and r.plan.available %}
         <div class="plan plan-{{ 'go' if r.plan.status == '可觀察進場' else ('no' if r.plan.status == '禁止追價' else 'wait') }}">
-          <div class="plan-head">明日交易計畫（持有 {{ hold_days }} 天）· <b>{{ r.plan.status }}</b></div>
+          <div class="plan-head">技術價位參考（與淨利目標統計分開）（持有 {{ hold_days }} 天）· <b>{{ r.plan.status }}</b></div>
           {% if r.plan.entry_status %}
           <div class="entry entry-{{ r.plan.vol_tier if r.plan.entry_icon == '⚠' else ('go' if r.plan.entry_icon == '🟢' else ('no' if r.plan.entry_icon == '⛔' else 'wait')) }}">
             <div class="entry-st">{{ r.plan.entry_icon }} {{ r.plan.entry_status }}</div>
@@ -1293,7 +1239,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <div><span>同期大盤</span>
         <b class="mono {{ 'up' if (portfolio.benchmark_return or 0) > 0 else ('down' if (portfolio.benchmark_return or 0) < 0 else '') }}">{{ ('%+.2f'|format(portfolio.benchmark_return) ~ '%') if portfolio.benchmark_return is not none else '—' }}</b></div>
       <div><span>交易數</span><b class="mono">{{ portfolio.trades }}</b></div>
-      <div><span>勝率</span><b class="mono">{{ (portfolio.win_rate ~ '%') if portfolio.win_rate is not none else '—' }}</b></div>
+      <div><span>淨利達標率</span><b class="mono">{{ (portfolio.success_rate ~ '%') if portfolio.success_rate is not none else '—' }}</b></div>
       <div><span>PF</span><b class="mono">{{ portfolio.profit_factor if portfolio.profit_factor is not none else '—' }}</b></div>
       <div><span>最大回撤</span><b class="mono down">{{ '%.2f'|format(portfolio.mdd) }}%</b></div>
     </div>
@@ -1302,7 +1248,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <b>目前持股</b>
       {% for p in portfolio.positions %}
       <div class="pf-row"><span class="mono">{{ p.code }}</span>{{ p.name }}
-        <span class="pf-meta mono">成本 {{ '%.2f'|format(p.entry) }} · 停損 {{ '%.2f'|format(p.stop) }} · 持有 {{ p.held }} 日</span></div>
+        <span class="pf-meta mono">成本 {{ '%.2f'|format(p.entry) }} · 淨利目標價 {{ '%.2f'|format(p.target1) }} · 持有 {{ p.held }} 日</span></div>
       {% endfor %}
     </div>
     {% elif portfolio.pending %}
@@ -1322,7 +1268,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% endif %}
     <p class="pf-note">
       規則：每日最多持有 {{ paper_max_positions }} 檔、等權配置、隔日開盤成交、
-      觸及停損或目標一出場、最長持有 {{ paper_max_hold }} 個交易日，來回扣 {{ backtest.cost_pct if backtest else 0.3 }}% 成本。
+      第 {{ min_exit_days }}～{{ exit_days }} 日收盤淨利至少 {{ profit_target }}% 出場，否則第 {{ exit_days }} 日出場；來回扣 {{ cost_pct }}% 成本。此統計策略未設定提前停損。
       完全依規則執行，沒有人為判斷，也沒有使用任何未來資料。這是紀錄，不是實際交易。
     </p>
   </div>
@@ -1370,39 +1316,17 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 方法說明 ===================== -->
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
-    <h3>清單順序：先看進場狀態，再看綜合分數</h3>
-    卡片上的名次是<b>最終進場排名</b>，先依<b>動能確認</b>分三層：<br>
-    🟢 <b>強勢確認</b>（收盤站上基準價、量能達標、動能分數 {{ mom_green }} 以上）→
-    🟡 <b>潛力觀察</b>（模型看好但今天還沒確認）→
-    🔴 <b>轉弱／追高風險</b>（今日跌逾 3%、收盤跌破 MA5、爆量收黑、收盤跌破昨日低點、
-    MACD 明顯轉弱，或距 MA20 乖離超過 {{ mom_bias }}%）。<br>
-    同一層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
-    前 {{ top_slots }} 名優先只從 🟢 挑，不足才由 🟡 補入，並在卡片上明說是補進來的。<br><br>
-
-    <b>動能不是追高</b>：今日漲幅落在 +{{ mom_low }}%～+{{ mom_high }}% 才加分，
-    超過 {{ mom_high }}% 不再加分。今天已經噴出的股票不會因為漲很多而排到前面。
-    動能只影響排序與風險過濾，<b>EV、勝率、PF、技術分數、回測、walk-forward 一律不變</b>。<br><br>
-
-    <b>綜合分數</b> ＝ 模型品質 × 65% ＋ 進場品質 × 35%（各自標準化成 0～100）<br>
-    <b>模型品質</b>：EV 30%、平滑勝率 25%、PF 20%、平均回撤 10%、技術分數 15%<br>
-    <b>進場品質</b>：收盤是否站上基準價 40%、量能倍數 25%、RR 25%、距觸發價 10%<br>
-    沒有歷史樣本的項目以中性 50 代入，不會因為缺資料被懲罰或加分。<br>
-    這一層<b>沒有改動任何模型</b>——EV、勝率、PF、回測、walk-forward 全部照舊，
-    每張卡片也仍然標示原本的<b>模型名次</b>。<br><br>
-
-    <h3>模型名次的依據：歷史勝率優先，技術分數只是分層特徵</h3>
-    首頁名次的第一順位是<b>歷史平滑勝率</b>，不是技術分數。做法是：
-    先用技術面把每檔標的歸類成「型態 ＋ 分數級距」（例如「帶量突破 ＋ 65–75 分」），
-    再去查回測資料裡同一類訊號歷史上贏過幾次。<br><br>
-
-    <b>排序順位</b>：期望值 EV → 平滑勝率 → Profit Factor → 平均最大回撤 → 技術分數。
-    EV = 勝率×平均獲利 ＋ 敗率×平均虧損（已扣成本）。
-    <b>EV ≤ 0 的標的會降到有正 EV 的之後，但不會被刪除</b>，仍看得到名次。<br>
-    <b>查表順序</b>：大盤狀態＋型態＋分數級距 → 型態＋分數級距 → 分數級距 → 樣本不足。<br>
-    <b>可信度</b>：N&lt;30 樣本不足、30–59 ★★、60–119 ★★★、120–249 ★★★★、≥250 ★★★★★。<br>
-    <b>勝率平滑</b>：(勝場 + {{ smooth_wins }}) / (樣本 + {{ smooth_n }})，避免「3 戰 3 勝 = 100%」這種假訊號。<br>
-    <b>樣本門檻</b>：型態層需 {{ pattern_min_samples }} 筆，不足退回只看分數級距；再不足就標示
-    <b>樣本不足</b>，以先驗 50% 計入排名並改用技術分數決定先後——不會生一個假勝率出來。<br><br>
+    <h3>排序：淨利達標，而非只要小賺</h3>
+    先篩選樣本至少 {{ min_samples }} 筆、收縮 EV &gt; 0、PF &gt; 1 且無明顯技術風險的標的；
+    再比較達標率的保守下界、收縮 EV 與綜合分數。不足不補滿。<br>
+    未通過者仍保留在後段觀察清單，明確標記原因，不參與自動配置。<br><br>
+    <b>綜合分數</b>＝歷史證據 {{ (w_evidence*100)|round|int }}%＋位置風報 {{ (w_position*100)|round|int }}%＋動能確認 {{ (w_momentum*100)|round|int }}%。
+    小額正報酬只計入真實報酬統計，不增加達標次數。
+    達標率向同目標的訓練股票池基準收縮一次；排名使用 Wilson 保守下界，降低小樣本偶然高分。<br>
+    <b>查表順序</b>：大盤狀態＋型態＋級距 → 型態＋級距 → 級距；仍不足就不報達標率。<br>
+    <b>驗證</b>：以日期分段，排除尚未成熟的訓練結果；各段只以前期資料建表，再重播相同排序。
+    同日股票與連續訊號彼此相關，樣本數與星等不代表獨立證據數量；目前股票池回溯亦有選樣限制。<br>
+    美股與隔日風險資料保留作觀察，未取得對應歷史時點資料前不介入淨利目標排序。<br><br>
 
     <h3>技術分數怎麼算（0～100）</h3>
     機會分數（五項加權正規化）× 風險調整。趨勢強度與進場位置是分開的兩件事——
@@ -1418,13 +1342,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <h3>回測條件</h3>
     期間 {{ backtest.period }}，共 {{ backtest.samples }} 筆有效樣本。
     {{ backtest.entry_rule }}；淨報酬已扣 {{ backtest.cost_pct }}% 來回交易成本，
-    <b>淨報酬 &gt; 0 才算贏</b>；同一檔出訊號後 {{ backtest.cooldown_days }} 個交易日內不重複採樣。
-    以持有 {{ backtest.hold_days }} 日為主。歷史結果不代表未來績效。<br><br>
+    <b>淨報酬至少 {{ profit_target }}% 才算達標；正報酬率另行統計</b>；同一檔出訊號後 {{ backtest.cooldown_days }} 個交易日內不重複採樣。
+    以第 {{ min_exit_days }}～{{ exit_days }} 日達標出場為主。歷史結果不代表未來績效。<br><br>
     {% else %}
     <b>⚠️ 目前沒有可用的回測資料</b>（找不到 <code>data/backtest.json</code>，或各分層樣本都不足
     {{ pattern_min_samples }} 筆）。因此所有標的顯示「樣本不足」，名次暫由技術分數決定，
-    標題也改為「機會排行」而非「勝率排行」。<br>
-    每日更新的流程會在缺少回測檔時自動補跑一次；也可以到 repo 的 Actions 手動執行
+    標題改為「機會排行」，等待新規則回測完成。<br>
+    每日更新的流程會在缺少回測檔或策略口徑改變時補跑；也可以到 repo 的 Actions 手動執行
     <b>每週回測</b>。<br><br>
     {% endif %}
 
@@ -1442,7 +1366,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 底部免責聲明 ===================== -->
   <div class="disclaimer-bottom">
     ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
-    歷史勝率是過去相似訊號的統計結果，不是未來的成功機率；技術分數更只是型態描述。<br>
+    歷史達標率是過去相似訊號的統計結果，不是未來的成功機率；技術分數更只是型態描述。<br>
     分數高不代表會上漲，技術指標只描述過去的價量行為。<br>
     資料可能因來源延遲或錯誤而失真，下單前請自行以券商報價複核。
   </div>
@@ -1915,7 +1839,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     if (st.mode === "pick") {
       picks = shown.filter(function (c) { return st.picks.indexOf(c.dataset.code) >= 0; });
     } else {
-      picks = shown.slice(0, st.splits);
+      picks = shown.filter(function (c) { return c.dataset.eligible === "1"; }).slice(0, st.splits);
     }
 
     if (!st.budget || st.budget <= 0) {

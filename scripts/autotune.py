@@ -182,6 +182,11 @@ def score_of(r: dict) -> tuple:
 
 
 def main() -> int:
+    print("舊版調校以隔日報酬為目標，已停用，避免覆蓋淨利達標策略。請用 scripts/evaluate.py 驗證。")
+    return 0
+
+
+def legacy_main() -> int:
     ap = argparse.ArgumentParser(description="用真實資料自動調校參數")
     ap.add_argument("--days", type=int, default=250)
     ap.add_argument("--demo", action="store_true", help="用模擬資料（只驗證流程）")

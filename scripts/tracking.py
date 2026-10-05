@@ -19,6 +19,7 @@ import logging
 from pathlib import Path
 
 import config as C
+import strategy
 
 log = logging.getLogger("tracking")
 ROOT = Path(__file__).resolve().parent.parent
@@ -64,7 +65,8 @@ def update_signals(rows: list[dict], trade_date: str, regime: str) -> dict:
     回傳 {code: {"badge": "🆕", "streak": 3, "rank_delta": +5, ...}}
     """
     hist = _load(C.SIGNALS_JSON, {"days": []})
-    days = hist.get("days", []) if isinstance(hist, dict) else []
+    import strategy
+    days = hist.get("days", []) if isinstance(hist, dict) and strategy.compatible(hist) else []
     days = [d for d in days if isinstance(d, dict) and d.get("date") != trade_date]
 
     prev_day = days[-1] if days else None
@@ -89,7 +91,7 @@ def update_signals(rows: list[dict], trade_date: str, regime: str) -> dict:
         code = r["code"]
         old = prev_rank.get(code)
         streak = streak_of(code) + 1
-        delta = (old - r["rank"]) if isinstance(old, int) else None
+        delta = (old - r.get("final_rank", r.get("rank", 999))) if isinstance(old, int) else None
 
         if old is None:
             badge, label = "🆕", "今日新訊號"
@@ -105,7 +107,7 @@ def update_signals(rows: list[dict], trade_date: str, regime: str) -> dict:
         marks[code] = {"badge": badge, "label": label, "streak": streak,
                        "rank_delta": delta, "prev_rank": old}
         entries.append({
-            "symbol": code, "date": trade_date, "rank": r["rank"],
+            "symbol": code, "date": trade_date, "rank": r.get("final_rank", r.get("rank", 999)),
             "ref_price": _num(r.get("close")), "score": _num(r.get("score")),
             "pattern": r.get("kind"), "regime": regime,
         })
@@ -121,7 +123,7 @@ def update_signals(rows: list[dict], trade_date: str, regime: str) -> dict:
 
     days.append({"date": trade_date, "regime": regime, "entries": entries})
     days = days[-C.SIGNALS_KEEP_DAYS:]
-    _save(C.SIGNALS_JSON, {"days": days})
+    _save(C.SIGNALS_JSON, {"strategy": strategy.contract(), "days": days})
 
     return {
         "marks": marks,
@@ -143,136 +145,18 @@ def _blank_portfolio() -> dict:
             "forward_start": None, "mode": "forward_test"}
 
 
-def update_portfolio(rows: list[dict], trade_date: str, index_close: float | None) -> dict:
-    """
-    每天收盤後跑一次：
-      1. 先用今天的開盤價成交昨天掛的單（t+1 open，不是預測）
-      2. 檢查持股是否觸及停損／目標／持有上限
-      3. 用今天收盤價結算淨值
-      4. 依今天的排名，替明天掛新單
-
-    rows 需要有 day_open / day_high / day_low（build_row 會帶）。
-    """
-    pf = _load(C.PORTFOLIO_JSON, None)
-    if not isinstance(pf, dict) or "cash" not in pf:
-        pf = _blank_portfolio()
-    for k, v in _blank_portfolio().items():
-        pf.setdefault(k, v)
-
-    if pf.get("last_date") == trade_date:      # 同一天重跑（例如盤前那班）不重複交易
-        return _summarize(pf, index_close)
-    if not pf.get("forward_start"):
-        pf["forward_start"] = trade_date       # 第一次跑的那天就是前瞻測試的起點
-
-    by_code = {r["code"]: r for r in rows}
-    cost = C.PAPER_COST_SIDE_PCT / 100
-
-    # --- 1) 成交昨天掛的單：用今天的開盤價 ---
-    filled = []
-    for order in pf.get("pending", []):
-        r = by_code.get(order.get("code"))
-        if not r:
-            continue                            # 今天沒進榜／沒資料 → 這張單作廢
-        px = _num(r.get("day_open")) or _num(r.get("close"))
-        if px <= 0:
-            continue
-        budget = _num(order.get("budget"))
-        shares = int(budget // px)              # 零股買法，1 股為單位
-        if shares < 1:
-            continue
-        cash_out = shares * px * (1 + cost)
-        if cash_out > pf["cash"]:
-            shares = int(pf["cash"] / (px * (1 + cost)))
-            cash_out = shares * px * (1 + cost)
-        if shares < 1:
-            continue
-        pf["cash"] -= cash_out
-        pf["positions"].append({
-            "code": r["code"], "name": r.get("name", ""), "shares": shares,
-            "entry": round(px, 2), "entry_date": trade_date, "held": 0,
-            "stop": _num(order.get("stop")), "target1": _num(order.get("target1")),
-            "pattern": order.get("pattern"),
-        })
-        filled.append(r["code"])
-    pf["pending"] = []
-
-    # --- 2) 出場檢查（用今天的高低價，不用未來資料）---
-    still = []
-    for pos in pf.get("positions", []):
-        r = by_code.get(pos["code"])
-        if not r:
-            still.append(pos)                   # 今天沒資料就先留著，明天再看
-            continue
-        if pos["code"] in filled:
-            still.append(pos)                   # 今天才成交，不當天出場
-            continue
-
-        pos["held"] = int(pos.get("held", 0)) + 1
-        hi = _num(r.get("day_high")) or _num(r.get("close"))
-        lo = _num(r.get("day_low")) or _num(r.get("close"))
-        cl = _num(r.get("close"))
-        stop, t1 = _num(pos.get("stop")), _num(pos.get("target1"))
-
-        exit_px, reason = None, None
-        if stop > 0 and lo <= stop:
-            exit_px, reason = stop, "停損"      # 保守：同日觸及停損視為以停損價成交
-        elif t1 > 0 and hi >= t1:
-            exit_px, reason = t1, "達標"
-        elif pos["held"] >= C.PAPER_MAX_HOLD_DAYS:
-            exit_px, reason = cl, "持有到期"
-
-        if exit_px and exit_px > 0:
-            proceeds = pos["shares"] * exit_px * (1 - cost)
-            pf["cash"] += proceeds
-            gross = (exit_px / pos["entry"] - 1) * 100 if pos["entry"] else 0
-            net = gross - C.TOTAL_COST_PCT
-            pf["trades"].append({
-                "code": pos["code"], "name": pos.get("name", ""),
-                "entry_date": pos.get("entry_date"), "exit_date": trade_date,
-                "entry": pos["entry"], "exit": round(exit_px, 2),
-                "net_pct": round(net, 2), "reason": reason,
-                "held": pos["held"], "pattern": pos.get("pattern"),
-            })
-        else:
-            still.append(pos)
-    pf["positions"] = still
-
-    # --- 3) 用今天收盤價結算淨值 ---
-    mv = 0.0
-    for pos in pf["positions"]:
-        r = by_code.get(pos["code"])
-        px = _num(r.get("close")) if r else pos["entry"]
-        mv += pos["shares"] * (px or pos["entry"])
-    equity = pf["cash"] + mv
-    if pf.get("start_index") is None and index_close:
-        pf["start_index"] = _num(index_close)
-    pf["equity"].append({"date": trade_date, "equity": round(equity, 2),
-                         "index": _num(index_close) or None})
-    pf["equity"] = pf["equity"][-250:]
-
-    # --- 4) 替明天掛新單：今天排名前 N、還沒持有、且計畫不是「禁止追價」---
-    held = {p["code"] for p in pf["positions"]}
-    slots = C.PAPER_MAX_POSITIONS - len(pf["positions"])
-    if slots > 0 and pf["cash"] > 1000:
-        per = pf["cash"] / slots                # 等權配置
-        for r in rows:
-            if slots <= 0:
-                break
-            if r["code"] in held:
-                continue
-            pl = r.get("plan") or {}
-            if pl.get("status") == "禁止追價":
-                continue
-            pf["pending"].append({
-                "code": r["code"], "budget": round(per, 2),
-                "stop": _num(pl.get("stop")), "target1": _num(pl.get("target1")),
-                "pattern": r.get("kind"),
-            })
-            slots -= 1
-
-    pf["last_date"] = trade_date
+def update_portfolio(rows: list[dict], trade_date: str, index_close: float | None,
+                     hist_map: dict | None = None) -> dict:
+    from paper_target import update
+    previous = _load(C.PORTFOLIO_JSON, {})
+    if previous and not strategy.compatible(previous):
+        # Preserve prior target/version results instead of silently overwriting them.
+        import hashlib
+        old_id = hashlib.sha256(json.dumps(previous.get("strategy"), sort_keys=True).encode()).hexdigest()[:12]
+        _save(f"data/portfolio_archive_{old_id}.json", previous)
+    pf, summary = update(previous, rows, trade_date, index_close, hist_map or {})
     _save(C.PORTFOLIO_JSON, pf)
-    return _summarize(pf, index_close)
+    return summary
 
 
 def _summarize(pf: dict, index_close: float | None) -> dict:
@@ -285,7 +169,8 @@ def _summarize(pf: dict, index_close: float | None) -> dict:
     nets = [_num(t.get("net_pct")) for t in trades]
     wins = [x for x in nets if x > 0]
     losses = [x for x in nets if x <= 0]
-    gross_w, gross_l = sum(wins), -sum(losses)
+    pnls = [_num(t.get("pnl"), _num(t.get("net_pct"))) for t in trades]
+    gross_w, gross_l = sum(x for x in pnls if x > 0), -sum(x for x in pnls if x <= 0)
 
     # 最大回撤：用淨值曲線的高點回落
     peak, mdd = init, 0.0
@@ -307,6 +192,8 @@ def _summarize(pf: dict, index_close: float | None) -> dict:
                           "stop": p.get("stop"), "target1": p.get("target1")})
 
     return {
+        "strategy": pf.get("strategy"),
+        "success_rate": round(sum(bool(t.get("success")) for t in trades) / len(trades) * 100, 1) if trades else None,
         "mode": pf.get("mode", "forward_test"),
         "forward_start": pf.get("forward_start"),
         "cost_pct": C.TOTAL_COST_PCT,

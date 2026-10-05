@@ -241,8 +241,8 @@ FINAL_W_POSITION = 0.30   # 位置與風報（進場位置、RR、距觸發價�
 FINAL_W_MOMENTUM = 0.25   # 動能與確認（收盤確認、量能、均線、MACD）合併計一次
 
 # 證據區塊：成功率（N 天內獲利出場）是核心，佔最大權重
-FINAL_EVIDENCE_W = {"success": 0.40, "ev": 0.20, "pf": 0.15,
-                    "winrate": 0.05, "mdd": 0.05, "samples": 0.15}
+FINAL_EVIDENCE_W = {"success": 0.50, "ev": 0.25, "pf": 0.15,
+                    "mdd": 0.05, "samples": 0.05}
 FINAL_POSITION_W = {"position": 0.45, "rr": 0.40, "distance": 0.15}
 
 # 舊的鍵保留給 autotune 相容，實際排序已不使用
@@ -497,8 +497,8 @@ OUTPUT_HTML = "index.html"
 OUTPUT_JSON = "data/latest.json"
 ARCHIVE_DIR = "data/history"
 BACKTEST_JSON = "data/backtest.json"   # 回測結果（有跑過才會存在）
-SIGNALS_JSON = "data/signals.json"     # 每日排名紀錄（訊號生命週期用）
-PORTFOLIO_JSON = "data/portfolio.json" # 模擬投資組合狀態
+SIGNALS_JSON = "data/signals_target.json"     # 每日排名紀錄（訊號生命週期用）
+PORTFOLIO_JSON = "data/portfolio_target.json" # 模擬投資組合狀態
 
 # --- 訊號生命週期 ---
 SIGNALS_KEEP_DAYS = 40        # 排名紀錄保留幾天
@@ -524,25 +524,16 @@ WF_TOP_N = 3                  # 每日取前幾名進行 out-of-sample 檢驗
 # 回測設定（scripts/backtest.py 使用）
 # ---------------------------------------------------------------------------
 # ---------------------------------------------------------------------------
-# 交易節奏：使用者不做當沖，是「看排名 → 隔天買進 → 再隔天賣出」
-#   訊號日 t 收盤產生排名
-#   t+1 開盤買進（收盤後才有排名，t 日收盤價已經買不到）
-#   t+1+HOLD 收盤賣出
-# HOLD_DAYS = 1 代表持有一夜，也就是隔日沖。
-# 改成 2 就是持有兩天，全站的統計與排名依據會一起跟著變。
-# ---------------------------------------------------------------------------
-# 核心定義：今天買、之後 1～10 個交易日內只要能「獲利出場」就算成功。
-#   進場：t+1 開盤
-#   每天收盤檢查一次，扣掉成本後還是正的就出場
-#   撐到第 EXIT_MAX_DAYS 天還沒機會，就當天收盤認賠出場
-# 排名的第一順位＝這個成功率，不是單日勝率。
-EXIT_MAX_DAYS = 10             # 最長持有幾個交易日
-EXIT_MIN_PROFIT = 0.0          # 扣成本後淨報酬超過這個值才算獲利出場（%）
+# 主策略：訊號發布後下一個可交易日開盤買，第 5～10 個交易日收盤檢查。
+# 淨利（已扣 TOTAL_COST_PCT）至少達標才算成功；未達標第 10 日出場。
+# 買進日算第 1 日。若希望更早接受達標，可調整 EXIT_MIN_DAYS 並重跑回測。
+EXIT_MIN_DAYS = 5
+EXIT_MAX_DAYS = 10
+EXIT_MIN_PROFIT = 3.0          # 淨利門檻（百分比），可改為 5.0；會使舊統計失效
 
-HOLD_DAYS = 1                  # 舊的固定持有期，仍用於部分輔助統計
-PRIMARY_HOLD_DAYS = HOLD_DAYS
-
-BACKTEST_HOLD_DAYS = [1, 2, 3, 5]      # 持有天數（第一個是主要依據）
+HOLD_DAYS = 1                  # 僅供獨立「明日強勢」及技術價位參考使用
+PRIMARY_HOLD_DAYS = EXIT_MIN_DAYS
+BACKTEST_HOLD_DAYS = [5, 10]    # 另列的固定持有期報酬，與達標率分開
 BACKTEST_TOP_K = [1, 3, 5, 10]         # 檢查前幾名
 BACKTEST_MIN_SCORE = 0               # 回測統計全部級距（含低分區），否則低分標的查不到表
 BACKTEST_SCORE_BUCKETS = [(0, 30), (30, 45), (45, 55), (55, 65), (65, 75), (75, 101)]
@@ -553,7 +544,7 @@ SLIPPAGE_PCT = 0.2            # 來回滑價假設，單位 %
                               # 不扣滑價的回測一定過度樂觀
 TOTAL_COST_PCT = TRADE_COST_PCT + SLIPPAGE_PCT   # 所有績效統一扣這個
                               # 台股實務約 0.4～0.6%，想更保守就調高
-SIGNAL_COOLDOWN_DAYS = 5      # 同一檔股票出訊號後幾個交易日內不重複採樣
+SIGNAL_COOLDOWN_DAYS = 10      # 同一檔股票出訊號後幾個交易日內不重複採樣
                               # 避免連續多天的同一段行情被算成好幾個獨立樣本
 
 # --- 樣本門檻與可信度 ---
@@ -647,11 +638,11 @@ def _load_tuned():
         return {}
 
 
-TUNED = _load_tuned()
+TUNED = {}  # 舊調校目標為隔日報酬，不套用到淨利達標策略
 for _k, _v in TUNED.items():
     if _k in globals() and isinstance(_v, (int, float)):
         globals()[_k] = _v
 
 # 跟著調校值連動的衍生設定
-PRIMARY_HOLD_DAYS = HOLD_DAYS
+PRIMARY_HOLD_DAYS = EXIT_MIN_DAYS
 RANK_W_FINAL = 1.0 - RANK_W_MOM

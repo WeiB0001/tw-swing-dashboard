@@ -1,32 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-backtest.py — 歷史回測（決定排名的依據）
+backtest.py — 與首頁共用排序程式的淨利目標回測。
+訊號日收盤後選股，次日開盤進場，第 5～10 日收盤淨利達標才成功，
+未達標第 10 日出場；小幅正報酬仍納入 EV，但不計入達標次數。
+同股校準樣本間隔 10 日，逐段驗證剔除尚未成熟的訓練結果。
+目前股票池回溯存在選樣限制，跨股與連續日樣本亦非互相獨立。
 
-這支的輸出不只是「看看分數準不準」，而是**首頁排名的實際依據**。
-儀表板會拿這裡算出來的歷史勝率去排序，技術分數只是分層用的特徵。
-
-交易假設（刻意保守，寧可低估）：
-  - 訊號用第 t 日**收盤後**的資料算出來
-  - 進場價是 **t+1 日的開盤價**，不是 t 日收盤價
-    （t 日收盤價在收盤後已經買不到了，用它當進場價等於偷看）
-  - 出場價是 t+h 日的收盤價
-  - 淨報酬 = 毛報酬 − 來回成本（手續費稅 TRADE_COST_PCT ＋ 滑價 SLIPPAGE_PCT）
-  - **淨報酬 > 0 才算贏**
-  - 同一檔股票出訊號後 config.SIGNAL_COOLDOWN_DAYS 個交易日內不重複採樣，
-    避免同一段行情被算成好幾個獨立樣本，把樣本數灌水
-
-統計輸出：
-  - 以持有 5 日為主，同時保留 3 / 10 / 20 日
-  - 依「分數級距」統計
-  - 再依「pattern（型態）＋ 分數級距」統計，這才是排名的主要依據
-  - 勝率一律做平滑：(wins + 10) / (samples + 20)，避免 3 戰 3 勝就變成 100%
-
-不使用 sklearn，只用 numpy / pandas。
-
-用法：
-    python scripts/backtest.py                 # 用線上資料跑（慢，約 10～25 分鐘）
-    python scripts/backtest.py --demo          # 用模擬資料跑，僅驗證程式流程
-    python scripts/backtest.py --days 250      # 只回測最近 250 個交易日
+python scripts/backtest.py --days 250
+python scripts/backtest.py --demo --no-save
 """
 
 from __future__ import annotations
@@ -46,6 +27,8 @@ import pandas as pd
 import config as C
 import indicators
 import scoring
+import strategy
+import ranking
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -67,7 +50,10 @@ def load_universe_history(demo: bool) -> dict[str, pd.DataFrame]:
     snapshot = fetch.fetch_twse_snapshot()
     if snapshot.empty:
         raise RuntimeError("證交所行情取得失敗，無法決定回測範圍。")
-    universe = fetch.build_universe(snapshot)
+    import universe as universe_mod
+    universe = universe_mod.build_core(snapshot, fetch.fetch_stock_info())
+    if universe.empty:
+        universe = fetch.build_universe(snapshot)
     # 與 build.py 共用同一份 data/history 快取，不重抓
     return fetch.fetch_history(universe["code"].tolist())
 
@@ -76,41 +62,9 @@ def load_universe_history(demo: bool) -> dict[str, pd.DataFrame]:
 # 勝率平滑
 # ---------------------------------------------------------------------------
 def first_profitable_exit(df, pos: int, cost: float) -> dict | None:
-    """
-    今天買、之後 1～EXIT_MAX_DAYS 天內能不能獲利出場？
-
-      進場：t+1 開盤（收盤後才有排名，t 日收盤價已經買不到）
-      每天收盤檢查一次，扣成本後淨報酬 > EXIT_MIN_PROFIT 就出場
-      撐到最後一天還沒機會，就以那天收盤認賠
-
-    回傳 {success, days, net, mdd}。這是排名的核心指標——
-    「賺錢的成功率」問的是有沒有機會獲利離場，不是固定持有 N 天的報酬。
-    """
-    n = len(df)
-    if pos + 1 >= n:
-        return None
-    try:
-        entry = float(df["open"].iloc[pos + 1])
-    except Exception:
-        return None
-    if not entry or entry <= 0:
-        return None
-
-    worst = 0.0
-    last_net = None
-    for d in range(1, C.EXIT_MAX_DAYS + 1):
-        j = pos + d
-        if j >= n:
-            break
-        lo = float(df["low"].iloc[j])
-        worst = min(worst, (lo / entry - 1) * 100)
-        net = (float(df["close"].iloc[j]) / entry - 1) * 100 - cost
-        last_net = net
-        if net > C.EXIT_MIN_PROFIT:
-            return {"success": True, "days": d, "net": net, "mdd": worst}
-    if last_net is None:
-        return None
-    return {"success": False, "days": C.EXIT_MAX_DAYS, "net": last_net, "mdd": worst}
+    """Shared 5–10 trading-day net-target outcome; only fully matured cohorts."""
+    result = strategy.outcome(df, pos + 1, cost)
+    return result if result and result.get("closed") else None
 
 
 def calibrate(wins: int, samples: int) -> float:
@@ -192,10 +146,13 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     usable = all_dates[C.MIN_BARS: len(all_dates) - max(max_hold, C.EXIT_MAX_DAYS) - 1]
     if lookback_days > 0:
         usable = usable[-lookback_days:]
+    if not usable:
+        raise RuntimeError("沒有可用的完整持有期間")
     log.info("回測期間：%s ～ %s（%d 個交易日）",
              str(usable[0])[:10], str(usable[-1])[:10], len(usable))
 
-    signals = []
+    import build as build_mod
+    signals, all_signals = [], []
     last_signal_day = {}          # code -> 上次採樣是第幾個交易日（用來做冷卻）
 
     for n, day in enumerate(usable):
@@ -240,7 +197,11 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
             if ex is None:
                 continue
 
+            replay = build_mod.build_row(code, code, f, res)
+            replay["prev_low"] = float(df["low"].iloc[pos - 1])
+            replay["regime"] = reg
             day_rows.append({
+                "replay": replay,
                 "exit": ex,
                 "regime": reg,
                 "day_index": n,
@@ -262,17 +223,16 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         # 當日名次仍用技術分數排（回測時還沒有勝率可用）
         day_rows.sort(key=scoring.sort_key)
 
-        rank = 0
         n_day = len(day_rows)
-        for r in day_rows:
+        for rank, r in enumerate(day_rows, 1):
+            r["rank"] = rank
+            r["pct"] = (rank - 1) / max(1, n_day)
+            all_signals.append(r)
             # --- 冷卻：同一檔在 N 個交易日內只採樣一次 ---
             prev = last_signal_day.get(r["code"])
             if prev is not None and n - prev < cooldown:
                 continue
             last_signal_day[r["code"]] = n
-            rank += 1
-            r["rank"] = rank
-            r["pct"] = rank / max(1, n_day)      # 名次百分位，用來做 decile 驗證
             signals.append(r)
 
         if (n + 1) % 20 == 0:
@@ -281,13 +241,17 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     if not signals:
         raise RuntimeError("回測期間沒有任何達標訊號，請放寬 MIN_SCORE_TO_SHOW 再試。")
 
-    # --- 切 in-sample / out-of-sample：後段完全不參與任何調整，只拿來驗證 ---
-    ordered = sorted(signals, key=lambda x: (x["date"], x["code"]))
-    cut = int(len(ordered) * C.OOS_SPLIT)
-    ins, oos = ordered[:cut], ordered[cut:]
-    log.info("樣本切分：in-sample %d 筆、out-of-sample %d 筆", len(ins), len(oos))
+    dates = sorted({r["date"] for r in signals})
+    cut_date = dates[min(len(dates) - 1, int(len(dates) * C.OOS_SPLIT))]
+    ins = [r for r in signals if r["exit"]["label_end"] < cut_date]
+    oos = [r for r in signals if r["date"] >= cut_date]
+    wf = walk_forward(all_signals, signals)
+    tables = calibration_tables(signals)
 
     return {
+        "strategy": strategy.contract(),
+        "calibration": tables,
+        "in_sample_overall": _pack(ins),
         "generated_at": datetime.now(C.TZ).strftime("%Y-%m-%d %H:%M"),
         "oos_period": (f"{oos[0]['date']} ～ {oos[-1]['date']}" if oos else ""),
         "oos_total": len(oos),
@@ -296,7 +260,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "oos_buckets": stats_by_pattern_bucket(oos),        # 排名查表優先用這個
         "oos_score_buckets": stats_by_bucket(oos),
         "deciles_in_sample": stats_by_decile(ins),
-        "deciles_oos": stats_by_decile(oos),
+        "deciles_oos": wf.get("deciles", []),
         "period": f"{str(usable[0])[:10]} ～ {str(usable[-1])[:10]}",
         "trading_days": len(usable),
         "universe_size": len(frames),
@@ -306,13 +270,14 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "cost_detail": {"fee_tax": C.TRADE_COST_PCT, "slippage": C.SLIPPAGE_PCT},
         "cooldown_days": cooldown,
         "entry_rule": ("訊號日 t 收盤後產生，t+1 開盤進場；之後每天收盤檢查，"
-                       "扣成本後有獲利就出場，最長持有 %d 個交易日" % C.EXIT_MAX_DAYS),
+                       "第 %d～%d 個交易日淨利至少 %.1f%% 才算達標；未達標第 %d 日出場（收盤成交模擬）"
+                       % (C.EXIT_MIN_DAYS, C.EXIT_MAX_DAYS, C.EXIT_MIN_PROFIT, C.EXIT_MAX_DAYS)),
         "exit_max_days": C.EXIT_MAX_DAYS,
         "topk": stats_by_topk(signals),
         "score_buckets": stats_by_bucket(signals),
         "regime_buckets": stats_by_regime_pattern_bucket(signals),
         "pattern_buckets": stats_by_pattern_bucket(signals),
-        "walk_forward": walk_forward(signals),
+        "walk_forward": wf,
         "patterns": stats_by_pattern(signals),
         "note": "歷史模擬結果，不代表未來績效。已扣 %.1f%% 來回成本（手續費稅 %.1f%% ＋ 滑價 %.1f%%）。"
                 % (cost, C.TRADE_COST_PCT, C.SLIPPAGE_PCT),
@@ -333,8 +298,10 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
         mdds = [e["mdd"] for e in ex]
         d = describe(nets, mdds)
         wins = sum(1 for e in ex if e["success"])
+        d["successes"] = wins
         d["success_rate"] = round(wins / len(ex) * 100, 1)
         d["calibrated_success"] = round(calibrate(wins, len(ex)) * 100, 1)
+        d["success_lower"] = round(strategy.wilson_lower(wins, len(ex)), 2)
         d["avg_days"] = round(sum(e["days"] for e in ex) / len(ex), 1)
         d["avg_days_win"] = (round(sum(e["days"] for e in ex if e["success"])
                                    / max(1, wins), 1) if wins else None)
@@ -343,6 +310,8 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
 
 
 def _pack_hold(sub: list[dict], h: int) -> dict:
+    if not sub:
+        return describe([], [])
     return describe([s["fwd"][h]["net"] for s in sub], [s["fwd"][h]["mdd"] for s in sub])
 
 
@@ -350,8 +319,8 @@ def stats_by_topk(signals: list[dict]) -> dict:
     out = {}
     for k in C.BACKTEST_TOP_K:
         sub = [s for s in signals if s["rank"] <= k]
-        out[f"top{k}"] = {str(h): _pack(sub, h) for h in C.BACKTEST_HOLD_DAYS} if sub else {}
-    out["all"] = {str(h): _pack(signals, h) for h in C.BACKTEST_HOLD_DAYS}
+        out[f"top{k}"] = {str(h): _pack_hold(sub, h) for h in C.BACKTEST_HOLD_DAYS} if sub else {}
+    out["all"] = {str(h): _pack_hold(signals, h) for h in C.BACKTEST_HOLD_DAYS}
     return out
 
 
@@ -400,100 +369,85 @@ def stats_by_regime_pattern_bucket(signals: list[dict]) -> list[dict]:
     return out
 
 
-def walk_forward(signals: list[dict]) -> dict:
+def calibration_tables(signals: list[dict]) -> dict:
+    return {"overall": _pack(signals),
+            "regime_buckets": stats_by_regime_pattern_bucket(signals),
+            "pattern_buckets": stats_by_pattern_bucket(signals),
+            "score_buckets": stats_by_bucket(signals)}
+
+
+def training_before(signals: list[dict], test_start: str) -> list[dict]:
+    # Purge overlapping outcome windows, not merely signal dates.
+    return [r for r in signals if r["date"] < test_start
+            and r["exit"]["label_end"] < test_start]
+
+
+def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> dict:
+    """Frozen chronological folds replay the same attach/momentum/rank functions.
+
+    No overseas or next-day model adjustment is applied to the live target rank,
+    so historical and live feature paths remain identical.
     """
-    簡單的 walk-forward：把樣本依時間切成 WF_FOLDS 段。
-    第 1 段只用來建表，之後每一段都用「該段之前」的資料建表再測，
-    絕不用測試期間自己的資料去調自己 —— 這樣才是 out-of-sample。
-
-    測試方式：用前期表查每筆訊號的期望值，每日取期望值最高的前 WF_TOP_N 筆，
-    記錄它們實際的 5 日淨報酬。
-    """
-    h = C.PRIMARY_HOLD_DAYS
-    k = max(int(C.WF_FOLDS), 2)
-    if len(signals) < k * 40:
-        return {"available": False, "reason": "樣本不足，無法做 walk-forward 驗證"}
-
-    ordered = sorted(signals, key=lambda s: (s["date"], s["code"]))
-    size = len(ordered) // k
-    folds = [ordered[i * size: (i + 1) * size] for i in range(k - 1)]
-    folds.append(ordered[(k - 1) * size:])
-
-    def build_table(rows: list[dict]) -> dict:
-        """(regime, pattern, bucket) -> expectancy；樣本不足的層自動略過。"""
-        tbl = {}
-        for reg in set(r.get("regime", "sideways") for r in rows):
-            for pat in set(r["pattern"] for r in rows):
-                for lo, hi in C.BACKTEST_SCORE_BUCKETS:
-                    sub = [r for r in rows
-                           if r.get("regime", "sideways") == reg and r["pattern"] == pat
-                           and lo <= r["score"] < hi]
-                    if len(sub) >= C.PATTERN_MIN_SAMPLES:
-                        tbl[(reg, pat, lo)] = _pack(sub, h)["expectancy"]
-        for pat in set(r["pattern"] for r in rows):        # 退一層：型態＋級距
-            for lo, hi in C.BACKTEST_SCORE_BUCKETS:
-                sub = [r for r in rows if r["pattern"] == pat and lo <= r["score"] < hi]
-                if len(sub) >= C.PATTERN_MIN_SAMPLES:
-                    tbl.setdefault((None, pat, lo), _pack(sub, h)["expectancy"])
-        return tbl
-
-    def bucket_lo(score: float):
-        for lo, hi in C.BACKTEST_SCORE_BUCKETS:
-            if lo <= score < hi:
-                return lo
-        return None
-
-    picked = []
-    for i in range(1, k):
-        # 嚴格避免 leakage：建表只用「測試段第一天之前」的樣本。
-        # 光用 folds[:i] 還不夠——同一天的樣本可能被切到兩段，
-        # 那會讓當天的結果反過來影響當天的選股。
-        test_start = min(r["date"] for r in folds[i]) if folds[i] else None
-        prior = [r for f in folds[:i] for r in f
-                 if test_start is None or r["date"] < test_start]
-        if len(prior) < C.PATTERN_MIN_SAMPLES:
+    import build as build_mod
+    from copy import deepcopy
+    calibration = signals if calibration is None else calibration
+    dates = sorted({s["date"] for s in signals})
+    k = max(2, C.WF_FOLDS)
+    if len(dates) < k * 5:
+        return {"available": False, "reason": "交易日期不足，尚無獨立驗證"}
+    folds = [list(x) for x in np.array_split(dates, k)]
+    by_day = {}
+    for r in signals:
+        by_day.setdefault(r["date"], []).append(r)
+    picked, tested, fold_stats, comparisons, success_comparisons = [], [], [], [], []
+    for i, test_dates in enumerate(folds[1:], 1):
+        prior = training_before(calibration, test_dates[0])
+        if len(prior) < C.MIN_SAMPLES_SCORE:
             continue
-        table = build_table(prior)
-        if not table:
-            continue
-        by_day = {}
-        for r in folds[i]:
-            lo = bucket_lo(r["score"])
-            ev = table.get((r.get("regime", "sideways"), r["pattern"], lo))
-            if ev is None:
-                ev = table.get((None, r["pattern"], lo))
-            if ev is None:
-                continue
-            by_day.setdefault(r["date"], []).append((ev, r))
-        for day, lst in by_day.items():
-            lst.sort(key=lambda x: -x[0])
-            for ev, r in lst[: C.WF_TOP_N]:
-                if ev > 0:                       # 只交易期望值為正的訊號
-                    picked.append(r)
-
-    if len(picked) < 20:
-        return {"available": False, "reason": "out-of-sample 樣本不足，不產出結果"}
-
-    # 每一段各自的 EV：全部為正才算穩定，忽正忽負代表只是運氣
-    fold_stats = []
-    for i in range(1, k):
-        dates = set(r["date"] for r in folds[i])
-        sub = [r for r in picked if r["date"] in dates]
-        if len(sub) >= 5:
-            fs = _pack(sub, h)
-            fold_stats.append({"fold": i, "samples": fs["samples"],
-                               "expectancy": fs["expectancy"],
-                               "profit_factor": fs["profit_factor"],
-                               "win_rate": fs["win_rate"]})
-    pos = sum(1 for f in fold_stats if (f["expectancy"] or 0) > 0)
-    stability = round(pos / len(fold_stats), 2) if fold_stats else 0.0
-
-    d = _pack(picked, h)
-    return {"available": True, "folds": k, "top_n": C.WF_TOP_N,
-            "period": f"{picked[0]['date']} ～ {picked[-1]['date']}",
-            "fold_stats": fold_stats,
-            "positive_folds": pos, "total_folds": len(fold_stats),
-            "stability": stability, **d}
+        tables = calibration_tables(prior)
+        fold_picked = []
+        for day in test_dates:
+            source = by_day[day]
+            rows = [deepcopy(r["replay"]) for r in source]
+            ranking.attach(rows, tables)
+            build_mod.add_momentum(rows)
+            build_mod.add_final_score(rows)
+            ranked = ranking.sort(rows)
+            lookup = {s["code"]: s for s in source}
+            n = len(ranked)
+            eligible = [r for r in ranked if r["rank_eligible"]][:C.WF_TOP_N]
+            today = [lookup[r["code"]] for r in eligible]
+            picked.extend(today)
+            fold_picked.extend(today)
+            if today:
+                comparisons.append(sum(s["exit"]["net"] for s in today) / len(today)
+                                   - sum(s["exit"]["net"] for s in source) / len(source))
+                success_comparisons.append(100 * (sum(s["exit"]["success"] for s in today) / len(today)
+                                           - sum(s["exit"]["success"] for s in source) / len(source)))
+            for rank, r in enumerate(ranked, 1):
+                tested.append({**lookup[r["code"]], "rank": rank,
+                               "pct": (rank - 1) / max(n, 1)})
+        fs = _pack(fold_picked)
+        fold_stats.append({"fold": i, "samples": fs["samples"],
+                           "expectancy": fs["expectancy"],
+                           "profit_factor": fs["profit_factor"],
+                           "win_rate": fs["win_rate"],
+                           "success_rate": fs.get("success_rate"),
+                           "train_last_outcome": max(r["exit"]["label_end"] for r in prior),
+                           "test_start": test_dates[0]})
+    if not tested:
+        return {"available": False, "reason": "成熟訓練樣本不足"}
+    positive = sum(1 for f in fold_stats if (f["expectancy"] or 0) > 0)
+    summary = _pack(picked)
+    return {"available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
+            "folds": k, "top_n": C.WF_TOP_N, "fold_stats": fold_stats,
+            "positive_folds": positive, "total_folds": len(fold_stats),
+            "stability": positive / len(fold_stats) if fold_stats else 0,
+            "period": f"{folds[1][0]} ～ {folds[-1][-1]}",
+            "deciles": stats_by_decile(tested), "baseline": _pack(tested),
+            "lift_ev": round(float(np.mean(comparisons)), 3) if comparisons else None,
+            "lift_success_pp": round(float(np.mean(success_comparisons)), 3) if success_comparisons else None,
+            "note": "同日跨股票與連續日結果相關；筆數不等於獨立樣本數。", **summary}
 
 
 DECILES = [("Top 10%", 0.0, 0.10), ("10–30%", 0.10, 0.30),
@@ -528,94 +482,21 @@ def stats_by_pattern(signals: list[dict]) -> list[dict]:
 # 報表
 # ---------------------------------------------------------------------------
 def print_report(bt: dict, demo: bool) -> None:
-    print("\n" + "=" * 74)
-    print(f"回測期間 {bt['period']}｜{bt['universe_size']} 檔｜{bt['total_signals']} 筆有效樣本")
-    print(f"進場規則：{bt['entry_rule']}")
-    print(f"交易成本 {bt['cost_pct']}%（已扣除）｜訊號冷卻 {bt['cooldown_days']} 個交易日")
+    print("回測口徑：", bt["strategy"])
+    print("期間：", bt["period"], "股票：", bt["universe_size"], "校準樣本：", bt["total_signals"])
     if demo:
-        print("⚠️ 這是【模擬資料】跑出來的，只驗證程式流程，數字沒有任何預測意義。")
-    print("=" * 74)
-
-    for k in ["top1", "top3", "top5", "top10", "all"]:
-        if not bt["topk"].get(k):
-            continue
-        d = bt["topk"][k].get(str(C.PRIMARY_HOLD_DAYS)) or {}
-        if not d.get("samples"):
-            continue
-        print(f"\n■ {k.upper()}　{C.EXIT_MAX_DAYS} 日內獲利出場")
-        print(f"  樣本 {d['samples']}｜成功率 {d.get('success_rate')}%"
-              f"（平滑 {d.get('calibrated_success')}%）｜平均持有 {d.get('avg_days')} 天"
-              f"（成功者 {d.get('avg_days_win')} 天）")
-        print(f"  EV {d['expectancy']:+.2f}%｜PF {d['profit_factor']}"
-              f"｜平均回撤 {d['avg_mdd']}%｜最差 {d['max_loss']}%")
-
-    print("\n■ 分數級距 vs 持有 5 日")
-    for b in bt["score_buckets"]:
-        if b["samples"]:
-            print(f"  {b['lo']:>3}–{b['hi']:<3} 分｜樣本 {b['samples']:>5}｜"
-                  f"勝率 {b['win_rate']:>5.1f}%（平滑 {b['calibrated_win_rate']:>5.1f}%）｜"
-                  f"平均 {b['avg_return']:+.2f}%｜PF {b['profit_factor']}")
-        else:
-            print(f"  {b['lo']:>3}–{b['hi']:<3} 分｜無樣本")
-
-    print("\n■ 型態整體表現（持有 5 日）")
-    for p in bt["patterns"]:
-        flag = "" if p["samples"] >= C.PATTERN_MIN_SAMPLES else "  ← 樣本不足，排名不會採用"
-        print(f"  {p['pattern']:<12}樣本 {p['samples']:>5}｜勝率 {p['win_rate']:>5.1f}%"
-              f"（平滑 {p['calibrated_win_rate']:>5.1f}%）｜平均 {p['avg_return']:+.2f}%"
-              f"｜PF {p['profit_factor']}{flag}")
-
-    for key, title in (("deciles_in_sample", "in-sample"), ("deciles_oos", "out-of-sample")):
-        rows = bt.get(key) or []
-        if not any(d["samples"] for d in rows):
-            continue
-        print(f"\n■ 名次分組驗證（{title}）　排名越前，EV 應該越高")
-        print(f"{'分組':<12}{'N':>7}{'勝率':>8}{'EV':>9}{'PF':>7}{'最大回撤':>10}")
-        for d in rows:
-            if not d["samples"]:
-                continue
-            ev = d.get("expectancy")
-            print(f"{d['label']:<12}{d['samples']:>7}{d['win_rate']:>7.1f}%"
-                  f"{(ev if ev is not None else 0):>8.2f}%"
-                  f"{(d['profit_factor'] if d['profit_factor'] is not None else 0):>7.2f}"
-                  f"{(d['worst_mdd'] if d['worst_mdd'] is not None else 0):>9.2f}%")
-
-    o = bt.get("oos_overall")
-    if o:
-        ok = (o.get("expectancy") or 0) > C.OOS_MIN_EV and (o.get("profit_factor") or 0) > C.OOS_MIN_PF
-        print(f"\n■ OOS 整體（{bt.get('oos_period','')}）：N {o['samples']}、"
-              f"勝率 {o['win_rate']}%、EV {o['expectancy']:+.2f}%、PF {o['profit_factor']}")
-        print("   " + ("✅ OOS 呈現正期望值" if ok else
-                       "❌ 模型尚未證實正期望值——排名只能當觀察清單，不要照名次下單"))
-
-    wf = bt.get("walk_forward", {})
+        print("示範資料只驗證流程，不代表市場績效")
+    wf = bt.get("walk_forward") or {}
     if wf.get("available"):
-        print(f"\n■ Walk-forward（out-of-sample，{wf['folds']} 段、每日取前 {wf['top_n']}）")
-        if wf.get("fold_stats"):
-            print("  各段 EV：" + "、".join(
-                f"第{f['fold']}段 {f['expectancy']:+.2f}%(N{f['samples']})"
-                for f in wf["fold_stats"]))
-            print(f"  正 EV 區段：{wf['positive_folds']}/{wf['total_folds']}"
-                  f"（穩定度 {wf['stability']}）")
-        print(f"  期間 {wf['period']}｜樣本 {wf['samples']}｜勝率 {wf['win_rate']}%"
-              f"（平滑 {wf['calibrated_win_rate']}%）｜EV {wf['expectancy']:+.2f}%"
-              f"｜PF {wf['profit_factor']}｜平均回撤 {wf['avg_mdd']}%")
+        print("逐段樣本外：", {k: wf.get(k) for k in
+              ("samples", "success_rate", "win_rate", "expectancy", "profit_factor", "lift_ev")})
+        print("各段：", wf.get("fold_stats"))
+        for row in wf.get("deciles", []):
+            print(row["label"], {k: row.get(k) for k in
+                  ("samples", "success_rate", "expectancy", "profit_factor")})
     else:
-        print(f"\n■ Walk-forward：{wf.get('reason', '資料不足')}")
-
-    reg = [b for b in bt.get("regime_buckets", []) if b["samples"] >= C.PATTERN_MIN_SAMPLES]
-    print(f"\n■ 大盤狀態 × 型態 × 級距：{len(reg)} 組樣本達標")
-    for b in sorted(reg, key=lambda x: -(x["expectancy"] or -99))[:8]:
-        print(f"  {b['regime']:<9}{b['pattern']:<12}{b['lo']:>3}–{b['hi']:<3}｜N {b['samples']:>4}"
-              f"｜EV {b['expectancy']:+.2f}%｜勝率 {b['calibrated_win_rate']}%")
-
-    usable = [b for b in bt["pattern_buckets"] if b["samples"] >= C.PATTERN_MIN_SAMPLES]
-    print(f"\n■ 型態 × 分數級距：共 {len(bt['pattern_buckets'])} 組，"
-          f"其中 {len(usable)} 組樣本達 {C.PATTERN_MIN_SAMPLES} 筆，排名時會優先採用")
-    for b in sorted(usable, key=lambda x: -x["calibrated_win_rate"])[:10]:
-        print(f"  {b['pattern']:<12}{b['lo']:>3}–{b['hi']:<3} 分｜樣本 {b['samples']:>4}｜"
-              f"平滑勝率 {b['calibrated_win_rate']:>5.1f}%｜平均 {b['avg_return']:+.2f}%")
-    print()
+        print("尚無可用樣本外驗證：", wf.get("reason"))
+    print("股票池回溯有選樣限制；同日與連續日訊號相關，筆數不等於獨立樣本數。")
 
 
 def main() -> int:
