@@ -36,6 +36,13 @@ jobs:
       - name: 取得原始碼
         uses: actions/checkout@v4
 
+      # Queued push events can point to a commit older than the previous run's
+      # generated data. Read the newest immutable snapshots before any build.
+      - name: 同步最新主分支與研究紀錄
+        run: |
+          git fetch origin main
+          git merge --ff-only origin/main
+
       - name: 安裝 Python
         uses: actions/setup-python@v5
         with:
@@ -93,12 +100,14 @@ jobs:
           else
             git commit -m "更新儀表板 $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
             # 多個排程可能同時推送，直接 push 會因為 non-fast-forward 失敗。
-            # 先 rebase 再推，失敗重試幾次，還是不行才放棄，不讓流程變紅。
+            # 衝突必須停止；不能把含衝突或未成功保存的研究紀錄部署出去。
+            PUSHED=0
             for i in 1 2 3; do
-              git pull --rebase --autostash origin "$(git rev-parse --abbrev-ref HEAD)" || true
-              if git push; then echo "已推送"; break; fi
+              git pull --rebase --autostash origin main || exit 1
+              if git push; then echo "已推送"; PUSHED=1; break; fi
               echo "第 $i 次推送失敗，10 秒後重試"; sleep 10
             done
+            test "$PUSHED" = 1
           fi
 
       - name: 打包網站檔案
