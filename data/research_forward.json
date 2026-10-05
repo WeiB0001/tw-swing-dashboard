@@ -1,12 +1,23 @@
 {
  "strategy": {
-  "version": "executable-risk-v4.1",
+  "version": "entry-context-v5",
   "target_net_pct": 3.0,
   "min_days": 2,
   "max_days": 10,
   "cost_pct": 0.785,
   "exit_rule": "close_signal_next_open_day10_open",
   "fill_grace_days": 5,
+  "entry_guard": {
+   "max_premium_pct": 2.0,
+   "max_ma20_bias_pct": 8.0,
+   "rule": "signal_price_ceiling_including_buy_slippage_skip_once"
+  },
+  "overseas_research": {
+   "version": "asof-close-regime-v1",
+   "max_age_days": 4,
+   "vix_risk_level": 25.0,
+   "active_in_main_rank": false
+  },
   "execution": {
    "fee_pct": 0.1425,
    "minimum_fee": 20.0,
@@ -38,28 +49,55 @@
    "positions": [],
    "pending": [
     {
-     "code": "6515",
-     "name": "穎崴",
-     "group": "其他",
+     "code": "00713",
+     "name": "元大台灣高息低波",
+     "group": "ETF",
      "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 62.85,
+      "ma20": 63.6675,
+      "max_fill_price": 64.107,
+      "max_open_price": 64.04295704295706,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
      "entry_approved": true,
-     "published_at": "2026-10-05T17:43:11.030673+08:00"
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
     },
     {
-     "code": "2885",
-     "name": "元大金",
-     "group": "金融",
+     "code": "2912",
+     "name": "統一超",
+     "group": "貿易百貨",
      "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 211.0,
+      "ma20": 214.725,
+      "max_fill_price": 215.22,
+      "max_open_price": 215.00499500499504,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
      "entry_approved": true,
-     "published_at": "2026-10-05T17:43:11.030673+08:00"
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
     },
     {
-     "code": "6669",
-     "name": "緯穎",
-     "group": "電腦週邊",
+     "code": "1590",
+     "name": "亞德客-KY",
+     "group": "機械",
      "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 1180.0,
+      "ma20": 1258.5,
+      "max_fill_price": 1203.6,
+      "max_open_price": 1202.3976023976024,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
      "entry_approved": true,
-     "published_at": "2026-10-05T17:43:11.030673+08:00"
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
     }
    ],
    "trades": [],
@@ -75,13 +113,24 @@
    "forward_start": "2026-10-05",
    "mode": "research_forward",
    "strategy": {
-    "version": "executable-risk-v4.1",
+    "version": "entry-context-v5",
     "target_net_pct": 3.0,
     "min_days": 2,
     "max_days": 10,
     "cost_pct": 0.785,
     "exit_rule": "close_signal_next_open_day10_open",
     "fill_grace_days": 5,
+    "entry_guard": {
+     "max_premium_pct": 2.0,
+     "max_ma20_bias_pct": 8.0,
+     "rule": "signal_price_ceiling_including_buy_slippage_skip_once"
+    },
+    "overseas_research": {
+     "version": "asof-close-regime-v1",
+     "max_age_days": 4,
+     "vix_risk_level": 25.0,
+     "active_in_main_rank": false
+    },
     "execution": {
      "fee_pct": 0.1425,
      "minimum_fee": 20.0,
@@ -120,28 +169,55 @@
    "positions": [],
    "pending": [
     {
-     "code": "6515",
-     "name": "穎崴",
-     "group": "其他",
+     "code": "00934",
+     "name": "中信成長高股息",
+     "group": "ETF",
      "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 30.08,
+      "ma20": 29.96,
+      "max_fill_price": 30.6816,
+      "max_open_price": 30.650949050949055,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
      "entry_approved": true,
-     "published_at": "2026-10-05T17:43:11.030673+08:00"
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
     },
     {
-     "code": "2885",
-     "name": "元大金",
-     "group": "金融",
-     "signal_date": "2026-10-05",
-     "entry_approved": true,
-     "published_at": "2026-10-05T17:43:11.030673+08:00"
-    },
-    {
-     "code": "6669",
-     "name": "緯穎",
+     "code": "3231",
+     "name": "緯創",
      "group": "電腦週邊",
      "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 189.5,
+      "ma20": 186.425,
+      "max_fill_price": 193.29,
+      "max_open_price": 193.0969030969031,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
      "entry_approved": true,
-     "published_at": "2026-10-05T17:43:11.030673+08:00"
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
+    },
+    {
+     "code": "2360",
+     "name": "致茂",
+     "group": "半導體",
+     "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 2325.0,
+      "ma20": 2211.75,
+      "max_fill_price": 2371.5,
+      "max_open_price": 2369.1308691308695,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
     }
    ],
    "trades": [],
@@ -157,13 +233,144 @@
    "forward_start": "2026-10-05",
    "mode": "research_forward",
    "strategy": {
-    "version": "executable-risk-v4.1",
+    "version": "entry-context-v5",
     "target_net_pct": 3.0,
     "min_days": 2,
     "max_days": 10,
     "cost_pct": 0.785,
     "exit_rule": "close_signal_next_open_day10_open",
     "fill_grace_days": 5,
+    "entry_guard": {
+     "max_premium_pct": 2.0,
+     "max_ma20_bias_pct": 8.0,
+     "rule": "signal_price_ceiling_including_buy_slippage_skip_once"
+    },
+    "overseas_research": {
+     "version": "asof-close-regime-v1",
+     "max_age_days": 4,
+     "vix_risk_level": 25.0,
+     "active_in_main_rank": false
+    },
+    "execution": {
+     "fee_pct": 0.1425,
+     "minimum_fee": 20.0,
+     "stock_tax_pct": 0.3,
+     "etf_tax_pct": 0.1,
+     "slippage_pct": 0.2,
+     "reference_notional": 100000
+    },
+    "risk_budget": {
+     "per_trade_pct": 0.5,
+     "total_pct": 1.5,
+     "position_pct": 45,
+     "sector_pct": 40.0,
+     "gap_buffer_pct": 1.0,
+     "slots": 3
+    },
+    "stop_loss_net_pct": 3.0,
+    "ranking": "target_gain_minus_weighted_loss",
+    "loss_aversion": 1.5,
+    "min_samples": 100,
+    "min_dates": 20,
+    "shrink_k": 50,
+    "bootstrap_block_days": 10,
+    "bootstrap_reps": 500
+   },
+   "cancelled_pending": [],
+   "capital_policy": {
+    "blocked": true,
+    "require_no_loss": false,
+    "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"
+   },
+   "skipped": []
+  },
+  "overseas": {
+   "cash": 100000.0,
+   "positions": [],
+   "pending": [
+    {
+     "code": "00934",
+     "name": "中信成長高股息",
+     "group": "ETF",
+     "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 30.08,
+      "ma20": 29.96,
+      "max_fill_price": 30.6816,
+      "max_open_price": 30.650949050949055,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
+    },
+    {
+     "code": "3450",
+     "name": "聯鈞",
+     "group": "其他",
+     "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 548.0,
+      "ma20": 530.525,
+      "max_fill_price": 558.96,
+      "max_open_price": 558.4015984015984,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
+    },
+    {
+     "code": "006208",
+     "name": "富邦台50",
+     "group": "ETF",
+     "signal_date": "2026-10-05",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 265.35,
+      "ma20": 252.195,
+      "max_fill_price": 270.65700000000004,
+      "max_open_price": 270.3866133866135,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-05T19:35:29.476627+08:00"
+    }
+   ],
+   "trades": [],
+   "equity": [
+    {
+     "date": "2026-10-05",
+     "equity": 100000.0,
+     "index": 48475.74
+    }
+   ],
+   "start_index": 48475.74,
+   "last_date": "2026-10-05",
+   "forward_start": "2026-10-05",
+   "mode": "research_forward",
+   "strategy": {
+    "version": "entry-context-v5",
+    "target_net_pct": 3.0,
+    "min_days": 2,
+    "max_days": 10,
+    "cost_pct": 0.785,
+    "exit_rule": "close_signal_next_open_day10_open",
+    "fill_grace_days": 5,
+    "entry_guard": {
+     "max_premium_pct": 2.0,
+     "max_ma20_bias_pct": 8.0,
+     "rule": "signal_price_ceiling_including_buy_slippage_skip_once"
+    },
+    "overseas_research": {
+     "version": "asof-close-regime-v1",
+     "max_age_days": 4,
+     "vix_risk_level": 25.0,
+     "active_in_main_rank": false
+    },
     "execution": {
      "fee_pct": 0.1425,
      "minimum_fee": 20.0,

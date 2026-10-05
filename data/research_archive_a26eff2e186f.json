@@ -1,0 +1,201 @@
+{
+ "strategy": {
+  "version": "executable-risk-v4.1",
+  "target_net_pct": 3.0,
+  "min_days": 2,
+  "max_days": 10,
+  "cost_pct": 0.785,
+  "exit_rule": "close_signal_next_open_day10_open",
+  "fill_grace_days": 5,
+  "execution": {
+   "fee_pct": 0.1425,
+   "minimum_fee": 20.0,
+   "stock_tax_pct": 0.3,
+   "etf_tax_pct": 0.1,
+   "slippage_pct": 0.2,
+   "reference_notional": 100000
+  },
+  "risk_budget": {
+   "per_trade_pct": 0.5,
+   "total_pct": 1.5,
+   "position_pct": 45,
+   "sector_pct": 40.0,
+   "gap_buffer_pct": 1.0,
+   "slots": 3
+  },
+  "stop_loss_net_pct": 3.0,
+  "ranking": "target_gain_minus_weighted_loss",
+  "loss_aversion": 1.5,
+  "min_samples": 100,
+  "min_dates": 20,
+  "shrink_k": 50,
+  "bootstrap_block_days": 10,
+  "bootstrap_reps": 500
+ },
+ "books": {
+  "composite": {
+   "cash": 100000.0,
+   "positions": [],
+   "pending": [
+    {
+     "code": "6515",
+     "name": "穎崴",
+     "group": "其他",
+     "signal_date": "2026-10-05",
+     "entry_approved": true,
+     "published_at": "2026-10-05T17:43:11.030673+08:00"
+    },
+    {
+     "code": "2885",
+     "name": "元大金",
+     "group": "金融",
+     "signal_date": "2026-10-05",
+     "entry_approved": true,
+     "published_at": "2026-10-05T17:43:11.030673+08:00"
+    },
+    {
+     "code": "6669",
+     "name": "緯穎",
+     "group": "電腦週邊",
+     "signal_date": "2026-10-05",
+     "entry_approved": true,
+     "published_at": "2026-10-05T17:43:11.030673+08:00"
+    }
+   ],
+   "trades": [],
+   "equity": [
+    {
+     "date": "2026-10-05",
+     "equity": 100000.0,
+     "index": 48475.74
+    }
+   ],
+   "start_index": 48475.74,
+   "last_date": "2026-10-05",
+   "forward_start": "2026-10-05",
+   "mode": "research_forward",
+   "strategy": {
+    "version": "executable-risk-v4.1",
+    "target_net_pct": 3.0,
+    "min_days": 2,
+    "max_days": 10,
+    "cost_pct": 0.785,
+    "exit_rule": "close_signal_next_open_day10_open",
+    "fill_grace_days": 5,
+    "execution": {
+     "fee_pct": 0.1425,
+     "minimum_fee": 20.0,
+     "stock_tax_pct": 0.3,
+     "etf_tax_pct": 0.1,
+     "slippage_pct": 0.2,
+     "reference_notional": 100000
+    },
+    "risk_budget": {
+     "per_trade_pct": 0.5,
+     "total_pct": 1.5,
+     "position_pct": 45,
+     "sector_pct": 40.0,
+     "gap_buffer_pct": 1.0,
+     "slots": 3
+    },
+    "stop_loss_net_pct": 3.0,
+    "ranking": "target_gain_minus_weighted_loss",
+    "loss_aversion": 1.5,
+    "min_samples": 100,
+    "min_dates": 20,
+    "shrink_k": 50,
+    "bootstrap_block_days": 10,
+    "bootstrap_reps": 500
+   },
+   "cancelled_pending": [],
+   "capital_policy": {
+    "blocked": true,
+    "require_no_loss": false,
+    "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"
+   },
+   "skipped": []
+  },
+  "ev_only": {
+   "cash": 100000.0,
+   "positions": [],
+   "pending": [
+    {
+     "code": "6515",
+     "name": "穎崴",
+     "group": "其他",
+     "signal_date": "2026-10-05",
+     "entry_approved": true,
+     "published_at": "2026-10-05T17:43:11.030673+08:00"
+    },
+    {
+     "code": "2885",
+     "name": "元大金",
+     "group": "金融",
+     "signal_date": "2026-10-05",
+     "entry_approved": true,
+     "published_at": "2026-10-05T17:43:11.030673+08:00"
+    },
+    {
+     "code": "6669",
+     "name": "緯穎",
+     "group": "電腦週邊",
+     "signal_date": "2026-10-05",
+     "entry_approved": true,
+     "published_at": "2026-10-05T17:43:11.030673+08:00"
+    }
+   ],
+   "trades": [],
+   "equity": [
+    {
+     "date": "2026-10-05",
+     "equity": 100000.0,
+     "index": 48475.74
+    }
+   ],
+   "start_index": 48475.74,
+   "last_date": "2026-10-05",
+   "forward_start": "2026-10-05",
+   "mode": "research_forward",
+   "strategy": {
+    "version": "executable-risk-v4.1",
+    "target_net_pct": 3.0,
+    "min_days": 2,
+    "max_days": 10,
+    "cost_pct": 0.785,
+    "exit_rule": "close_signal_next_open_day10_open",
+    "fill_grace_days": 5,
+    "execution": {
+     "fee_pct": 0.1425,
+     "minimum_fee": 20.0,
+     "stock_tax_pct": 0.3,
+     "etf_tax_pct": 0.1,
+     "slippage_pct": 0.2,
+     "reference_notional": 100000
+    },
+    "risk_budget": {
+     "per_trade_pct": 0.5,
+     "total_pct": 1.5,
+     "position_pct": 45,
+     "sector_pct": 40.0,
+     "gap_buffer_pct": 1.0,
+     "slots": 3
+    },
+    "stop_loss_net_pct": 3.0,
+    "ranking": "target_gain_minus_weighted_loss",
+    "loss_aversion": 1.5,
+    "min_samples": 100,
+    "min_dates": 20,
+    "shrink_k": 50,
+    "bootstrap_block_days": 10,
+    "bootstrap_reps": 500
+   },
+   "cancelled_pending": [],
+   "capital_policy": {
+    "blocked": true,
+    "require_no_loss": false,
+    "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"
+   },
+   "skipped": []
+  }
+ }
+}

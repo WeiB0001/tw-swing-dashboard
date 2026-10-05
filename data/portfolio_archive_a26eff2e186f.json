@@ -15,24 +15,13 @@
  "forward_start": "2026-10-05",
  "mode": "forward_test",
  "strategy": {
-  "version": "entry-context-v5",
+  "version": "executable-risk-v4.1",
   "target_net_pct": 3.0,
   "min_days": 2,
   "max_days": 10,
   "cost_pct": 0.785,
   "exit_rule": "close_signal_next_open_day10_open",
   "fill_grace_days": 5,
-  "entry_guard": {
-   "max_premium_pct": 2.0,
-   "max_ma20_bias_pct": 8.0,
-   "rule": "signal_price_ceiling_including_buy_slippage_skip_once"
-  },
-  "overseas_research": {
-   "version": "asof-close-regime-v1",
-   "max_age_days": 4,
-   "vix_risk_level": 25.0,
-   "active_in_main_rank": false
-  },
   "execution": {
    "fee_pct": 0.1425,
    "minimum_fee": 20.0,
