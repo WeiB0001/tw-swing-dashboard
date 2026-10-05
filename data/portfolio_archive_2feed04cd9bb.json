@@ -1,0 +1,63 @@
+{
+ "cash": 100000.0,
+ "positions": [],
+ "pending": [],
+ "trades": [],
+ "equity": [
+  {
+   "date": "2026-10-05",
+   "equity": 100000.0,
+   "index": 48475.74
+  }
+ ],
+ "start_index": 48475.74,
+ "last_date": "2026-10-05",
+ "forward_start": "2026-10-05",
+ "mode": "forward_test",
+ "strategy": {
+  "version": "expected-net-v2",
+  "target_net_pct": 3.0,
+  "min_days": 2,
+  "max_days": 10,
+  "cost_pct": 0.5,
+  "exit_rule": "daily_close",
+  "stop_loss_net_pct": null,
+  "ranking": "expected_net_desc",
+  "min_samples": 100,
+  "min_dates": 20,
+  "shrink_k": 50,
+  "bootstrap_block_days": 10,
+  "bootstrap_reps": 500
+ },
+ "cancelled_pending": [
+  {
+   "code": "3231",
+   "name": "緯創",
+   "budget": 33333.333333333336,
+   "signal_date": "2026-10-02",
+   "published_at": "2026-10-05T14:56:51.400048+08:00",
+   "cancel_reason": "策略版本更換，舊待成交單撤銷"
+  },
+  {
+   "code": "8039",
+   "name": "台虹",
+   "budget": 33333.333333333336,
+   "signal_date": "2026-10-02",
+   "published_at": "2026-10-05T14:56:51.400048+08:00",
+   "cancel_reason": "策略版本更換，舊待成交單撤銷"
+  },
+  {
+   "code": "2609",
+   "name": "陽明",
+   "budget": 33333.333333333336,
+   "signal_date": "2026-10-02",
+   "published_at": "2026-10-05T14:56:51.400048+08:00",
+   "cancel_reason": "策略版本更換，舊待成交單撤銷"
+  }
+ ],
+ "capital_policy": {
+  "blocked": true,
+  "require_no_loss": true,
+  "reason": "零虧損要求：股票無法證明零風險，保持空手；僅提供研究排名"
+ }
+}
