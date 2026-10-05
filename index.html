@@ -795,14 +795,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
       <div class="us-grid us-sub">
         <div><span>那斯達克期貨（此刻）</span>
-          <b class="down">-0.06%</b></div>
+          <b class="down">-0.12%</b></div>
         <div><span>S&P 500 期貨（此刻）</span>
-          <b class="down">-0.01%</b></div>
+          <b class="down">-0.04%</b></div>
       </div>
 
       <div class="us-fc">
-<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 +0.11%
-          · 區間 -1.28% ～ +1.50%
+<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 +0.08%
+          · 區間 -1.31% ～ +1.47%
           · R² 0.328 · N 250</div>
       </div>
       <p class="us-note">
@@ -821,7 +821,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="refresh-msg" id="refresh-msg" hidden></div>
     <div class="recalc-box" id="recalc-box" hidden></div>
     <div class="stamp">
-      <span id="freshness">更新時間 <b class="mono">2026-10-05 19:49</b></span>
+      <span id="freshness">更新時間 <b class="mono">2026-10-05 20:07</b></span>
       <span>行情資料日 <b class="mono">2026-10-05</b></span>
       <span class="apply">適用交易日 <b class="mono">2026-10-06</b></span>
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
@@ -853,7 +853,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     成本逐筆計算：每邊手續費 0.1425%（最低 20.0 元）、賣出稅一般股票 0.3%／ETF 0.1%、來回滑價 0.2%。費率為可調假設，未套用個別商品稅務優惠。
     單筆訊號統計以約 100,000 元為參考，資金回測依實際股數計算。<br>
     目前 <b>0</b> 檔通過研究門檻；<b>0</b> 檔允許配置。
-目前研究設定：收盤淨損達 3.0% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>    排名更新：2026-10-05 19:49:54。
+目前研究設定：收盤淨損達 3.0% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>    排名更新：2026-10-05 20:07:15。
     </div>
   </details>
   <details class="fold" id="validation-details">
@@ -983,8 +983,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
   </details>
   <div class="section-head">
-    <h2>可進場候選</h2>
-    <span>0 檔 · 依綜合分數排序</span>
+    <h2>股票研究排名</h2>
+    <span>179 檔 · 符合配置條件 0 檔</span>
   </div>
 
   <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
@@ -1098,15 +1098,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="band-note" id="band-count"></div>
   </section>
 
-  <section id="candidate-list" aria-label="可進場候選">
-    <div class="empty" id="candidate-empty"><b>目前沒有可進場候選</b>
-      風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金；行情異常或公司行動待核對；仍有未結算出場
-    </div>
-  </section>
-  <details class="fold" id="research-rank">
-    <summary>展開其餘研究排名 <small>179 檔 · 僅供觀察</small></summary>
-    <div class="fold-body">
-      <p class="research-note">保留全榜原始名次；排名靠前仍可能追高或未通過驗證。展開卡片查看進場上限與海外研究。</p>
+  <section id="research-rank" aria-label="股票研究排名">
     <details class="card" data-code="00713" data-rank="1" data-eligible="0" data-lot="62850" data-name="元大台灣高息低波" data-price="62.85" data-score="-0.308"
 data-trigger="63.18" data-stop="62.63" data-t1="63.83" data-t2="64.26" data-type="ETF">
       <summary>
@@ -39583,8 +39575,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
         </div>
       </div>
     </details>
-    </div>
-  </details>
+  </section>
   <button type="button" class="more" id="show-more" hidden></button>
   <div class="empty" id="band-empty" style="display:none">目前篩選條件下沒有符合的標的。</div>
 
@@ -39706,7 +39697,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
 
   <footer>
     台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
-    <span class="mono">2026-10-05 19:49</span>
+    <span class="mono">2026-10-05 20:07</span>
   </footer>
 </div>
 
@@ -39717,7 +39708,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
 (function () {
   "use strict";
 
-  var GENERATED = "2026-10-05T19:49:54+08:00";
+  var GENERATED = "2026-10-05T20:07:15+08:00";
   var TRADE_DATE = "2026-10-05";
 
   /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
@@ -39738,7 +39729,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
     else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
     else word = Math.floor(mins / 1440) + " 天前更新";
     freshness.innerHTML = '<b>' + word + '</b>';
-    freshness.title = "更新時間 2026-10-05 19:49";
+    freshness.title = "更新時間 2026-10-05 20:07";
   }
   renderFreshness();
   setInterval(renderFreshness, 60000);
@@ -39761,7 +39752,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
      ---------------------------------------------------------------------- */
   var refreshBtn = document.getElementById("btn-refresh");
   var refreshMsg = document.getElementById("refresh-msg");
-  var CURRENT_STAMP = "2026-10-05 19:49";
+  var CURRENT_STAMP = "2026-10-05 20:07";
 
   function showMsg(text, isNew) {
     if (!refreshMsg) return;
@@ -40092,7 +40083,6 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
   var ODD_LOT = true;
   var HIDE_UNAFFORDABLE = true;
 
-  var researchFold = document.getElementById("research-rank");
   var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
   var budgetInput = document.getElementById("budget-input");
   var clearBtn = document.getElementById("budget-clear");
@@ -40108,7 +40098,6 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
   var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
   var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
 
-  if (researchFold) researchFold.addEventListener("toggle", function () { st.limit = st.q ? cards.length : INITIAL_VISIBLE; render(); });
   var INITIAL_VISIBLE = 20;
   var moreBtn = document.getElementById("show-more");
   var st = { budget: 0, splits: 3, mode: "auto", type: "all",
@@ -40132,7 +40121,6 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
   function visible() {
     var matched = [], shown = [];
     cards.forEach(function (c) {
-      var okScope = c.dataset.eligible === "1" || (researchFold && researchFold.open);
       var okType = st.type === "all" || c.dataset.type === st.type;
       var lot = parseInt(c.dataset.lot, 10) || 0;
       var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
@@ -40144,7 +40132,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
                    (sec ? sec.textContent : "")).toLowerCase();
         okFind = hay.indexOf(st.q) >= 0;
       }
-      if (okScope && okType && okBudget && okFind) matched.push(c);
+      if (okType && okBudget && okFind) matched.push(c);
       else { c.style.display = "none"; c.open = false; }
     });
     matched.forEach(function (c, i) {
@@ -40254,7 +40242,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
-      var head = bits.length ? bits.join("、") + "：" : (researchFold && researchFold.open ? "候選與研究：" : "可進場候選：");
+      var head = bits.length ? bits.join("、") + "：" : "研究排名：";
       var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
       countEl.textContent = head + tail + best;
@@ -40301,7 +40289,6 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
   var findClear = document.getElementById("find-clear");
   if (findEl) findEl.addEventListener("input", function () {
     st.q = findEl.value.trim().toLowerCase();
-    if (st.q && researchFold) researchFold.open = true;
     st.limit = st.q ? cards.length : INITIAL_VISIBLE;   // 搜尋時一次找完，不用按「顯示更多」
     render();
   });
