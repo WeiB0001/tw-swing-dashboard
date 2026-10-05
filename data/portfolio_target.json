@@ -1,0 +1,47 @@
+{
+ "cash": 100000.0,
+ "positions": [],
+ "pending": [
+  {
+   "code": "3231",
+   "name": "緯創",
+   "budget": 33333.333333333336,
+   "signal_date": "2026-10-02",
+   "published_at": "2026-10-05T14:56:51.400048+08:00"
+  },
+  {
+   "code": "8039",
+   "name": "台虹",
+   "budget": 33333.333333333336,
+   "signal_date": "2026-10-02",
+   "published_at": "2026-10-05T14:56:51.400048+08:00"
+  },
+  {
+   "code": "2609",
+   "name": "陽明",
+   "budget": 33333.333333333336,
+   "signal_date": "2026-10-02",
+   "published_at": "2026-10-05T14:56:51.400048+08:00"
+  }
+ ],
+ "trades": [],
+ "equity": [
+  {
+   "date": "2026-10-02",
+   "equity": 100000.0,
+   "index": 48475.74
+  }
+ ],
+ "start_index": 48475.74,
+ "last_date": "2026-10-02",
+ "forward_start": "2026-10-02",
+ "mode": "forward_test",
+ "strategy": {
+  "version": "net-target-v1",
+  "target_net_pct": 3.0,
+  "min_days": 5,
+  "max_days": 10,
+  "cost_pct": 0.5,
+  "exit_rule": "daily_close"
+ }
+}
