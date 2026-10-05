@@ -109,18 +109,18 @@ body{
 .budget-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .budget-input button{background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
 
-.preset,.split,.mode-btn,.type-btn,.rank-sort{
+.preset,.split,.mode-btn,.type-btn,.rank-sort,.strong-filter{
   flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;
   padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
   background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
 }
 .split{padding:6px 11px;min-width:34px;text-align:center}
-.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"],.rank-sort[aria-pressed="true"]{
+.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"],.rank-sort[aria-pressed="true"],.strong-filter[aria-pressed="true"]{
   background:var(--signal);border-color:var(--signal);color:#161105;
 }
 .preset:active{background:#2A333F}
 .preset:focus-visible,.split:focus-visible,.mode-btn:focus-visible,
-.type-btn:focus-visible,.rank-sort:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
+.type-btn:focus-visible,.rank-sort:focus-visible,.strong-filter:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
   outline:2px solid var(--signal);outline-offset:2px}
 .ghost-btn{
   flex:0 0 auto;font:inherit;font-size:12px;font-weight:600;padding:5px 10px;
@@ -703,6 +703,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 .score-pair .score{font-size:23px}
 .reference-risk{margin:9px 0 0;color:#D9AF83;font-size:12px;line-height:1.6}
 .rank-explainer{margin:0 0 10px}
+.strength-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:9px;font-size:11px}
+.strength-badge{border:1px solid #8F6C31;border-radius:6px;padding:4px 7px;background:#332713;color:#FFD17C;font-weight:700}
+.strength-badge.evidence{border-color:#367650;background:#163122;color:#ADE3BE}
+.strength-note{color:var(--muted)}
+.strength-caution{color:#E2AF8F;border:1px solid #654535;border-radius:6px;padding:3px 6px}
+.card[data-strong="1"]{border-color:#665432}
 .card:not([open])>summary .summary-extra,.card:not([open])>summary .kind,
 .card:not([open])>summary .sector,.card:not([open])>summary .mark,.card:not([open])>summary .lot{display:none}
 .card .row3{margin-top:9px;flex-wrap:wrap}
@@ -799,14 +805,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
       <div class="us-grid us-sub">
         <div><span>那斯達克期貨（此刻）</span>
-          <b class="down">-0.21%</b></div>
+          <b class="down">-0.20%</b></div>
         <div><span>S&P 500 期貨（此刻）</span>
-          <b class="down">-0.02%</b></div>
+          <b class="down">-0.11%</b></div>
       </div>
 
       <div class="us-fc">
-<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 +0.02%
-          · 區間 -1.37% ～ +1.41%
+<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 +0.03%
+          · 區間 -1.36% ～ +1.41%
           · R² 0.328 · N 250</div>
       </div>
       <p class="us-note">
@@ -825,7 +831,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="refresh-msg" id="refresh-msg" hidden></div>
     <div class="recalc-box" id="recalc-box" hidden></div>
     <div class="stamp">
-      <span id="freshness">更新時間 <b class="mono">2026-10-05 20:39</b></span>
+      <span id="freshness">更新時間 <b class="mono">2026-10-05 21:09</b></span>
       <span>行情資料日 <b class="mono">2026-10-05</b></span>
       <span class="apply">適用交易日 <b class="mono">2026-10-06</b></span>
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
@@ -857,7 +863,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     成本逐筆計算：每邊手續費 0.1425%（最低 20.0 元）、賣出稅一般股票 0.3%／ETF 0.1%、來回滑價 0.2%。費率為可調假設，未套用個別商品稅務優惠。
     單筆訊號統計以約 100,000 元為參考，資金回測依實際股數計算。<br>
     目前 <b>0</b> 檔通過研究門檻；<b>0</b> 檔允許配置。
-目前研究設定：收盤淨損達 3.0% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。<b>目前沒有通過全部配置門檻的標的；參考排名仍完整保留。</b>    排名更新：2026-10-05 20:39:11。
+目前研究設定：收盤淨損達 3.0% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。<b>目前沒有通過全部配置門檻的標的；參考排名仍完整保留。</b>    排名更新：2026-10-05 21:09:10。
     </div>
   </details>
   <details class="fold" id="validation-details">
@@ -991,10 +997,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <span>179 檔 · 2026-10-06</span>
   </div>
   <details class="fold fold-inline rank-explainer">
-    <summary>分數怎麼看？ <small>未過門檻仍列入</small></summary>
+    <summary>分數與強勢標註 <small>技術強勢 6 檔 · 未過門檻仍列入</small></summary>
     <div class="fold-body">
       風險報酬分綜合達標率、達標淨利與虧損風險；目前 0 檔大於 0。負分仍照常排名，不代表遭到排除。<br>
       技術機會分為 0～100 分，衡量位置、趨勢、轉強、量價與技術風險；正分不等於正的預期報酬，也不是成功率。兩種排序都保留全榜，未通過條件改以風險提示揭露。
+      <p><b>★ 技術強勢</b>：技術分至少 60、動能已確認、當日有效行情。這是走勢標記，不代表低虧損率；漲多、進場上限與海外逆風另行提示，詳見個股。</p>
+      <p><b>強勢・較低虧損條件</b>：另外要求同類樣本至少 100 筆／20 個訊號日、虧損率保守上界不超過 40%、淨報酬保守估計大於 0、通過整體樣本外驗證，且沒有追價或海外警示。目前 0 檔；這些是研究設定，尚非最佳參數，也不保證未來表現。</p>
     </div>
   </details>
 
@@ -1004,6 +1012,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <span class="lbl">排序</span>
       <button type="button" class="rank-sort" data-sort="risk" aria-pressed="true">風險報酬</button>
       <button type="button" class="rank-sort" data-sort="technical" aria-pressed="false">技術機會</button>
+      <button type="button" class="strong-filter" id="strong-only" aria-pressed="false">只看強勢（6）</button>
     </div>
     <div class="panel-row">
       <div class="find">
@@ -1115,7 +1124,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </section>
 
   <section id="research-rank" aria-label="明日參考排名">
-    <details class="card" data-code="00713" data-rank="1" data-research-rank="1" data-technical-rank="110" data-eligible="0" data-lot="62850" data-name="元大台灣高息低波" data-price="62.85" data-score="-0.308"
+    <details class="card" data-code="00713" data-rank="1" data-research-rank="1" data-technical-rank="110" data-strong="0" data-eligible="0" data-lot="62850" data-name="元大台灣高息低波" data-price="62.85" data-score="-0.308"
 data-trigger="63.18" data-stop="62.63" data-t1="63.83" data-t2="64.26" data-type="ETF">
       <summary>
         <div class="row1">
@@ -1132,6 +1141,7 @@ data-trigger="63.18" data-stop="62.63" data-t1="63.83" data-t2="64.26" data-type
             <span class="lot mono">一張 6.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -1337,7 +1347,7 @@ data-trigger="63.18" data-stop="62.63" data-t1="63.83" data-t2="64.26" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2912" data-rank="2" data-research-rank="2" data-technical-rank="173" data-eligible="0" data-lot="211000" data-name="統一超" data-price="211.0" data-score="-0.308"
+    <details class="card" data-code="2912" data-rank="2" data-research-rank="2" data-technical-rank="173" data-strong="0" data-eligible="0" data-lot="211000" data-name="統一超" data-price="211.0" data-score="-0.308"
 data-trigger="212.12" data-stop="209.68" data-t1="215.05" data-t2="217.01" data-type="貿易百貨">
       <summary>
         <div class="row1">
@@ -1354,6 +1364,7 @@ data-trigger="212.12" data-stop="209.68" data-t1="215.05" data-t2="217.01" data-
             <span class="lot mono">一張 21.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -1559,7 +1570,7 @@ data-trigger="212.12" data-stop="209.68" data-t1="215.05" data-t2="217.01" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="1590" data-rank="3" data-research-rank="3" data-technical-rank="107" data-eligible="0" data-lot="1180000" data-name="亞德客-KY" data-price="1180.0" data-score="-0.308"
+    <details class="card" data-code="1590" data-rank="3" data-research-rank="3" data-technical-rank="107" data-strong="0" data-eligible="0" data-lot="1180000" data-name="亞德客-KY" data-price="1180.0" data-score="-0.308"
 data-trigger="1207.58" data-stop="1155.91" data-t1="1269.59" data-t2="1310.92" data-type="機械">
       <summary>
         <div class="row1">
@@ -1576,6 +1587,7 @@ data-trigger="1207.58" data-stop="1155.91" data-t1="1269.59" data-t2="1310.92" d
             <span class="lot mono">一張 118.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -1781,7 +1793,7 @@ data-trigger="1207.58" data-stop="1155.91" data-t1="1269.59" data-t2="1310.92" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="2845" data-rank="4" data-research-rank="4" data-technical-rank="142" data-eligible="0" data-lot="12800" data-name="遠東銀" data-price="12.8" data-score="-0.308"
+    <details class="card" data-code="2845" data-rank="4" data-research-rank="4" data-technical-rank="142" data-strong="0" data-eligible="0" data-lot="12800" data-name="遠東銀" data-price="12.8" data-score="-0.308"
 data-trigger="12.96" data-stop="12.73" data-t1="13.24" data-t2="13.42" data-type="其他">
       <summary>
         <div class="row1">
@@ -1798,6 +1810,7 @@ data-trigger="12.96" data-stop="12.73" data-t1="13.24" data-t2="13.42" data-type
             <span class="lot mono">一張 1.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -2003,7 +2016,7 @@ data-trigger="12.96" data-stop="12.73" data-t1="13.24" data-t2="13.42" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="5871" data-rank="5" data-research-rank="5" data-technical-rank="133" data-eligible="0" data-lot="105500" data-name="中租-KY" data-price="105.5" data-score="-0.308"
+    <details class="card" data-code="5871" data-rank="5" data-research-rank="5" data-technical-rank="133" data-strong="0" data-eligible="0" data-lot="105500" data-name="中租-KY" data-price="105.5" data-score="-0.308"
 data-trigger="107.1" data-stop="105.09" data-t1="109.52" data-t2="111.13" data-type="金融">
       <summary>
         <div class="row1">
@@ -2020,6 +2033,7 @@ data-trigger="107.1" data-stop="105.09" data-t1="109.52" data-t2="111.13" data-t
             <span class="lot mono">一張 10.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -2225,7 +2239,7 @@ data-trigger="107.1" data-stop="105.09" data-t1="109.52" data-t2="111.13" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="1402" data-rank="6" data-research-rank="6" data-technical-rank="122" data-eligible="0" data-lot="27750" data-name="遠東新" data-price="27.75" data-score="-0.308"
+    <details class="card" data-code="1402" data-rank="6" data-research-rank="6" data-technical-rank="122" data-strong="0" data-eligible="0" data-lot="27750" data-name="遠東新" data-price="27.75" data-score="-0.308"
 data-trigger="28.23" data-stop="27.68" data-t1="28.89" data-t2="29.25" data-type="紡織">
       <summary>
         <div class="row1">
@@ -2242,6 +2256,7 @@ data-trigger="28.23" data-stop="27.68" data-t1="28.89" data-t2="29.25" data-type
             <span class="lot mono">一張 2.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -2447,7 +2462,7 @@ data-trigger="28.23" data-stop="27.68" data-t1="28.89" data-t2="29.25" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2324" data-rank="7" data-research-rank="7" data-technical-rank="125" data-eligible="0" data-lot="35800" data-name="仁寶" data-price="35.8" data-score="-0.308"
+    <details class="card" data-code="2324" data-rank="7" data-research-rank="7" data-technical-rank="125" data-strong="0" data-eligible="0" data-lot="35800" data-name="仁寶" data-price="35.8" data-score="-0.308"
 data-trigger="36.66" data-stop="35.48" data-t1="38.07" data-t2="39.01" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -2464,6 +2479,7 @@ data-trigger="36.66" data-stop="35.48" data-t1="38.07" data-t2="39.01" data-type
             <span class="lot mono">一張 3.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -2669,7 +2685,7 @@ data-trigger="36.66" data-stop="35.48" data-t1="38.07" data-t2="39.01" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2356" data-rank="8" data-research-rank="8" data-technical-rank="145" data-eligible="0" data-lot="58300" data-name="英業達" data-price="58.3" data-score="-0.308"
+    <details class="card" data-code="2356" data-rank="8" data-research-rank="8" data-technical-rank="145" data-strong="0" data-eligible="0" data-lot="58300" data-name="英業達" data-price="58.3" data-score="-0.308"
 data-trigger="59.69" data-stop="57.94" data-t1="61.79" data-t2="63.19" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -2686,6 +2702,7 @@ data-trigger="59.69" data-stop="57.94" data-t1="61.79" data-t2="63.19" data-type
             <span class="lot mono">一張 5.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -2891,7 +2908,7 @@ data-trigger="59.69" data-stop="57.94" data-t1="61.79" data-t2="63.19" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="1216" data-rank="9" data-research-rank="9" data-technical-rank="160" data-eligible="0" data-lot="72700" data-name="統一" data-price="72.7" data-score="-0.308"
+    <details class="card" data-code="1216" data-rank="9" data-research-rank="9" data-technical-rank="160" data-strong="0" data-eligible="0" data-lot="72700" data-name="統一" data-price="72.7" data-score="-0.308"
 data-trigger="73.35" data-stop="72.36" data-t1="74.54" data-t2="75.33" data-type="食品">
       <summary>
         <div class="row1">
@@ -2908,6 +2925,7 @@ data-trigger="73.35" data-stop="72.36" data-t1="74.54" data-t2="75.33" data-type
             <span class="lot mono">一張 7.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -3113,7 +3131,7 @@ data-trigger="73.35" data-stop="72.36" data-t1="74.54" data-t2="75.33" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2812" data-rank="10" data-research-rank="10" data-technical-rank="163" data-eligible="0" data-lot="18550" data-name="台中銀" data-price="18.55" data-score="-0.308"
+    <details class="card" data-code="2812" data-rank="10" data-research-rank="10" data-technical-rank="163" data-strong="0" data-eligible="0" data-lot="18550" data-name="台中銀" data-price="18.55" data-score="-0.308"
 data-trigger="18.81" data-stop="18.55" data-t1="19.13" data-t2="19.34" data-type="其他">
       <summary>
         <div class="row1">
@@ -3130,6 +3148,7 @@ data-trigger="18.81" data-stop="18.55" data-t1="19.13" data-t2="19.34" data-type
             <span class="lot mono">一張 1.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -3335,7 +3354,7 @@ data-trigger="18.81" data-stop="18.55" data-t1="19.13" data-t2="19.34" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="4938" data-rank="11" data-research-rank="11" data-technical-rank="123" data-eligible="0" data-lot="88700" data-name="和碩" data-price="88.7" data-score="-0.308"
+    <details class="card" data-code="4938" data-rank="11" data-research-rank="11" data-technical-rank="123" data-strong="0" data-eligible="0" data-lot="88700" data-name="和碩" data-price="88.7" data-score="-0.308"
 data-trigger="90.41" data-stop="88.24" data-t1="93.02" data-t2="94.75" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -3352,6 +3371,7 @@ data-trigger="90.41" data-stop="88.24" data-t1="93.02" data-t2="94.75" data-type
             <span class="lot mono">一張 8.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -3557,7 +3577,7 @@ data-trigger="90.41" data-stop="88.24" data-t1="93.02" data-t2="94.75" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2886" data-rank="12" data-research-rank="12" data-technical-rank="119" data-eligible="0" data-lot="48550" data-name="兆豐金" data-price="48.55" data-score="-0.308"
+    <details class="card" data-code="2886" data-rank="12" data-research-rank="12" data-technical-rank="119" data-strong="0" data-eligible="0" data-lot="48550" data-name="兆豐金" data-price="48.55" data-score="-0.308"
 data-trigger="49.66" data-stop="48.5" data-t1="51.05" data-t2="51.98" data-type="金融">
       <summary>
         <div class="row1">
@@ -3574,6 +3594,7 @@ data-trigger="49.66" data-stop="48.5" data-t1="51.05" data-t2="51.98" data-type=
             <span class="lot mono">一張 4.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -3779,13 +3800,13 @@ data-trigger="49.66" data-stop="48.5" data-t1="51.05" data-t2="51.98" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2421" data-rank="13" data-research-rank="13" data-technical-rank="26" data-eligible="0" data-lot="169500" data-name="建準" data-price="169.5" data-score="-0.403"
+    <details class="card" data-code="2421" data-rank="13" data-research-rank="13" data-technical-rank="26" data-strong="0" data-eligible="0" data-lot="169500" data-name="建準" data-price="169.5" data-score="-0.403"
 data-trigger="172.32" data-stop="165.95" data-t1="179.0" data-t2="181.55" data-type="電子零件">
       <summary>
         <div class="row1">
           <div class="rank ">13</div>
           <div class="ident">
-            <div class="code mono">2421<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">散熱機構</span><span class="mark" title="今日新訊號">🆕</span></div>
+            <div class="code mono">2421<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">散熱機構</span><span class="mark" title="今日新訊號">🆕</span></div>
             <div class="name">建準</div>
           </div>
           <div class="px">
@@ -3796,6 +3817,7 @@ data-trigger="172.32" data-stop="165.95" data-t1="179.0" data-t2="181.55" data-t
             <span class="lot mono">一張 16.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -3994,13 +4016,13 @@ data-trigger="172.32" data-stop="165.95" data-t1="179.0" data-t2="181.55" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="3008" data-rank="14" data-research-rank="14" data-technical-rank="10" data-eligible="0" data-lot="6730000" data-name="大立光" data-price="6730.0" data-score="-0.403"
+    <details class="card" data-code="3008" data-rank="14" data-research-rank="14" data-technical-rank="10" data-strong="1" data-eligible="0" data-lot="6730000" data-name="大立光" data-price="6730.0" data-score="-0.403"
 data-trigger="6869.45" data-stop="6480.46" data-t1="7336.24" data-t2="7491.84" data-type="光電">
       <summary>
         <div class="row1">
           <div class="rank ">14</div>
           <div class="ident">
-            <div class="code mono">3008<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">光學</span><span class="mark" title="今日新訊號">🆕</span></div>
+            <div class="code mono">3008<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">光學</span><span class="mark" title="今日新訊號">🆕</span></div>
             <div class="name">大立光</div>
           </div>
           <div class="px">
@@ -4011,6 +4033,11 @@ data-trigger="6869.45" data-stop="6480.46" data-t1="7336.24" data-t2="7491.84" d
             <span class="lot mono">一張 673.0 萬</span>
           </div>
         </div>
+
+        <div class="strength-line" aria-label="強勢標註">
+          <span class="strength-badge ">★ 技術強勢</span>
+          <span class="strength-note">低虧損獲利能力待驗證</span>
+<span class="strength-caution">今日漲多，留意追價</span>        </div>
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -4209,13 +4236,13 @@ data-trigger="6869.45" data-stop="6480.46" data-t1="7336.24" data-t2="7491.84" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="3450" data-rank="15" data-research-rank="15" data-technical-rank="9" data-eligible="0" data-lot="548000" data-name="聯鈞" data-price="548.0" data-score="-0.403"
+    <details class="card" data-code="3450" data-rank="15" data-research-rank="15" data-technical-rank="9" data-strong="1" data-eligible="0" data-lot="548000" data-name="聯鈞" data-price="548.0" data-score="-0.403"
 data-trigger="575.66" data-stop="542.38" data-t1="596.0" data-t2="609.32" data-type="其他">
       <summary>
         <div class="row1">
           <div class="rank ">15</div>
           <div class="ident">
-            <div class="code mono">3450<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">其他</span><span class="mark" title="今日新訊號">🆕</span></div>
+            <div class="code mono">3450<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">其他</span><span class="mark" title="今日新訊號">🆕</span></div>
             <div class="name">聯鈞</div>
           </div>
           <div class="px">
@@ -4226,6 +4253,11 @@ data-trigger="575.66" data-stop="542.38" data-t1="596.0" data-t2="609.32" data-t
             <span class="lot mono">一張 54.8 萬</span>
           </div>
         </div>
+
+        <div class="strength-line" aria-label="強勢標註">
+          <span class="strength-badge ">★ 技術強勢</span>
+          <span class="strength-note">低虧損獲利能力待驗證</span>
+<span class="strength-caution">海外逆風</span>        </div>
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -4424,7 +4456,7 @@ data-trigger="575.66" data-stop="542.38" data-t1="596.0" data-t2="609.32" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="3006" data-rank="16" data-research-rank="16" data-technical-rank="14" data-eligible="0" data-lot="282000" data-name="晶豪科" data-price="282.0" data-score="-0.403"
+    <details class="card" data-code="3006" data-rank="16" data-research-rank="16" data-technical-rank="14" data-strong="0" data-eligible="0" data-lot="282000" data-name="晶豪科" data-price="282.0" data-score="-0.403"
 data-trigger="283.77" data-stop="268.4" data-t1="302.21" data-t2="314.5" data-type="半導體">
       <summary>
         <div class="row1">
@@ -4441,6 +4473,7 @@ data-trigger="283.77" data-stop="268.4" data-t1="302.21" data-t2="314.5" data-ty
             <span class="lot mono">一張 28.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -4640,7 +4673,7 @@ data-trigger="283.77" data-stop="268.4" data-t1="302.21" data-t2="314.5" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="2313" data-rank="17" data-research-rank="17" data-technical-rank="40" data-eligible="0" data-lot="248500" data-name="華通" data-price="248.5" data-score="-0.403"
+    <details class="card" data-code="2313" data-rank="17" data-research-rank="17" data-technical-rank="40" data-strong="0" data-eligible="0" data-lot="248500" data-name="華通" data-price="248.5" data-score="-0.403"
 data-trigger="249.01" data-stop="238.76" data-t1="258.0" data-t2="262.1" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -4657,6 +4690,7 @@ data-trigger="249.01" data-stop="238.76" data-t1="258.0" data-t2="262.1" data-ty
             <span class="lot mono">一張 24.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -4856,7 +4890,7 @@ data-trigger="249.01" data-stop="238.76" data-t1="258.0" data-t2="262.1" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="2609" data-rank="18" data-research-rank="18" data-technical-rank="41" data-eligible="0" data-lot="58700" data-name="陽明" data-price="58.7" data-score="-0.403"
+    <details class="card" data-code="2609" data-rank="18" data-research-rank="18" data-technical-rank="41" data-strong="0" data-eligible="0" data-lot="58700" data-name="陽明" data-price="58.7" data-score="-0.403"
 data-trigger="59.69" data-stop="57.93" data-t1="61.79" data-t2="63.1" data-type="航運">
       <summary>
         <div class="row1">
@@ -4873,6 +4907,7 @@ data-trigger="59.69" data-stop="57.93" data-t1="61.79" data-t2="63.1" data-type=
             <span class="lot mono">一張 5.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -5072,7 +5107,7 @@ data-trigger="59.69" data-stop="57.93" data-t1="61.79" data-t2="63.1" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2883" data-rank="19" data-research-rank="19" data-technical-rank="29" data-eligible="0" data-lot="37300" data-name="凱基金" data-price="37.3" data-score="-0.403"
+    <details class="card" data-code="2883" data-rank="19" data-research-rank="19" data-technical-rank="29" data-strong="0" data-eligible="0" data-lot="37300" data-name="凱基金" data-price="37.3" data-score="-0.403"
 data-trigger="38.01" data-stop="36.88" data-t1="39.36" data-t2="40.26" data-type="金融">
       <summary>
         <div class="row1">
@@ -5089,6 +5124,7 @@ data-trigger="38.01" data-stop="36.88" data-t1="39.36" data-t2="40.26" data-type
             <span class="lot mono">一張 3.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -5288,7 +5324,7 @@ data-trigger="38.01" data-stop="36.88" data-t1="39.36" data-t2="40.26" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2801" data-rank="20" data-research-rank="20" data-technical-rank="31" data-eligible="0" data-lot="27200" data-name="彰銀" data-price="27.2" data-score="-0.403"
+    <details class="card" data-code="2801" data-rank="20" data-research-rank="20" data-technical-rank="31" data-strong="0" data-eligible="0" data-lot="27200" data-name="彰銀" data-price="27.2" data-score="-0.403"
 data-trigger="27.98" data-stop="27.34" data-t1="28.75" data-t2="29.26" data-type="金融">
       <summary>
         <div class="row1">
@@ -5305,6 +5341,7 @@ data-trigger="27.98" data-stop="27.34" data-t1="28.75" data-t2="29.26" data-type
             <span class="lot mono">一張 2.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -5504,7 +5541,7 @@ data-trigger="27.98" data-stop="27.34" data-t1="28.75" data-t2="29.26" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2464" data-rank="21" data-research-rank="21" data-technical-rank="33" data-eligible="0" data-lot="191000" data-name="盟立" data-price="191.0" data-score="-0.403"
+    <details class="card" data-code="2464" data-rank="21" data-research-rank="21" data-technical-rank="33" data-strong="0" data-eligible="0" data-lot="191000" data-name="盟立" data-price="191.0" data-score="-0.403"
 data-trigger="210.09" data-stop="198.33" data-t1="224.0" data-t2="228.7" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -5521,6 +5558,7 @@ data-trigger="210.09" data-stop="198.33" data-t1="224.0" data-t2="228.7" data-ty
             <span class="lot mono">一張 19.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -5720,7 +5758,7 @@ data-trigger="210.09" data-stop="198.33" data-t1="224.0" data-t2="228.7" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="2880" data-rank="22" data-research-rank="22" data-technical-rank="32" data-eligible="0" data-lot="44600" data-name="華南金" data-price="44.6" data-score="-0.403"
+    <details class="card" data-code="2880" data-rank="22" data-research-rank="22" data-technical-rank="32" data-strong="0" data-eligible="0" data-lot="44600" data-name="華南金" data-price="44.6" data-score="-0.403"
 data-trigger="46.11" data-stop="44.87" data-t1="47.6" data-t2="48.3" data-type="金融">
       <summary>
         <div class="row1">
@@ -5737,6 +5775,7 @@ data-trigger="46.11" data-stop="44.87" data-t1="47.6" data-t2="48.3" data-type="
             <span class="lot mono">一張 4.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -5936,7 +5975,7 @@ data-trigger="46.11" data-stop="44.87" data-t1="47.6" data-t2="48.3" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="00919" data-rank="23" data-research-rank="23" data-technical-rank="93" data-eligible="0" data-lot="31630" data-name="群益台灣精選高息" data-price="31.63" data-score="-0.42"
+    <details class="card" data-code="00919" data-rank="23" data-research-rank="23" data-technical-rank="93" data-strong="0" data-eligible="0" data-lot="31630" data-name="群益台灣精選高息" data-price="31.63" data-score="-0.42"
 data-trigger="31.88" data-stop="31.5" data-t1="32.34" data-t2="32.64" data-type="ETF">
       <summary>
         <div class="row1">
@@ -5953,6 +5992,7 @@ data-trigger="31.88" data-stop="31.5" data-t1="32.34" data-t2="32.64" data-type=
             <span class="lot mono">一張 3.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -6158,7 +6198,7 @@ data-trigger="31.88" data-stop="31.5" data-t1="32.34" data-t2="32.64" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2834" data-rank="24" data-research-rank="24" data-technical-rank="94" data-eligible="0" data-lot="17300" data-name="臺企銀" data-price="17.3" data-score="-0.42"
+    <details class="card" data-code="2834" data-rank="24" data-research-rank="24" data-technical-rank="94" data-strong="0" data-eligible="0" data-lot="17300" data-name="臺企銀" data-price="17.3" data-score="-0.42"
 data-trigger="17.62" data-stop="17.29" data-t1="18.0" data-t2="18.26" data-type="其他">
       <summary>
         <div class="row1">
@@ -6175,6 +6215,7 @@ data-trigger="17.62" data-stop="17.29" data-t1="18.0" data-t2="18.26" data-type=
             <span class="lot mono">一張 1.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -6380,7 +6421,7 @@ data-trigger="17.62" data-stop="17.29" data-t1="18.0" data-t2="18.26" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2887" data-rank="25" data-research-rank="25" data-technical-rank="55" data-eligible="0" data-lot="40850" data-name="台新新光金" data-price="40.85" data-score="-0.42"
+    <details class="card" data-code="2887" data-rank="25" data-research-rank="25" data-technical-rank="55" data-strong="0" data-eligible="0" data-lot="40850" data-name="台新新光金" data-price="40.85" data-score="-0.42"
 data-trigger="41.41" data-stop="40.19" data-t1="42.88" data-t2="43.86" data-type="金融">
       <summary>
         <div class="row1">
@@ -6397,6 +6438,7 @@ data-trigger="41.41" data-stop="40.19" data-t1="42.88" data-t2="43.86" data-type
             <span class="lot mono">一張 4.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -6602,7 +6644,7 @@ data-trigger="41.41" data-stop="40.19" data-t1="42.88" data-t2="43.86" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2382" data-rank="26" data-research-rank="26" data-technical-rank="97" data-eligible="0" data-lot="331000" data-name="廣達" data-price="331.0" data-score="-0.42"
+    <details class="card" data-code="2382" data-rank="26" data-research-rank="26" data-technical-rank="97" data-strong="0" data-eligible="0" data-lot="331000" data-name="廣達" data-price="331.0" data-score="-0.42"
 data-trigger="336.39" data-stop="328.51" data-t1="345.86" data-t2="351.5" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -6619,6 +6661,7 @@ data-trigger="336.39" data-stop="328.51" data-t1="345.86" data-t2="351.5" data-t
             <span class="lot mono">一張 33.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -6824,7 +6867,7 @@ data-trigger="336.39" data-stop="328.51" data-t1="345.86" data-t2="351.5" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="5880" data-rank="27" data-research-rank="27" data-technical-rank="90" data-eligible="0" data-lot="25900" data-name="合庫金" data-price="25.9" data-score="-0.42"
+    <details class="card" data-code="5880" data-rank="27" data-research-rank="27" data-technical-rank="90" data-strong="0" data-eligible="0" data-lot="25900" data-name="合庫金" data-price="25.9" data-score="-0.42"
 data-trigger="26.42" data-stop="25.94" data-t1="27.0" data-t2="27.39" data-type="金融">
       <summary>
         <div class="row1">
@@ -6841,6 +6884,7 @@ data-trigger="26.42" data-stop="25.94" data-t1="27.0" data-t2="27.39" data-type=
             <span class="lot mono">一張 2.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -7046,7 +7090,7 @@ data-trigger="26.42" data-stop="25.94" data-t1="27.0" data-t2="27.39" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2207" data-rank="28" data-research-rank="28" data-technical-rank="73" data-eligible="0" data-lot="510000" data-name="和泰車" data-price="510.0" data-score="-0.42"
+    <details class="card" data-code="2207" data-rank="28" data-research-rank="28" data-technical-rank="73" data-strong="0" data-eligible="0" data-lot="510000" data-name="和泰車" data-price="510.0" data-score="-0.42"
 data-trigger="521.55" data-stop="510.64" data-t1="534.63" data-t2="543.35" data-type="汽車">
       <summary>
         <div class="row1">
@@ -7063,6 +7107,7 @@ data-trigger="521.55" data-stop="510.64" data-t1="534.63" data-t2="543.35" data-
             <span class="lot mono">一張 51.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -7268,7 +7313,7 @@ data-trigger="521.55" data-stop="510.64" data-t1="534.63" data-t2="543.35" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2889" data-rank="29" data-research-rank="29" data-technical-rank="99" data-eligible="0" data-lot="16000" data-name="國票金" data-price="16.0" data-score="-0.42"
+    <details class="card" data-code="2889" data-rank="29" data-research-rank="29" data-technical-rank="99" data-strong="0" data-eligible="0" data-lot="16000" data-name="國票金" data-price="16.0" data-score="-0.42"
 data-trigger="16.17" data-stop="15.83" data-t1="16.57" data-t2="16.85" data-type="其他">
       <summary>
         <div class="row1">
@@ -7285,6 +7330,7 @@ data-trigger="16.17" data-stop="15.83" data-t1="16.57" data-t2="16.85" data-type
             <span class="lot mono">一張 1.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -7490,7 +7536,7 @@ data-trigger="16.17" data-stop="15.83" data-t1="16.57" data-t2="16.85" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="9910" data-rank="30" data-research-rank="30" data-technical-rank="101" data-eligible="0" data-lot="66700" data-name="豐泰" data-price="66.7" data-score="-0.42"
+    <details class="card" data-code="9910" data-rank="30" data-research-rank="30" data-technical-rank="101" data-strong="0" data-eligible="0" data-lot="66700" data-name="豐泰" data-price="66.7" data-score="-0.42"
 data-trigger="68.07" data-stop="66.73" data-t1="69.67" data-t2="70.74" data-type="紡織">
       <summary>
         <div class="row1">
@@ -7507,6 +7553,7 @@ data-trigger="68.07" data-stop="66.73" data-t1="69.67" data-t2="70.74" data-type
             <span class="lot mono">一張 6.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -7712,7 +7759,7 @@ data-trigger="68.07" data-stop="66.73" data-t1="69.67" data-t2="70.74" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="00918" data-rank="31" data-research-rank="31" data-technical-rank="23" data-eligible="0" data-lot="33890" data-name="大華優利高填息30" data-price="33.89" data-score="-0.432"
+    <details class="card" data-code="00918" data-rank="31" data-research-rank="31" data-technical-rank="23" data-strong="0" data-eligible="0" data-lot="33890" data-name="大華優利高填息30" data-price="33.89" data-score="-0.432"
 data-trigger="34.09" data-stop="33.69" data-t1="34.57" data-t2="34.89" data-type="ETF">
       <summary>
         <div class="row1">
@@ -7729,6 +7776,7 @@ data-trigger="34.09" data-stop="33.69" data-t1="34.57" data-t2="34.89" data-type
             <span class="lot mono">一張 3.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -7927,13 +7975,13 @@ data-trigger="34.09" data-stop="33.69" data-t1="34.57" data-t2="34.89" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="3596" data-rank="32" data-research-rank="32" data-technical-rank="96" data-eligible="0" data-lot="156000" data-name="智易" data-price="156.0" data-score="-0.543"
+    <details class="card" data-code="3596" data-rank="32" data-research-rank="32" data-technical-rank="96" data-strong="0" data-eligible="0" data-lot="156000" data-name="智易" data-price="156.0" data-score="-0.543"
 data-trigger="156.66" data-stop="153.45" data-t1="160.5" data-t2="161.78" data-type="網通">
       <summary>
         <div class="row1">
           <div class="rank ">32</div>
           <div class="ident">
-            <div class="code mono">3596<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">網通</span></div>
+            <div class="code mono">3596<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">網通</span></div>
             <div class="name">智易</div>
           </div>
           <div class="px">
@@ -7944,6 +7992,7 @@ data-trigger="156.66" data-stop="153.45" data-t1="160.5" data-t2="161.78" data-t
             <span class="lot mono">一張 15.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -8148,13 +8197,13 @@ data-trigger="156.66" data-stop="153.45" data-t1="160.5" data-t2="161.78" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="3661" data-rank="33" data-research-rank="33" data-technical-rank="44" data-eligible="0" data-lot="3950000" data-name="世芯-KY" data-price="3950.0" data-score="-0.543"
+    <details class="card" data-code="3661" data-rank="33" data-research-rank="33" data-technical-rank="44" data-strong="0" data-eligible="0" data-lot="3950000" data-name="世芯-KY" data-price="3950.0" data-score="-0.543"
 data-trigger="4009.02" data-stop="3828.59" data-t1="4225.54" data-t2="4297.71" data-type="半導體">
       <summary>
         <div class="row1">
           <div class="rank ">33</div>
           <div class="ident">
-            <div class="code mono">3661<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">IC設計</span></div>
+            <div class="code mono">3661<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">IC設計</span></div>
             <div class="name">世芯-KY</div>
           </div>
           <div class="px">
@@ -8165,6 +8214,7 @@ data-trigger="4009.02" data-stop="3828.59" data-t1="4225.54" data-t2="4297.71" d
             <span class="lot mono">一張 395.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -8369,13 +8419,13 @@ data-trigger="4009.02" data-stop="3828.59" data-t1="4225.54" data-t2="4297.71" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="2059" data-rank="34" data-research-rank="34" data-technical-rank="43" data-eligible="0" data-lot="13355000" data-name="川湖" data-price="13355.0" data-score="-0.543"
+    <details class="card" data-code="2059" data-rank="34" data-research-rank="34" data-technical-rank="43" data-strong="0" data-eligible="0" data-lot="13355000" data-name="川湖" data-price="13355.0" data-score="-0.543"
 data-trigger="13388.47" data-stop="12719.07" data-t1="14191.75" data-t2="14459.51" data-type="電子零件">
       <summary>
         <div class="row1">
           <div class="rank ">34</div>
           <div class="ident">
-            <div class="code mono">2059<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">散熱機構</span></div>
+            <div class="code mono">2059<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">散熱機構</span></div>
             <div class="name">川湖</div>
           </div>
           <div class="px">
@@ -8386,6 +8436,7 @@ data-trigger="13388.47" data-stop="12719.07" data-t1="14191.75" data-t2="14459.5
             <span class="lot mono">一張 1335.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -8584,7 +8635,7 @@ data-trigger="13388.47" data-stop="12719.07" data-t1="14191.75" data-t2="14459.5
         </div>
       </div>
     </details>
-    <details class="card" data-code="2882" data-rank="35" data-research-rank="35" data-technical-rank="75" data-eligible="0" data-lot="111500" data-name="國泰金" data-price="111.5" data-score="-0.543"
+    <details class="card" data-code="2882" data-rank="35" data-research-rank="35" data-technical-rank="75" data-strong="0" data-eligible="0" data-lot="111500" data-name="國泰金" data-price="111.5" data-score="-0.543"
 data-trigger="113.15" data-stop="110.2" data-t1="116.68" data-t2="117.86" data-type="金融">
       <summary>
         <div class="row1">
@@ -8601,6 +8652,7 @@ data-trigger="113.15" data-stop="110.2" data-t1="116.68" data-t2="117.86" data-t
             <span class="lot mono">一張 11.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -8799,7 +8851,7 @@ data-trigger="113.15" data-stop="110.2" data-t1="116.68" data-t2="117.86" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="2337" data-rank="36" data-research-rank="36" data-technical-rank="48" data-eligible="0" data-lot="121500" data-name="旺宏" data-price="121.5" data-score="-0.543"
+    <details class="card" data-code="2337" data-rank="36" data-research-rank="36" data-technical-rank="48" data-strong="0" data-eligible="0" data-lot="121500" data-name="旺宏" data-price="121.5" data-score="-0.543"
 data-trigger="122.75" data-stop="117.68" data-t1="128.85" data-t2="130.88" data-type="半導體">
       <summary>
         <div class="row1">
@@ -8816,6 +8868,7 @@ data-trigger="122.75" data-stop="117.68" data-t1="128.85" data-t2="130.88" data-
             <span class="lot mono">一張 12.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -9014,7 +9067,7 @@ data-trigger="122.75" data-stop="117.68" data-t1="128.85" data-t2="130.88" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="8112" data-rank="37" data-research-rank="37" data-technical-rank="47" data-eligible="0" data-lot="84100" data-name="至上" data-price="84.1" data-score="-0.543"
+    <details class="card" data-code="8112" data-rank="37" data-research-rank="37" data-technical-rank="47" data-strong="0" data-eligible="0" data-lot="84100" data-name="至上" data-price="84.1" data-score="-0.543"
 data-trigger="84.69" data-stop="82.98" data-t1="86.73" data-t2="88.1" data-type="電子通路">
       <summary>
         <div class="row1">
@@ -9031,6 +9084,7 @@ data-trigger="84.69" data-stop="82.98" data-t1="86.73" data-t2="88.1" data-type=
             <span class="lot mono">一張 8.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -9229,7 +9283,7 @@ data-trigger="84.69" data-stop="82.98" data-t1="86.73" data-t2="88.1" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="5388" data-rank="38" data-research-rank="38" data-technical-rank="74" data-eligible="0" data-lot="71700" data-name="中磊" data-price="71.7" data-score="-0.543"
+    <details class="card" data-code="5388" data-rank="38" data-research-rank="38" data-technical-rank="74" data-strong="0" data-eligible="0" data-lot="71700" data-name="中磊" data-price="71.7" data-score="-0.543"
 data-trigger="72.58" data-stop="71.02" data-t1="74.45" data-t2="75.69" data-type="網通">
       <summary>
         <div class="row1">
@@ -9246,6 +9300,7 @@ data-trigger="72.58" data-stop="71.02" data-t1="74.45" data-t2="75.69" data-type
             <span class="lot mono">一張 7.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -9444,7 +9499,7 @@ data-trigger="72.58" data-stop="71.02" data-t1="74.45" data-t2="75.69" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="7769" data-rank="39" data-research-rank="39" data-technical-rank="64" data-eligible="0" data-lot="5815000" data-name="鴻勁" data-price="5815.0" data-score="-0.543"
+    <details class="card" data-code="7769" data-rank="39" data-research-rank="39" data-technical-rank="64" data-strong="0" data-eligible="0" data-lot="5815000" data-name="鴻勁" data-price="5815.0" data-score="-0.543"
 data-trigger="5890.84" data-stop="5573.99" data-t1="6271.06" data-t2="6524.54" data-type="其他">
       <summary>
         <div class="row1">
@@ -9461,6 +9516,7 @@ data-trigger="5890.84" data-stop="5573.99" data-t1="6271.06" data-t2="6524.54" d
             <span class="lot mono">一張 581.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -9659,7 +9715,7 @@ data-trigger="5890.84" data-stop="5573.99" data-t1="6271.06" data-t2="6524.54" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="6176" data-rank="40" data-research-rank="40" data-technical-rank="87" data-eligible="0" data-lot="92300" data-name="瑞儀" data-price="92.3" data-score="-0.543"
+    <details class="card" data-code="6176" data-rank="40" data-research-rank="40" data-technical-rank="87" data-strong="0" data-eligible="0" data-lot="92300" data-name="瑞儀" data-price="92.3" data-score="-0.543"
 data-trigger="92.91" data-stop="90.64" data-t1="95.64" data-t2="96.55" data-type="光電">
       <summary>
         <div class="row1">
@@ -9676,6 +9732,7 @@ data-trigger="92.91" data-stop="90.64" data-t1="95.64" data-t2="96.55" data-type
             <span class="lot mono">一張 9.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -9874,7 +9931,7 @@ data-trigger="92.91" data-stop="90.64" data-t1="95.64" data-t2="96.55" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="6269" data-rank="41" data-research-rank="41" data-technical-rank="42" data-eligible="0" data-lot="65100" data-name="台郡" data-price="65.1" data-score="-0.543"
+    <details class="card" data-code="6269" data-rank="41" data-research-rank="41" data-technical-rank="42" data-strong="0" data-eligible="0" data-lot="65100" data-name="台郡" data-price="65.1" data-score="-0.543"
 data-trigger="67.04" data-stop="64.26" data-t1="70.37" data-t2="71.48" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -9891,6 +9948,7 @@ data-trigger="67.04" data-stop="64.26" data-t1="70.37" data-t2="71.48" data-type
             <span class="lot mono">一張 6.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -10090,7 +10148,7 @@ data-trigger="67.04" data-stop="64.26" data-t1="70.37" data-t2="71.48" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2345" data-rank="42" data-research-rank="42" data-technical-rank="82" data-eligible="0" data-lot="2075000" data-name="智邦" data-price="2075.0" data-score="-0.543"
+    <details class="card" data-code="2345" data-rank="42" data-research-rank="42" data-technical-rank="82" data-strong="0" data-eligible="0" data-lot="2075000" data-name="智邦" data-price="2075.0" data-score="-0.543"
 data-trigger="2115.05" data-stop="2014.05" data-t1="2190.0" data-t2="2230.4" data-type="網通">
       <summary>
         <div class="row1">
@@ -10107,6 +10165,7 @@ data-trigger="2115.05" data-stop="2014.05" data-t1="2190.0" data-t2="2230.4" dat
             <span class="lot mono">一張 207.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -10306,7 +10365,7 @@ data-trigger="2115.05" data-stop="2014.05" data-t1="2190.0" data-t2="2230.4" dat
         </div>
       </div>
     </details>
-    <details class="card" data-code="2892" data-rank="43" data-research-rank="43" data-technical-rank="78" data-eligible="0" data-lot="38050" data-name="第一金" data-price="38.05" data-score="-0.543"
+    <details class="card" data-code="2892" data-rank="43" data-research-rank="43" data-technical-rank="78" data-strong="0" data-eligible="0" data-lot="38050" data-name="第一金" data-price="38.05" data-score="-0.543"
 data-trigger="39.05" data-stop="38.14" data-t1="40.14" data-t2="40.86" data-type="金融">
       <summary>
         <div class="row1">
@@ -10323,6 +10382,7 @@ data-trigger="39.05" data-stop="38.14" data-t1="40.14" data-t2="40.86" data-type
             <span class="lot mono">一張 3.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -10522,7 +10582,7 @@ data-trigger="39.05" data-stop="38.14" data-t1="40.14" data-t2="40.86" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2884" data-rank="44" data-research-rank="44" data-technical-rank="57" data-eligible="0" data-lot="44800" data-name="玉山金" data-price="44.8" data-score="-0.543"
+    <details class="card" data-code="2884" data-rank="44" data-research-rank="44" data-technical-rank="57" data-strong="0" data-eligible="0" data-lot="44800" data-name="玉山金" data-price="44.8" data-score="-0.543"
 data-trigger="45.81" data-stop="44.67" data-t1="47.17" data-t2="47.63" data-type="金融">
       <summary>
         <div class="row1">
@@ -10539,6 +10599,7 @@ data-trigger="45.81" data-stop="44.67" data-t1="47.17" data-t2="47.63" data-type
             <span class="lot mono">一張 4.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -10738,7 +10799,7 @@ data-trigger="45.81" data-stop="44.67" data-t1="47.17" data-t2="47.63" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2891" data-rank="45" data-research-rank="45" data-technical-rank="61" data-eligible="0" data-lot="67400" data-name="中信金" data-price="67.4" data-score="-0.543"
+    <details class="card" data-code="2891" data-rank="45" data-research-rank="45" data-technical-rank="61" data-strong="0" data-eligible="0" data-lot="67400" data-name="中信金" data-price="67.4" data-score="-0.543"
 data-trigger="68.48" data-stop="66.94" data-t1="70.32" data-t2="71.55" data-type="金融">
       <summary>
         <div class="row1">
@@ -10755,6 +10816,7 @@ data-trigger="68.48" data-stop="66.94" data-t1="70.32" data-t2="71.55" data-type
             <span class="lot mono">一張 6.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -10954,7 +11016,7 @@ data-trigger="68.48" data-stop="66.94" data-t1="70.32" data-t2="71.55" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2615" data-rank="46" data-research-rank="46" data-technical-rank="60" data-eligible="0" data-lot="110500" data-name="萬海" data-price="110.5" data-score="-0.543"
+    <details class="card" data-code="2615" data-rank="46" data-research-rank="46" data-technical-rank="60" data-strong="0" data-eligible="0" data-lot="110500" data-name="萬海" data-price="110.5" data-score="-0.543"
 data-trigger="114.24" data-stop="109.42" data-t1="120.02" data-t2="123.88" data-type="航運">
       <summary>
         <div class="row1">
@@ -10971,6 +11033,7 @@ data-trigger="114.24" data-stop="109.42" data-t1="120.02" data-t2="123.88" data-
             <span class="lot mono">一張 11.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -11170,7 +11233,7 @@ data-trigger="114.24" data-stop="109.42" data-t1="120.02" data-t2="123.88" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2890" data-rank="47" data-research-rank="47" data-technical-rank="70" data-eligible="0" data-lot="44050" data-name="永豐金" data-price="44.05" data-score="-0.543"
+    <details class="card" data-code="2890" data-rank="47" data-research-rank="47" data-technical-rank="70" data-strong="0" data-eligible="0" data-lot="44050" data-name="永豐金" data-price="44.05" data-score="-0.543"
 data-trigger="45.26" data-stop="44.1" data-t1="46.35" data-t2="46.81" data-type="其他">
       <summary>
         <div class="row1">
@@ -11187,6 +11250,7 @@ data-trigger="45.26" data-stop="44.1" data-t1="46.35" data-t2="46.81" data-type=
             <span class="lot mono">一張 4.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -11386,13 +11450,13 @@ data-trigger="45.26" data-stop="44.1" data-t1="46.35" data-t2="46.81" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="00934" data-rank="48" data-research-rank="48" data-technical-rank="38" data-eligible="0" data-lot="30080" data-name="中信成長高股息" data-price="30.08" data-score="-0.583"
+    <details class="card" data-code="00934" data-rank="48" data-research-rank="48" data-technical-rank="38" data-strong="0" data-eligible="0" data-lot="30080" data-name="中信成長高股息" data-price="30.08" data-score="-0.583"
 data-trigger="30.28" data-stop="29.92" data-t1="30.7" data-t2="30.85" data-type="ETF">
       <summary>
         <div class="row1">
           <div class="rank ">48</div>
           <div class="ident">
-            <div class="code mono">00934<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">ETF·高股息</span></div>
+            <div class="code mono">00934<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">ETF·高股息</span></div>
             <div class="name">中信成長高股息</div>
           </div>
           <div class="px">
@@ -11403,6 +11467,7 @@ data-trigger="30.28" data-stop="29.92" data-t1="30.7" data-t2="30.85" data-type=
             <span class="lot mono">一張 3.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -11607,7 +11672,7 @@ data-trigger="30.28" data-stop="29.92" data-t1="30.7" data-t2="30.85" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="3231" data-rank="49" data-research-rank="49" data-technical-rank="16" data-eligible="0" data-lot="189500" data-name="緯創" data-price="189.5" data-score="-0.583"
+    <details class="card" data-code="3231" data-rank="49" data-research-rank="49" data-technical-rank="16" data-strong="0" data-eligible="0" data-lot="189500" data-name="緯創" data-price="189.5" data-score="-0.583"
 data-trigger="191.81" data-stop="185.58" data-t1="199.29" data-t2="201.78" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -11624,6 +11689,7 @@ data-trigger="191.81" data-stop="185.58" data-t1="199.29" data-t2="201.78" data-
             <span class="lot mono">一張 18.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -11822,13 +11888,13 @@ data-trigger="191.81" data-stop="185.58" data-t1="199.29" data-t2="201.78" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2360" data-rank="50" data-research-rank="50" data-technical-rank="18" data-eligible="0" data-lot="2325000" data-name="致茂" data-price="2325.0" data-score="-0.583"
+    <details class="card" data-code="2360" data-rank="50" data-research-rank="50" data-technical-rank="18" data-strong="1" data-eligible="0" data-lot="2325000" data-name="致茂" data-price="2325.0" data-score="-0.583"
 data-trigger="2362.17" data-stop="2218.82" data-t1="2534.19" data-t2="2591.52" data-type="半導體">
       <summary>
         <div class="row1">
           <div class="rank ">50</div>
           <div class="ident">
-            <div class="code mono">2360<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">設備儀器</span></div>
+            <div class="code mono">2360<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">設備儀器</span></div>
             <div class="name">致茂</div>
           </div>
           <div class="px">
@@ -11839,6 +11905,11 @@ data-trigger="2362.17" data-stop="2218.82" data-t1="2534.19" data-t2="2591.52" d
             <span class="lot mono">一張 232.5 萬</span>
           </div>
         </div>
+
+        <div class="strength-line" aria-label="強勢標註">
+          <span class="strength-badge ">★ 技術強勢</span>
+          <span class="strength-note">低虧損獲利能力待驗證</span>
+<span class="strength-caution">今日漲多，留意追價</span>        </div>
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -12037,7 +12108,7 @@ data-trigger="2362.17" data-stop="2218.82" data-t1="2534.19" data-t2="2591.52" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="2377" data-rank="51" data-research-rank="51" data-technical-rank="13" data-eligible="0" data-lot="155000" data-name="微星" data-price="155.0" data-score="-0.583"
+    <details class="card" data-code="2377" data-rank="51" data-research-rank="51" data-technical-rank="13" data-strong="0" data-eligible="0" data-lot="155000" data-name="微星" data-price="155.0" data-score="-0.583"
 data-trigger="159.23" data-stop="154.56" data-t1="164.0" data-t2="165.87" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -12054,6 +12125,7 @@ data-trigger="159.23" data-stop="154.56" data-t1="164.0" data-t2="165.87" data-t
             <span class="lot mono">一張 15.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -12252,7 +12324,7 @@ data-trigger="159.23" data-stop="154.56" data-t1="164.0" data-t2="165.87" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="2481" data-rank="52" data-research-rank="52" data-technical-rank="35" data-eligible="0" data-lot="180500" data-name="強茂" data-price="180.5" data-score="-0.583"
+    <details class="card" data-code="2481" data-rank="52" data-research-rank="52" data-technical-rank="35" data-strong="0" data-eligible="0" data-lot="180500" data-name="強茂" data-price="180.5" data-score="-0.583"
 data-trigger="192.02" data-stop="181.6" data-t1="197.23" data-t2="201.4" data-type="其他">
       <summary>
         <div class="row1">
@@ -12269,6 +12341,7 @@ data-trigger="192.02" data-stop="181.6" data-t1="197.23" data-t2="201.4" data-ty
             <span class="lot mono">一張 18.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -12468,7 +12541,7 @@ data-trigger="192.02" data-stop="181.6" data-t1="197.23" data-t2="201.4" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="6116" data-rank="53" data-research-rank="53" data-technical-rank="19" data-eligible="0" data-lot="15900" data-name="彩晶" data-price="15.9" data-score="-0.583"
+    <details class="card" data-code="6116" data-rank="53" data-research-rank="53" data-technical-rank="19" data-strong="0" data-eligible="0" data-lot="15900" data-name="彩晶" data-price="15.9" data-score="-0.583"
 data-trigger="17.54" data-stop="16.7" data-t1="17.96" data-t2="18.3" data-type="光電">
       <summary>
         <div class="row1">
@@ -12485,6 +12558,7 @@ data-trigger="17.54" data-stop="16.7" data-t1="17.96" data-t2="18.3" data-type="
             <span class="lot mono">一張 1.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -12684,7 +12758,7 @@ data-trigger="17.54" data-stop="16.7" data-t1="17.96" data-t2="18.3" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="1101" data-rank="54" data-research-rank="54" data-technical-rank="11" data-eligible="0" data-lot="25000" data-name="台泥" data-price="25.0" data-score="-0.583"
+    <details class="card" data-code="1101" data-rank="54" data-research-rank="54" data-technical-rank="11" data-strong="0" data-eligible="0" data-lot="25000" data-name="台泥" data-price="25.0" data-score="-0.583"
 data-trigger="25.63" data-stop="24.99" data-t1="26.4" data-t2="26.7" data-type="水泥">
       <summary>
         <div class="row1">
@@ -12701,6 +12775,7 @@ data-trigger="25.63" data-stop="24.99" data-t1="26.4" data-t2="26.7" data-type="
             <span class="lot mono">一張 2.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -12900,7 +12975,7 @@ data-trigger="25.63" data-stop="24.99" data-t1="26.4" data-t2="26.7" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="6239" data-rank="55" data-research-rank="55" data-technical-rank="37" data-eligible="0" data-lot="297500" data-name="力成" data-price="297.5" data-score="-0.583"
+    <details class="card" data-code="6239" data-rank="55" data-research-rank="55" data-technical-rank="37" data-strong="0" data-eligible="0" data-lot="297500" data-name="力成" data-price="297.5" data-score="-0.583"
 data-trigger="311.64" data-stop="298.82" data-t1="318.05" data-t2="323.18" data-type="半導體">
       <summary>
         <div class="row1">
@@ -12917,6 +12992,7 @@ data-trigger="311.64" data-stop="298.82" data-t1="318.05" data-t2="323.18" data-
             <span class="lot mono">一張 29.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -13116,7 +13192,7 @@ data-trigger="311.64" data-stop="298.82" data-t1="318.05" data-t2="323.18" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2449" data-rank="56" data-research-rank="56" data-technical-rank="15" data-eligible="0" data-lot="294000" data-name="京元電子" data-price="294.0" data-score="-0.583"
+    <details class="card" data-code="2449" data-rank="56" data-research-rank="56" data-technical-rank="15" data-strong="0" data-eligible="0" data-lot="294000" data-name="京元電子" data-price="294.0" data-score="-0.583"
 data-trigger="304.18" data-stop="290.61" data-t1="320.46" data-t2="330.0" data-type="半導體">
       <summary>
         <div class="row1">
@@ -13133,6 +13209,7 @@ data-trigger="304.18" data-stop="290.61" data-t1="320.46" data-t2="330.0" data-t
             <span class="lot mono">一張 29.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -13332,7 +13409,7 @@ data-trigger="304.18" data-stop="290.61" data-t1="320.46" data-t2="330.0" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="6426" data-rank="57" data-research-rank="57" data-technical-rank="27" data-eligible="0" data-lot="357500" data-name="統新" data-price="357.5" data-score="-0.583"
+    <details class="card" data-code="6426" data-rank="57" data-research-rank="57" data-technical-rank="27" data-strong="0" data-eligible="0" data-lot="357500" data-name="統新" data-price="357.5" data-score="-0.583"
 data-trigger="372.25" data-stop="347.21" data-t1="402.3" data-t2="412.31" data-type="其他">
       <summary>
         <div class="row1">
@@ -13349,6 +13426,7 @@ data-trigger="372.25" data-stop="347.21" data-t1="402.3" data-t2="412.31" data-t
             <span class="lot mono">一張 35.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -13554,7 +13632,7 @@ data-trigger="372.25" data-stop="347.21" data-t1="402.3" data-t2="412.31" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="3481" data-rank="58" data-research-rank="58" data-technical-rank="17" data-eligible="0" data-lot="52300" data-name="群創" data-price="52.3" data-score="-0.583"
+    <details class="card" data-code="3481" data-rank="58" data-research-rank="58" data-technical-rank="17" data-strong="0" data-eligible="0" data-lot="52300" data-name="群創" data-price="52.3" data-score="-0.583"
 data-trigger="56.32" data-stop="53.85" data-t1="57.56" data-t2="58.55" data-type="光電">
       <summary>
         <div class="row1">
@@ -13571,6 +13649,7 @@ data-trigger="56.32" data-stop="53.85" data-t1="57.56" data-t2="58.55" data-type
             <span class="lot mono">一張 5.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -13770,7 +13849,7 @@ data-trigger="56.32" data-stop="53.85" data-t1="57.56" data-t2="58.55" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2303" data-rank="59" data-research-rank="59" data-technical-rank="24" data-eligible="0" data-lot="152500" data-name="聯電" data-price="152.5" data-score="-0.583"
+    <details class="card" data-code="2303" data-rank="59" data-research-rank="59" data-technical-rank="24" data-strong="0" data-eligible="0" data-lot="152500" data-name="聯電" data-price="152.5" data-score="-0.583"
 data-trigger="165.37" data-stop="157.99" data-t1="169.06" data-t2="172.01" data-type="半導體">
       <summary>
         <div class="row1">
@@ -13787,6 +13866,7 @@ data-trigger="165.37" data-stop="157.99" data-t1="169.06" data-t2="172.01" data-
             <span class="lot mono">一張 15.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -13986,7 +14066,7 @@ data-trigger="165.37" data-stop="157.99" data-t1="169.06" data-t2="172.01" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="3714" data-rank="60" data-research-rank="60" data-technical-rank="21" data-eligible="0" data-lot="68200" data-name="富采" data-price="68.2" data-score="-0.583"
+    <details class="card" data-code="3714" data-rank="60" data-research-rank="60" data-technical-rank="21" data-strong="0" data-eligible="0" data-lot="68200" data-name="富采" data-price="68.2" data-score="-0.583"
 data-trigger="72.96" data-stop="69.78" data-t1="74.55" data-t2="75.82" data-type="其他">
       <summary>
         <div class="row1">
@@ -14003,6 +14083,7 @@ data-trigger="72.96" data-stop="69.78" data-t1="74.55" data-t2="75.82" data-type
             <span class="lot mono">一張 6.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -14202,7 +14283,7 @@ data-trigger="72.96" data-stop="69.78" data-t1="74.55" data-t2="75.82" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="6515" data-rank="61" data-research-rank="61" data-technical-rank="50" data-eligible="0" data-lot="6205000" data-name="穎崴" data-price="6205.0" data-score="-0.621"
+    <details class="card" data-code="6515" data-rank="61" data-research-rank="61" data-technical-rank="50" data-strong="0" data-eligible="0" data-lot="6205000" data-name="穎崴" data-price="6205.0" data-score="-0.621"
 data-trigger="6299.91" data-stop="5901.77" data-t1="6777.67" data-t2="7096.18" data-type="其他">
       <summary>
         <div class="row1">
@@ -14219,6 +14300,7 @@ data-trigger="6299.91" data-stop="5901.77" data-t1="6777.67" data-t2="7096.18" d
             <span class="lot mono">一張 620.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -14417,7 +14499,7 @@ data-trigger="6299.91" data-stop="5901.77" data-t1="6777.67" data-t2="7096.18" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="2885" data-rank="62" data-research-rank="62" data-technical-rank="63" data-eligible="0" data-lot="68200" data-name="元大金" data-price="68.2" data-score="-0.621"
+    <details class="card" data-code="2885" data-rank="62" data-research-rank="62" data-technical-rank="63" data-strong="0" data-eligible="0" data-lot="68200" data-name="元大金" data-price="68.2" data-score="-0.621"
 data-trigger="68.58" data-stop="67.01" data-t1="70.46" data-t2="71.7" data-type="金融">
       <summary>
         <div class="row1">
@@ -14434,6 +14516,7 @@ data-trigger="68.58" data-stop="67.01" data-t1="70.46" data-t2="71.7" data-type=
             <span class="lot mono">一張 6.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -14632,7 +14715,7 @@ data-trigger="68.58" data-stop="67.01" data-t1="70.46" data-t2="71.7" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="6669" data-rank="63" data-research-rank="63" data-technical-rank="72" data-eligible="0" data-lot="2150000" data-name="緯穎" data-price="2150.0" data-score="-0.621"
+    <details class="card" data-code="6669" data-rank="63" data-research-rank="63" data-technical-rank="72" data-strong="0" data-eligible="0" data-lot="2150000" data-name="緯穎" data-price="2150.0" data-score="-0.621"
 data-trigger="2180.71" data-stop="1966.54" data-t1="2437.71" data-t2="2570.0" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -14649,6 +14732,7 @@ data-trigger="2180.71" data-stop="1966.54" data-t1="2437.71" data-t2="2570.0" da
             <span class="lot mono">一張 215.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -14847,7 +14931,7 @@ data-trigger="2180.71" data-stop="1966.54" data-t1="2437.71" data-t2="2570.0" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="006208" data-rank="64" data-research-rank="64" data-technical-rank="25" data-eligible="0" data-lot="265350" data-name="富邦台50" data-price="265.35" data-score="-0.665"
+    <details class="card" data-code="006208" data-rank="64" data-research-rank="64" data-technical-rank="25" data-strong="0" data-eligible="0" data-lot="265350" data-name="富邦台50" data-price="265.35" data-score="-0.665"
 data-trigger="266.14" data-stop="262.39" data-t1="270.64" data-t2="272.85" data-type="ETF">
       <summary>
         <div class="row1">
@@ -14864,6 +14948,7 @@ data-trigger="266.14" data-stop="262.39" data-t1="270.64" data-t2="272.85" data-
             <span class="lot mono">一張 26.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -15069,7 +15154,7 @@ data-trigger="266.14" data-stop="262.39" data-t1="270.64" data-t2="272.85" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="00881" data-rank="65" data-research-rank="65" data-technical-rank="22" data-eligible="0" data-lot="54450" data-name="國泰台灣科技龍頭" data-price="54.45" data-score="-0.665"
+    <details class="card" data-code="00881" data-rank="65" data-research-rank="65" data-technical-rank="22" data-strong="0" data-eligible="0" data-lot="54450" data-name="國泰台灣科技龍頭" data-price="54.45" data-score="-0.665"
 data-trigger="54.7" data-stop="53.7" data-t1="55.9" data-t2="56.44" data-type="ETF">
       <summary>
         <div class="row1">
@@ -15086,6 +15171,7 @@ data-trigger="54.7" data-stop="53.7" data-t1="55.9" data-t2="56.44" data-type="E
             <span class="lot mono">一張 5.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -15291,7 +15377,7 @@ data-trigger="54.7" data-stop="53.7" data-t1="55.9" data-t2="56.44" data-type="E
         </div>
       </div>
     </details>
-    <details class="card" data-code="00923" data-rank="66" data-research-rank="66" data-technical-rank="20" data-eligible="0" data-lot="42970" data-name="群益台ESG低碳50" data-price="42.97" data-score="-0.665"
+    <details class="card" data-code="00923" data-rank="66" data-research-rank="66" data-technical-rank="20" data-strong="0" data-eligible="0" data-lot="42970" data-name="群益台ESG低碳50" data-price="42.97" data-score="-0.665"
 data-trigger="43.13" data-stop="42.44" data-t1="43.97" data-t2="44.37" data-type="ETF">
       <summary>
         <div class="row1">
@@ -15308,6 +15394,7 @@ data-trigger="43.13" data-stop="42.44" data-t1="43.97" data-t2="44.37" data-type
             <span class="lot mono">一張 4.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -15512,7 +15599,7 @@ data-trigger="43.13" data-stop="42.44" data-t1="43.97" data-t2="44.37" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="6005" data-rank="67" data-research-rank="67" data-technical-rank="12" data-eligible="0" data-lot="33000" data-name="群益證" data-price="33.0" data-score="-0.665"
+    <details class="card" data-code="6005" data-rank="67" data-research-rank="67" data-technical-rank="12" data-strong="0" data-eligible="0" data-lot="33000" data-name="群益證" data-price="33.0" data-score="-0.665"
 data-trigger="33.14" data-stop="32.39" data-t1="34.04" data-t2="34.64" data-type="其他">
       <summary>
         <div class="row1">
@@ -15529,6 +15616,7 @@ data-trigger="33.14" data-stop="32.39" data-t1="34.04" data-t2="34.64" data-type
             <span class="lot mono">一張 3.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -15733,7 +15821,7 @@ data-trigger="33.14" data-stop="32.39" data-t1="34.04" data-t2="34.64" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="00981A" data-rank="68" data-research-rank="68" data-technical-rank="39" data-eligible="0" data-lot="32650" data-name="主動統一台股增長" data-price="32.65" data-score="-0.665"
+    <details class="card" data-code="00981A" data-rank="68" data-research-rank="68" data-technical-rank="39" data-strong="0" data-eligible="0" data-lot="32650" data-name="主動統一台股增長" data-price="32.65" data-score="-0.665"
 data-trigger="32.8" data-stop="32.02" data-t1="33.73" data-t2="34.21" data-type="ETF">
       <summary>
         <div class="row1">
@@ -15750,6 +15838,7 @@ data-trigger="32.8" data-stop="32.02" data-t1="33.73" data-t2="34.21" data-type=
             <span class="lot mono">一張 3.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -15956,7 +16045,7 @@ data-trigger="32.8" data-stop="32.02" data-t1="33.73" data-t2="34.21" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="00403A" data-rank="69" data-research-rank="69" data-technical-rank="36" data-eligible="0" data-lot="11440" data-name="主動統一升級50" data-price="11.44" data-score="-0.665"
+    <details class="card" data-code="00403A" data-rank="69" data-research-rank="69" data-technical-rank="36" data-strong="0" data-eligible="0" data-lot="11440" data-name="主動統一升級50" data-price="11.44" data-score="-0.665"
 data-trigger="11.51" data-stop="11.27" data-t1="11.8" data-t2="11.93" data-type="ETF">
       <summary>
         <div class="row1">
@@ -15973,6 +16062,7 @@ data-trigger="11.51" data-stop="11.27" data-t1="11.8" data-t2="11.93" data-type=
             <span class="lot mono">一張 1.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -16179,7 +16269,7 @@ data-trigger="11.51" data-stop="11.27" data-t1="11.8" data-t2="11.93" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2367" data-rank="70" data-research-rank="70" data-technical-rank="30" data-eligible="0" data-lot="49650" data-name="燿華" data-price="49.65" data-score="-0.665"
+    <details class="card" data-code="2367" data-rank="70" data-research-rank="70" data-technical-rank="30" data-strong="0" data-eligible="0" data-lot="49650" data-name="燿華" data-price="49.65" data-score="-0.665"
 data-trigger="49.73" data-stop="48.13" data-t1="51.65" data-t2="52.92" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -16196,6 +16286,7 @@ data-trigger="49.73" data-stop="48.13" data-t1="51.65" data-t2="52.92" data-type
             <span class="lot mono">一張 5.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -16403,7 +16494,7 @@ data-trigger="49.73" data-stop="48.13" data-t1="51.65" data-t2="52.92" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="00991A" data-rank="71" data-research-rank="71" data-technical-rank="28" data-eligible="0" data-lot="19470" data-name="主動復華未來50" data-price="19.47" data-score="-0.665"
+    <details class="card" data-code="00991A" data-rank="71" data-research-rank="71" data-technical-rank="28" data-strong="0" data-eligible="0" data-lot="19470" data-name="主動復華未來50" data-price="19.47" data-score="-0.665"
 data-trigger="19.52" data-stop="19.04" data-t1="20.1" data-t2="20.43" data-type="ETF">
       <summary>
         <div class="row1">
@@ -16420,6 +16511,7 @@ data-trigger="19.52" data-stop="19.04" data-t1="20.1" data-t2="20.43" data-type=
             <span class="lot mono">一張 1.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -16626,7 +16718,7 @@ data-trigger="19.52" data-stop="19.04" data-t1="20.1" data-t2="20.43" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2308" data-rank="72" data-research-rank="72" data-technical-rank="34" data-eligible="0" data-lot="2005000" data-name="台達電" data-price="2005.0" data-score="-0.665"
+    <details class="card" data-code="2308" data-rank="72" data-research-rank="72" data-technical-rank="34" data-strong="0" data-eligible="0" data-lot="2005000" data-name="台達電" data-price="2005.0" data-score="-0.665"
 data-trigger="2014.36" data-stop="1927.19" data-t1="2118.96" data-t2="2179.33" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -16643,6 +16735,7 @@ data-trigger="2014.36" data-stop="1927.19" data-t1="2118.96" data-t2="2179.33" d
             <span class="lot mono">一張 200.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -16849,7 +16942,7 @@ data-trigger="2014.36" data-stop="1927.19" data-t1="2118.96" data-t2="2179.33" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="2376" data-rank="73" data-research-rank="73" data-technical-rank="8" data-eligible="0" data-lot="388500" data-name="技嘉" data-price="388.5" data-score="-0.665"
+    <details class="card" data-code="2376" data-rank="73" data-research-rank="73" data-technical-rank="8" data-strong="0" data-eligible="0" data-lot="388500" data-name="技嘉" data-price="388.5" data-score="-0.665"
 data-trigger="394.62" data-stop="382.28" data-t1="409.42" data-t2="414.35" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -16866,6 +16959,7 @@ data-trigger="394.62" data-stop="382.28" data-t1="409.42" data-t2="414.35" data-
             <span class="lot mono">一張 38.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -17071,13 +17165,13 @@ data-trigger="394.62" data-stop="382.28" data-t1="409.42" data-t2="414.35" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2049" data-rank="74" data-research-rank="74" data-technical-rank="1" data-eligible="0" data-lot="345500" data-name="上銀" data-price="345.5" data-score="-0.685"
+    <details class="card" data-code="2049" data-rank="74" data-research-rank="74" data-technical-rank="1" data-strong="1" data-eligible="0" data-lot="345500" data-name="上銀" data-price="345.5" data-score="-0.685"
 data-trigger="357.76" data-stop="342.53" data-t1="376.04" data-t2="382.13" data-type="機械">
       <summary>
         <div class="row1">
           <div class="rank ">74</div>
           <div class="ident">
-            <div class="code mono">2049<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">機械</span></div>
+            <div class="code mono">2049<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">機械</span></div>
             <div class="name">上銀</div>
           </div>
           <div class="px">
@@ -17088,6 +17182,11 @@ data-trigger="357.76" data-stop="342.53" data-t1="376.04" data-t2="382.13" data-
             <span class="lot mono">一張 34.5 萬</span>
           </div>
         </div>
+
+        <div class="strength-line" aria-label="強勢標註">
+          <span class="strength-badge ">★ 技術強勢</span>
+          <span class="strength-note">低虧損獲利能力待驗證</span>
+<span class="strength-caution">海外逆風</span>        </div>
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -17286,13 +17385,13 @@ data-trigger="357.76" data-stop="342.53" data-t1="376.04" data-t2="382.13" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2301" data-rank="75" data-research-rank="75" data-technical-rank="3" data-eligible="0" data-lot="298000" data-name="光寶科" data-price="298.0" data-score="-0.685"
+    <details class="card" data-code="2301" data-rank="75" data-research-rank="75" data-technical-rank="3" data-strong="1" data-eligible="0" data-lot="298000" data-name="光寶科" data-price="298.0" data-score="-0.685"
 data-trigger="302.12" data-stop="289.64" data-t1="316.0" data-t2="320.99" data-type="電腦週邊">
       <summary>
         <div class="row1">
           <div class="rank ">75</div>
           <div class="ident">
-            <div class="code mono">2301<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">電腦週邊</span></div>
+            <div class="code mono">2301<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">電腦週邊</span></div>
             <div class="name">光寶科</div>
           </div>
           <div class="px">
@@ -17303,6 +17402,11 @@ data-trigger="302.12" data-stop="289.64" data-t1="316.0" data-t2="320.99" data-t
             <span class="lot mono">一張 29.8 萬</span>
           </div>
         </div>
+
+        <div class="strength-line" aria-label="強勢標註">
+          <span class="strength-badge ">★ 技術強勢</span>
+          <span class="strength-note">低虧損獲利能力待驗證</span>
+<span class="strength-caution">今日漲多，留意追價</span>        </div>
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -17501,13 +17605,13 @@ data-trigger="302.12" data-stop="289.64" data-t1="316.0" data-t2="320.99" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="6442" data-rank="76" data-research-rank="76" data-technical-rank="4" data-eligible="0" data-lot="1705000" data-name="光聖" data-price="1705.0" data-score="-0.685"
+    <details class="card" data-code="6442" data-rank="76" data-research-rank="76" data-technical-rank="4" data-strong="1" data-eligible="0" data-lot="1705000" data-name="光聖" data-price="1705.0" data-score="-0.685"
 data-trigger="1759.88" data-stop="1662.33" data-t1="1875.0" data-t2="1914.02" data-type="其他">
       <summary>
         <div class="row1">
           <div class="rank ">76</div>
           <div class="ident">
-            <div class="code mono">6442<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">其他</span></div>
+            <div class="code mono">6442<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">其他</span></div>
             <div class="name">光聖</div>
           </div>
           <div class="px">
@@ -17518,6 +17622,11 @@ data-trigger="1759.88" data-stop="1662.33" data-t1="1875.0" data-t2="1914.02" da
             <span class="lot mono">一張 170.5 萬</span>
           </div>
         </div>
+
+        <div class="strength-line" aria-label="強勢標註">
+          <span class="strength-badge ">★ 技術強勢</span>
+          <span class="strength-note">低虧損獲利能力待驗證</span>
+<span class="strength-caution">今日漲多，留意追價</span><span class="strength-caution">海外逆風</span>        </div>
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -17716,7 +17825,7 @@ data-trigger="1759.88" data-stop="1662.33" data-t1="1875.0" data-t2="1914.02" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="6285" data-rank="77" data-research-rank="77" data-technical-rank="2" data-eligible="0" data-lot="249500" data-name="啟碁" data-price="249.5" data-score="-0.685"
+    <details class="card" data-code="6285" data-rank="77" data-research-rank="77" data-technical-rank="2" data-strong="0" data-eligible="0" data-lot="249500" data-name="啟碁" data-price="249.5" data-score="-0.685"
 data-trigger="250.92" data-stop="242.51" data-t1="261.02" data-t2="267.75" data-type="網通">
       <summary>
         <div class="row1">
@@ -17733,6 +17842,7 @@ data-trigger="250.92" data-stop="242.51" data-t1="261.02" data-t2="267.75" data-
             <span class="lot mono">一張 24.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -17937,13 +18047,13 @@ data-trigger="250.92" data-stop="242.51" data-t1="261.02" data-t2="267.75" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="00900" data-rank="78" data-research-rank="78" data-technical-rank="120" data-eligible="0" data-lot="19490" data-name="富邦特選高股息30" data-price="19.49" data-score="-0.706"
+    <details class="card" data-code="00900" data-rank="78" data-research-rank="78" data-technical-rank="120" data-strong="0" data-eligible="0" data-lot="19490" data-name="富邦特選高股息30" data-price="19.49" data-score="-0.706"
 data-trigger="19.64" data-stop="19.43" data-t1="19.9" data-t2="19.98" data-type="ETF">
       <summary>
         <div class="row1">
           <div class="rank ">78</div>
           <div class="ident">
-            <div class="code mono">00900<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">ETF·高股息</span></div>
+            <div class="code mono">00900<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">ETF·高股息</span></div>
             <div class="name">富邦特選高股息30</div>
           </div>
           <div class="px">
@@ -17954,6 +18064,7 @@ data-trigger="19.64" data-stop="19.43" data-t1="19.9" data-t2="19.98" data-type=
             <span class="lot mono">一張 1.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -18158,7 +18269,7 @@ data-trigger="19.64" data-stop="19.43" data-t1="19.9" data-t2="19.98" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="3034" data-rank="79" data-research-rank="79" data-technical-rank="128" data-eligible="0" data-lot="543000" data-name="聯詠" data-price="543.0" data-score="-0.706"
+    <details class="card" data-code="3034" data-rank="79" data-research-rank="79" data-technical-rank="128" data-strong="0" data-eligible="0" data-lot="543000" data-name="聯詠" data-price="543.0" data-score="-0.706"
 data-trigger="546.83" data-stop="530.21" data-t1="566.78" data-t2="573.43" data-type="半導體">
       <summary>
         <div class="row1">
@@ -18175,6 +18286,7 @@ data-trigger="546.83" data-stop="530.21" data-t1="566.78" data-t2="573.43" data-
             <span class="lot mono">一張 54.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -18373,13 +18485,13 @@ data-trigger="546.83" data-stop="530.21" data-t1="566.78" data-t2="573.43" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="4904" data-rank="80" data-research-rank="80" data-technical-rank="143" data-eligible="0" data-lot="105500" data-name="遠傳" data-price="105.5" data-score="-0.706"
+    <details class="card" data-code="4904" data-rank="80" data-research-rank="80" data-technical-rank="143" data-strong="0" data-eligible="0" data-lot="105500" data-name="遠傳" data-price="105.5" data-score="-0.706"
 data-trigger="106.1" data-stop="104.13" data-t1="107.5" data-t2="108.29" data-type="電信">
       <summary>
         <div class="row1">
           <div class="rank ">80</div>
           <div class="ident">
-            <div class="code mono">4904<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">電信</span></div>
+            <div class="code mono">4904<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">電信</span></div>
             <div class="name">遠傳</div>
           </div>
           <div class="px">
@@ -18390,6 +18502,7 @@ data-trigger="106.1" data-stop="104.13" data-t1="107.5" data-t2="108.29" data-ty
             <span class="lot mono">一張 10.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -18594,7 +18707,7 @@ data-trigger="106.1" data-stop="104.13" data-t1="107.5" data-t2="108.29" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="2474" data-rank="81" data-research-rank="81" data-technical-rank="126" data-eligible="0" data-lot="207000" data-name="可成" data-price="207.0" data-score="-0.706"
+    <details class="card" data-code="2474" data-rank="81" data-research-rank="81" data-technical-rank="126" data-strong="0" data-eligible="0" data-lot="207000" data-name="可成" data-price="207.0" data-score="-0.706"
 data-trigger="208.15" data-stop="205.07" data-t1="211.85" data-t2="213.08" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -18611,6 +18724,7 @@ data-trigger="208.15" data-stop="205.07" data-t1="211.85" data-t2="213.08" data-
             <span class="lot mono">一張 20.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -18815,13 +18929,13 @@ data-trigger="208.15" data-stop="205.07" data-t1="211.85" data-t2="213.08" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="6415" data-rank="82" data-research-rank="82" data-technical-rank="165" data-eligible="0" data-lot="442000" data-name="矽力*-KY" data-price="442.0" data-score="-0.706"
+    <details class="card" data-code="6415" data-rank="82" data-research-rank="82" data-technical-rank="165" data-strong="0" data-eligible="0" data-lot="442000" data-name="矽力*-KY" data-price="442.0" data-score="-0.706"
 data-trigger="453.0" data-stop="433.08" data-t1="462.95" data-t2="470.92" data-type="半導體">
       <summary>
         <div class="row1">
           <div class="rank ">82</div>
           <div class="ident">
-            <div class="code mono">6415<span class="mtier m0">🟢 強勢確認</span><span class="kind">區間整理</span><span class="sector">IC設計</span></div>
+            <div class="code mono">6415<span class="mtier m0">🟢 動能確認</span><span class="kind">區間整理</span><span class="sector">IC設計</span></div>
             <div class="name">矽力*-KY</div>
           </div>
           <div class="px">
@@ -18832,6 +18946,7 @@ data-trigger="453.0" data-stop="433.08" data-t1="462.95" data-t2="470.92" data-t
             <span class="lot mono">一張 44.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -19036,7 +19151,7 @@ data-trigger="453.0" data-stop="433.08" data-t1="462.95" data-t2="470.92" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="00939" data-rank="83" data-research-rank="83" data-technical-rank="149" data-eligible="0" data-lot="23870" data-name="統一台灣高息動能" data-price="23.87" data-score="-0.706"
+    <details class="card" data-code="00939" data-rank="83" data-research-rank="83" data-technical-rank="149" data-strong="0" data-eligible="0" data-lot="23870" data-name="統一台灣高息動能" data-price="23.87" data-score="-0.706"
 data-trigger="24.06" data-stop="23.8" data-t1="24.38" data-t2="24.5" data-type="ETF">
       <summary>
         <div class="row1">
@@ -19053,6 +19168,7 @@ data-trigger="24.06" data-stop="23.8" data-t1="24.38" data-t2="24.5" data-type="
             <span class="lot mono">一張 2.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -19258,7 +19374,7 @@ data-trigger="24.06" data-stop="23.8" data-t1="24.38" data-t2="24.5" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="3045" data-rank="84" data-research-rank="84" data-technical-rank="132" data-eligible="0" data-lot="122500" data-name="台灣大" data-price="122.5" data-score="-0.706"
+    <details class="card" data-code="3045" data-rank="84" data-research-rank="84" data-technical-rank="132" data-strong="0" data-eligible="0" data-lot="122500" data-name="台灣大" data-price="122.5" data-score="-0.706"
 data-trigger="123.6" data-stop="121.65" data-t1="125.5" data-t2="126.28" data-type="電信">
       <summary>
         <div class="row1">
@@ -19275,6 +19391,7 @@ data-trigger="123.6" data-stop="121.65" data-t1="125.5" data-t2="126.28" data-ty
             <span class="lot mono">一張 12.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -19479,7 +19596,7 @@ data-trigger="123.6" data-stop="121.65" data-t1="125.5" data-t2="126.28" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="2002" data-rank="85" data-research-rank="85" data-technical-rank="138" data-eligible="0" data-lot="18900" data-name="中鋼" data-price="18.9" data-score="-0.706"
+    <details class="card" data-code="2002" data-rank="85" data-research-rank="85" data-technical-rank="138" data-strong="0" data-eligible="0" data-lot="18900" data-name="中鋼" data-price="18.9" data-score="-0.706"
 data-trigger="19.11" data-stop="18.86" data-t1="19.3" data-t2="19.4" data-type="鋼鐵">
       <summary>
         <div class="row1">
@@ -19496,6 +19613,7 @@ data-trigger="19.11" data-stop="18.86" data-t1="19.3" data-t2="19.4" data-type="
             <span class="lot mono">一張 1.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -19701,7 +19819,7 @@ data-trigger="19.11" data-stop="18.86" data-t1="19.3" data-t2="19.4" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="2105" data-rank="86" data-research-rank="86" data-technical-rank="108" data-eligible="0" data-lot="30150" data-name="正新" data-price="30.15" data-score="-0.706"
+    <details class="card" data-code="2105" data-rank="86" data-research-rank="86" data-technical-rank="108" data-strong="0" data-eligible="0" data-lot="30150" data-name="正新" data-price="30.15" data-score="-0.706"
 data-trigger="30.77" data-stop="30.34" data-t1="31.15" data-t2="31.32" data-type="橡膠">
       <summary>
         <div class="row1">
@@ -19718,6 +19836,7 @@ data-trigger="30.77" data-stop="30.34" data-t1="31.15" data-t2="31.32" data-type
             <span class="lot mono">一張 3.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -19917,7 +20036,7 @@ data-trigger="30.77" data-stop="30.34" data-t1="31.15" data-t2="31.32" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2610" data-rank="87" data-research-rank="87" data-technical-rank="172" data-eligible="0" data-lot="20100" data-name="華航" data-price="20.1" data-score="-0.706"
+    <details class="card" data-code="2610" data-rank="87" data-research-rank="87" data-technical-rank="172" data-strong="0" data-eligible="0" data-lot="20100" data-name="華航" data-price="20.1" data-score="-0.706"
 data-trigger="20.42" data-stop="20.08" data-t1="20.65" data-t2="20.79" data-type="航運">
       <summary>
         <div class="row1">
@@ -19934,6 +20053,7 @@ data-trigger="20.42" data-stop="20.08" data-t1="20.65" data-t2="20.79" data-type
             <span class="lot mono">一張 2.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -20138,7 +20258,7 @@ data-trigger="20.42" data-stop="20.08" data-t1="20.65" data-t2="20.79" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2603" data-rank="88" data-research-rank="88" data-technical-rank="131" data-eligible="0" data-lot="234500" data-name="長榮" data-price="234.5" data-score="-0.706"
+    <details class="card" data-code="2603" data-rank="88" data-research-rank="88" data-technical-rank="131" data-strong="0" data-eligible="0" data-lot="234500" data-name="長榮" data-price="234.5" data-score="-0.706"
 data-trigger="240.79" data-stop="234.91" data-t1="245.5" data-t2="247.85" data-type="航運">
       <summary>
         <div class="row1">
@@ -20155,6 +20275,7 @@ data-trigger="240.79" data-stop="234.91" data-t1="245.5" data-t2="247.85" data-t
             <span class="lot mono">一張 23.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -20354,7 +20475,7 @@ data-trigger="240.79" data-stop="234.91" data-t1="245.5" data-t2="247.85" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="5269" data-rank="89" data-research-rank="89" data-technical-rank="176" data-eligible="0" data-lot="1475000" data-name="祥碩" data-price="1475.0" data-score="-0.706"
+    <details class="card" data-code="5269" data-rank="89" data-research-rank="89" data-technical-rank="176" data-strong="0" data-eligible="0" data-lot="1475000" data-name="祥碩" data-price="1475.0" data-score="-0.706"
 data-trigger="1482.11" data-stop="1439.95" data-t1="1505.0" data-t2="1521.86" data-type="半導體">
       <summary>
         <div class="row1">
@@ -20371,6 +20492,7 @@ data-trigger="1482.11" data-stop="1439.95" data-t1="1505.0" data-t2="1521.86" da
             <span class="lot mono">一張 147.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -20575,7 +20697,7 @@ data-trigger="1482.11" data-stop="1439.95" data-t1="1505.0" data-t2="1521.86" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="5876" data-rank="90" data-research-rank="90" data-technical-rank="168" data-eligible="0" data-lot="48650" data-name="上海商銀" data-price="48.65" data-score="-0.706"
+    <details class="card" data-code="5876" data-rank="90" data-research-rank="90" data-technical-rank="168" data-strong="0" data-eligible="0" data-lot="48650" data-name="上海商銀" data-price="48.65" data-score="-0.706"
 data-trigger="49.7" data-stop="48.68" data-t1="50.21" data-t2="50.62" data-type="其他">
       <summary>
         <div class="row1">
@@ -20592,6 +20714,7 @@ data-trigger="49.7" data-stop="48.68" data-t1="50.21" data-t2="50.62" data-type=
             <span class="lot mono">一張 4.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -20796,13 +20919,13 @@ data-trigger="49.7" data-stop="48.68" data-t1="50.21" data-t2="50.62" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2393" data-rank="91" data-research-rank="91" data-technical-rank="51" data-eligible="0" data-lot="67000" data-name="億光" data-price="67.0" data-score="-0.954"
+    <details class="card" data-code="2393" data-rank="91" data-research-rank="91" data-technical-rank="51" data-strong="0" data-eligible="0" data-lot="67000" data-name="億光" data-price="67.0" data-score="-0.954"
 data-trigger="67.97" data-stop="66.52" data-t1="69.72" data-t2="70.88" data-type="光電">
       <summary>
         <div class="row1">
           <div class="rank ">91</div>
           <div class="ident">
-            <div class="code mono">2393<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">光電面板</span></div>
+            <div class="code mono">2393<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">光電面板</span></div>
             <div class="name">億光</div>
           </div>
           <div class="px">
@@ -20813,6 +20936,7 @@ data-trigger="67.97" data-stop="66.52" data-t1="69.72" data-t2="70.88" data-type
             <span class="lot mono">一張 6.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -21018,13 +21142,13 @@ data-trigger="67.97" data-stop="66.52" data-t1="69.72" data-t2="70.88" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="3583" data-rank="92" data-research-rank="92" data-technical-rank="85" data-eligible="0" data-lot="744000" data-name="辛耘" data-price="744.0" data-score="-0.954"
+    <details class="card" data-code="3583" data-rank="92" data-research-rank="92" data-technical-rank="85" data-strong="0" data-eligible="0" data-lot="744000" data-name="辛耘" data-price="744.0" data-score="-0.954"
 data-trigger="758.55" data-stop="727.61" data-t1="774.01" data-t2="786.39" data-type="半導體">
       <summary>
         <div class="row1">
           <div class="rank ">92</div>
           <div class="ident">
-            <div class="code mono">3583<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">設備儀器</span></div>
+            <div class="code mono">3583<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">設備儀器</span></div>
             <div class="name">辛耘</div>
           </div>
           <div class="px">
@@ -21035,6 +21159,7 @@ data-trigger="758.55" data-stop="727.61" data-t1="774.01" data-t2="786.39" data-
             <span class="lot mono">一張 74.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -21233,7 +21358,7 @@ data-trigger="758.55" data-stop="727.61" data-t1="774.01" data-t2="786.39" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2344" data-rank="93" data-research-rank="93" data-technical-rank="52" data-eligible="0" data-lot="181000" data-name="華邦電" data-price="181.0" data-score="-0.954"
+    <details class="card" data-code="2344" data-rank="93" data-research-rank="93" data-technical-rank="52" data-strong="0" data-eligible="0" data-lot="181000" data-name="華邦電" data-price="181.0" data-score="-0.954"
 data-trigger="181.42" data-stop="172.93" data-t1="191.61" data-t2="195.01" data-type="半導體">
       <summary>
         <div class="row1">
@@ -21250,6 +21375,7 @@ data-trigger="181.42" data-stop="172.93" data-t1="191.61" data-t2="195.01" data-
             <span class="lot mono">一張 18.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -21448,13 +21574,13 @@ data-trigger="181.42" data-stop="172.93" data-t1="191.61" data-t2="195.01" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2317" data-rank="94" data-research-rank="94" data-technical-rank="76" data-eligible="0" data-lot="254000" data-name="鴻海" data-price="254.0" data-score="-0.954"
+    <details class="card" data-code="2317" data-rank="94" data-research-rank="94" data-technical-rank="76" data-strong="0" data-eligible="0" data-lot="254000" data-name="鴻海" data-price="254.0" data-score="-0.954"
 data-trigger="256.26" data-stop="251.05" data-t1="259.0" data-t2="261.08" data-type="電腦週邊">
       <summary>
         <div class="row1">
           <div class="rank ">94</div>
           <div class="ident">
-            <div class="code mono">2317<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">電腦週邊</span></div>
+            <div class="code mono">2317<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">電腦週邊</span></div>
             <div class="name">鴻海</div>
           </div>
           <div class="px">
@@ -21465,6 +21591,7 @@ data-trigger="256.26" data-stop="251.05" data-t1="259.0" data-t2="261.08" data-t
             <span class="lot mono">一張 25.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -21669,7 +21796,7 @@ data-trigger="256.26" data-stop="251.05" data-t1="259.0" data-t2="261.08" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="3406" data-rank="95" data-research-rank="95" data-technical-rank="65" data-eligible="0" data-lot="1055000" data-name="玉晶光" data-price="1055.0" data-score="-0.954"
+    <details class="card" data-code="3406" data-rank="95" data-research-rank="95" data-technical-rank="65" data-strong="0" data-eligible="0" data-lot="1055000" data-name="玉晶光" data-price="1055.0" data-score="-0.954"
 data-trigger="1058.41" data-stop="990.21" data-t1="1140.0" data-t2="1167.28" data-type="光電">
       <summary>
         <div class="row1">
@@ -21686,6 +21813,7 @@ data-trigger="1058.41" data-stop="990.21" data-t1="1140.0" data-t2="1167.28" dat
             <span class="lot mono">一張 105.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -21891,7 +22019,7 @@ data-trigger="1058.41" data-stop="990.21" data-t1="1140.0" data-t2="1167.28" dat
         </div>
       </div>
     </details>
-    <details class="card" data-code="2454" data-rank="96" data-research-rank="96" data-technical-rank="88" data-eligible="0" data-lot="5165000" data-name="聯發科" data-price="5165.0" data-score="-0.954"
+    <details class="card" data-code="2454" data-rank="96" data-research-rank="96" data-technical-rank="88" data-strong="0" data-eligible="0" data-lot="5165000" data-name="聯發科" data-price="5165.0" data-score="-0.954"
 data-trigger="5175.9" data-stop="4957.99" data-t1="5437.38" data-t2="5524.54" data-type="半導體">
       <summary>
         <div class="row1">
@@ -21908,6 +22036,7 @@ data-trigger="5175.9" data-stop="4957.99" data-t1="5437.38" data-t2="5524.54" da
             <span class="lot mono">一張 516.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -22106,13 +22235,13 @@ data-trigger="5175.9" data-stop="4957.99" data-t1="5437.38" data-t2="5524.54" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="3017" data-rank="97" data-research-rank="97" data-technical-rank="79" data-eligible="0" data-lot="3585000" data-name="奇鋐" data-price="3585.0" data-score="-0.954"
+    <details class="card" data-code="3017" data-rank="97" data-research-rank="97" data-technical-rank="79" data-strong="0" data-eligible="0" data-lot="3585000" data-name="奇鋐" data-price="3585.0" data-score="-0.954"
 data-trigger="3699.56" data-stop="3508.29" data-t1="3795.2" data-t2="3871.71" data-type="電子零件">
       <summary>
         <div class="row1">
           <div class="rank ">97</div>
           <div class="ident">
-            <div class="code mono">3017<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">散熱機構</span></div>
+            <div class="code mono">3017<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">散熱機構</span></div>
             <div class="name">奇鋐</div>
           </div>
           <div class="px">
@@ -22123,6 +22252,7 @@ data-trigger="3699.56" data-stop="3508.29" data-t1="3795.2" data-t2="3871.71" da
             <span class="lot mono">一張 358.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -22327,7 +22457,7 @@ data-trigger="3699.56" data-stop="3508.29" data-t1="3795.2" data-t2="3871.71" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="1326" data-rank="98" data-research-rank="98" data-technical-rank="83" data-eligible="0" data-lot="71600" data-name="台化" data-price="71.6" data-score="-0.954"
+    <details class="card" data-code="1326" data-rank="98" data-research-rank="98" data-technical-rank="83" data-strong="0" data-eligible="0" data-lot="71600" data-name="台化" data-price="71.6" data-score="-0.954"
 data-trigger="73.16" data-stop="69.87" data-t1="75.1" data-t2="76.42" data-type="塑化">
       <summary>
         <div class="row1">
@@ -22344,6 +22474,7 @@ data-trigger="73.16" data-stop="69.87" data-t1="75.1" data-t2="76.42" data-type=
             <span class="lot mono">一張 7.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -22542,7 +22673,7 @@ data-trigger="73.16" data-stop="69.87" data-t1="75.1" data-t2="76.42" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="2492" data-rank="99" data-research-rank="99" data-technical-rank="49" data-eligible="0" data-lot="368500" data-name="華新科" data-price="368.5" data-score="-0.954"
+    <details class="card" data-code="2492" data-rank="99" data-research-rank="99" data-technical-rank="49" data-strong="0" data-eligible="0" data-lot="368500" data-name="華新科" data-price="368.5" data-score="-0.954"
 data-trigger="397.12" data-stop="374.63" data-t1="413.5" data-t2="422.5" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -22559,6 +22690,7 @@ data-trigger="397.12" data-stop="374.63" data-t1="413.5" data-t2="422.5" data-ty
             <span class="lot mono">一張 36.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -22766,7 +22898,7 @@ data-trigger="397.12" data-stop="374.63" data-t1="413.5" data-t2="422.5" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="4906" data-rank="100" data-research-rank="100" data-technical-rank="45" data-eligible="0" data-lot="42150" data-name="正文" data-price="42.15" data-score="-0.954"
+    <details class="card" data-code="4906" data-rank="100" data-research-rank="100" data-technical-rank="45" data-strong="0" data-eligible="0" data-lot="42150" data-name="正文" data-price="42.15" data-score="-0.954"
 data-trigger="44.09" data-stop="42.26" data-t1="45.01" data-t2="45.74" data-type="網通">
       <summary>
         <div class="row1">
@@ -22783,6 +22915,7 @@ data-trigger="44.09" data-stop="42.26" data-t1="45.01" data-t2="45.74" data-type
             <span class="lot mono">一張 4.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -22988,7 +23121,7 @@ data-trigger="44.09" data-stop="42.26" data-t1="45.01" data-t2="45.74" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2327" data-rank="101" data-research-rank="101" data-technical-rank="91" data-eligible="0" data-lot="626000" data-name="國巨*" data-price="626.0" data-score="-0.954"
+    <details class="card" data-code="2327" data-rank="101" data-research-rank="101" data-technical-rank="91" data-strong="0" data-eligible="0" data-lot="626000" data-name="國巨*" data-price="626.0" data-score="-0.954"
 data-trigger="659.72" data-stop="625.34" data-t1="676.91" data-t2="690.66" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -23005,6 +23138,7 @@ data-trigger="659.72" data-stop="625.34" data-t1="676.91" data-t2="690.66" data-
             <span class="lot mono">一張 62.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -23210,7 +23344,7 @@ data-trigger="659.72" data-stop="625.34" data-t1="676.91" data-t2="690.66" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="6257" data-rank="102" data-research-rank="102" data-technical-rank="68" data-eligible="0" data-lot="260000" data-name="矽格" data-price="260.0" data-score="-0.954"
+    <details class="card" data-code="6257" data-rank="102" data-research-rank="102" data-technical-rank="68" data-strong="0" data-eligible="0" data-lot="260000" data-name="矽格" data-price="260.0" data-score="-0.954"
 data-trigger="275.66" data-stop="262.55" data-t1="282.21" data-t2="287.45" data-type="其他">
       <summary>
         <div class="row1">
@@ -23227,6 +23361,7 @@ data-trigger="275.66" data-stop="262.55" data-t1="282.21" data-t2="287.45" data-
             <span class="lot mono">一張 26.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -23433,7 +23568,7 @@ data-trigger="275.66" data-stop="262.55" data-t1="282.21" data-t2="287.45" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2458" data-rank="103" data-research-rank="103" data-technical-rank="92" data-eligible="0" data-lot="134000" data-name="義隆" data-price="134.0" data-score="-0.954"
+    <details class="card" data-code="2458" data-rank="103" data-research-rank="103" data-technical-rank="92" data-strong="0" data-eligible="0" data-lot="134000" data-name="義隆" data-price="134.0" data-score="-0.954"
 data-trigger="135.7" data-stop="131.77" data-t1="139.5" data-t2="141.07" data-type="半導體">
       <summary>
         <div class="row1">
@@ -23450,6 +23585,7 @@ data-trigger="135.7" data-stop="131.77" data-t1="139.5" data-t2="141.07" data-ty
             <span class="lot mono">一張 13.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -23649,7 +23785,7 @@ data-trigger="135.7" data-stop="131.77" data-t1="139.5" data-t2="141.07" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="2484" data-rank="104" data-research-rank="104" data-technical-rank="81" data-eligible="0" data-lot="86400" data-name="希華" data-price="86.4" data-score="-0.954"
+    <details class="card" data-code="2484" data-rank="104" data-research-rank="104" data-technical-rank="81" data-strong="0" data-eligible="0" data-lot="86400" data-name="希華" data-price="86.4" data-score="-0.954"
 data-trigger="95.04" data-stop="90.3" data-t1="97.4" data-t2="99.3" data-type="其他">
       <summary>
         <div class="row1">
@@ -23666,6 +23802,7 @@ data-trigger="95.04" data-stop="90.3" data-t1="97.4" data-t2="99.3" data-type="�
             <span class="lot mono">一張 8.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -23873,7 +24010,7 @@ data-trigger="95.04" data-stop="90.3" data-t1="97.4" data-t2="99.3" data-type="�
         </div>
       </div>
     </details>
-    <details class="card" data-code="2379" data-rank="105" data-research-rank="105" data-technical-rank="77" data-eligible="0" data-lot="755000" data-name="瑞昱" data-price="755.0" data-score="-0.954"
+    <details class="card" data-code="2379" data-rank="105" data-research-rank="105" data-technical-rank="77" data-strong="0" data-eligible="0" data-lot="755000" data-name="瑞昱" data-price="755.0" data-score="-0.954"
 data-trigger="767.4" data-stop="739.46" data-t1="794.0" data-t2="805.17" data-type="半導體">
       <summary>
         <div class="row1">
@@ -23890,6 +24027,7 @@ data-trigger="767.4" data-stop="739.46" data-t1="794.0" data-t2="805.17" data-ty
             <span class="lot mono">一張 75.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -24088,7 +24226,7 @@ data-trigger="767.4" data-stop="739.46" data-t1="794.0" data-t2="805.17" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="3532" data-rank="106" data-research-rank="106" data-technical-rank="67" data-eligible="0" data-lot="469500" data-name="台勝科" data-price="469.5" data-score="-0.954"
+    <details class="card" data-code="3532" data-rank="106" data-research-rank="106" data-technical-rank="67" data-strong="0" data-eligible="0" data-lot="469500" data-name="台勝科" data-price="469.5" data-score="-0.954"
 data-trigger="493.91" data-stop="465.76" data-t1="507.98" data-t2="519.24" data-type="半導體">
       <summary>
         <div class="row1">
@@ -24105,6 +24243,7 @@ data-trigger="493.91" data-stop="465.76" data-t1="507.98" data-t2="519.24" data-
             <span class="lot mono">一張 47.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -24303,7 +24442,7 @@ data-trigger="493.91" data-stop="465.76" data-t1="507.98" data-t2="519.24" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="3605" data-rank="107" data-research-rank="107" data-technical-rank="84" data-eligible="0" data-lot="168000" data-name="宏致" data-price="168.0" data-score="-0.954"
+    <details class="card" data-code="3605" data-rank="107" data-research-rank="107" data-technical-rank="84" data-strong="0" data-eligible="0" data-lot="168000" data-name="宏致" data-price="168.0" data-score="-0.954"
 data-trigger="172.57" data-stop="161.25" data-t1="186.15" data-t2="190.68" data-type="其他">
       <summary>
         <div class="row1">
@@ -24320,6 +24459,7 @@ data-trigger="172.57" data-stop="161.25" data-t1="186.15" data-t2="190.68" data-
             <span class="lot mono">一張 16.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -24526,7 +24666,7 @@ data-trigger="172.57" data-stop="161.25" data-t1="186.15" data-t2="190.68" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2401" data-rank="108" data-research-rank="108" data-technical-rank="56" data-eligible="0" data-lot="26650" data-name="凌陽" data-price="26.65" data-score="-0.954"
+    <details class="card" data-code="2401" data-rank="108" data-research-rank="108" data-technical-rank="56" data-strong="0" data-eligible="0" data-lot="26650" data-name="凌陽" data-price="26.65" data-score="-0.954"
 data-trigger="28.04" data-stop="27.15" data-t1="28.49" data-t2="28.85" data-type="半導體">
       <summary>
         <div class="row1">
@@ -24543,6 +24683,7 @@ data-trigger="28.04" data-stop="27.15" data-t1="28.49" data-t2="28.85" data-type
             <span class="lot mono">一張 2.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -24742,7 +24883,7 @@ data-trigger="28.04" data-stop="27.15" data-t1="28.49" data-t2="28.85" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="3026" data-rank="109" data-research-rank="109" data-technical-rank="53" data-eligible="0" data-lot="817000" data-name="禾伸堂" data-price="817.0" data-score="-0.954"
+    <details class="card" data-code="3026" data-rank="109" data-research-rank="109" data-technical-rank="53" data-strong="0" data-eligible="0" data-lot="817000" data-name="禾伸堂" data-price="817.0" data-score="-0.954"
 data-trigger="863.74" data-stop="809.0" data-t1="891.1" data-t2="913.0" data-type="其他">
       <summary>
         <div class="row1">
@@ -24759,6 +24900,7 @@ data-trigger="863.74" data-stop="809.0" data-t1="891.1" data-t2="913.0" data-typ
             <span class="lot mono">一張 81.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -24958,7 +25100,7 @@ data-trigger="863.74" data-stop="809.0" data-t1="891.1" data-t2="913.0" data-typ
         </div>
       </div>
     </details>
-    <details class="card" data-code="3665" data-rank="110" data-research-rank="110" data-technical-rank="71" data-eligible="0" data-lot="2485000" data-name="貿聯-KY" data-price="2485.0" data-score="-0.954"
+    <details class="card" data-code="3665" data-rank="110" data-research-rank="110" data-technical-rank="71" data-strong="0" data-eligible="0" data-lot="2485000" data-name="貿聯-KY" data-price="2485.0" data-score="-0.954"
 data-trigger="2566.86" data-stop="2429.74" data-t1="2685.0" data-t2="2739.85" data-type="其他">
       <summary>
         <div class="row1">
@@ -24975,6 +25117,7 @@ data-trigger="2566.86" data-stop="2429.74" data-t1="2685.0" data-t2="2739.85" da
             <span class="lot mono">一張 248.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -25181,7 +25324,7 @@ data-trigger="2566.86" data-stop="2429.74" data-t1="2685.0" data-t2="2739.85" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="1727" data-rank="111" data-research-rank="111" data-technical-rank="66" data-eligible="0" data-lot="117500" data-name="中華化" data-price="117.5" data-score="-0.954"
+    <details class="card" data-code="1727" data-rank="111" data-research-rank="111" data-technical-rank="66" data-strong="0" data-eligible="0" data-lot="117500" data-name="中華化" data-price="117.5" data-score="-0.954"
 data-trigger="130.44" data-stop="121.56" data-t1="134.89" data-t2="138.44" data-type="其他">
       <summary>
         <div class="row1">
@@ -25198,6 +25341,7 @@ data-trigger="130.44" data-stop="121.56" data-t1="134.89" data-t2="138.44" data-
             <span class="lot mono">一張 11.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -25404,7 +25548,7 @@ data-trigger="130.44" data-stop="121.56" data-t1="134.89" data-t2="138.44" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2409" data-rank="112" data-research-rank="112" data-technical-rank="89" data-eligible="0" data-lot="39050" data-name="友達" data-price="39.05" data-score="-0.954"
+    <details class="card" data-code="2409" data-rank="112" data-research-rank="112" data-technical-rank="89" data-strong="0" data-eligible="0" data-lot="39050" data-name="友達" data-price="39.05" data-score="-0.954"
 data-trigger="43.66" data-stop="41.39" data-t1="44.8" data-t2="45.71" data-type="光電">
       <summary>
         <div class="row1">
@@ -25421,6 +25565,7 @@ data-trigger="43.66" data-stop="41.39" data-t1="44.8" data-t2="45.71" data-type=
             <span class="lot mono">一張 3.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -25628,7 +25773,7 @@ data-trigger="43.66" data-stop="41.39" data-t1="44.8" data-t2="45.71" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="3042" data-rank="113" data-research-rank="113" data-technical-rank="98" data-eligible="0" data-lot="222000" data-name="晶技" data-price="222.0" data-score="-0.954"
+    <details class="card" data-code="3042" data-rank="113" data-research-rank="113" data-technical-rank="98" data-strong="0" data-eligible="0" data-lot="222000" data-name="晶技" data-price="222.0" data-score="-0.954"
 data-trigger="236.15" data-stop="223.18" data-t1="242.64" data-t2="247.82" data-type="其他">
       <summary>
         <div class="row1">
@@ -25645,6 +25790,7 @@ data-trigger="236.15" data-stop="223.18" data-t1="242.64" data-t2="247.82" data-
             <span class="lot mono">一張 22.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -25850,7 +25996,7 @@ data-trigger="236.15" data-stop="223.18" data-t1="242.64" data-t2="247.82" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="4919" data-rank="114" data-research-rank="114" data-technical-rank="102" data-eligible="0" data-lot="155500" data-name="新唐" data-price="155.5" data-score="-0.954"
+    <details class="card" data-code="4919" data-rank="114" data-research-rank="114" data-technical-rank="102" data-strong="0" data-eligible="0" data-lot="155500" data-name="新唐" data-price="155.5" data-score="-0.954"
 data-trigger="162.95" data-stop="154.03" data-t1="167.4" data-t2="170.97" data-type="半導體">
       <summary>
         <div class="row1">
@@ -25867,6 +26013,7 @@ data-trigger="162.95" data-stop="154.03" data-t1="167.4" data-t2="170.97" data-t
             <span class="lot mono">一張 15.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -26074,7 +26221,7 @@ data-trigger="162.95" data-stop="154.03" data-t1="167.4" data-t2="170.97" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="6533" data-rank="115" data-research-rank="115" data-technical-rank="100" data-eligible="0" data-lot="336000" data-name="晶心科" data-price="336.0" data-score="-0.954"
+    <details class="card" data-code="6533" data-rank="115" data-research-rank="115" data-technical-rank="100" data-strong="0" data-eligible="0" data-lot="336000" data-name="晶心科" data-price="336.0" data-score="-0.954"
 data-trigger="352.41" data-stop="334.28" data-t1="366.5" data-t2="373.75" data-type="其他">
       <summary>
         <div class="row1">
@@ -26091,6 +26238,7 @@ data-trigger="352.41" data-stop="334.28" data-t1="366.5" data-t2="373.75" data-t
             <span class="lot mono">一張 33.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -26298,13 +26446,13 @@ data-trigger="352.41" data-stop="334.28" data-t1="366.5" data-t2="373.75" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="6139" data-rank="116" data-research-rank="116" data-technical-rank="114" data-eligible="0" data-lot="790000" data-name="亞翔" data-price="790.0" data-score="-0.961"
+    <details class="card" data-code="6139" data-rank="116" data-research-rank="116" data-technical-rank="114" data-strong="0" data-eligible="0" data-lot="790000" data-name="亞翔" data-price="790.0" data-score="-0.961"
 data-trigger="804.44" data-stop="775.66" data-t1="838.97" data-t2="850.48" data-type="其他">
       <summary>
         <div class="row1">
           <div class="rank ">116</div>
           <div class="ident">
-            <div class="code mono">6139<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">其他</span></div>
+            <div class="code mono">6139<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">其他</span></div>
             <div class="name">亞翔</div>
           </div>
           <div class="px">
@@ -26315,6 +26463,7 @@ data-trigger="804.44" data-stop="775.66" data-t1="838.97" data-t2="850.48" data-
             <span class="lot mono">一張 79.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -26521,7 +26670,7 @@ data-trigger="804.44" data-stop="775.66" data-t1="838.97" data-t2="850.48" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2357" data-rank="117" data-research-rank="117" data-technical-rank="112" data-eligible="0" data-lot="995000" data-name="華碩" data-price="995.0" data-score="-0.961"
+    <details class="card" data-code="2357" data-rank="117" data-research-rank="117" data-technical-rank="112" data-strong="0" data-eligible="0" data-lot="995000" data-name="華碩" data-price="995.0" data-score="-0.961"
 data-trigger="996.36" data-stop="969.23" data-t1="1028.91" data-t2="1039.76" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -26538,6 +26687,7 @@ data-trigger="996.36" data-stop="969.23" data-t1="1028.91" data-t2="1039.76" dat
             <span class="lot mono">一張 99.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -26736,7 +26886,7 @@ data-trigger="996.36" data-stop="969.23" data-t1="1028.91" data-t2="1039.76" dat
         </div>
       </div>
     </details>
-    <details class="card" data-code="00878" data-rank="118" data-research-rank="118" data-technical-rank="148" data-eligible="0" data-lot="35110" data-name="國泰永續高股息" data-price="35.11" data-score="-0.961"
+    <details class="card" data-code="00878" data-rank="118" data-research-rank="118" data-technical-rank="148" data-strong="0" data-eligible="0" data-lot="35110" data-name="國泰永續高股息" data-price="35.11" data-score="-0.961"
 data-trigger="35.32" data-stop="34.95" data-t1="35.77" data-t2="35.91" data-type="ETF">
       <summary>
         <div class="row1">
@@ -26753,6 +26903,7 @@ data-trigger="35.32" data-stop="34.95" data-t1="35.77" data-t2="35.91" data-type
             <span class="lot mono">一張 3.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -26957,13 +27108,13 @@ data-trigger="35.32" data-stop="34.95" data-t1="35.77" data-t2="35.91" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="1301" data-rank="119" data-research-rank="119" data-technical-rank="144" data-eligible="0" data-lot="68500" data-name="台塑" data-price="68.5" data-score="-0.961"
+    <details class="card" data-code="1301" data-rank="119" data-research-rank="119" data-technical-rank="144" data-strong="0" data-eligible="0" data-lot="68500" data-name="台塑" data-price="68.5" data-score="-0.961"
 data-trigger="69.73" data-stop="67.1" data-t1="71.05" data-t2="72.1" data-type="塑化">
       <summary>
         <div class="row1">
           <div class="rank ">119</div>
           <div class="ident">
-            <div class="code mono">1301<span class="mtier m0">🟢 強勢確認</span><span class="kind">多頭回檔</span><span class="sector">塑化</span></div>
+            <div class="code mono">1301<span class="mtier m0">🟢 動能確認</span><span class="kind">多頭回檔</span><span class="sector">塑化</span></div>
             <div class="name">台塑</div>
           </div>
           <div class="px">
@@ -26974,6 +27125,7 @@ data-trigger="69.73" data-stop="67.1" data-t1="71.05" data-t2="72.1" data-type="
             <span class="lot mono">一張 6.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -27178,7 +27330,7 @@ data-trigger="69.73" data-stop="67.1" data-t1="71.05" data-t2="72.1" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="2881" data-rank="120" data-research-rank="120" data-technical-rank="124" data-eligible="0" data-lot="152000" data-name="富邦金" data-price="152.0" data-score="-0.961"
+    <details class="card" data-code="2881" data-rank="120" data-research-rank="120" data-technical-rank="124" data-strong="0" data-eligible="0" data-lot="152000" data-name="富邦金" data-price="152.0" data-score="-0.961"
 data-trigger="153.2" data-stop="149.24" data-t1="156.5" data-t2="158.08" data-type="金融">
       <summary>
         <div class="row1">
@@ -27195,6 +27347,7 @@ data-trigger="153.2" data-stop="149.24" data-t1="156.5" data-t2="158.08" data-ty
             <span class="lot mono">一張 15.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -27393,7 +27546,7 @@ data-trigger="153.2" data-stop="149.24" data-t1="156.5" data-t2="158.08" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="6531" data-rank="121" data-research-rank="121" data-technical-rank="104" data-eligible="0" data-lot="1055000" data-name="愛普*" data-price="1055.0" data-score="-0.961"
+    <details class="card" data-code="6531" data-rank="121" data-research-rank="121" data-technical-rank="104" data-strong="0" data-eligible="0" data-lot="1055000" data-name="愛普*" data-price="1055.0" data-score="-0.961"
 data-trigger="1093.1" data-stop="1031.01" data-t1="1124.15" data-t2="1148.99" data-type="半導體">
       <summary>
         <div class="row1">
@@ -27410,6 +27563,7 @@ data-trigger="1093.1" data-stop="1031.01" data-t1="1124.15" data-t2="1148.99" da
             <span class="lot mono">一張 105.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -27609,7 +27763,7 @@ data-trigger="1093.1" data-stop="1031.01" data-t1="1124.15" data-t2="1148.99" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="2395" data-rank="122" data-research-rank="122" data-technical-rank="117" data-eligible="0" data-lot="740000" data-name="研華" data-price="740.0" data-score="-0.961"
+    <details class="card" data-code="2395" data-rank="122" data-research-rank="122" data-technical-rank="117" data-strong="0" data-eligible="0" data-lot="740000" data-name="研華" data-price="740.0" data-score="-0.961"
 data-trigger="747.33" data-stop="720.81" data-t1="760.58" data-t2="771.19" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -27626,6 +27780,7 @@ data-trigger="747.33" data-stop="720.81" data-t1="760.58" data-t2="771.19" data-
             <span class="lot mono">一張 74.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -27830,7 +27985,7 @@ data-trigger="747.33" data-stop="720.81" data-t1="760.58" data-t2="771.19" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2408" data-rank="123" data-research-rank="123" data-technical-rank="137" data-eligible="0" data-lot="530000" data-name="南亞科" data-price="530.0" data-score="-0.961"
+    <details class="card" data-code="2408" data-rank="123" data-research-rank="123" data-technical-rank="137" data-strong="0" data-eligible="0" data-lot="530000" data-name="南亞科" data-price="530.0" data-score="-0.961"
 data-trigger="535.21" data-stop="511.06" data-t1="547.28" data-t2="556.94" data-type="半導體">
       <summary>
         <div class="row1">
@@ -27847,6 +28002,7 @@ data-trigger="535.21" data-stop="511.06" data-t1="547.28" data-t2="556.94" data-
             <span class="lot mono">一張 53.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -28051,7 +28207,7 @@ data-trigger="535.21" data-stop="511.06" data-t1="547.28" data-t2="556.94" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2855" data-rank="124" data-research-rank="124" data-technical-rank="127" data-eligible="0" data-lot="58200" data-name="統一證" data-price="58.2" data-score="-0.961"
+    <details class="card" data-code="2855" data-rank="124" data-research-rank="124" data-technical-rank="127" data-strong="0" data-eligible="0" data-lot="58200" data-name="統一證" data-price="58.2" data-score="-0.961"
 data-trigger="59.09" data-stop="57.22" data-t1="60.03" data-t2="60.78" data-type="其他">
       <summary>
         <div class="row1">
@@ -28068,6 +28224,7 @@ data-trigger="59.09" data-stop="57.22" data-t1="60.03" data-t2="60.78" data-type
             <span class="lot mono">一張 5.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -28272,7 +28429,7 @@ data-trigger="59.09" data-stop="57.22" data-t1="60.03" data-t2="60.78" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2451" data-rank="125" data-research-rank="125" data-technical-rank="150" data-eligible="0" data-lot="289500" data-name="創見" data-price="289.5" data-score="-0.961"
+    <details class="card" data-code="2451" data-rank="125" data-research-rank="125" data-technical-rank="150" data-strong="0" data-eligible="0" data-lot="289500" data-name="創見" data-price="289.5" data-score="-0.961"
 data-trigger="292.39" data-stop="284.6" data-t1="296.29" data-t2="299.4" data-type="半導體">
       <summary>
         <div class="row1">
@@ -28289,6 +28446,7 @@ data-trigger="292.39" data-stop="284.6" data-t1="296.29" data-t2="299.4" data-ty
             <span class="lot mono">一張 28.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -28493,7 +28651,7 @@ data-trigger="292.39" data-stop="284.6" data-t1="296.29" data-t2="299.4" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="2404" data-rank="126" data-research-rank="126" data-technical-rank="170" data-eligible="0" data-lot="1310000" data-name="漢唐" data-price="1310.0" data-score="-0.961"
+    <details class="card" data-code="2404" data-rank="126" data-research-rank="126" data-technical-rank="170" data-strong="0" data-eligible="0" data-lot="1310000" data-name="漢唐" data-price="1310.0" data-score="-0.961"
 data-trigger="1327.99" data-stop="1268.24" data-t1="1357.86" data-t2="1381.76" data-type="其他">
       <summary>
         <div class="row1">
@@ -28510,6 +28668,7 @@ data-trigger="1327.99" data-stop="1268.24" data-t1="1357.86" data-t2="1381.76" d
             <span class="lot mono">一張 131.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -28716,7 +28875,7 @@ data-trigger="1327.99" data-stop="1268.24" data-t1="1357.86" data-t2="1381.76" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="2412" data-rank="127" data-research-rank="127" data-technical-rank="162" data-eligible="0" data-lot="145500" data-name="中華電" data-price="145.5" data-score="-0.961"
+    <details class="card" data-code="2412" data-rank="127" data-research-rank="127" data-technical-rank="162" data-strong="0" data-eligible="0" data-lot="145500" data-name="中華電" data-price="145.5" data-score="-0.961"
 data-trigger="147.1" data-stop="145.16" data-t1="149.37" data-t2="150.14" data-type="電信">
       <summary>
         <div class="row1">
@@ -28733,6 +28892,7 @@ data-trigger="147.1" data-stop="145.16" data-t1="149.37" data-t2="150.14" data-t
             <span class="lot mono">一張 14.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -28937,7 +29097,7 @@ data-trigger="147.1" data-stop="145.16" data-t1="149.37" data-t2="150.14" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="6770" data-rank="128" data-research-rank="128" data-technical-rank="118" data-eligible="0" data-lot="75800" data-name="力積電" data-price="75.8" data-score="-0.961"
+    <details class="card" data-code="6770" data-rank="128" data-research-rank="128" data-technical-rank="118" data-strong="0" data-eligible="0" data-lot="75800" data-name="力積電" data-price="75.8" data-score="-0.961"
 data-trigger="78.26" data-stop="75.08" data-t1="79.85" data-t2="81.12" data-type="其他">
       <summary>
         <div class="row1">
@@ -28954,6 +29114,7 @@ data-trigger="78.26" data-stop="75.08" data-t1="79.85" data-t2="81.12" data-type
             <span class="lot mono">一張 7.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -29152,7 +29313,7 @@ data-trigger="78.26" data-stop="75.08" data-t1="79.85" data-t2="81.12" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2347" data-rank="129" data-research-rank="129" data-technical-rank="136" data-eligible="0" data-lot="97000" data-name="聯強" data-price="97.0" data-score="-0.961"
+    <details class="card" data-code="2347" data-rank="129" data-research-rank="129" data-technical-rank="136" data-strong="0" data-eligible="0" data-lot="97000" data-name="聯強" data-price="97.0" data-score="-0.961"
 data-trigger="98.82" data-stop="96.43" data-t1="100.02" data-t2="100.97" data-type="電子通路">
       <summary>
         <div class="row1">
@@ -29169,6 +29330,7 @@ data-trigger="98.82" data-stop="96.43" data-t1="100.02" data-t2="100.97" data-ty
             <span class="lot mono">一張 9.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -29367,7 +29529,7 @@ data-trigger="98.82" data-stop="96.43" data-t1="100.02" data-t2="100.97" data-ty
         </div>
       </div>
     </details>
-    <details class="card" data-code="6456" data-rank="130" data-research-rank="130" data-technical-rank="121" data-eligible="0" data-lot="90600" data-name="GIS-KY" data-price="90.6" data-score="-0.961"
+    <details class="card" data-code="6456" data-rank="130" data-research-rank="130" data-technical-rank="121" data-strong="0" data-eligible="0" data-lot="90600" data-name="GIS-KY" data-price="90.6" data-score="-0.961"
 data-trigger="93.85" data-stop="88.82" data-t1="96.36" data-t2="98.38" data-type="其他">
       <summary>
         <div class="row1">
@@ -29384,6 +29546,7 @@ data-trigger="93.85" data-stop="88.82" data-t1="96.36" data-t2="98.38" data-type
             <span class="lot mono">一張 9.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -29590,7 +29753,7 @@ data-trigger="93.85" data-stop="88.82" data-t1="96.36" data-t2="98.38" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="8996" data-rank="131" data-research-rank="131" data-technical-rank="116" data-eligible="0" data-lot="1595000" data-name="高力" data-price="1595.0" data-score="-0.961"
+    <details class="card" data-code="8996" data-rank="131" data-research-rank="131" data-technical-rank="116" data-strong="0" data-eligible="0" data-lot="1595000" data-name="高力" data-price="1595.0" data-score="-0.961"
 data-trigger="1605.57" data-stop="1494.16" data-t1="1665.0" data-t2="1709.57" data-type="其他">
       <summary>
         <div class="row1">
@@ -29607,6 +29770,7 @@ data-trigger="1605.57" data-stop="1494.16" data-t1="1665.0" data-t2="1709.57" da
             <span class="lot mono">一張 159.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -29813,7 +29977,7 @@ data-trigger="1605.57" data-stop="1494.16" data-t1="1665.0" data-t2="1709.57" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="6505" data-rank="132" data-research-rank="132" data-technical-rank="129" data-eligible="0" data-lot="98600" data-name="台塑化" data-price="98.6" data-score="-0.961"
+    <details class="card" data-code="6505" data-rank="132" data-research-rank="132" data-technical-rank="129" data-strong="0" data-eligible="0" data-lot="98600" data-name="台塑化" data-price="98.6" data-score="-0.961"
 data-trigger="101.23" data-stop="96.6" data-t1="103.55" data-t2="105.4" data-type="塑化">
       <summary>
         <div class="row1">
@@ -29830,6 +29994,7 @@ data-trigger="101.23" data-stop="96.6" data-t1="103.55" data-t2="105.4" data-typ
             <span class="lot mono">一張 9.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -30036,7 +30201,7 @@ data-trigger="101.23" data-stop="96.6" data-t1="103.55" data-t2="105.4" data-typ
         </div>
       </div>
     </details>
-    <details class="card" data-code="8150" data-rank="133" data-research-rank="133" data-technical-rank="103" data-eligible="0" data-lot="124000" data-name="南茂" data-price="124.0" data-score="-0.961"
+    <details class="card" data-code="8150" data-rank="133" data-research-rank="133" data-technical-rank="103" data-strong="0" data-eligible="0" data-lot="124000" data-name="南茂" data-price="124.0" data-score="-0.961"
 data-trigger="133.36" data-stop="126.17" data-t1="136.96" data-t2="139.83" data-type="其他">
       <summary>
         <div class="row1">
@@ -30053,6 +30218,7 @@ data-trigger="133.36" data-stop="126.17" data-t1="136.96" data-t2="139.83" data-
             <span class="lot mono">一張 12.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -30259,7 +30425,7 @@ data-trigger="133.36" data-stop="126.17" data-t1="136.96" data-t2="139.83" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="3673" data-rank="134" data-research-rank="134" data-technical-rank="109" data-eligible="0" data-lot="76800" data-name="TPK-KY" data-price="76.8" data-score="-0.961"
+    <details class="card" data-code="3673" data-rank="134" data-research-rank="134" data-technical-rank="109" data-strong="0" data-eligible="0" data-lot="76800" data-name="TPK-KY" data-price="76.8" data-score="-0.961"
 data-trigger="81.17" data-stop="77.68" data-t1="82.92" data-t2="84.32" data-type="其他">
       <summary>
         <div class="row1">
@@ -30276,6 +30442,7 @@ data-trigger="81.17" data-stop="77.68" data-t1="82.92" data-t2="84.32" data-type
             <span class="lot mono">一張 7.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -30482,7 +30649,7 @@ data-trigger="81.17" data-stop="77.68" data-t1="82.92" data-t2="84.32" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="6834" data-rank="135" data-research-rank="135" data-technical-rank="111" data-eligible="0" data-lot="125500" data-name="天二科技" data-price="125.5" data-score="-0.961"
+    <details class="card" data-code="6834" data-rank="135" data-research-rank="135" data-technical-rank="111" data-strong="0" data-eligible="0" data-lot="125500" data-name="天二科技" data-price="125.5" data-score="-0.961"
 data-trigger="134.42" data-stop="126.01" data-t1="138.62" data-t2="141.99" data-type="其他">
       <summary>
         <div class="row1">
@@ -30499,6 +30666,7 @@ data-trigger="134.42" data-stop="126.01" data-t1="138.62" data-t2="141.99" data-
             <span class="lot mono">一張 12.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -30705,7 +30873,7 @@ data-trigger="134.42" data-stop="126.01" data-t1="138.62" data-t2="141.99" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="0056" data-rank="136" data-research-rank="136" data-technical-rank="105" data-eligible="0" data-lot="57850" data-name="元大高股息" data-price="57.85" data-score="-0.965"
+    <details class="card" data-code="0056" data-rank="136" data-research-rank="136" data-technical-rank="105" data-strong="0" data-eligible="0" data-lot="57850" data-name="元大高股息" data-price="57.85" data-score="-0.965"
 data-trigger="57.94" data-stop="57.19" data-t1="58.83" data-t2="59.34" data-type="ETF">
       <summary>
         <div class="row1">
@@ -30722,6 +30890,7 @@ data-trigger="57.94" data-stop="57.19" data-t1="58.83" data-t2="59.34" data-type
             <span class="lot mono">一張 5.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -30926,7 +31095,7 @@ data-trigger="57.94" data-stop="57.19" data-t1="58.83" data-t2="59.34" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="2330" data-rank="137" data-research-rank="137" data-technical-rank="147" data-eligible="0" data-lot="2575000" data-name="台積電" data-price="2575.0" data-score="-0.965"
+    <details class="card" data-code="2330" data-rank="137" data-research-rank="137" data-technical-rank="147" data-strong="0" data-eligible="0" data-lot="2575000" data-name="台積電" data-price="2575.0" data-score="-0.965"
 data-trigger="2582.02" data-stop="2541.7" data-t1="2630.4" data-t2="2655.64" data-type="半導體">
       <summary>
         <div class="row1">
@@ -30943,6 +31112,7 @@ data-trigger="2582.02" data-stop="2541.7" data-t1="2630.4" data-t2="2655.64" dat
             <span class="lot mono">一張 257.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -31148,7 +31318,7 @@ data-trigger="2582.02" data-stop="2541.7" data-t1="2630.4" data-t2="2655.64" dat
         </div>
       </div>
     </details>
-    <details class="card" data-code="00929" data-rank="138" data-research-rank="138" data-technical-rank="174" data-eligible="0" data-lot="30050" data-name="復華台灣科技優息" data-price="30.05" data-score="-0.965"
+    <details class="card" data-code="00929" data-rank="138" data-research-rank="138" data-technical-rank="174" data-strong="0" data-eligible="0" data-lot="30050" data-name="復華台灣科技優息" data-price="30.05" data-score="-0.965"
 data-trigger="30.17" data-stop="29.81" data-t1="30.6" data-t2="30.76" data-type="ETF">
       <summary>
         <div class="row1">
@@ -31165,6 +31335,7 @@ data-trigger="30.17" data-stop="29.81" data-t1="30.6" data-t2="30.76" data-type=
             <span class="lot mono">一張 3.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -31371,7 +31542,7 @@ data-trigger="30.17" data-stop="29.81" data-t1="30.6" data-t2="30.76" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="00935" data-rank="139" data-research-rank="139" data-technical-rank="159" data-eligible="0" data-lot="63550" data-name="野村臺灣新科技50" data-price="63.55" data-score="-0.965"
+    <details class="card" data-code="00935" data-rank="139" data-research-rank="139" data-technical-rank="159" data-strong="0" data-eligible="0" data-lot="63550" data-name="野村臺灣新科技50" data-price="63.55" data-score="-0.965"
 data-trigger="63.77" data-stop="62.35" data-t1="65.47" data-t2="66.39" data-type="ETF">
       <summary>
         <div class="row1">
@@ -31388,6 +31559,7 @@ data-trigger="63.77" data-stop="62.35" data-t1="65.47" data-t2="66.39" data-type
             <span class="lot mono">一張 6.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -31594,7 +31766,7 @@ data-trigger="63.77" data-stop="62.35" data-t1="65.47" data-t2="66.39" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="00940" data-rank="140" data-research-rank="140" data-technical-rank="157" data-eligible="0" data-lot="13260" data-name="元大台灣價值高息" data-price="13.26" data-score="-0.965"
+    <details class="card" data-code="00940" data-rank="140" data-research-rank="140" data-technical-rank="157" data-strong="0" data-eligible="0" data-lot="13260" data-name="元大台灣價值高息" data-price="13.26" data-score="-0.965"
 data-trigger="13.32" data-stop="13.18" data-t1="13.48" data-t2="13.53" data-type="ETF">
       <summary>
         <div class="row1">
@@ -31611,6 +31783,7 @@ data-trigger="13.32" data-stop="13.18" data-t1="13.48" data-t2="13.53" data-type
             <span class="lot mono">一張 1.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -31816,7 +31989,7 @@ data-trigger="13.32" data-stop="13.18" data-t1="13.48" data-t2="13.53" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="009816" data-rank="141" data-research-rank="141" data-technical-rank="156" data-eligible="0" data-lot="16990" data-name="凱基台灣TOP50" data-price="16.99" data-score="-0.965"
+    <details class="card" data-code="009816" data-rank="141" data-research-rank="141" data-technical-rank="156" data-strong="0" data-eligible="0" data-lot="16990" data-name="凱基台灣TOP50" data-price="16.99" data-score="-0.965"
 data-trigger="17.05" data-stop="16.81" data-t1="17.34" data-t2="17.47" data-type="ETF">
       <summary>
         <div class="row1">
@@ -31833,6 +32006,7 @@ data-trigger="17.05" data-stop="16.81" data-t1="17.34" data-t2="17.47" data-type
             <span class="lot mono">一張 1.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -32038,7 +32212,7 @@ data-trigger="17.05" data-stop="16.81" data-t1="17.34" data-t2="17.47" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="00891" data-rank="142" data-research-rank="142" data-technical-rank="155" data-eligible="0" data-lot="38810" data-name="中信關鍵半導體" data-price="38.81" data-score="-0.965"
+    <details class="card" data-code="00891" data-rank="142" data-research-rank="142" data-technical-rank="155" data-strong="0" data-eligible="0" data-lot="38810" data-name="中信關鍵半導體" data-price="38.81" data-score="-0.965"
 data-trigger="39.0" data-stop="38.29" data-t1="39.84" data-t2="40.22" data-type="ETF">
       <summary>
         <div class="row1">
@@ -32055,6 +32229,7 @@ data-trigger="39.0" data-stop="38.29" data-t1="39.84" data-t2="40.22" data-type=
             <span class="lot mono">一張 3.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -32261,7 +32436,7 @@ data-trigger="39.0" data-stop="38.29" data-t1="39.84" data-t2="40.22" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="0052" data-rank="143" data-research-rank="143" data-technical-rank="135" data-eligible="0" data-lot="67650" data-name="富邦科技" data-price="67.65" data-score="-0.965"
+    <details class="card" data-code="0052" data-rank="143" data-research-rank="143" data-technical-rank="135" data-strong="0" data-eligible="0" data-lot="67650" data-name="富邦科技" data-price="67.65" data-score="-0.965"
 data-trigger="68.15" data-stop="67.11" data-t1="69.41" data-t2="69.83" data-type="ETF">
       <summary>
         <div class="row1">
@@ -32278,6 +32453,7 @@ data-trigger="68.15" data-stop="67.11" data-t1="69.41" data-t2="69.83" data-type
             <span class="lot mono">一張 6.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -32483,7 +32659,7 @@ data-trigger="68.15" data-stop="67.11" data-t1="69.41" data-t2="69.83" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="3044" data-rank="144" data-research-rank="144" data-technical-rank="152" data-eligible="0" data-lot="557000" data-name="健鼎" data-price="557.0" data-score="-0.965"
+    <details class="card" data-code="3044" data-rank="144" data-research-rank="144" data-technical-rank="152" data-strong="0" data-eligible="0" data-lot="557000" data-name="健鼎" data-price="557.0" data-score="-0.965"
 data-trigger="564.97" data-stop="545.6" data-t1="588.21" data-t2="595.95" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -32500,6 +32676,7 @@ data-trigger="564.97" data-stop="545.6" data-t1="588.21" data-t2="595.95" data-t
             <span class="lot mono">一張 55.7 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -32706,7 +32883,7 @@ data-trigger="564.97" data-stop="545.6" data-t1="588.21" data-t2="595.95" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="00733" data-rank="145" data-research-rank="145" data-technical-rank="167" data-eligible="0" data-lot="76350" data-name="富邦臺灣中小" data-price="76.35" data-score="-0.965"
+    <details class="card" data-code="00733" data-rank="145" data-research-rank="145" data-technical-rank="167" data-strong="0" data-eligible="0" data-lot="76350" data-name="富邦臺灣中小" data-price="76.35" data-score="-0.965"
 data-trigger="76.83" data-stop="75.22" data-t1="78.76" data-t2="79.57" data-type="ETF">
       <summary>
         <div class="row1">
@@ -32723,6 +32900,7 @@ data-trigger="76.83" data-stop="75.22" data-t1="78.76" data-t2="79.57" data-type
             <span class="lot mono">一張 7.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -32931,7 +33109,7 @@ data-trigger="76.83" data-stop="75.22" data-t1="78.76" data-t2="79.57" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="3533" data-rank="146" data-research-rank="146" data-technical-rank="113" data-eligible="0" data-lot="1875000" data-name="嘉澤" data-price="1875.0" data-score="-0.965"
+    <details class="card" data-code="3533" data-rank="146" data-research-rank="146" data-technical-rank="113" data-strong="0" data-eligible="0" data-lot="1875000" data-name="嘉澤" data-price="1875.0" data-score="-0.965"
 data-trigger="1898.85" data-stop="1821.77" data-t1="1991.36" data-t2="2053.03" data-type="其他">
       <summary>
         <div class="row1">
@@ -32948,6 +33126,7 @@ data-trigger="1898.85" data-stop="1821.77" data-t1="1991.36" data-t2="2053.03" d
             <span class="lot mono">一張 187.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -33155,7 +33334,7 @@ data-trigger="1898.85" data-stop="1821.77" data-t1="1991.36" data-t2="2053.03" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="00927" data-rank="147" data-research-rank="147" data-technical-rank="141" data-eligible="0" data-lot="40820" data-name="群益半導體收益" data-price="40.82" data-score="-0.965"
+    <details class="card" data-code="00927" data-rank="147" data-research-rank="147" data-technical-rank="141" data-strong="0" data-eligible="0" data-lot="40820" data-name="群益半導體收益" data-price="40.82" data-score="-0.965"
 data-trigger="41.4" data-stop="40.6" data-t1="42.36" data-t2="42.68" data-type="ETF">
       <summary>
         <div class="row1">
@@ -33172,6 +33351,7 @@ data-trigger="41.4" data-stop="40.6" data-t1="42.36" data-t2="42.68" data-type="
             <span class="lot mono">一張 4.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -33378,7 +33558,7 @@ data-trigger="41.4" data-stop="40.6" data-t1="42.36" data-t2="42.68" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="6672" data-rank="148" data-research-rank="148" data-technical-rank="154" data-eligible="0" data-lot="451000" data-name="騰輝電子-KY" data-price="451.0" data-score="-0.965"
+    <details class="card" data-code="6672" data-rank="148" data-research-rank="148" data-technical-rank="154" data-strong="0" data-eligible="0" data-lot="451000" data-name="騰輝電子-KY" data-price="451.0" data-score="-0.965"
 data-trigger="458.55" data-stop="437.51" data-t1="483.8" data-t2="493.08" data-type="其他">
       <summary>
         <div class="row1">
@@ -33395,6 +33575,7 @@ data-trigger="458.55" data-stop="437.51" data-t1="483.8" data-t2="493.08" data-t
             <span class="lot mono">一張 45.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -33605,7 +33786,7 @@ data-trigger="458.55" data-stop="437.51" data-t1="483.8" data-t2="493.08" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="4958" data-rank="149" data-research-rank="149" data-technical-rank="130" data-eligible="0" data-lot="576000" data-name="臻鼎-KY" data-price="576.0" data-score="-0.965"
+    <details class="card" data-code="4958" data-rank="149" data-research-rank="149" data-technical-rank="130" data-strong="0" data-eligible="0" data-lot="576000" data-name="臻鼎-KY" data-price="576.0" data-score="-0.965"
 data-trigger="591.38" data-stop="563.78" data-t1="624.51" data-t2="635.55" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -33622,6 +33803,7 @@ data-trigger="591.38" data-stop="563.78" data-t1="624.51" data-t2="635.55" data-
             <span class="lot mono">一張 57.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -33830,7 +34012,7 @@ data-trigger="591.38" data-stop="563.78" data-t1="624.51" data-t2="635.55" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="8021" data-rank="150" data-research-rank="150" data-technical-rank="115" data-eligible="0" data-lot="560000" data-name="尖點" data-price="560.0" data-score="-0.965"
+    <details class="card" data-code="8021" data-rank="150" data-research-rank="150" data-technical-rank="115" data-strong="0" data-eligible="0" data-lot="560000" data-name="尖點" data-price="560.0" data-score="-0.965"
 data-trigger="578.33" data-stop="551.73" data-t1="610.25" data-t2="620.89" data-type="其他">
       <summary>
         <div class="row1">
@@ -33847,6 +34029,7 @@ data-trigger="578.33" data-stop="551.73" data-t1="610.25" data-t2="620.89" data-
             <span class="lot mono">一張 56.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -34055,7 +34238,7 @@ data-trigger="578.33" data-stop="551.73" data-t1="610.25" data-t2="620.89" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2340" data-rank="151" data-research-rank="151" data-technical-rank="139" data-eligible="0" data-lot="50300" data-name="台亞" data-price="50.3" data-score="-0.965"
+    <details class="card" data-code="2340" data-rank="151" data-research-rank="151" data-technical-rank="139" data-strong="0" data-eligible="0" data-lot="50300" data-name="台亞" data-price="50.3" data-score="-0.965"
 data-trigger="50.42" data-stop="48.01" data-t1="53.32" data-t2="55.13" data-type="其他">
       <summary>
         <div class="row1">
@@ -34072,6 +34255,7 @@ data-trigger="50.42" data-stop="48.01" data-t1="53.32" data-t2="55.13" data-type
             <span class="lot mono">一張 5.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -34282,7 +34466,7 @@ data-trigger="50.42" data-stop="48.01" data-t1="53.32" data-t2="55.13" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="6213" data-rank="152" data-research-rank="152" data-technical-rank="175" data-eligible="0" data-lot="751000" data-name="聯茂" data-price="751.0" data-score="-0.965"
+    <details class="card" data-code="6213" data-rank="152" data-research-rank="152" data-technical-rank="175" data-strong="0" data-eligible="0" data-lot="751000" data-name="聯茂" data-price="751.0" data-score="-0.965"
 data-trigger="753.01" data-stop="712.89" data-t1="801.14" data-t2="831.23" data-type="其他">
       <summary>
         <div class="row1">
@@ -34299,6 +34483,7 @@ data-trigger="753.01" data-stop="712.89" data-t1="801.14" data-t2="831.23" data-
             <span class="lot mono">一張 75.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -34509,7 +34694,7 @@ data-trigger="753.01" data-stop="712.89" data-t1="801.14" data-t2="831.23" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="8046" data-rank="153" data-research-rank="153" data-technical-rank="140" data-eligible="0" data-lot="1495000" data-name="南電" data-price="1495.0" data-score="-0.965"
+    <details class="card" data-code="8046" data-rank="153" data-research-rank="153" data-technical-rank="140" data-strong="0" data-eligible="0" data-lot="1495000" data-name="南電" data-price="1495.0" data-score="-0.965"
 data-trigger="1554.33" data-stop="1467.75" data-t1="1658.23" data-t2="1692.86" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -34526,6 +34711,7 @@ data-trigger="1554.33" data-stop="1467.75" data-t1="1658.23" data-t2="1692.86" d
             <span class="lot mono">一張 149.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -34734,7 +34920,7 @@ data-trigger="1554.33" data-stop="1467.75" data-t1="1658.23" data-t2="1692.86" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="3167" data-rank="154" data-research-rank="154" data-technical-rank="151" data-eligible="0" data-lot="996000" data-name="大量" data-price="996.0" data-score="-0.965"
+    <details class="card" data-code="3167" data-rank="154" data-research-rank="154" data-technical-rank="151" data-strong="0" data-eligible="0" data-lot="996000" data-name="大量" data-price="996.0" data-score="-0.965"
 data-trigger="1007.82" data-stop="951.4" data-t1="1075.52" data-t2="1108.84" data-type="其他">
       <summary>
         <div class="row1">
@@ -34751,6 +34937,7 @@ data-trigger="1007.82" data-stop="951.4" data-t1="1075.52" data-t2="1108.84" dat
             <span class="lot mono">一張 99.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -34958,7 +35145,7 @@ data-trigger="1007.82" data-stop="951.4" data-t1="1075.52" data-t2="1108.84" dat
         </div>
       </div>
     </details>
-    <details class="card" data-code="3711" data-rank="155" data-research-rank="155" data-technical-rank="158" data-eligible="0" data-lot="742000" data-name="日月光投控" data-price="742.0" data-score="-0.965"
+    <details class="card" data-code="3711" data-rank="155" data-research-rank="155" data-technical-rank="158" data-strong="0" data-eligible="0" data-lot="742000" data-name="日月光投控" data-price="742.0" data-score="-0.965"
 data-trigger="759.41" data-stop="731.19" data-t1="793.27" data-t2="804.56" data-type="半導體">
       <summary>
         <div class="row1">
@@ -34975,6 +35162,7 @@ data-trigger="759.41" data-stop="731.19" data-t1="793.27" data-t2="804.56" data-
             <span class="lot mono">一張 74.2 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -35183,7 +35371,7 @@ data-trigger="759.41" data-stop="731.19" data-t1="793.27" data-t2="804.56" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2383" data-rank="156" data-research-rank="156" data-technical-rank="164" data-eligible="0" data-lot="5700000" data-name="台光電" data-price="5700.0" data-score="-0.965"
+    <details class="card" data-code="2383" data-rank="156" data-research-rank="156" data-technical-rank="164" data-strong="0" data-eligible="0" data-lot="5700000" data-name="台光電" data-price="5700.0" data-score="-0.965"
 data-trigger="5713.21" data-stop="5448.95" data-t1="6030.33" data-t2="6241.75" data-type="其他">
       <summary>
         <div class="row1">
@@ -35200,6 +35388,7 @@ data-trigger="5713.21" data-stop="5448.95" data-t1="6030.33" data-t2="6241.75" d
             <span class="lot mono">一張 570.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -35408,7 +35597,7 @@ data-trigger="5713.21" data-stop="5448.95" data-t1="6030.33" data-t2="6241.75" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="2368" data-rank="157" data-research-rank="157" data-technical-rank="171" data-eligible="0" data-lot="1215000" data-name="金像電" data-price="1215.0" data-score="-0.965"
+    <details class="card" data-code="2368" data-rank="157" data-research-rank="157" data-technical-rank="171" data-strong="0" data-eligible="0" data-lot="1215000" data-name="金像電" data-price="1215.0" data-score="-0.965"
 data-trigger="1218.6" data-stop="1146.65" data-t1="1304.93" data-t2="1358.89" data-type="其他">
       <summary>
         <div class="row1">
@@ -35425,6 +35614,7 @@ data-trigger="1218.6" data-stop="1146.65" data-t1="1304.93" data-t2="1358.89" da
             <span class="lot mono">一張 121.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -35632,7 +35822,7 @@ data-trigger="1218.6" data-stop="1146.65" data-t1="1304.93" data-t2="1358.89" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="2426" data-rank="158" data-research-rank="158" data-technical-rank="166" data-eligible="0" data-lot="114000" data-name="鼎元" data-price="114.0" data-score="-0.965"
+    <details class="card" data-code="2426" data-rank="158" data-research-rank="158" data-technical-rank="166" data-strong="0" data-eligible="0" data-lot="114000" data-name="鼎元" data-price="114.0" data-score="-0.965"
 data-trigger="114.35" data-stop="107.29" data-t1="122.82" data-t2="128.12" data-type="其他">
       <summary>
         <div class="row1">
@@ -35649,6 +35839,7 @@ data-trigger="114.35" data-stop="107.29" data-t1="122.82" data-t2="128.12" data-
             <span class="lot mono">一張 11.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -35857,7 +36048,7 @@ data-trigger="114.35" data-stop="107.29" data-t1="122.82" data-t2="128.12" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="2455" data-rank="159" data-research-rank="159" data-technical-rank="153" data-eligible="0" data-lot="606000" data-name="全新" data-price="606.0" data-score="-0.965"
+    <details class="card" data-code="2455" data-rank="159" data-research-rank="159" data-technical-rank="153" data-strong="0" data-eligible="0" data-lot="606000" data-name="全新" data-price="606.0" data-score="-0.965"
 data-trigger="608.47" data-stop="578.98" data-t1="643.87" data-t2="665.0" data-type="其他">
       <summary>
         <div class="row1">
@@ -35874,6 +36065,7 @@ data-trigger="608.47" data-stop="578.98" data-t1="643.87" data-t2="665.0" data-t
             <span class="lot mono">一張 60.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -36081,7 +36273,7 @@ data-trigger="608.47" data-stop="578.98" data-t1="643.87" data-t2="665.0" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="3653" data-rank="160" data-research-rank="160" data-technical-rank="134" data-eligible="0" data-lot="7205000" data-name="健策" data-price="7205.0" data-score="-0.965"
+    <details class="card" data-code="3653" data-rank="160" data-research-rank="160" data-technical-rank="134" data-strong="0" data-eligible="0" data-lot="7205000" data-name="健策" data-price="7205.0" data-score="-0.965"
 data-trigger="7459.0" data-stop="7079.09" data-t1="7914.88" data-t2="8066.84" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -36098,6 +36290,7 @@ data-trigger="7459.0" data-stop="7079.09" data-t1="7914.88" data-t2="8066.84" da
             <span class="lot mono">一張 720.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -36305,7 +36498,7 @@ data-trigger="7459.0" data-stop="7079.09" data-t1="7914.88" data-t2="8066.84" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="3443" data-rank="161" data-research-rank="161" data-technical-rank="169" data-eligible="0" data-lot="8600000" data-name="創意" data-price="8600.0" data-score="-0.965"
+    <details class="card" data-code="3443" data-rank="161" data-research-rank="161" data-technical-rank="169" data-strong="0" data-eligible="0" data-lot="8600000" data-name="創意" data-price="8600.0" data-score="-0.965"
 data-trigger="8711.77" data-stop="8276.31" data-t1="9234.33" data-t2="9470.93" data-type="半導體">
       <summary>
         <div class="row1">
@@ -36322,6 +36515,7 @@ data-trigger="8711.77" data-stop="8276.31" data-t1="9234.33" data-t2="9470.93" d
             <span class="lot mono">一張 860.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -36530,7 +36724,7 @@ data-trigger="8711.77" data-stop="8276.31" data-t1="9234.33" data-t2="9470.93" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="3189" data-rank="162" data-research-rank="162" data-technical-rank="106" data-eligible="0" data-lot="1095000" data-name="景碩" data-price="1095.0" data-score="-0.965"
+    <details class="card" data-code="3189" data-rank="162" data-research-rank="162" data-technical-rank="106" data-strong="0" data-eligible="0" data-lot="1095000" data-name="景碩" data-price="1095.0" data-score="-0.965"
 data-trigger="1152.92" data-stop="1094.52" data-t1="1211.8" data-t2="1235.16" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -36547,6 +36741,7 @@ data-trigger="1152.92" data-stop="1094.52" data-t1="1211.8" data-t2="1235.16" da
             <span class="lot mono">一張 109.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -36756,7 +36951,7 @@ data-trigger="1152.92" data-stop="1094.52" data-t1="1211.8" data-t2="1235.16" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="3702" data-rank="163" data-research-rank="163" data-technical-rank="161" data-eligible="0" data-lot="119000" data-name="大聯大" data-price="119.0" data-score="-0.965"
+    <details class="card" data-code="3702" data-rank="163" data-research-rank="163" data-technical-rank="161" data-strong="0" data-eligible="0" data-lot="119000" data-name="大聯大" data-price="119.0" data-score="-0.965"
 data-trigger="121.19" data-stop="117.41" data-t1="123.08" data-t2="124.59" data-type="電子通路">
       <summary>
         <div class="row1">
@@ -36773,6 +36968,7 @@ data-trigger="121.19" data-stop="117.41" data-t1="123.08" data-t2="124.59" data-
             <span class="lot mono">一張 11.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -36977,7 +37173,7 @@ data-trigger="121.19" data-stop="117.41" data-t1="123.08" data-t2="124.59" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="3094" data-rank="164" data-research-rank="164" data-technical-rank="146" data-eligible="0" data-lot="69000" data-name="聯傑" data-price="69.0" data-score="-0.965"
+    <details class="card" data-code="3094" data-rank="164" data-research-rank="164" data-technical-rank="146" data-strong="0" data-eligible="0" data-lot="69000" data-name="聯傑" data-price="69.0" data-score="-0.965"
 data-trigger="73.7" data-stop="69.76" data-t1="75.66" data-t2="77.24" data-type="其他">
       <summary>
         <div class="row1">
@@ -36994,6 +37190,7 @@ data-trigger="73.7" data-stop="69.76" data-t1="75.66" data-t2="77.24" data-type=
             <span class="lot mono">一張 6.9 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -37202,7 +37399,7 @@ data-trigger="73.7" data-stop="69.76" data-t1="75.66" data-t2="77.24" data-type=
         </div>
       </div>
     </details>
-    <details class="card" data-code="8039" data-rank="165" data-research-rank="165" data-technical-rank="5" data-eligible="0" data-lot="303500" data-name="台虹" data-price="303.5" data-score="-1.004"
+    <details class="card" data-code="8039" data-rank="165" data-research-rank="165" data-technical-rank="5" data-strong="0" data-eligible="0" data-lot="303500" data-name="台虹" data-price="303.5" data-score="-1.004"
 data-trigger="308.96" data-stop="289.81" data-t1="327.5" data-t2="335.16" data-type="其他">
       <summary>
         <div class="row1">
@@ -37219,6 +37416,7 @@ data-trigger="308.96" data-stop="289.81" data-t1="327.5" data-t2="335.16" data-t
             <span class="lot mono">一張 30.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -37424,7 +37622,7 @@ data-trigger="308.96" data-stop="289.81" data-t1="327.5" data-t2="335.16" data-t
         </div>
       </div>
     </details>
-    <details class="card" data-code="6805" data-rank="166" data-research-rank="166" data-technical-rank="6" data-eligible="0" data-lot="2450000" data-name="富世達" data-price="2450.0" data-score="-1.004"
+    <details class="card" data-code="6805" data-rank="166" data-research-rank="166" data-technical-rank="6" data-strong="0" data-eligible="0" data-lot="2450000" data-name="富世達" data-price="2450.0" data-score="-1.004"
 data-trigger="2517.86" data-stop="2360.64" data-t1="2706.53" data-t2="2769.42" data-type="其他">
       <summary>
         <div class="row1">
@@ -37441,6 +37639,7 @@ data-trigger="2517.86" data-stop="2360.64" data-t1="2706.53" data-t2="2769.42" d
             <span class="lot mono">一張 245.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -37640,7 +37839,7 @@ data-trigger="2517.86" data-stop="2360.64" data-t1="2706.53" data-t2="2769.42" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="6226" data-rank="167" data-research-rank="167" data-technical-rank="7" data-eligible="0" data-lot="43000" data-name="光鼎" data-price="43.0" data-score="-1.004"
+    <details class="card" data-code="6226" data-rank="167" data-research-rank="167" data-technical-rank="7" data-strong="0" data-eligible="0" data-lot="43000" data-name="光鼎" data-price="43.0" data-score="-1.004"
 data-trigger="49.96" data-stop="46.71" data-t1="51.7" data-t2="53.0" data-type="其他">
       <summary>
         <div class="row1">
@@ -37657,6 +37856,7 @@ data-trigger="49.96" data-stop="46.71" data-t1="51.7" data-t2="53.0" data-type="
             <span class="lot mono">一張 4.3 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -37862,7 +38062,7 @@ data-trigger="49.96" data-stop="46.71" data-t1="51.7" data-t2="53.0" data-type="
         </div>
       </div>
     </details>
-    <details class="card" data-code="00892" data-rank="168" data-research-rank="168" data-technical-rank="46" data-eligible="0" data-lot="44400" data-name="富邦台灣半導體" data-price="44.4" data-score="-1.117"
+    <details class="card" data-code="00892" data-rank="168" data-research-rank="168" data-technical-rank="46" data-strong="0" data-eligible="0" data-lot="44400" data-name="富邦台灣半導體" data-price="44.4" data-score="-1.117"
 data-trigger="44.44" data-stop="43.59" data-t1="45.47" data-t2="46.11" data-type="ETF">
       <summary>
         <div class="row1">
@@ -37879,6 +38079,7 @@ data-trigger="44.44" data-stop="43.59" data-t1="45.47" data-t2="46.11" data-type
             <span class="lot mono">一張 4.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -38084,7 +38285,7 @@ data-trigger="44.44" data-stop="43.59" data-t1="45.47" data-t2="46.11" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="00922" data-rank="169" data-research-rank="169" data-technical-rank="62" data-eligible="0" data-lot="45110" data-name="國泰台灣領袖50" data-price="45.11" data-score="-1.117"
+    <details class="card" data-code="00922" data-rank="169" data-research-rank="169" data-technical-rank="62" data-strong="0" data-eligible="0" data-lot="45110" data-name="國泰台灣領袖50" data-price="45.11" data-score="-1.117"
 data-trigger="45.19" data-stop="44.51" data-t1="46.01" data-t2="46.47" data-type="ETF">
       <summary>
         <div class="row1">
@@ -38101,6 +38302,7 @@ data-trigger="45.19" data-stop="44.51" data-t1="46.01" data-t2="46.47" data-type
             <span class="lot mono">一張 4.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -38306,7 +38508,7 @@ data-trigger="45.19" data-stop="44.51" data-t1="46.01" data-t2="46.47" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="0050" data-rank="170" data-research-rank="170" data-technical-rank="80" data-eligible="0" data-lot="115950" data-name="元大台灣50" data-price="115.95" data-score="-1.117"
+    <details class="card" data-code="0050" data-rank="170" data-research-rank="170" data-technical-rank="80" data-strong="0" data-eligible="0" data-lot="115950" data-name="元大台灣50" data-price="115.95" data-score="-1.117"
 data-trigger="116.24" data-stop="114.53" data-t1="118.29" data-t2="119.37" data-type="ETF">
       <summary>
         <div class="row1">
@@ -38323,6 +38525,7 @@ data-trigger="116.24" data-stop="114.53" data-t1="118.29" data-t2="119.37" data-
             <span class="lot mono">一張 11.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -38527,7 +38730,7 @@ data-trigger="116.24" data-stop="114.53" data-t1="118.29" data-t2="119.37" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="00904" data-rank="171" data-research-rank="171" data-technical-rank="59" data-eligible="0" data-lot="44990" data-name="台新臺灣半導體30" data-price="44.99" data-score="-1.117"
+    <details class="card" data-code="00904" data-rank="171" data-research-rank="171" data-technical-rank="59" data-strong="0" data-eligible="0" data-lot="44990" data-name="台新臺灣半導體30" data-price="44.99" data-score="-1.117"
 data-trigger="45.12" data-stop="44.34" data-t1="46.06" data-t2="46.56" data-type="ETF">
       <summary>
         <div class="row1">
@@ -38544,6 +38747,7 @@ data-trigger="45.12" data-stop="44.34" data-t1="46.06" data-t2="46.56" data-type
             <span class="lot mono">一張 4.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -38749,7 +38953,7 @@ data-trigger="45.12" data-stop="44.34" data-t1="46.06" data-t2="46.56" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="6414" data-rank="172" data-research-rank="172" data-technical-rank="69" data-eligible="0" data-lot="407500" data-name="樺漢" data-price="407.5" data-score="-1.117"
+    <details class="card" data-code="6414" data-rank="172" data-research-rank="172" data-technical-rank="69" data-strong="0" data-eligible="0" data-lot="407500" data-name="樺漢" data-price="407.5" data-score="-1.117"
 data-trigger="411.17" data-stop="397.84" data-t1="427.16" data-t2="437.83" data-type="電腦週邊">
       <summary>
         <div class="row1">
@@ -38766,6 +38970,7 @@ data-trigger="411.17" data-stop="397.84" data-t1="427.16" data-t2="437.83" data-
             <span class="lot mono">一張 40.8 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -38970,7 +39175,7 @@ data-trigger="411.17" data-stop="397.84" data-t1="427.16" data-t2="437.83" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="3413" data-rank="173" data-research-rank="173" data-technical-rank="58" data-eligible="0" data-lot="295000" data-name="京鼎" data-price="295.0" data-score="-1.117"
+    <details class="card" data-code="3413" data-rank="173" data-research-rank="173" data-technical-rank="58" data-strong="0" data-eligible="0" data-lot="295000" data-name="京鼎" data-price="295.0" data-score="-1.117"
 data-trigger="298.32" data-stop="291.91" data-t1="306.01" data-t2="311.13" data-type="半導體">
       <summary>
         <div class="row1">
@@ -38987,6 +39192,7 @@ data-trigger="298.32" data-stop="291.91" data-t1="306.01" data-t2="311.13" data-
             <span class="lot mono">一張 29.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -39191,7 +39397,7 @@ data-trigger="298.32" data-stop="291.91" data-t1="306.01" data-t2="311.13" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="3149" data-rank="174" data-research-rank="174" data-technical-rank="54" data-eligible="0" data-lot="79500" data-name="正達" data-price="79.5" data-score="-1.117"
+    <details class="card" data-code="3149" data-rank="174" data-research-rank="174" data-technical-rank="54" data-strong="0" data-eligible="0" data-lot="79500" data-name="正達" data-price="79.5" data-score="-1.117"
 data-trigger="80.17" data-stop="76.74" data-t1="84.29" data-t2="87.03" data-type="其他">
       <summary>
         <div class="row1">
@@ -39208,6 +39414,7 @@ data-trigger="80.17" data-stop="76.74" data-t1="84.29" data-t2="87.03" data-type
             <span class="lot mono">一張 8.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -39416,7 +39623,7 @@ data-trigger="80.17" data-stop="76.74" data-t1="84.29" data-t2="87.03" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="1303" data-rank="175" data-research-rank="175" data-technical-rank="86" data-eligible="0" data-lot="286000" data-name="南亞" data-price="286.0" data-score="-1.117"
+    <details class="card" data-code="1303" data-rank="175" data-research-rank="175" data-technical-rank="86" data-strong="0" data-eligible="0" data-lot="286000" data-name="南亞" data-price="286.0" data-score="-1.117"
 data-trigger="286.75" data-stop="271.83" data-t1="304.65" data-t2="315.84" data-type="塑化">
       <summary>
         <div class="row1">
@@ -39433,6 +39640,7 @@ data-trigger="286.75" data-stop="271.83" data-t1="304.65" data-t2="315.84" data-
             <span class="lot mono">一張 28.6 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -39641,7 +39849,7 @@ data-trigger="286.75" data-stop="271.83" data-t1="304.65" data-t2="315.84" data-
         </div>
       </div>
     </details>
-    <details class="card" data-code="3037" data-rank="176" data-research-rank="176" data-technical-rank="95" data-eligible="0" data-lot="1325000" data-name="欣興" data-price="1325.0" data-score="-1.117"
+    <details class="card" data-code="3037" data-rank="176" data-research-rank="176" data-technical-rank="95" data-strong="0" data-eligible="0" data-lot="1325000" data-name="欣興" data-price="1325.0" data-score="-1.117"
 data-trigger="1423.33" data-stop="1356.64" data-t1="1458.4" data-t2="1485.08" data-type="電子零件">
       <summary>
         <div class="row1">
@@ -39658,6 +39866,7 @@ data-trigger="1423.33" data-stop="1356.64" data-t1="1458.4" data-t2="1485.08" da
             <span class="lot mono">一張 132.5 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -39867,7 +40076,7 @@ data-trigger="1423.33" data-stop="1356.64" data-t1="1458.4" data-t2="1485.08" da
         </div>
       </div>
     </details>
-    <details class="card" data-code="1709" data-rank="177" data-research-rank="177" data-technical-rank="179" data-eligible="0" data-lot="64300" data-name="和益" data-price="64.3" data-score="0"
+    <details class="card" data-code="1709" data-rank="177" data-research-rank="177" data-technical-rank="179" data-strong="0" data-eligible="0" data-lot="64300" data-name="和益" data-price="64.3" data-score="0"
 data-trigger="64.48" data-stop="60.89" data-t1="68.78" data-t2="71.47" data-type="其他">
       <summary>
         <div class="row1">
@@ -39884,6 +40093,7 @@ data-trigger="64.48" data-stop="60.89" data-t1="68.78" data-t2="71.47" data-type
             <span class="lot mono">一張 6.4 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -40074,7 +40284,7 @@ data-trigger="64.48" data-stop="60.89" data-t1="68.78" data-t2="71.47" data-type
         </div>
       </div>
     </details>
-    <details class="card" data-code="1560" data-rank="178" data-research-rank="178" data-technical-rank="178" data-eligible="0" data-lot="1040000" data-name="中砂" data-price="1040.0" data-score="0"
+    <details class="card" data-code="1560" data-rank="178" data-research-rank="178" data-technical-rank="178" data-strong="0" data-eligible="0" data-lot="1040000" data-name="中砂" data-price="1040.0" data-score="0"
 data-trigger="1061.96" data-stop="1022.83" data-t1="1108.91" data-t2="1124.56" data-type="其他">
       <summary>
         <div class="row1">
@@ -40091,6 +40301,7 @@ data-trigger="1061.96" data-stop="1022.83" data-t1="1108.91" data-t2="1124.56" d
             <span class="lot mono">一張 104.0 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -40281,7 +40492,7 @@ data-trigger="1061.96" data-stop="1022.83" data-t1="1108.91" data-t2="1124.56" d
         </div>
       </div>
     </details>
-    <details class="card" data-code="3016" data-rank="179" data-research-rank="179" data-technical-rank="177" data-eligible="0" data-lot="181500" data-name="嘉晶" data-price="181.5" data-score="0"
+    <details class="card" data-code="3016" data-rank="179" data-research-rank="179" data-technical-rank="177" data-strong="0" data-eligible="0" data-lot="181500" data-name="嘉晶" data-price="181.5" data-score="0"
 data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-type="其他">
       <summary>
         <div class="row1">
@@ -40298,6 +40509,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
             <span class="lot mono">一張 18.1 萬</span>
           </div>
         </div>
+
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -40608,7 +40820,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
 
   <footer>
     台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
-    <span class="mono">2026-10-05 20:39</span>
+    <span class="mono">2026-10-05 21:09</span>
   </footer>
 </div>
 
@@ -40619,7 +40831,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
 (function () {
   "use strict";
 
-  var GENERATED = "2026-10-05T20:39:11+08:00";
+  var GENERATED = "2026-10-05T21:09:10+08:00";
   var TRADE_DATE = "2026-10-05";
 
   /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
@@ -40640,7 +40852,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
     else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
     else word = Math.floor(mins / 1440) + " 天前更新";
     freshness.innerHTML = '<b>' + word + '</b>';
-    freshness.title = "更新時間 2026-10-05 20:39";
+    freshness.title = "更新時間 2026-10-05 21:09";
   }
   renderFreshness();
   setInterval(renderFreshness, 60000);
@@ -40663,7 +40875,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
      ---------------------------------------------------------------------- */
   var refreshBtn = document.getElementById("btn-refresh");
   var refreshMsg = document.getElementById("refresh-msg");
-  var CURRENT_STAMP = "2026-10-05 20:39";
+  var CURRENT_STAMP = "2026-10-05 21:09";
 
   function showMsg(text, isNew) {
     if (!refreshMsg) return;
@@ -41008,12 +41220,13 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
   var modeBtns = Array.prototype.slice.call(document.querySelectorAll(".mode-btn"));
   var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
   var rankSortBtns = Array.prototype.slice.call(document.querySelectorAll(".rank-sort"));
+  var strongOnlyBtn = document.getElementById("strong-only");
   var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
 
   var INITIAL_VISIBLE = 20;
   var moreBtn = document.getElementById("show-more");
   var st = { budget: 0, splits: 3, mode: "auto", type: "all",
-             picks: [], limit: INITIAL_VISIBLE, q: "", sort: "risk" };
+             picks: [], limit: INITIAL_VISIBLE, q: "", sort: "risk", strongOnly: false };
   var orderedBy = null;
 
   function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
@@ -41050,6 +41263,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
     var matched = [], shown = [];
     cards.forEach(function (c) {
       var okType = st.type === "all" || c.dataset.type === st.type;
+      var okStrength = !st.strongOnly || c.dataset.strong === "1";
       var lot = parseInt(c.dataset.lot, 10) || 0;
       var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
       // 搜尋：比對代號、名稱與產業標籤
@@ -41060,7 +41274,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
                    (sec ? sec.textContent : "")).toLowerCase();
         okFind = hay.indexOf(st.q) >= 0;
       }
-      if (okType && okBudget && okFind) matched.push(c);
+      if (okType && okStrength && okBudget && okFind) matched.push(c);
       else { c.style.display = "none"; c.open = false; }
     });
     matched.forEach(function (c, i) {
@@ -41149,6 +41363,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
   function render() {
     orderReferenceCards();
     press(rankSortBtns, "sort", st.sort);
+    if (strongOnlyBtn) strongOnlyBtn.setAttribute("aria-pressed", st.strongOnly ? "true" : "false");
     var budgetSummary = document.getElementById("budget-summary");
     if (budgetSummary) budgetSummary.textContent = st.budget ? money(st.budget) + (st.mode === "pick" ? " · 自己挑" : " · 自動分配") : "選填";
     press(modeBtns, "mode", st.mode);
@@ -41171,6 +41386,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
     var v = visible();
     if (countEl) {
       var bits = [];
+      if (st.strongOnly) bits.push("僅技術強勢");
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
@@ -41180,7 +41396,10 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
       countEl.textContent = head + tail + best;
     }
-    if (emptyEl) emptyEl.style.display = v.matched.length || (!st.q && !st.budget && st.type === "all") ? "none" : "block";
+    if (emptyEl) {
+      emptyEl.style.display = v.matched.length || (!st.q && !st.budget && st.type === "all" && !st.strongOnly) ? "none" : "block";
+      emptyEl.textContent = st.strongOnly ? "目前篩選範圍內沒有技術強勢標的；再點「只看強勢」可恢復完整排名。" : "目前篩選條件下沒有符合的標的。";
+    }
 
     allocate(v.matched);
 
@@ -41242,6 +41461,11 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
       st.limit = st.q ? cards.length : INITIAL_VISIBLE;
       render();
     });
+  });
+  if (strongOnlyBtn) strongOnlyBtn.addEventListener("click",function(){
+    st.strongOnly = !st.strongOnly;
+    st.limit = st.q ? cards.length : INITIAL_VISIBLE;
+    render();
   });
   pickClearBtn.addEventListener("click", function () {
     st.picks = []; st.mode = "auto"; render();
