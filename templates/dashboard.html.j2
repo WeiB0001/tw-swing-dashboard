@@ -109,18 +109,18 @@ body{
 .budget-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .budget-input button{background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
 
-.preset,.split,.mode-btn,.type-btn{
+.preset,.split,.mode-btn,.type-btn,.rank-sort{
   flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;
   padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
   background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
 }
 .split{padding:6px 11px;min-width:34px;text-align:center}
-.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"]{
+.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"],.rank-sort[aria-pressed="true"]{
   background:var(--signal);border-color:var(--signal);color:#161105;
 }
 .preset:active{background:#2A333F}
 .preset:focus-visible,.split:focus-visible,.mode-btn:focus-visible,
-.type-btn:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
+.type-btn:focus-visible,.rank-sort:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
   outline:2px solid var(--signal);outline-offset:2px}
 .ghost-btn{
   flex:0 0 auto;font:inherit;font-size:12px;font-weight:600;padding:5px 10px;
@@ -699,9 +699,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 .key-metrics dt{font-size:10.5px;color:var(--muted);margin-bottom:3px}
 .key-metrics dd{margin:0;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
 .rank-state{font-size:12px;color:var(--muted)}
+.score-pair{display:flex;justify-content:flex-end;gap:22px;flex-wrap:wrap;margin-left:auto}
+.score-pair .score{font-size:23px}
+.reference-risk{margin:9px 0 0;color:#D9AF83;font-size:12px;line-height:1.6}
+.rank-explainer{margin:0 0 10px}
 .card:not([open])>summary .summary-extra,.card:not([open])>summary .kind,
 .card:not([open])>summary .sector,.card:not([open])>summary .mark,.card:not([open])>summary .lot{display:none}
-.card .row3{margin-top:9px}
+.card .row3{margin-top:9px;flex-wrap:wrap}
 .card .score em{font-size:10px;letter-spacing:0}
 .card .pickrow{align-items:center}
 .card-hint{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
@@ -858,17 +862,17 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   <!-- ===================== 排名 ===================== -->
   <details class="fold status-fold {{ 'ready' if not capital_policy.blocked else '' }}" id="capital-policy">
-    <summary>{{ '僅供研究 · 暫停配置' if capital_policy.blocked else '已通過驗證 · 可配置試算' }} <small>查看原因</small></summary>
+    <summary>風險提示 <small>排名完整保留 · 展開查看</small></summary>
     <div class="fold-body">
     <b>{{ capital_policy.reason }}</b><br>
     {% if capital_policy.blocked %}自動配置、手動配置試算與新增模擬買單已停用；個人交易記帳仍可如實記錄。{% endif %}
-    已改採風險報酬綜合評估；研究排名與回測不保證獲利，未通過驗證時仍保留現金。
+    未通過驗證的標的仍列入參考排名並揭露風險；配置與模擬帳戶另外檢查資格。排名與回測不保證獲利。
     </div>
   </details>
   <div class="rule-strip" aria-label="策略摘要">
     <span>預計持有<b>{{ min_exit_days }}～{{ exit_days }} 日</b></span>
     <span>淨利目標<b>+{{ '%g'|format(profit_target) }}%</b></span>
-    <span>可配置<b>{{ eligible_count }} 檔</b></span>
+    <span>參考清單<b>{{ rows|length }} 檔</b></span>
   </div>
   <details class="fold fold-inline" id="target-rule">
     <summary>交易規則與成本</summary>
@@ -880,7 +884,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     單筆訊號統計以約 {{ '{:,.0f}'.format(risk_settings.reference) }} 元為參考，資金回測依實際股數計算。<br>
     目前 <b>{{ research_count }}</b> 檔通過研究門檻；<b>{{ eligible_count }}</b> 檔允許配置。
     {% if stop_loss_pct is not none %}目前研究設定：收盤淨損達 {{ stop_loss_pct }}% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。{% endif %}
-    {% if not eligible_count %}<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>{% endif %}
+    {% if not eligible_count %}<b>目前沒有通過全部配置門檻的標的；參考排名仍完整保留。</b>{% endif %}
     {% if not backtest %}<br>此目標的回測尚待重算，暫不顯示達標率。{% endif %}
     排名更新：{{ meta.ranked_at or meta.close_run_at or meta.generated_at }}。
     </div>
@@ -1081,12 +1085,24 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
   </details>
   <div class="section-head">
-    <h2>股票研究排名</h2>
-    <span>{{ rows|length }} 檔 · 符合配置條件 {{ eligible_count }} 檔</span>
+    <h2>明日參考排名</h2>
+    <span>{{ rows|length }} 檔 · {{ meta.applies_to or meta.trade_date }}</span>
   </div>
+  <details class="fold fold-inline rank-explainer">
+    <summary>分數怎麼看？ <small>未過門檻仍列入</small></summary>
+    <div class="fold-body">
+      風險報酬分綜合達標率、達標淨利與虧損風險；目前 {{ positive_risk_reward_count }} 檔大於 0。負分仍照常排名，不代表遭到排除。<br>
+      技術機會分為 0～100 分，衡量位置、趨勢、轉強、量價與技術風險；正分不等於正的預期報酬，也不是成功率。兩種排序都保留全榜，未通過條件改以風險提示揭露。
+    </div>
+  </details>
 
   <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
   <section class="panel">
+    <div class="panel-row wrap" role="group" aria-label="參考排名排序">
+      <span class="lbl">排序</span>
+      <button type="button" class="rank-sort" data-sort="risk" aria-pressed="true">風險報酬</button>
+      <button type="button" class="rank-sort" data-sort="technical" aria-pressed="false">技術機會</button>
+    </div>
     <div class="panel-row">
       <div class="find">
         <span>🔍</span>
@@ -1134,7 +1150,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <details class="fold fold-inline">
       <summary>配置試算方式</summary>
       <div class="fold-body">
-      依名次順序，在每筆 {{ risk_settings.per_trade }}%、整體 {{ risk_settings.total }}% 的計畫風險額度內試算；單一標的上限 {{ max_position_pct }}%、同產業 {{ risk_settings.sector }}%，不因只選一檔而放寬。
+      依風險報酬名次順序，在每筆 {{ risk_settings.per_trade }}%、整體 {{ risk_settings.total }}% 的計畫風險額度內試算；單一標的上限 {{ max_position_pct }}%、同產業 {{ risk_settings.sector }}%，不因只選一檔而放寬。
       部位以淨損觸發幅度加 {{ risk_settings.buffer }} 個百分點跳空緩衝估算，已含買進手續費與滑價；退出成本含在淨損定義內。計畫風險不是損失上限。
       {% if allow_odd_lot %}預算不足一張時改以零股試算，需券商支援。{% endif %}
       </div>
@@ -1155,7 +1171,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </section>
 
   {% macro stock_card(r) %}
-    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-research-rank="{{ r.final_rank or r.rank }}" data-technical-rank="{{ r.technical_rank }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
         <div class="row1">
@@ -1196,17 +1212,17 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
 
         <div class="row3">
-          <div class="rank-state">{{ '可配置試算' if r.trade_eligible else ('樣本不足' if not r.hist_samples else '僅供研究') }}</div>
-          {% if r.final_score is defined and r.final_score is not none %}
+          <div class="rank-state">已列入參考</div>
+          <div class="score-pair">
+          <div class="score mono">{{ '%.1f'|format(r.score) }}<span class="pct">/100</span><em>技術機會分 · 非成功率</em></div>
           {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
-          <div class="score mono">{{ '%+.2f'|format(r.hist_risk_reward) }}<span class="pct">分</span><em>綜合分數 · 非報酬率</em></div>
+          <div class="score mono">{{ '%+.2f'|format(r.hist_risk_reward) }}<span class="pct">分</span><em>風險報酬分 · 非報酬率</em></div>
           {% else %}
-          <div class="score mono nodata">—<em>綜合排名資料不足</em></div>
+          <div class="score mono nodata">—<em>風險報酬統計不足</em></div>
           {% endif %}
-          {% else %}
-          <div class="score mono nodata">{{ '%.0f'|format(r.score) }}<em>技術分數</em></div>
-          {% endif %}
+          </div>
         </div>
+        <p class="reference-risk">風險：{{ r.reference_risk }}</p>
 
         {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
         <dl class="key-metrics" aria-label="歷史風險報酬">
@@ -1217,9 +1233,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </dl>
         {% else %}<p class="key-empty">資料不足，暫不提供機率估計。</p>{% endif %}
         <div class="pickrow">
-          <button type="button" class="pick" data-pick data-code="{{ r.code }}" aria-pressed="false" {% if capital_policy.blocked or not r.trade_eligible %}disabled title="目前僅供研究，不允許配置"{% endif %}>
-            ＋ 選入
-          </button>
           <button type="button" class="jbuy" data-jbuy data-code="{{ r.code }}"
                   data-name="{{ r.name }}" data-price="{{ r.close }}">＋加入我的持股</button>
           <div class="alloc" data-alloc hidden></div>
@@ -1265,7 +1278,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
       </summary>
       <div class="detail">
-        <p class="mainrisk">研究狀態：{{ r.rank_status or '僅供觀察' }}</p>
+        <p class="mainrisk">風險說明：{{ r.reference_warnings|join('；') if r.reference_warnings else '仍可能虧損，依自身風險承受度評估。' }}</p>
+        <details class="fold fold-inline"><summary>配置試算資格 <small>{{ '通過' if r.trade_eligible and not capital_policy.blocked else '尚未通過 · 不影響排名' }}</small></summary>
+          <p class="research-note">{{ r.rank_status or '僅供觀察' }}。{{ capital_policy.reason }}</p>
+          <button type="button" class="pick" data-pick data-code="{{ r.code }}" aria-pressed="false" {% if capital_policy.blocked or not r.trade_eligible %}disabled title="目前僅供研究，不允許配置"{% endif %}>＋ 選入試算</button>
+        </details>
         {% if r.trade_plan %}
         <details class="fold fold-inline"><summary>交易計畫 <small>{{ r.trade_plan.status }}</small></summary>
           <div class="plan-summary"><b>開盤進場上限：{{ r.trade_plan.entry_ceiling if r.trade_plan.entry_ceiling is not none else '資料不足' }} 元</b>；超價跳過該次訊號，不假設盤中回落就能買到。</div>
@@ -1442,7 +1459,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
     </details>
   {% endmacro %}
-  <section id="research-rank" aria-label="股票研究排名">
+  <section id="research-rank" aria-label="明日參考排名">
     {% for r in rows %}{{ stock_card(r) }}{% endfor %}
   </section>
   <button type="button" class="more" id="show-more" hidden></button>
@@ -2005,12 +2022,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var splitBtns = Array.prototype.slice.call(document.querySelectorAll(".split"));
   var modeBtns = Array.prototype.slice.call(document.querySelectorAll(".mode-btn"));
   var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
+  var rankSortBtns = Array.prototype.slice.call(document.querySelectorAll(".rank-sort"));
   var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
 
   var INITIAL_VISIBLE = {{ initial_visible }};
   var moreBtn = document.getElementById("show-more");
   var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all",
-             picks: [], limit: INITIAL_VISIBLE, q: "" };
+             picks: [], limit: INITIAL_VISIBLE, q: "", sort: "risk" };
+  var orderedBy = null;
 
   function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
   function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -2020,6 +2039,21 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     list.forEach(function (b) {
       b.setAttribute("aria-pressed", b.dataset[attr] === value ? "true" : "false");
     });
+  }
+
+  function orderReferenceCards() {
+    if (orderedBy === st.sort) return;
+    var key = st.sort === "technical" ? "technicalRank" : "researchRank";
+    var list = document.getElementById("research-rank");
+    cards.sort(function(a,b){return Number(a.dataset[key])-Number(b.dataset[key]);});
+    cards.forEach(function(c){
+      c.dataset.rank = c.dataset[key];
+      var rank = c.querySelector(".rank");
+      rank.textContent = c.dataset.rank;
+      rank.classList.toggle("top", Number(c.dataset.rank) <= 3);
+      list.appendChild(c);
+    });
+    orderedBy = st.sort;
   }
 
   /* ---- 決定哪些卡片看得到：類別 + 買不買得起 ------------------------------
@@ -2107,6 +2141,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       return;
     }
     var picks=shown.filter(function(c){return c.dataset.eligible === "1" && (st.mode !== "pick" || st.picks.indexOf(c.dataset.code)>=0);});
+    // Display-only technical sorting must never change the strategy allocation.
+    picks.sort(function(a,b){return Number(a.dataset.researchRank)-Number(b.dataset.researchRank);});
     picks=picks.slice(0,Math.min(st.mode === "pick" ? {{ paper_max_positions }} : st.splits,{{ paper_max_positions }}));
     if (!st.budget || st.budget<=0) {resultEl.textContent="填入預算，依計畫風險額度試算部位。";return;}
     if (!picks.length) {resultEl.textContent="目前沒有符合條件的可配置標的。";return;}
@@ -2126,6 +2162,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   /* ---- 重畫全部 ---- */
   function render() {
+    orderReferenceCards();
+    press(rankSortBtns, "sort", st.sort);
     var budgetSummary = document.getElementById("budget-summary");
     if (budgetSummary) budgetSummary.textContent = st.budget ? money(st.budget) + (st.mode === "pick" ? " · 自己挑" : " · 自動分配") : "選填";
     press(modeBtns, "mode", st.mode);
@@ -2142,7 +2180,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     pickBtns.forEach(function (b) {
       var on = st.picks.indexOf(b.dataset.code) >= 0;
       b.setAttribute("aria-pressed", on ? "true" : "false");
-      b.textContent = on ? "✓ 已選入" : "＋ 選入";
+      b.textContent = on ? "✓ 已選入試算" : "＋ 選入試算";
     });
 
     var v = visible();
@@ -2151,7 +2189,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
-      var head = bits.length ? bits.join("、") + "：" : "研究排名：";
+      var orderLabel = st.sort === "technical" ? "技術機會排名" : "風險報酬排名";
+      var head = orderLabel + (bits.length ? " · " + bits.join("、") : "") + "：";
       var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
       countEl.textContent = head + tail + best;
@@ -2164,6 +2203,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     save("splits", String(st.splits));
     save("mode", st.mode);
     save("type", st.type);
+    save("reference-sort-v1", st.sort);
     save("picks", JSON.stringify({ date: TRADE_DATE, codes: st.picks }));
   }
 
@@ -2211,6 +2251,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       st.type = b.dataset.type; st.limit = INITIAL_VISIBLE; render();
     });
   });
+  rankSortBtns.forEach(function(b){
+    b.addEventListener("click",function(){
+      st.sort = b.dataset.sort;
+      st.limit = st.q ? cards.length : INITIAL_VISIBLE;
+      render();
+    });
+  });
   pickClearBtn.addEventListener("click", function () {
     st.picks = []; st.mode = "auto"; render();
   });
@@ -2243,6 +2290,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   if (savedMode === "auto" || savedMode === "pick") st.mode = savedMode;
   var savedType = load("type");
   if (savedType) st.type = savedType;
+  var savedSort = load("reference-sort-v1");
+  if (savedSort === "technical") st.sort = savedSort;
   try {
     var pk = JSON.parse(load("picks") || "{}");
     // 只還原同一個交易日的選擇，換一天就重來

@@ -209,7 +209,7 @@ class PublicationAndPaperTests(unittest.TestCase):
         payload["meta"]["has_winrate"] = False
         html = render.render_html(payload)
         self.assertIn("淨利至少 +3%", html)
-        self.assertIn("今日沒有符合候選條件的標的", html)
+        self.assertIn("參考排名仍完整保留", html)
         self.assertNotIn("<em>歷史勝率</em>", html)
 
     def test_template_compiles(self):

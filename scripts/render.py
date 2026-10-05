@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -79,6 +80,43 @@ def _groups(rows: list) -> list:
     return [{"name": g, "count": n} for g, n in head + tail]
 
 
+def reference_rows(rows: list[dict], data_date: str | None = None) -> list[dict]:
+    """Prepare an unfiltered reference view without changing strategy records."""
+    result = [dict(row) for row in rows]
+
+    def technical_key(row):
+        value = row.get("score")
+        known = isinstance(value, (int, float)) and math.isfinite(value)
+        return (not known, -value if known else 0, row.get("code", ""))
+
+    for rank, row in enumerate(sorted(result, key=technical_key), 1):
+        row["technical_rank"] = rank
+    for row in result:
+        warnings = []
+        if data_date and row.get("quote_date") != data_date:
+            warnings.append("行情日期不一致，價格需更新確認")
+        if row.get("hist_risk_reward") is None:
+            warnings.append("歷史統計不足，達標與虧損機率未知")
+        else:
+            if row["hist_risk_reward"] <= 0:
+                warnings.append("歷史風險報酬分不高於 0")
+            if row.get("hist_expectancy") is not None and row["hist_expectancy"] <= 0:
+                warnings.append("歷史平均淨報酬不高於 0")
+            if any(row.get(k) is None or row[k] <= 0 for k in ("hist_ev_lower", "hist_risk_reward_lower")):
+                warnings.append("統計保守估計未轉正")
+        if row.get("main_risk"):
+            warnings.append(row["main_risk"])
+        elif row.get("momentum_tier", 2) >= 2:
+            warnings.append("技術轉弱或追高風險")
+        # Keep one statistical warning and the current technical risk visible.
+        brief = warnings[:1]
+        if row.get("main_risk") and row["main_risk"] not in brief:
+            brief.append(row["main_risk"])
+        row["reference_warnings"] = warnings
+        row["reference_risk"] = "；".join(brief) or "仍有價格波動與跳空風險"
+    return result
+
+
 def render_html(payload: dict) -> str:
     import ranking
     policy = strategy.capital_policy()
@@ -98,6 +136,7 @@ def render_html(payload: dict) -> str:
         lstrip_blocks=True,
     )
     tpl = env.get_template("dashboard.html.j2")
+    rows = reference_rows(payload["rows"], payload["meta"].get("data_date"))
     return tpl.render(
         meta=payload["meta"],
         index=payload.get("index") or None,
@@ -146,7 +185,8 @@ def render_html(payload: dict) -> str:
         paper_max_hold=C.PAPER_MAX_HOLD_DAYS,
         smooth_wins=C.SMOOTH_WINS,
         smooth_n=C.SMOOTH_N,
-        rows=payload["rows"],
+        rows=rows,
+        positive_risk_reward_count=sum(r.get("hist_risk_reward") is not None and r["hist_risk_reward"] > 0 for r in rows),
         segments=SEGMENTS,
         star_rows=STAR_ROWS,
         hide_unaffordable=C.HIDE_UNAFFORDABLE,
