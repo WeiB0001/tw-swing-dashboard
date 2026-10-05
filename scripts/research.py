@@ -24,7 +24,8 @@ def freeze(rows, day, published_at):
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
     keys = ("code", "name", "group", "close", "quote_date", "final_rank", "hist_risk_reward",
-            "hist_expectancy", "hist_samples", "hist_signal_dates", "research_eligible", "trade_eligible")
+            "hist_expectancy", "hist_samples", "hist_signal_dates", "research_eligible", "trade_eligible",
+            "ma20", "entry_plan", "overseas_context", "overseas_rank", "overseas_hist_score", "overseas_hist_source")
     record = {"strategy": strategy.contract(), "data_date": day, "published_at": published_at,
               "rows": [{k:r.get(k) for k in keys} for r in rows]}
     # The first publication for this date/version is immutable, including reruns.
@@ -47,7 +48,9 @@ def update_forward(rows, day, published_at, histories, index_close=None):
     candidates = [{**r, "research_eligible": True} for r in record["rows"]
                   if r.get("hist_risk_reward") is not None and r.get("quote_date") == day]
     streams = {"composite": candidates,
-               "ev_only": sorted(candidates, key=lambda r: -(r.get("hist_expectancy") or 0))}
+               "ev_only": sorted(candidates, key=lambda r: -(r.get("hist_expectancy") or 0)),
+               "overseas": sorted([r for r in candidates if r.get("overseas_rank") is not None],
+                                  key=lambda r: r["overseas_rank"])}
     for name, ordered in streams.items():
         book, stats = paper_target.update(state["books"].get(name, {}), ordered[:C.WF_TOP_N], day,
             index_close, histories, record["published_at"], research=True)
@@ -107,3 +110,25 @@ def exit_study(signals, histories):
     return {"variants": output, "auto_selected": False, "signals": len(signals),
             "basis": "固定同一組有歷史統計的樣本外前 3 名與進場日（含未過交易資格者），僅改出場；不是各方案重新訓練後的獨立驗證。",
             "note": "所有方案一併列出，不依本次歷史最佳值自動切換；下一次變更須另用新資料驗證。"}
+
+
+def entry_study(signals, histories):
+    import backtest
+    variants = []
+    for guard, label in ((False, "無進場上限"), (True, "防追高上限（目前設定）")):
+        outcomes, unfilled, skipped, unresolved = [], 0, 0, 0
+        for s in signals:
+            df = histories[s["code"]]
+            pos = df.index.get_indexer([pd.Timestamp(s["date"])])[0] + 1
+            ex = execution.simulate(df, pos, s["code"], guard=guard)
+            if ex and ex.get("closed"):
+                outcomes.append({"date": s["date"], "exit": ex})
+            elif ex and ex.get("entered") is False:
+                unfilled += 1
+                skipped += bool(ex.get("entry_skipped"))
+            else:
+                unresolved += 1
+        variants.append({"label": label, "guard": guard, "unfilled": unfilled, "skipped": skipped,
+                         "unresolved": unresolved, **backtest._pack(outcomes)})
+    return {"signals": len(signals), "variants": variants, "auto_selected": False,
+            "basis": "固定同一組樣本外研究前 3 名，只切換進場上限；統計限已成交結算，跳過另列。不是兩套重新訓練策略的獨立勝負驗證。"}

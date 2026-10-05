@@ -790,6 +790,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <div class="fold-body">
     <section class="us">
       <h3>美股連動</h3>
+      <p class="research-note">即時資訊供觀察；主排名未加上海外分數。歷史對照見「海外排名研究」。</p>
       {% if us.last_night %}
       <div class="us-grid">
         {% for m in us.last_night %}
@@ -977,7 +978,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </table>
     <div class="decile-note">
       依<b>同版本已發布排名</b>與後續價格模擬，非實際成交；同一訊號日去重，且整批訊號完整經過持有上限後才納入。
-      {% if livecheck.pending %}（另有 {{ livecheck.pending }} 筆還沒走完 {{ livecheck.exit_max_days }} 天，未列入）{% endif %}
+      {% if livecheck.unfilled %}未成交／超價跳過 {{ livecheck.unfilled }} 筆。{% endif %}
+      {% if livecheck.pending %}（另有 {{ livecheck.pending }} 筆未結算或還沒走完 {{ livecheck.exit_max_days }} 天，未列入）{% endif %}
     </div>
   </div>
   {% endif %}
@@ -1011,7 +1013,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
   </details>
   <details class="fold" id="risk-research">
-    <summary>風險與策略研究 <small>部位試算 · 出場比較 · 資金績效</small></summary>
+    <summary>風險與策略研究 <small>防追高 · 海外比較 · 資金績效</small></summary>
     <div class="fold-body">
     <details class="fold fold-inline" id="risk-calculator">
       <summary>風險部位試算 <small>假設情境，不產生配置或委託</small></summary>
@@ -1025,6 +1027,26 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <p class="research-note">含買進手續費、最低費用及滑價。淨損幅度另加 {{ risk_settings.buffer }} 個百分點緩衝，並套用整體風險 {{ risk_settings.total }}%、單一標的 {{ max_position_pct }}%、同產業 {{ risk_settings.sector }}% 上限。此處假設目前空手；既有持倉會減少可用額度。跳空、停牌時實際虧損可超過試算值。</p>
     </details>
     {% set wf = backtest.walk_forward if backtest and backtest.walk_forward else none %}
+    {% if wf and wf.entry_study %}
+    <details class="fold fold-inline" id="entry-comparison">
+      <summary>防追高比較 <small>{{ wf.entry_study.signals }} 個相同訊號</small></summary>
+      <p class="research-note">{{ wf.entry_study.basis }}</p>
+      <div class="research-table"><table><thead><tr><th>方案</th><th>已結算</th><th>平均淨報酬</th><th>達標率</th><th>虧損率</th><th>最差 5% 平均</th><th>超價跳過</th><th>其他未成交／未結算</th></tr></thead><tbody>
+      {% for v in wf.entry_study.variants %}<tr><td>{{ v.label }}</td><td>{{ v.samples }}</td><td>{{ '%+.2f%%'|format(v.expectancy) if v.expectancy is not none else '—' }}</td><td>{{ v.success_rate|default('—') }}%</td><td>{{ v.loss_rate if v.loss_rate is not none else '—' }}%</td><td>{{ '%.2f%%'|format(v.tail_mean_5pct) if v.tail_mean_5pct is not none else '—' }}</td><td>{{ v.skipped }}</td><td>{{ v.unfilled - v.skipped }}／{{ v.unresolved }}</td></tr>{% endfor %}
+      </tbody></table></div>
+    </details>
+    {% endif %}
+    {% if wf and wf.overseas_study %}{% set ov = wf.overseas_study %}
+    <details class="fold fold-inline" id="overseas-comparison">
+      <summary>海外排名研究 <small>{{ ov.coverage_pct }}% 日期有可比資料 · 尚未啟用</small></summary>
+      <p class="research-note">{{ ov.status }}。{{ ov.basis }}</p>
+      <div class="research-table"><table><thead><tr><th>研究組</th><th>已結算</th><th>平均淨報酬</th><th>達標率</th><th>虧損率</th><th>最差 5% 平均</th><th>未成交／未結算</th></tr></thead><tbody>
+      {% for v in ov.variants %}<tr><td>{{ v.label }}</td><td>{{ v.samples }}</td><td>{{ '%+.2f%%'|format(v.expectancy) if v.expectancy is not none else '—' }}</td><td>{{ v.success_rate|default('—') }}%</td><td>{{ v.loss_rate if v.loss_rate is not none else '—' }}%</td><td>{{ '%.2f%%'|format(v.tail_mean_5pct) if v.tail_mean_5pct is not none else '—' }}</td><td>{{ v.unfilled }}／{{ v.unresolved }}</td></tr>{% endfor %}
+      </tbody></table></div>
+      <p class="research-note">可比 {{ ov.matched_dates }}/{{ ov.total_dates }} 日；海外分組樣本不足回退 {{ ov.fallback_picks }} 次。{{ ov.paired_dates }} 個日期配對差 {{ '%+.2f%%'|format(ov.paired_ev_lift) if ov.paired_ev_lift is not none else '—' }}，估計下緣 {{ '%+.2f%%'|format(ov.paired_ev_lift_lower) if ov.paired_ev_lift_lower is not none else '資料不足' }}。</p>
+      <details class="fold fold-inline"><summary>資料與判定方式</summary><p class="research-note">電子類使用 Nasdaq 與費半近 5 日方向，其他類使用 S&amp;P 500；VIX ≥ 25 列為逆風。以相同海外狀態、類別與技術分數的成熟歷史統計評分，條件不足回退原統計。這組門檻事先固定，沒有挑本次表現最佳的參數。</p><p class="research-note">{{ ov.note }}</p></details>
+    </details>
+    {% endif %}
     {% if wf and wf.exit_study %}
     <details class="fold fold-inline" id="exit-comparison">
       <summary>出場規則比較 <small>{{ wf.exit_study.signals }} 個相同進場訊號</small></summary>
@@ -1047,10 +1069,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% endif %}
     {% if research_forward %}
     <details class="fold fold-inline" id="forward-research">
-      <summary>發布後研究追蹤 <small>原始排名固定保存</small></summary>
+      <summary>發布後研究追蹤 <small>原始排名、買價上限與海外時間固定保存</small></summary>
       <p class="research-note">從 {{ research_forward.books.composite.forward_start }} 開始，取有足夠歷史統計的前 3 名作研究模擬，包含未過交易資格者，不開放配置。第一份發布紀錄不因重跑而覆寫，沒有事後補進場。<a href="{{ research_forward.snapshot }}">查看本次原始紀錄</a></p>
       <div class="research-table"><table><thead><tr><th>研究組</th><th>帳戶報酬</th><th>最大回落</th><th>已平倉</th><th>待進場</th><th>持倉</th></tr></thead><tbody>
-      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬')] %}{% set book = research_forward.books[key] %}<tr><td>{{ label }}</td><td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.pending }}</td><td>{{ book.positions|length }}</td></tr>{% endfor %}
+      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬'),('overseas','海外分組研究')] %}{% set book = research_forward.books.get(key) or research_forward.books.composite %}<tr><td>{{ label }}</td><td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.pending }}</td><td>{{ book.positions|length }}</td></tr>{% endfor %}
       </tbody></table></div>
       <p class="research-note">尚無交易或短期獲利均不代表策略有效；持續累積新資料，並保留虧損、未成交與策略版本。</p>
     </details>
@@ -1058,8 +1080,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
   </details>
   <div class="section-head">
-    <h2>股票研究排名</h2>
-    <span>依綜合分數排序</span>
+    <h2>可進場候選</h2>
+    <span>{{ eligible_count }} 檔 · 依綜合分數排序</span>
   </div>
 
   <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
@@ -1131,8 +1153,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="band-note" id="band-count"></div>
   </section>
 
-  {% if rows %}
-    {% for r in rows %}
+  {% macro stock_card(r) %}
     <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
@@ -1246,6 +1267,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <p class="mainrisk">研究狀態：{{ r.rank_status or '僅供觀察' }}</p>
         {% if r.trade_plan %}
         <details class="fold fold-inline"><summary>交易計畫 <small>{{ r.trade_plan.status }}</small></summary>
+          <div class="plan-summary"><b>開盤進場上限：{{ r.trade_plan.entry_ceiling if r.trade_plan.entry_ceiling is not none else '資料不足' }} 元</b>；超價跳過該次訊號，不假設盤中回落就能買到。</div>
+          <p class="research-note">取訊號收盤 +{{ entry_settings.premium }}% 與訊號 MA20 +{{ entry_settings.bias }}% 的較低者，再扣回買進滑價；這是研究設定，尚未證明最佳。</p>
           <div class="plan-summary">以 {{ r.trade_plan.reference_price }} 元參考進場：獲利觸發價約 <b>{{ r.trade_plan.target_trigger }}</b> 元；停損觸發價約 <b>{{ r.trade_plan.stop_trigger }}</b> 元。預定最晚第 {{ r.trade_plan.max_days }} 日開盤退出，無法成交時延後。</div>
           <p class="research-note">{{ r.trade_plan.note }} 單筆計畫風險為本金 {{ r.trade_plan.risk_per_trade_pct }}%，另含 {{ r.trade_plan.gap_buffer_pct }} 個百分點緩衝；可在上方「風險部位試算」帶入自己的金額。</p>
         </details>
@@ -1296,6 +1319,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
         {% endif %}
 
+        {% if r.overseas_label %}
+        <details class="fold fold-inline"><summary>海外研究 <small>{{ r.overseas_label }} · 不影響主排名</small></summary>
+          <p class="research-note">{% if r.overseas_rank %}研究名次 {{ r.overseas_rank }}，綜合分數 {{ r.overseas_hist_score }}；{{ '採海外分組統計' if r.overseas_hist_source == 'overseas' else '海外條件樣本不足，回退原統計' }}。{% else %}缺少完整海外行情或成熟統計，暫無研究名次。{% endif %}</p>
+          {% if r.overseas_context %}<p class="research-note">{{ r.overseas_context.basis }}。使用美股日期：{% for key,date in r.overseas_context.dates.items() %}{{ key }} {{ date }}{{ '；' if not loop.last }}{% endfor %}</p>{% endif %}
+        </details>
+        {% endif %}
         {% if r.overseas_note %}
         <div class="ov">🌐 {{ r.overseas_note }}</div>
         {% endif %}
@@ -1407,27 +1436,28 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           機會分數組成：
           {% for k, label in segments %}
           <b>{{ label }}</b> {{ '%.1f'|format(r.breakdown[k].points) }}/{{ r.breakdown[k].max }}{{ '　' if not loop.last }}
-          {% endfor %}
+                {% endfor %}
         </div>
       </div>
     </details>
-    {% endfor %}
-
-    <button type="button" class="more" id="show-more" hidden></button>
-  {% else %}
-    <div class="empty">
-      <b>今天沒有達標的標的</b>
-      掃描了 {{ meta.scanned_count }} 檔，沒有任何一檔同時滿足超賣與量能條件。
-      分數門檻設在 {{ meta.min_score }} 分，寧可空手也不硬找。明天收盤後會再更新。
+  {% endmacro %}
+  <section id="candidate-list" aria-label="可進場候選">
+    {% for r in rows if r.trade_eligible and not capital_policy.blocked %}{{ stock_card(r) }}{% endfor %}
+    {% if not eligible_count %}
+    <div class="empty" id="candidate-empty"><b>目前沒有可進場候選</b>
+      {{ capital_policy.reason if capital_policy.blocked else '目前沒有同時通過統計、技術風險與行情日期檢查的標的。' }}
     </div>
-  {% endif %}
-
-  <div class="empty" id="band-empty" style="display:none">
-    <b>這個條件下沒有符合的標的</b>
-    掃描到的標的裡，沒有一檔同時符合你選的類別與預算。可以提高預算、換個類別看看，或明天再來。
-    若想從源頭就只掃低價股，把 <code>scripts/config.py</code> 的 <code>MAX_CLOSE_PRICE</code>
-    設成你的每股上限即可。
-  </div>
+    {% endif %}
+  </section>
+  <details class="fold" id="research-rank">
+    <summary>展開其餘研究排名 <small>{{ rows|length - eligible_count }} 檔 · 僅供觀察</small></summary>
+    <div class="fold-body">
+      <p class="research-note">保留全榜原始名次；排名靠前仍可能追高或未通過驗證。展開卡片查看進場上限與海外研究。</p>
+      {% for r in rows if not r.trade_eligible or capital_policy.blocked %}{{ stock_card(r) }}{% endfor %}
+    </div>
+  </details>
+  <button type="button" class="more" id="show-more" hidden></button>
+  <div class="empty" id="band-empty" style="display:none">目前篩選條件下沒有符合的標的。</div>
 
   {% if portfolio and portfolio.days %}
   <details class="fold" id="portfolio-details">
@@ -1973,6 +2003,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var ODD_LOT = {{ 'true' if allow_odd_lot else 'false' }};
   var HIDE_UNAFFORDABLE = {{ 'true' if hide_unaffordable else 'false' }};
 
+  var researchFold = document.getElementById("research-rank");
   var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
   var budgetInput = document.getElementById("budget-input");
   var clearBtn = document.getElementById("budget-clear");
@@ -1988,6 +2019,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
   var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
 
+  if (researchFold) researchFold.addEventListener("toggle", function () { st.limit = st.q ? cards.length : INITIAL_VISIBLE; render(); });
   var INITIAL_VISIBLE = {{ initial_visible }};
   var moreBtn = document.getElementById("show-more");
   var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all",
@@ -2011,6 +2043,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   function visible() {
     var matched = [], shown = [];
     cards.forEach(function (c) {
+      var okScope = c.dataset.eligible === "1" || (researchFold && researchFold.open);
       var okType = st.type === "all" || c.dataset.type === st.type;
       var lot = parseInt(c.dataset.lot, 10) || 0;
       var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
@@ -2022,7 +2055,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
                    (sec ? sec.textContent : "")).toLowerCase();
         okFind = hay.indexOf(st.q) >= 0;
       }
-      if (okType && okBudget && okFind) matched.push(c);
+      if (okScope && okType && okBudget && okFind) matched.push(c);
       else { c.style.display = "none"; c.open = false; }
     });
     matched.forEach(function (c, i) {
@@ -2132,12 +2165,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
-      var head = bits.length ? bits.join("、") + "：" : "全部：";
+      var head = bits.length ? bits.join("、") + "：" : (researchFold && researchFold.open ? "候選與研究：" : "可進場候選：");
       var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
       countEl.textContent = head + tail + best;
     }
-    if (emptyEl) emptyEl.style.display = v.matched.length ? "none" : "block";
+    if (emptyEl) emptyEl.style.display = v.matched.length || (!st.q && !st.budget && st.type === "all") ? "none" : "block";
 
     allocate(v.matched);
 
@@ -2179,6 +2212,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var findClear = document.getElementById("find-clear");
   if (findEl) findEl.addEventListener("input", function () {
     st.q = findEl.value.trim().toLowerCase();
+    if (st.q && researchFold) researchFold.open = true;
     st.limit = st.q ? cards.length : INITIAL_VISIBLE;   // 搜尋時一次找完，不用按「顯示更多」
     render();
   });

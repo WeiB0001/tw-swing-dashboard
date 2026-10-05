@@ -80,7 +80,53 @@ def close_decision(entry, close, held, shares=None, code="", stop_pct=None):
     return None
 
 
-def simulate(df, entry_pos, code="", stop_pct="default", require_mature=True):
+def make_entry_plan(reference, ma20=None):
+    """Freeze the ceiling at signal time; the fill must include adverse slippage."""
+    try:
+        reference = float(reference)
+        if not math.isfinite(reference) or reference <= 0:
+            raise ValueError()
+        ceiling = reference * (1 + C.ENTRY_MAX_PREMIUM_PCT / 100)
+        moving = float(ma20) if ma20 is not None else None
+        if moving is not None:
+            if not math.isfinite(moving) or moving <= 0:
+                raise ValueError()
+            ceiling = min(ceiling, moving * (1 + C.ENTRY_MAX_MA20_BIAS_PCT / 100))
+        return {"available": True, "reference_price": reference, "ma20": moving,
+                "max_fill_price": ceiling,
+                "max_open_price": ceiling / (1 + C.SLIPPAGE_PCT / 200),
+                "max_premium_pct": C.ENTRY_MAX_PREMIUM_PCT,
+                "max_ma20_bias_pct": C.ENTRY_MAX_MA20_BIAS_PCT}
+    except (TypeError, ValueError):
+        return {"available": False, "reason": "訊號參考價格不足，不進場"}
+
+
+def history_entry_plan(df, signal_pos):
+    if signal_pos < 0:
+        return None  # Low-level execution fixtures can start at an already chosen entry.
+    row = df.iloc[signal_pos]
+    moving = row.get("ma20")
+    if moving is None and signal_pos >= 19:
+        moving = df["close"].iloc[signal_pos-19:signal_pos+1].mean(skipna=False)
+    return make_entry_plan(row.get("close"), moving)
+
+
+def check_entry_price(open_price, plan):
+    if not plan or not plan.get("available"):
+        return "訊號參考價格不足，不進場"
+    try:
+        fill = float(open_price) * (1 + C.SLIPPAGE_PCT / 200)
+        if not math.isfinite(fill) or fill <= 0:
+            return "進場價格無效"
+        if fill > plan["max_fill_price"] + 1e-9:
+            return "超過進場上限，不追價"
+    except (KeyError, TypeError, ValueError):
+        return "訊號參考價格不足，不進場"
+    return None
+
+
+def simulate(df, entry_pos, code="", stop_pct="default", require_mature=True,
+             entry_plan=None, guard=True):
     if entry_pos < 0 or entry_pos >= len(df):
         return None
     horizon = C.EXIT_MAX_DAYS + C.EXIT_FILL_GRACE_DAYS
@@ -93,6 +139,12 @@ def simulate(df, entry_pos, code="", stop_pct="default", require_mature=True):
     if not tradable(first, "buy", previous):
         return {"closed": False, "entered": False, "reason": "進場無法成交"}
     entry = float(first["open"])
+    frozen_plan = entry_plan if entry_plan is not None else history_entry_plan(df, entry_pos-1)
+    if guard and (entry_pos > 0 or entry_plan is not None):
+        rejected = check_entry_price(entry, frozen_plan)
+        if rejected:
+            return {"closed": False, "entered": False, "entry_skipped": True,
+                    "reason": rejected, "entry_plan": frozen_plan}
     shares = max(1, int(C.REFERENCE_NOTIONAL_TWD / entry))
     pending, trigger_date, worst, delay = None, None, 0., 0
     for held, (date, bar) in enumerate(window.iterrows(), 1):

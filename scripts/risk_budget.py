@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import config as C
+import math
 import execution
 
 
@@ -38,7 +39,10 @@ def attach_plans(rows):
             continue
         code = r["code"]
         shares = max(1, int(C.REFERENCE_NOTIONAL_TWD / px))
+        r["entry_plan"] = execution.make_entry_plan(px, r.get("ma20"))
         r["trade_plan"] = {
+            "entry_ceiling": (math.floor(r["entry_plan"]["max_open_price"] * 100) / 100
+                              if r["entry_plan"].get("available") else None),
             "reference_price": px,
             "target_trigger": round(execution.price_for_net(px, C.EXIT_MIN_PROFIT, shares, code), 2),
             "stop_trigger": round(execution.price_for_net(px, -C.STOP_LOSS_NET_PCT, shares, code), 2) if C.STOP_LOSS_NET_PCT else None,

@@ -656,6 +656,13 @@ def _load_tuned():
 
 
 TUNED = {}  # 舊調校目標為隔日報酬，不套用到淨利達標策略
+
+# Frozen research settings; never selected by the best result in the current test.
+ENTRY_MAX_PREMIUM_PCT = 2.0
+ENTRY_MAX_MA20_BIAS_PCT = 8.0
+OVERSEAS_RESEARCH_VERSION = "asof-close-regime-v1"
+OVERSEAS_MAX_AGE_DAYS = 4
+OVERSEAS_VIX_RISK_LEVEL = 25.0
 for _k, _v in TUNED.items():
     if _k in globals() and isinstance(_v, (int, float)):
         globals()[_k] = _v

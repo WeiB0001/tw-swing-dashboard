@@ -17,7 +17,7 @@ import execution
 
 
 def row(code, ev, success=60.):
-    return {"code": code, "name": code, "hist_samples": 200, "hist_expectancy": ev,
+    return {"code": code, "name": code, "close": 100., "ma20": 100., "hist_samples": 200, "hist_expectancy": ev,
             "hist_success": success, "hist_success_lower": success - 10,
             "hist_pf": 2., "hist_ev_lower": ev - .5, "hist_signal_dates": 30,
             "hist_risk_reward": ev, "hist_risk_reward_lower": ev - .5,

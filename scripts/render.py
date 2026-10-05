@@ -112,6 +112,7 @@ def render_html(payload: dict) -> str:
                        "fee": C.BROKER_FEE_PCT, "minimum_fee": C.MIN_BROKER_FEE_TWD,
                        "slippage": C.SLIPPAGE_PCT, "stock_tax": C.STOCK_SELL_TAX_PCT,
                        "etf_tax": C.ETF_SELL_TAX_PCT, "reference": C.REFERENCE_NOTIONAL_TWD},
+        entry_settings={"premium": C.ENTRY_MAX_PREMIUM_PCT, "bias": C.ENTRY_MAX_MA20_BIAS_PCT},
         capital_policy=policy,
         no_loss_required=C.REQUIRE_NO_LOSS,
         loss_aversion=C.LOSS_AVERSION,

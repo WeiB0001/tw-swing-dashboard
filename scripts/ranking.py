@@ -5,7 +5,7 @@ import config as C
 import strategy
 
 
-def attach(rows: list[dict], tables: dict, regime: str = "sideways") -> None:
+def attach(rows: list[dict], tables: dict, regime: str = "sideways", use_overseas=False) -> None:
     baseline = (tables.get("overall") or {}).get("success_rate", 0) or 0
     for r in rows:
         for key in list(r):
@@ -19,6 +19,8 @@ def attach(rows: list[dict], tables: dict, regime: str = "sideways") -> None:
             ("pattern", tables.get("pattern_buckets", [])),
             ("bucket", tables.get("score_buckets", [])),
         ]
+        if use_overseas:
+            candidates.insert(0, ("overseas", tables.get("overseas_buckets", [])))
         for source, buckets in candidates:
             hit = next((b for b in buckets
                         if b["lo"] <= r["score"] < b["hi"]
@@ -27,7 +29,10 @@ def attach(rows: list[dict], tables: dict, regime: str = "sideways") -> None:
                         and b.get("ev_lower") is not None
                         and b.get("risk_reward_lower") is not None
                         and b.get("risk_reward_score") is not None
-                        and (source == "bucket" or b.get("pattern") == r["kind"])
+                        and (source in ("bucket", "overseas") or b.get("pattern") == r["kind"])
+                        and (source != "overseas" or (b.get("overseas_group") == r.get("overseas_group")
+                             and b.get("overseas_state") == r.get("overseas_state")
+                             and r.get("overseas_context", {}).get("available")))
                         and (source != "regime" or b.get("regime") == r.get("regime", regime))), None)
             if hit is None:
                 continue

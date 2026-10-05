@@ -170,6 +170,7 @@ class PublicationAndPaperTests(unittest.TestCase):
         h = mature([104.])
         pf = {"strategy": strategy.contract(), "cash": 100000., "positions": [],
               "pending": [{"code": "A", "name": "A", "signal_date": "2026-01-02",
+                           "entry_plan": execution.make_entry_plan(100., 100.),
                            "published_at": "2026-01-02T16:00:00+08:00", "budget": 100000., "entry_approved": True}],
               "trades": [], "equity": [], "start_index": None, "last_date": None}
         state, summary = paper_target.update(pf, [], "2026-01-16", 100., {"A": h},

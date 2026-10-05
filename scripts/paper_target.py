@@ -117,6 +117,11 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None, capi
             sector = sum(p.get("entry_cash", 0) for p in pf["positions"] if p.get("group") == group)
             risk = sum(p.get("planned_risk", 0) for p in pf["positions"])
             px = float(bar["open"])
+            rejected = execution.check_entry_price(px, order.get("entry_plan"))
+            if rejected:
+                pf["skipped"].append({"code": order["code"], "date": day, "reason": rejected,
+                                      "open": px, "entry_plan": order.get("entry_plan")})
+                continue
             size = risk_budget.position_size(equity, min(pf["cash"], order.get("budget", pf["cash"])), px,
                                              order["code"], committed_risk=risk, sector_value=sector)
             if not size["shares"] or len(pf["positions"]) >= C.PAPER_MAX_POSITIONS:
@@ -153,6 +158,7 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None, capi
                 continue
             pf["pending"].append({"code": row["code"], "name": row.get("name", ""),
                 "group": row.get("group") or "其他", "signal_date": trade_date,
+                "entry_plan": row.get("entry_plan") or execution.make_entry_plan(row.get("close"), row.get("ma20")),
                 "entry_approved": True, "published_at": now.isoformat()})
             held_codes.add(row["code"])
             slots -= 1

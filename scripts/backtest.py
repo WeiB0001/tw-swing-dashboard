@@ -31,6 +31,7 @@ import strategy
 import ranking
 import risk_stats
 import execution
+import overseas_research
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -128,7 +129,7 @@ def load_regimes(demo: bool) -> pd.Series | None:
 
 
 def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
-                 regimes: pd.Series | None = None) -> dict:
+                 regimes: pd.Series | None = None, overseas_histories=None) -> dict:
     max_hold = max(max(C.BACKTEST_HOLD_DAYS), C.EXIT_MAX_DAYS + C.EXIT_FILL_GRACE_DAYS)
     cost = C.TOTAL_COST_PCT   # 手續費＋證交稅＋滑價
     cooldown = C.SIGNAL_COOLDOWN_DAYS
@@ -159,7 +160,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
              str(usable[0])[:10], str(usable[-1])[:10], len(usable))
 
     audit = execution.audit(hist_map)
-    audit.update(unfilled_entries=0, unresolved_exits=0)
+    audit.update(unfilled_entries=0, unresolved_exits=0, price_guard_skips=0)
     audit["market_regime_available"] = regimes is not None
     import build as build_mod
     signals, all_signals = [], []
@@ -167,6 +168,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
 
     for n, day in enumerate(usable):
         day_rows = []
+        overseas_context = overseas_research.context_for_day(overseas_histories or {}, day)
         for code, df in frames.items():
             pos = df.index.get_indexer([day])[0]
             if pos < C.MIN_BARS - 1 or pos + max(max_hold, C.EXIT_MAX_DAYS) + 1 >= len(df):
@@ -209,6 +211,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
             if not ex or not ex.get("closed"):
                 if ex and ex.get("entered") is False:
                     audit["unfilled_entries"] += 1
+                    audit["price_guard_skips"] += bool(ex.get("entry_skipped"))
                 else:
                     audit["unresolved_exits"] += 1
                 ex = ex or {"closed": False, "reason": "資料不足"}
@@ -217,6 +220,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
             replay = build_mod.build_row(code, code, f, res)
             replay["prev_low"] = float(df["low"].iloc[pos - 1])
             replay["regime"] = reg
+            overseas_research.attach_context([replay], overseas_context)
             day_rows.append({
                 "replay": replay,
                 "exit": ex,
@@ -294,7 +298,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
                         "stock_sell_tax": C.STOCK_SELL_TAX_PCT, "etf_sell_tax": C.ETF_SELL_TAX_PCT,
                         "reference_notional": C.REFERENCE_NOTIONAL_TWD},
         "cooldown_days": cooldown,
-        "entry_rule": "發布後下一開盤進場；收盤達獲利或停損條件，下一開盤退出。第 10 日開盤預定離場；無法成交則延後並揭露。達標依實現淨利判定。",
+        "entry_rule": f"發布後下一開盤進場；買進滑價後不得超過訊號收盤 +{C.ENTRY_MAX_PREMIUM_PCT:g}% 與訊號 MA20 +{C.ENTRY_MAX_MA20_BIAS_PCT:g}% 的較低者，超價跳過。收盤觸發、次開盤退出，第 {C.EXIT_MAX_DAYS} 日開盤預定離場。達標依實現淨利判定。",
         "exit_max_days": C.EXIT_MAX_DAYS,
         "topk": stats_by_topk(signals),
         "score_buckets": stats_by_bucket(signals),
@@ -397,6 +401,7 @@ def stats_by_regime_pattern_bucket(signals: list[dict]) -> list[dict]:
 
 def calibration_tables(signals: list[dict]) -> dict:
     return {"overall": _pack(signals),
+            "overseas_buckets": overseas_research.calibration(signals),
             "regime_buckets": stats_by_regime_pattern_bucket(signals),
             "pattern_buckets": stats_by_pattern_bucket(signals),
             "score_buckets": stats_by_bucket(signals)}
@@ -428,6 +433,7 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None, his
     picked, tested, fold_stats, comparisons, success_comparisons = [], [], [], [], []
     utility_comparisons, ev_sorted_picks, matched_rank_differences = [], [], []
     observation_picks, observation_ev = [], []
+    overseas_study = {}
     for i, test_dates in enumerate(folds[1:], 1):
         prior = training_before(calibration, test_dates[0])
         if len(prior) < C.MIN_SAMPLES_SCORE:
@@ -442,6 +448,7 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None, his
             build_mod.add_final_score(rows)
             ranked = ranking.sort(rows)
             lookup = {s["code"]: s for s in source}
+            overseas_research.compare_day(overseas_study, ranked, tables, lookup, i)
             known = [r for r in ranked if r.get("hist_risk_reward") is not None]
             observation_picks.extend(lookup[r["code"]] for r in known[:C.WF_TOP_N])
             observation_ev.extend(lookup[r["code"]] for r in sorted(known, key=lambda r: -r["hist_expectancy"])[:C.WF_TOP_N])
@@ -492,10 +499,12 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None, his
     if histories is not None:
         import research
         experiments = {"exit_study": research.exit_study(observation_picks, histories),
+                       "entry_study": research.entry_study(observation_picks, histories),
                        "portfolio_replay": {"composite": research.historical_book(observation_picks, histories),
                                             "ev_only": research.historical_book(observation_ev, histories)},
                        "observation_note": "研究比較取有足夠歷史統計的前 3 名，包含未通過交易資格的標的；不可視為配置建議。"}
-    return {**experiments, "available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
+    return {**experiments, "overseas_study": overseas_research.summarize(overseas_study),
+            "available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
             "selected_signals": len(picked),
             "unfilled_entries": sum(s["exit"].get("entered") is False for s in picked),
             "unresolved_exits": sum(not s["exit"].get("closed") and s["exit"].get("entered") is not False for s in picked),
@@ -573,7 +582,8 @@ def main() -> int:
 
     hist_map = load_universe_history(args.demo)
     regimes = load_regimes(args.demo)
-    bt = run_backtest(hist_map, args.days, regimes)
+    overseas_histories = {} if args.demo else overseas_research.load_history(refresh=True)
+    bt = run_backtest(hist_map, args.days, regimes, overseas_histories)
     bt["mode"] = "demo" if args.demo else "live"
     print_report(bt, args.demo)
 

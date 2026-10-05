@@ -328,15 +328,19 @@ def run_live() -> dict:
              scanned, strong, C.WEAK_SCORE, regime)
 
     data_date = _row_data_date(rows) or _data_date(hist_map, now)
+    import overseas_research
+    overseas_context = overseas_research.context_for_day(overseas_research.load_history(refresh=True), data_date)
+    overseas_research.attach_context(rows, overseas_context)
     idx_close = (index_info or {}).get("close")
     # 用 data_date 而不是執行日：早上那班的行情日跟前一天收盤班相同，
     # tracking 會判定為同一天而不重複記錄、也不會用舊開盤價成交
     us_data = _us_snapshot()
     add_momentum(rows)
-    # Overseas/next-day tables are informational only: historical replay lacks
-    # point-in-time snapshots for those models, so they cannot alter target rank.
+    # Legacy overseas/next-day forecasts remain informational. The separately
+    # replayed overseas study never alters the main rank or entry permissions.
     add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
     rows = sort_by_final(rows)
+    overseas_research.attach_shadow(rows, (bt or {}).get("calibration", {}))
     capital_policy = ranking.apply_policy(rows, bt, data_date)
     import risk_budget
     import research
@@ -424,6 +428,7 @@ def run_live() -> dict:
         "signals": signals,
         "portfolio": portfolio,
         "research_forward": research_forward,
+        "overseas_research_context": overseas_context,
         "capital_policy": capital_policy,
         "backtest": _backtest_summary(bt),
         "livecheck": _load_livecheck(),
@@ -498,8 +503,8 @@ def add_momentum(rows: list[dict]) -> None:
     """
     動能確認（0～100）：只回答「今天有沒有出現上漲確認、有沒有追高風險」。
 
-    **不碰任何歷史模型**：EV、勝率、PF、技術分數、回測、walk-forward 全部照舊，
-    這裡只用今天的價量把標的分成三層，並在同一層內做最終排序。
+    用當下價量產生動能確認與技術風險門檻。紅燈不取得候選資格；
+    研究全榜仍依 ranking.sort 的歷史綜合分數排序，不依燈號重新排序。
 
     加分項（符合越多分數越高）：
       收盤站上基準價、量能 >= 1.0×、收盤 >= MA5、MA5 上彎、

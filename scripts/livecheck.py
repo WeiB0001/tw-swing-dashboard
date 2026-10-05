@@ -96,7 +96,7 @@ def load_prices() -> dict[str, pd.DataFrame]:
 
 
 def outcome(df: pd.DataFrame, sig_date: str, cost: float,
-            published_at: str | None = None, code="") -> dict | None:
+            published_at: str | None = None, code="", entry_plan=None) -> dict | None:
     idx = int(df.index.searchsorted(pd.Timestamp(sig_date), side="right"))
     if published_at:
         published = pd.Timestamp(published_at)
@@ -107,7 +107,10 @@ def outcome(df: pd.DataFrame, sig_date: str, cost: float,
             if market_open > published:
                 break
             idx += 1
-    return strategy.outcome(df, idx, code=code)
+    import execution
+    signal_pos = int(df.index.searchsorted(pd.Timestamp(sig_date), side="right")) - 1
+    frozen = entry_plan if entry_plan is not None else execution.history_entry_plan(df, signal_pos)
+    return strategy.outcome(df, idx, code=code, entry_plan=frozen)
 
 
 def pack(items: list[dict]) -> dict:
@@ -146,7 +149,7 @@ def run(days: int) -> dict:
         raise RuntimeError("data/history 裡沒有價格快取（*.csv）。")
 
     buckets = {label: [] for label, _, _ in GROUPS}
-    every, pending = [], 0
+    every, pending, unfilled = [], 0, 0
 
     for a in archives:
         rows = sorted(a["rows"], key=lambda r: r.get("final_rank") or r.get("rank") or 999)
@@ -154,11 +157,14 @@ def run(days: int) -> dict:
             df = prices.get(r.get("code"))
             if df is None:
                 continue
-            o = outcome(df, a["date"], C.TOTAL_COST_PCT, a["published_at"], r.get("code", ""))
+            o = outcome(df, a["date"], C.TOTAL_COST_PCT, a["published_at"], r.get("code", ""), r.get("entry_plan"))
             if o is None:
                 continue
             if not o["closed"]:
-                pending += 1
+                if o.get("entered") is False:
+                    unfilled += 1
+                else:
+                    pending += 1
                 continue          # 還沒走完 10 天的不算，避免結果被截斷偏差影響
             every.append(o)
             for label, lo, hi in GROUPS:
@@ -170,6 +176,7 @@ def run(days: int) -> dict:
         "days": len(archives),
         "period": f"{archives[0]['date']} ～ {archives[-1]['date']}",
         "pending": pending,
+        "unfilled": unfilled,
         "cost_pct": C.TOTAL_COST_PCT,
         "exit_max_days": C.EXIT_MAX_DAYS,
         "groups": {k: pack(v) for k, v in buckets.items()},

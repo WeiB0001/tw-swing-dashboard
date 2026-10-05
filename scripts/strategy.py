@@ -5,7 +5,7 @@ import math
 import config as C
 import execution
 
-VERSION = "executable-risk-v4.1"
+VERSION = "entry-context-v5"
 
 
 def contract() -> dict:
@@ -19,6 +19,13 @@ def contract() -> dict:
             "min_days": int(C.EXIT_MIN_DAYS), "max_days": int(C.EXIT_MAX_DAYS),
             "cost_pct": float(C.TOTAL_COST_PCT), "exit_rule": "close_signal_next_open_day10_open",
             "fill_grace_days": C.EXIT_FILL_GRACE_DAYS,
+            "entry_guard": {"max_premium_pct": C.ENTRY_MAX_PREMIUM_PCT,
+                            "max_ma20_bias_pct": C.ENTRY_MAX_MA20_BIAS_PCT,
+                            "rule": "signal_price_ceiling_including_buy_slippage_skip_once"},
+            "overseas_research": {"version": C.OVERSEAS_RESEARCH_VERSION,
+                                  "max_age_days": C.OVERSEAS_MAX_AGE_DAYS,
+                                  "vix_risk_level": C.OVERSEAS_VIX_RISK_LEVEL,
+                                  "active_in_main_rank": False},
             "execution": {"fee_pct": C.BROKER_FEE_PCT, "minimum_fee": C.MIN_BROKER_FEE_TWD,
                           "stock_tax_pct": C.STOCK_SELL_TAX_PCT, "etf_tax_pct": C.ETF_SELL_TAX_PCT,
                           "slippage_pct": C.SLIPPAGE_PCT, "reference_notional": C.REFERENCE_NOTIONAL_TWD},
@@ -72,13 +79,13 @@ def utility(net: float) -> float:
     return net if target_met(net) else C.LOSS_AVERSION * min(net, 0.0)
 
 
-def outcome(df, entry_pos: int, cost: float | None = None, code="") -> dict | None:
+def outcome(df, entry_pos: int, cost: float | None = None, code="", entry_plan=None) -> dict | None:
     """Compatibility entry point; costs now come from the versioned cash model.
 
     The old positional cost argument is deliberately not used for target trades.
     Backtests, published outcomes and paper books share execution.simulate.
     """
-    return execution.simulate(df, entry_pos, code)
+    return execution.simulate(df, entry_pos, code, entry_plan=entry_plan)
 
 
 def wilson_lower(successes: int, samples: int, z: float = 1.6448536269514722) -> float:
