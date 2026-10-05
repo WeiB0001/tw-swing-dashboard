@@ -193,6 +193,9 @@ def _summarize(pf: dict, index_close: float | None) -> dict:
 
     return {
         "strategy": pf.get("strategy"),
+        "capital_policy": pf.get("capital_policy", strategy.capital_policy()),
+        "loss_trades": sum(x < 0 for x in nets),
+        "worst_net": min(nets) if nets else None,
         "success_rate": round(sum(bool(t.get("success")) for t in trades) / len(trades) * 100, 1) if trades else None,
         "mode": pf.get("mode", "forward_test"),
         "forward_start": pf.get("forward_start"),

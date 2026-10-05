@@ -700,7 +700,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">{{ "今日淨利達標排行" if meta.has_winrate else "今日機會排行" }}
+    <h1 class="title">{{ "預期淨報酬研究排行" if meta.has_winrate else "研究排行待驗證" }}
       {% if meta.regime == 'bull' %}<span class="regime bull">🟢 多頭</span>
       {% elif meta.regime == 'bear' %}<span class="regime bear">🔴 空頭</span>
       {% else %}<span class="regime side">🟡 震盪</span>{% endif %}
@@ -792,12 +792,18 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </header>
 
   <!-- ===================== 排名 ===================== -->
+  <div class="oos-warn {{ 'bad' if capital_policy.blocked else 'ok' }}" id="capital-policy">
+    <b>{{ capital_policy.reason }}</b><br>
+    {% if capital_policy.blocked %}自動配置、手動配置試算與新增模擬買單已停用；個人交易記帳仍可如實記錄。{% endif %}
+    研究排名與回測不代表可保證獲利的交易。空手的零交易、零損益不是模型零虧損的證據。
+  </div>
   <div class="note" id="target-rule">
     <b>目標：扣成本後淨利至少 +{{ '%g'|format(profit_target) }}%</b><br>
     訊號發布後下一個可交易日開盤買進，第 {{ min_exit_days }}～{{ exit_days }} 個交易日收盤檢查；
     達標即模擬出場，未達標在第 {{ exit_days }} 日出場。買進日算第 1 日。
     來回成本含滑價 {{ cost_pct }}%；小賺但未達目標不算成功。收盤成交為模擬假設。<br>
-    目前 <b>{{ eligible_count }}</b> 檔通過樣本數、正 EV、PF &gt; 1 與技術風險門檻。
+    目前 <b>{{ research_count }}</b> 檔通過研究門檻；<b>{{ eligible_count }}</b> 檔允許配置。
+    {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發停損，可早於第 {{ min_exit_days }} 日；成交損失可能更大。{% else %}未授權停損幅度，研究回測到期仍如實計入虧損，不延長持有來掩蓋虧損。{% endif %}
     {% if not eligible_count %}<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>{% endif %}
     {% if not backtest %}<br>此目標的回測尚待重算，暫不顯示達標率。{% endif %}
   </div>
@@ -808,13 +814,15 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     out-of-sample（{{ backtest.oos_period }}）共 {{ backtest.oos_overall.samples }} 筆：
     EV {{ '%+.2f'|format(backtest.oos_overall.expectancy) }}%、
     PF {{ backtest.oos_overall.profit_factor }}、淨利達標率 {{ backtest.oos_overall.success_rate }}%。
-    驗證還需同日達標率與平均報酬優於股票池基準、足夠樣本與跨期穩定性。
+    虧損率 {{ backtest.oos_overall.loss_rate }}%、最差淨報酬 {{ backtest.oos_overall.worst_net }}%。
+    驗證要求各排名分組平均報酬由前到後遞減、同日報酬優於基準、足夠樣本與跨期穩定性。
   </div>
   {% else %}
   <div class="oos-warn ok">
-    ✅ 排名初步通過樣本外檢查（{{ backtest.oos_period }}，{{ backtest.oos_overall.samples }} 筆）前段候選呈現正期望值：
+    研究排序初步通過樣本外檢查（{{ backtest.oos_period }}，{{ backtest.oos_overall.samples }} 筆）：
     EV {{ '%+.2f'|format(backtest.oos_overall.expectancy) }}%、PF {{ backtest.oos_overall.profit_factor }}。
-    同日達標率比股票池平均高 {{ backtest.oos_overall.lift_success_pp }} 個百分點；歷史結果仍不代表未來績效。
+    同日報酬比股票池平均高 {{ backtest.oos_overall.lift_ev }} 個百分點。
+    虧損率 {{ backtest.oos_overall.loss_rate }}%、最差淨報酬 {{ backtest.oos_overall.worst_net }}%；這不代表零虧損。
   </div>
   {% endif %}
   {% endif %}
@@ -873,18 +881,18 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   {% if backtest and backtest.deciles_oos %}
   <div class="decile">
-    <div class="decile-head">最終排序的逐段樣本外驗證</div>
+    <div class="decile-head">研究排序的逐段樣本外驗證（包含所有虧損）</div>
     <table>
-      <tr><th>分組</th><th>N</th><th>達標率</th><th>EV</th><th>PF</th><th>最差持有跌幅</th></tr>
+      <tr><th>分組</th><th>N</th><th>平均淨報酬</th><th>達標率</th><th>虧損率</th><th>最差淨報酬</th></tr>
       {% for d in backtest.deciles_oos %}
       {% if d.samples %}
       <tr>
         <td>{{ d.label }}</td><td class="mono">{{ d.samples }}</td>
-        <td class="mono">{{ d.success_rate }}%</td>
         <td class="mono {{ 'up' if (d.expectancy or 0) > 0 else 'down' }}">
           {{ '%+.2f'|format(d.expectancy or 0) }}%</td>
-        <td class="mono">{{ d.profit_factor if d.profit_factor is not none else '--' }}</td>
-        <td class="mono down">{{ '%.2f'|format(d.worst_mdd or 0) }}%</td>
+        <td class="mono">{{ d.success_rate }}%</td>
+        <td class="mono down">{{ d.loss_rate }}%</td>
+        <td class="mono down">{{ '%+.2f'|format(d.worst_net or 0) }}%</td>
       </tr>
       {% endif %}
       {% endfor %}
@@ -898,7 +906,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
 
   <div class="section-head">
-    <h2>{{ exit_days ~ "日內淨利達標排名" if meta.has_winrate else "機會排名" }}</h2>
+    <h2>{{ min_exit_days }}～{{ exit_days }} 日預期淨報酬研究排名</h2>
     <span>名次為全部標的的總排名</span>
   </div>
 
@@ -965,7 +973,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   {% if rows %}
     {% for r in rows %}
-    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-eligible="{{ 1 if r.rank_eligible else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.success_used or 0 }}"
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_expectancy or 0 }}"
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
         <div class="row1">
@@ -1007,7 +1015,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="headline">{{ r.headline }}</div>
           {% if r.final_score is defined and r.final_score is not none %}
           {% if r.hist_success is not none %}
-          <div class="score mono">{{ '%.0f'|format(r.hist_success) }}<span class="pct">%</span><em>淨利 ≥{{ '%g'|format(profit_target) }}% 達標率</em></div>
+          <div class="score mono">{{ '%+.2f'|format(r.hist_expectancy) }}<span class="pct">%</span><em>歷史估計淨報酬</em></div>
           {% else %}
           <div class="score mono">{{ '%.0f'|format(r.final_score) }}<span class="pct">/100</span><em>綜合分數</em></div>
           {% endif %}
@@ -1017,7 +1025,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
 
         <div class="pickrow">
-          <button type="button" class="pick" data-pick data-code="{{ r.code }}" aria-pressed="false">
+          <button type="button" class="pick" data-pick data-code="{{ r.code }}" aria-pressed="false" {% if capital_policy.blocked or not r.trade_eligible %}disabled title="目前僅供研究，不允許配置"{% endif %}>
             ＋ 選入
           </button>
           <button type="button" class="jbuy" data-jbuy data-code="{{ r.code }}"
@@ -1066,14 +1074,17 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         {% if r.spark %}<div class="spark" data-spark='{{ r.spark|tojson }}'></div>{% endif %}
         <div class="scoreline">
           綜合分數＝歷史證據 {{ (w_evidence*100)|round|int }}%＋位置風報 {{ (w_position*100)|round|int }}%＋動能 {{ (w_momentum*100)|round|int }}%。
-          實際排序先檢查候選門檻，再比較保守達標分數、收縮 EV 與綜合分數。<br>
+          有足夠資料的標的依估計淨報酬由高到低排序；交易資格另外檢查，不因研究名次而自動取得。<br>
           {% if r.hist_success is not none %}
             歷史同類訊號 {{ r.hist_samples }} 筆；原始達標率 {{ r.hist_success_raw }}%，
             向訓練股票池基準收縮後 {{ r.hist_success }}%。
-            排序使用 Wilson 保守下界 {{ r.success_used }}%，不是未來機率保證。<br>
+            原始平均淨報酬 {{ r.hist_expectancy_raw }}%，按樣本量收縮後 {{ r.hist_expectancy }}%。
+            日期區塊重抽樣保守估計 {{ r.hist_ev_lower }}%，涵蓋 {{ r.hist_signal_dates }} 個訊號日；不是未來獲利保證。<br>
             第 {{ min_exit_days }}～{{ exit_days }} 日扣除 {{ cost_pct }}% 成本後，淨利至少 {{ profit_target }}% 才算達標。
             未達標的小額獲利仍如實計入 EV 與 PF。<br>
             平均獲利 {{ r.hist_avg_win }}%、平均虧損 {{ r.hist_avg_loss }}%。
+            虧損率 {{ r.hist_loss_rate }}%，虧損率不確定性上界 {{ r.hist_loss_rate_upper }}%；
+            最差淨報酬 {{ r.hist_worst_net }}%，最差 5% 樣本平均 {{ r.hist_tail_mean }}%。
             這些歷史資料用於查表排名，獨立驗證請看上方 Walk-forward。
           {% else %}
             樣本不足或目標統計尚未重算，僅列觀察，不參與自動配置。
@@ -1233,12 +1244,16 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% if portfolio and portfolio.days %}
   <div class="section-head"><h2>模擬投資組合</h2><span>本金 {{ '{:,.0f}'.format(portfolio.initial) }} · 規則自動執行</span></div>
   <div class="pf">
+    {% if portfolio.capital_policy and portfolio.capital_policy.blocked %}
+    <p class="pf-note"><b>{{ portfolio.capital_policy.reason }}</b>。零交易不等於交易策略已證明零虧損。</p>
+    {% endif %}
     <div class="pf-top">
       <div><span>總報酬</span>
         <b class="mono {{ 'up' if portfolio.total_return > 0 else ('down' if portfolio.total_return < 0 else '') }}">{{ '%+.2f'|format(portfolio.total_return) }}%</b></div>
       <div><span>同期大盤</span>
         <b class="mono {{ 'up' if (portfolio.benchmark_return or 0) > 0 else ('down' if (portfolio.benchmark_return or 0) < 0 else '') }}">{{ ('%+.2f'|format(portfolio.benchmark_return) ~ '%') if portfolio.benchmark_return is not none else '—' }}</b></div>
       <div><span>交易數</span><b class="mono">{{ portfolio.trades }}</b></div>
+      <div><span>虧損筆數</span><b class="mono">{{ portfolio.loss_trades }}</b></div>
       <div><span>淨利達標率</span><b class="mono">{{ (portfolio.success_rate ~ '%') if portfolio.success_rate is not none else '—' }}</b></div>
       <div><span>PF</span><b class="mono">{{ portfolio.profit_factor if portfolio.profit_factor is not none else '—' }}</b></div>
       <div><span>最大回撤</span><b class="mono down">{{ '%.2f'|format(portfolio.mdd) }}%</b></div>
@@ -1268,7 +1283,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% endif %}
     <p class="pf-note">
       規則：每日最多持有 {{ paper_max_positions }} 檔、等權配置、隔日開盤成交、
-      第 {{ min_exit_days }}～{{ exit_days }} 日收盤淨利至少 {{ profit_target }}% 出場，否則第 {{ exit_days }} 日出場；來回扣 {{ cost_pct }}% 成本。此統計策略未設定提前停損。
+      第 {{ min_exit_days }}～{{ exit_days }} 日收盤淨利至少 {{ profit_target }}% 出場，否則第 {{ exit_days }} 日出場；來回扣 {{ cost_pct }}% 成本。
+      {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發提前停損，並非保證損失上限。{% else %}未授權提前停損額度，禁止新增模擬買單。{% endif %}
       完全依規則執行，沒有人為判斷，也沒有使用任何未來資料。這是紀錄，不是實際交易。
     </p>
   </div>
@@ -1316,16 +1332,18 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 方法說明 ===================== -->
   <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
   <div class="note">
-    <h3>排序：淨利達標，而非只要小賺</h3>
-    先篩選樣本至少 {{ min_samples }} 筆、收縮 EV &gt; 0、PF &gt; 1 且無明顯技術風險的標的；
-    再比較達標率的保守下界、收縮 EV 與綜合分數。不足不補滿。<br>
-    未通過者仍保留在後段觀察清單，明確標記原因，不參與自動配置。<br><br>
+    <h3>排序：估計淨報酬越高，研究名次越前</h3>
+    至少 {{ min_samples }} 筆、{{ min_calibration_dates }} 個訊號日才報估計值；
+    平均淨報酬按 N / (N + {{ shrink_k }}) 收縮，依收縮後數值由高到低排序。相同估計值不代表可區分優劣。<br>
+    研究門檻另要求日期區塊重抽樣保守估計 &gt; 0、獲利因子與技術風險過關；
+    資金配置還須通過樣本外分組報酬排序驗證及資金政策。零虧損要求開啟時保持空手。<br><br>
     <b>綜合分數</b>＝歷史證據 {{ (w_evidence*100)|round|int }}%＋位置風報 {{ (w_position*100)|round|int }}%＋動能確認 {{ (w_momentum*100)|round|int }}%。
     小額正報酬只計入真實報酬統計，不增加達標次數。
-    達標率向同目標的訓練股票池基準收縮一次；排名使用 Wilson 保守下界，降低小樣本偶然高分。<br>
+    達標率向同目標的訓練股票池基準收縮一次，作為輔助資訊；所有虧損均納入平均報酬。<br>
     <b>查表順序</b>：大盤狀態＋型態＋級距 → 型態＋級距 → 級距；仍不足就不報達標率。<br>
     <b>驗證</b>：以日期分段，排除尚未成熟的訓練結果；各段只以前期資料建表，再重播相同排序。
     同日股票與連續訊號彼此相關，樣本數與星等不代表獨立證據數量；目前股票池回溯亦有選樣限制。<br>
+    此段歷史曾用於規則開發，分段結果屬回溯研究；仍需後續新發布排名的前瞻驗證。<br>
     美股與隔日風險資料保留作觀察，未取得對應歷史時點資料前不介入淨利目標排序。<br><br>
 
     <h3>技術分數怎麼算（0～100）</h3>
@@ -1835,9 +1853,15 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       if (el) { el.hidden = true; el.innerHTML = ""; }
     });
 
+    if ({{ 'true' if capital_policy.blocked else 'false' }}) {
+      resultEl.classList.add("show");
+      resultEl.textContent = {{ capital_policy.reason|tojson }} + "。資金保留現金，不產生配置試算。";
+      return;
+    }
+
     var picks;
     if (st.mode === "pick") {
-      picks = shown.filter(function (c) { return st.picks.indexOf(c.dataset.code) >= 0; });
+      picks = shown.filter(function (c) { return c.dataset.eligible === "1" && st.picks.indexOf(c.dataset.code) >= 0; });
     } else {
       picks = shown.filter(function (c) { return c.dataset.eligible === "1"; }).slice(0, st.splits);
     }

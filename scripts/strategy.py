@@ -4,13 +4,22 @@ from __future__ import annotations
 import math
 import config as C
 
-VERSION = "net-target-v1"
+VERSION = "expected-net-v2"
 
 
 def contract() -> dict:
+    if not 1 <= C.EXIT_MIN_DAYS <= C.EXIT_MAX_DAYS:
+        raise ValueError("持有天數設定不合法")
+    if C.STOP_LOSS_NET_PCT is not None and C.STOP_LOSS_NET_PCT <= 0:
+        raise ValueError("停損幅度須為正數；不啟用請設 None")
     return {"version": VERSION, "target_net_pct": float(C.EXIT_MIN_PROFIT),
             "min_days": int(C.EXIT_MIN_DAYS), "max_days": int(C.EXIT_MAX_DAYS),
-            "cost_pct": float(C.TOTAL_COST_PCT), "exit_rule": "daily_close"}
+            "cost_pct": float(C.TOTAL_COST_PCT), "exit_rule": "daily_close",
+            "stop_loss_net_pct": C.STOP_LOSS_NET_PCT,
+            "ranking": "expected_net_desc", "min_samples": C.MIN_SAMPLES_SCORE,
+            "min_dates": C.MIN_CALIBRATION_DATES,
+            "shrink_k": C.SHRINK_K, "bootstrap_block_days": C.EV_BOOTSTRAP_BLOCK_DAYS,
+            "bootstrap_reps": C.EV_BOOTSTRAP_REPS}
 
 
 def compatible(data: dict | None) -> bool:
@@ -27,9 +36,23 @@ def target_met(net: float) -> bool:
 
 
 def exit_reason(net: float, days: int) -> str | None:
+    # A stop is a trigger, not a cap: record the actual closing loss, including gaps.
+    if C.STOP_LOSS_NET_PCT is not None and net <= -C.STOP_LOSS_NET_PCT:
+        return "風險停損"
     if days >= C.EXIT_MIN_DAYS and target_met(net):
         return "淨利達標"
     return "持有到期" if days >= C.EXIT_MAX_DAYS else None
+
+
+def capital_policy() -> dict:
+    if C.REQUIRE_NO_LOSS:
+        return {"blocked": True, "require_no_loss": True,
+                "reason": "零虧損要求：股票無法證明零風險，保持空手；僅提供研究排名"}
+    if C.STOP_LOSS_NET_PCT is None:
+        return {"blocked": True, "require_no_loss": False,
+                "reason": "尚未設定可接受的停損觸發幅度，暫不配置資金"}
+    return {"blocked": False, "require_no_loss": False,
+            "reason": "須通過研究與樣本外門檻；停損仍可能因跳空而超出觸發幅度"}
 
 
 def outcome(df, entry_pos: int, cost: float | None = None) -> dict | None:

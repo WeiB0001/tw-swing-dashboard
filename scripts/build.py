@@ -199,8 +199,12 @@ def oos_reliability(bt: dict) -> dict:
         reasons.append("樣本外 PF 尚未超過 1")
     if (lift or 0) <= 0:
         reasons.append("同日候選報酬尚未優於股票池平均")
-    if (wf.get("lift_success_pp") or 0) <= 0:
-        reasons.append("同日候選達標率尚未優於股票池平均")
+    if (wf.get("ev_lower") or 0) <= 0:
+        reasons.append("日期區塊重抽樣的平均報酬保守估計尚未轉正")
+    if not (wf.get("rank_order") or {}).get("monotonic"):
+        reasons.append("各排名分組尚未呈現越前平均報酬越高")
+    if (wf.get("losses") or 0) > 0:
+        reasons.append("研究回測仍有 %d 筆虧損，無法符合零虧損要求" % wf["losses"])
     if wf.get("total_folds"):
         reasons.append("%d/%d 段為正 EV" % (wf.get("positive_folds", 0), wf["total_folds"]))
     return {"level": "中" if _oos_proven(bt) else "低" if n else "無",
@@ -326,6 +330,7 @@ def run_live() -> dict:
     # point-in-time snapshots for those models, so they cannot alter target rank.
     add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
     rows = sort_by_final(rows)
+    capital_policy = ranking.apply_policy(rows, bt, data_date)
     signals = tracking.update_signals(rows, data_date, regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
@@ -407,6 +412,7 @@ def run_live() -> dict:
         "us": us_data,
         "signals": signals,
         "portfolio": portfolio,
+        "capital_policy": capital_policy,
         "backtest": _backtest_summary(bt),
         "livecheck": _load_livecheck(),
         "rows": top,
@@ -1004,14 +1010,8 @@ def _backtest_summary(bt: dict | None) -> dict | None:
 
 
 def _oos_proven(bt: dict) -> bool:
-    """Only describe preliminary rank evidence after matched-date validation."""
-    wf = (bt or {}).get("walk_forward") or {}
-    return bool(wf.get("available") and (wf.get("samples") or 0) >= 100
-                and (wf.get("expectancy") or 0) > 0
-                and (wf.get("profit_factor") or 0) > 1
-                and (wf.get("lift_ev") or 0) > 0
-                and (wf.get("lift_success_pp") or 0) > 0
-                and (wf.get("positive_folds") or 0) >= 2)
+    """Research rank evidence is distinct from permission to allocate capital."""
+    return ranking.research_validated(bt)
 
 
 # ---------------------------------------------------------------------------

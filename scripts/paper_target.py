@@ -10,8 +10,18 @@ import strategy
 def update(pf, rows, trade_date, index_close, histories, published_at=None):
     from tracking import _blank_portfolio, _summarize
     if not strategy.compatible(pf):
+        cancelled = [{**order, "cancel_reason": "策略版本更換，舊待成交單撤銷"}
+                     for order in pf.get("pending", [])]
         pf = _blank_portfolio()
         pf["strategy"] = strategy.contract()
+        pf["cancelled_pending"] = cancelled[-100:]
+    policy = strategy.capital_policy()
+    pf["capital_policy"] = policy
+    if policy["blocked"] and pf.get("pending"):
+        pf.setdefault("cancelled_pending", []).extend(
+            {**order, "cancel_reason": policy["reason"]} for order in pf["pending"])
+        pf["cancelled_pending"] = pf["cancelled_pending"][-100:]
+        pf["pending"] = []
     if pf.get("last_date") == trade_date:
         return pf, _summarize(pf, index_close)
     now = pd.Timestamp(published_at or datetime.now(C.TZ))
@@ -20,6 +30,8 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None):
     half_cost = C.TOTAL_COST_PCT / 200
     pending = []
     for order in pf["pending"]:
+        if not order.get("entry_approved"):
+            continue
         h = histories.get(order["code"])
         if h is None:
             pending.append(order)
@@ -43,7 +55,8 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None):
                                 "shares": shares, "entry": px, "entry_date": str(day)[:10],
                                 "held": 0, "last_processed": None,
                                 "target1": px * (1 + (C.EXIT_MIN_PROFIT + C.TOTAL_COST_PCT) / 100),
-                                "stop": None})
+                                "stop": (px * (1 + (C.TOTAL_COST_PCT - C.STOP_LOSS_NET_PCT) / 100)
+                                         if C.STOP_LOSS_NET_PCT is not None else None)})
     pf["pending"] = pending
     still = []
     for pos in pf["positions"]:
@@ -90,15 +103,16 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None):
                          "index": index_close})
     held = {p["code"] for p in still + pf["pending"]}
     slots = C.PAPER_MAX_POSITIONS - len(held)
-    if slots > 0:
+    if slots > 0 and not policy["blocked"]:
         budget = pf["cash"] / slots
         for row in rows:
             if slots <= 0:
                 break
-            if not row.get("rank_eligible") or row["code"] in held:
+            if not row.get("trade_eligible") or row["code"] in held:
                 continue
             pf["pending"].append({"code": row["code"], "name": row.get("name", ""),
                                    "budget": budget, "signal_date": trade_date,
+                                   "entry_approved": True,
                                    "published_at": now.isoformat()})
             slots -= 1
     pf["last_date"] = trade_date

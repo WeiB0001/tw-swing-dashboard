@@ -524,16 +524,21 @@ WF_TOP_N = 3                  # 每日取前幾名進行 out-of-sample 檢驗
 # 回測設定（scripts/backtest.py 使用）
 # ---------------------------------------------------------------------------
 # ---------------------------------------------------------------------------
-# 主策略：訊號發布後下一個可交易日開盤買，第 5～10 個交易日收盤檢查。
+# 研究策略：訊號發布後下一個可交易日開盤買，第 2～10 個交易日收盤檢查。
 # 淨利（已扣 TOTAL_COST_PCT）至少達標才算成功；未達標第 10 日出場。
 # 買進日算第 1 日。若希望更早接受達標，可調整 EXIT_MIN_DAYS 並重跑回測。
-EXIT_MIN_DAYS = 5
+EXIT_MIN_DAYS = 2
 EXIT_MAX_DAYS = 10
 EXIT_MIN_PROFIT = 3.0          # 淨利門檻（百分比），可改為 5.0；會使舊統計失效
+REQUIRE_NO_LOSS = True        # 硬限制：股票無法保證零損，故不配置資金／不新增模擬買單
+STOP_LOSS_NET_PCT = None      # 尚未授權虧損額度；不擅自設定。正數代表收盤淨損觸發值，非保證上限
+MIN_CALIBRATION_DATES = 20    # 不把同一天的很多股票當成很多獨立日期
+EV_BOOTSTRAP_BLOCK_DAYS = 10  # 以連續日期區塊估計報酬不確定性
+EV_BOOTSTRAP_REPS = 500
 
 HOLD_DAYS = 1                  # 僅供獨立「明日強勢」及技術價位參考使用
 PRIMARY_HOLD_DAYS = EXIT_MIN_DAYS
-BACKTEST_HOLD_DAYS = [5, 10]    # 另列的固定持有期報酬，與達標率分開
+BACKTEST_HOLD_DAYS = [2, 5, 10] # 另列的固定持有期報酬，與達標率分開
 BACKTEST_TOP_K = [1, 3, 5, 10]         # 檢查前幾名
 BACKTEST_MIN_SCORE = 0               # 回測統計全部級距（含低分區），否則低分標的查不到表
 BACKTEST_SCORE_BUCKETS = [(0, 30), (30, 45), (45, 55), (55, 65), (65, 75), (75, 101)]
@@ -548,7 +553,7 @@ SIGNAL_COOLDOWN_DAYS = 10      # 同一檔股票出訊號後幾個交易日內�
                               # 避免連續多天的同一段行情被算成好幾個獨立樣本
 
 # --- 樣本門檻與可信度 ---
-MIN_SAMPLES_SCORE = 30        # 樣本少於此數：不評分、不參與排序調整
+MIN_SAMPLES_SCORE = 100       # 樣本少於此數：不報預期淨報酬，退回較大分組或列觀察
 LOW_CONFIDENCE_N = 100        # 樣本少於此數：可信度降級（星等上限 3 顆）
 
 # --- OOS 優先的排名 ---

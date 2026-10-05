@@ -28,7 +28,9 @@ def bars(closes, start="2026-01-05"):
 def bucket(successes=60, n=100, ev=1.0, pf=2.):
     return {"lo": 45, "hi": 65, "samples": n, "successes": successes,
             "success_rate": successes / n * 100, "expectancy": ev,
-            "profit_factor": pf, "avg_mdd": -2., "win_rate": 80.}
+            "profit_factor": pf, "avg_mdd": -2., "win_rate": 80.,
+            "signal_dates": 30, "ev_lower": ev - .5, "losses": 20,
+            "loss_rate": 20., "loss_rate_upper": 30., "worst_net": -5., "tail_mean_5pct": -4.}
 
 
 class TargetOutcomeTests(unittest.TestCase):
@@ -44,11 +46,11 @@ class TargetOutcomeTests(unittest.TestCase):
     def test_exact_three_percent_is_inclusive(self):
         result = strategy.outcome(bars([103.5] * 10), 0)
         self.assertTrue(result["success"])
-        self.assertEqual(result["days"], 5)
+        self.assertEqual(result["days"], 2)
         self.assertAlmostEqual(result["net"], 3.)
 
-    def test_pre_fifth_day_hit_does_not_qualify(self):
-        result = strategy.outcome(bars([104.] * 4 + [101.] * 6), 0)
+    def test_pre_second_day_hit_does_not_qualify(self):
+        result = strategy.outcome(bars([104.] + [101.] * 9), 0)
         self.assertFalse(result["success"])
 
     def test_day_ten_success_counts(self):
@@ -143,13 +145,15 @@ class PublicationAndPaperTests(unittest.TestCase):
     def test_late_publication_does_not_buy_an_already_passed_open(self):
         h = bars([100., 103.5] + [103.5] * 9)
         result = livecheck.outcome(h, "2026-01-04", .5, "2026-01-05T10:00:00+08:00")
-        self.assertEqual(result["exit_date"], "2026-01-12")
+        self.assertEqual(result["exit_date"], "2026-01-07")
 
+    @patch.object(C, "REQUIRE_NO_LOSS", False)
+    @patch.object(C, "STOP_LOSS_NET_PCT", 2.0)
     def test_paper_matches_outcome_and_cost_ledger(self):
         h = bars([103.5] * 10)
         pf = {"strategy": strategy.contract(), "cash": 100000., "positions": [],
               "pending": [{"code": "A", "name": "A", "signal_date": "2026-01-02",
-                           "published_at": "2026-01-02T16:00:00+08:00", "budget": 100000.}],
+                           "published_at": "2026-01-02T16:00:00+08:00", "budget": 100000., "entry_approved": True}],
               "trades": [], "equity": [], "start_index": None, "last_date": None}
         state, summary = paper_target.update(pf, [], "2026-01-16", 100., {"A": h},
                                              "2026-01-16T16:00:00+08:00")
@@ -162,13 +166,14 @@ class PublicationAndPaperTests(unittest.TestCase):
         unchanged, _ = paper_target.update(copy.deepcopy(state), [], "2026-01-16", 100., {"A": h})
         self.assertEqual(unchanged, state)
 
-    def test_average_return_alone_does_not_claim_target_accuracy(self):
+    def test_positive_ev_alone_does_not_prove_rank_order(self):
         wf = {"available": True, "samples": 500, "expectancy": 1.2,
               "profit_factor": 1.5, "lift_ev": .4, "positive_folds": 3,
-              "lift_success_pp": -.2}
-        self.assertFalse(build._oos_proven({"walk_forward": wf}))
-        wf["lift_success_pp"] = .2
-        self.assertTrue(build._oos_proven({"walk_forward": wf}))
+              "ev_lower": .2, "signal_dates": 30, "rank_order": {"monotonic": False}}
+        bt = {"strategy": strategy.contract(), "mode": "live", "walk_forward": wf}
+        self.assertFalse(build._oos_proven(bt))
+        wf["rank_order"]["monotonic"] = True
+        self.assertTrue(build._oos_proven(bt))
 
     def test_missing_statistics_render_without_old_success_rates(self):
         payload = json.loads((Path(__file__).resolve().parents[1] / "data/latest.json").read_text())

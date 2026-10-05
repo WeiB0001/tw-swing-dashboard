@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 backtest.py — 與首頁共用排序程式的淨利目標回測。
-訊號日收盤後選股，次日開盤進場，第 5～10 日收盤淨利達標才成功，
+訊號日收盤後選股，次日開盤進場，第 2～10 日收盤淨利達標才成功，
 未達標第 10 日出場；小幅正報酬仍納入 EV，但不計入達標次數。
 同股校準樣本間隔 10 日，逐段驗證剔除尚未成熟的訓練結果。
 目前股票池回溯存在選樣限制，跨股與連續日樣本亦非互相獨立。
@@ -29,6 +29,7 @@ import indicators
 import scoring
 import strategy
 import ranking
+import risk_stats
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -62,7 +63,7 @@ def load_universe_history(demo: bool) -> dict[str, pd.DataFrame]:
 # 勝率平滑
 # ---------------------------------------------------------------------------
 def first_profitable_exit(df, pos: int, cost: float) -> dict | None:
-    """Shared 5–10 trading-day net-target outcome; only fully matured cohorts."""
+    """Shared net-target outcome; only fully matured cohorts."""
     result = strategy.outcome(df, pos + 1, cost)
     return result if result and result.get("closed") else None
 
@@ -88,6 +89,7 @@ def describe(nets: list[float], mdds: list[float]) -> dict:
     # 期望值：勝率×平均獲利 ＋ 敗率×平均虧損（avg_loss 本身是負值）
     expectancy = wr * avg_win + (1 - wr) * avg_loss
     return {
+        **risk_stats.losses(nets),
         "expectancy": round(expectancy, 3) if n else None,
         "samples": n,
         "wins": int(len(wins)),
@@ -250,6 +252,8 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
 
     return {
         "strategy": strategy.contract(),
+        "research_only": True,
+        "capital_policy": strategy.capital_policy(),
         "calibration": tables,
         "in_sample_overall": _pack(ins),
         "generated_at": datetime.now(C.TZ).strftime("%Y-%m-%d %H:%M"),
@@ -297,6 +301,7 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
         nets = [e["net"] for e in ex]
         mdds = [e["mdd"] for e in ex]
         d = describe(nets, mdds)
+        d.update(risk_stats.expected_return_lower(sub))
         wins = sum(1 for e in ex if e["success"])
         d["successes"] = wins
         d["success_rate"] = round(wins / len(ex) * 100, 1)
@@ -311,7 +316,7 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
 
 def _pack_hold(sub: list[dict], h: int) -> dict:
     if not sub:
-        return describe([], [])
+        return {**describe([], []), "signal_dates": 0, "ev_lower": None}
     return describe([s["fwd"][h]["net"] for s in sub], [s["fwd"][h]["mdd"] for s in sub])
 
 
@@ -354,7 +359,7 @@ def stats_by_pattern_bucket(signals: list[dict]) -> list[dict]:
 
 def stats_by_regime_pattern_bucket(signals: list[dict]) -> list[dict]:
     """大盤狀態 × 型態 × 分數級距。這是排名查表的第一順位。"""
-    h = 5
+    h = C.PRIMARY_HOLD_DAYS
     out = []
     keys = sorted(set((s.get("regime", "sideways"), s["pattern"]) for s in signals))
     for reg, pat in keys:
@@ -415,7 +420,8 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
             ranked = ranking.sort(rows)
             lookup = {s["code"]: s for s in source}
             n = len(ranked)
-            eligible = [r for r in ranked if r["rank_eligible"]][:C.WF_TOP_N]
+            # Research replay remains measurable while capital policy blocks buys.
+            eligible = [r for r in ranked if r["research_eligible"]][:C.WF_TOP_N]
             today = [lookup[r["code"]] for r in eligible]
             picked.extend(today)
             fold_picked.extend(today)
@@ -433,18 +439,21 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
                            "profit_factor": fs["profit_factor"],
                            "win_rate": fs["win_rate"],
                            "success_rate": fs.get("success_rate"),
+                           "loss_rate": fs.get("loss_rate"), "worst_net": fs.get("worst_net"),
                            "train_last_outcome": max(r["exit"]["label_end"] for r in prior),
                            "test_start": test_dates[0]})
     if not tested:
         return {"available": False, "reason": "成熟訓練樣本不足"}
     positive = sum(1 for f in fold_stats if (f["expectancy"] or 0) > 0)
     summary = _pack(picked)
+    deciles = stats_by_decile(tested)
     return {"available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
+            "selection": "research_candidates", "research_only": True,
             "folds": k, "top_n": C.WF_TOP_N, "fold_stats": fold_stats,
             "positive_folds": positive, "total_folds": len(fold_stats),
             "stability": positive / len(fold_stats) if fold_stats else 0,
             "period": f"{folds[1][0]} ～ {folds[-1][-1]}",
-            "deciles": stats_by_decile(tested), "baseline": _pack(tested),
+            "deciles": deciles, "rank_order": risk_stats.rank_order_check(deciles), "baseline": _pack(tested),
             "lift_ev": round(float(np.mean(comparisons)), 3) if comparisons else None,
             "lift_success_pp": round(float(np.mean(success_comparisons)), 3) if success_comparisons else None,
             "note": "同日跨股票與連續日結果相關；筆數不等於獨立樣本數。", **summary}

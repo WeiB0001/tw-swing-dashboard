@@ -9,7 +9,7 @@ livecheck.py — 用「你的網站實際發布過的排名」驗證，不是重
 這是最貼近真實的驗證——當天發布了什麼，就用什麼來算，沒有事後諸葛的空間。
 
 成功定義與首頁一致：
-    發布後下一個可交易日開盤買 → 第 5～10 日收盤檢查淨利目標
+    發布後下一個可交易日開盤買 → 第 2～10 日收盤檢查淨利目標
     未達目標第 EXIT_MAX_DAYS 日出場；完整持有期間成熟後才納入統計
 
 另外可以帶入你自己的交易紀錄（從「我的交易」頁匯出的 JSON），
@@ -36,6 +36,7 @@ import pandas as pd
 
 import config as C
 import strategy
+import risk_stats
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -108,6 +109,7 @@ def pack(items: list[dict]) -> dict:
     gw = float(nets[nets > 0].sum())
     gl = float(-nets[nets <= 0].sum())
     return {
+        **risk_stats.losses(nets.tolist()),
         "n": len(items),
         "success_rate": round(wins / len(items) * 100, 1),
         "win_rate": round(float((nets > 0).mean()) * 100, 1),

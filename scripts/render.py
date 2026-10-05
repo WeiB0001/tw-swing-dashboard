@@ -14,6 +14,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 import config as C
+import strategy
 
 log = logging.getLogger("render")
 
@@ -79,6 +80,9 @@ def _groups(rows: list) -> list:
 
 
 def render_html(payload: dict) -> str:
+    policy = strategy.capital_policy()
+    if not policy["blocked"]:
+        policy = payload.get("capital_policy") or {"blocked": True, "reason": "尚未取得交易資格驗證"}
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATE_DIR)),
         autoescape=select_autoescape(["html"]),
@@ -94,6 +98,11 @@ def render_html(payload: dict) -> str:
         us=payload.get("us") or None,
         signals=payload.get("signals") or None,
         portfolio=payload.get("portfolio") or None,
+        capital_policy=policy,
+        no_loss_required=C.REQUIRE_NO_LOSS,
+        stop_loss_pct=C.STOP_LOSS_NET_PCT,
+        min_calibration_dates=C.MIN_CALIBRATION_DATES,
+        research_count=sum(bool(r.get("research_eligible")) for r in payload["rows"]),
         pattern_min_samples=C.PATTERN_MIN_SAMPLES,
         min_samples=C.MIN_SAMPLES_SCORE,
         w_evidence=C.FINAL_W_EVIDENCE,
@@ -107,7 +116,8 @@ def render_html(payload: dict) -> str:
         min_exit_days=C.EXIT_MIN_DAYS,
         profit_target=C.EXIT_MIN_PROFIT,
         cost_pct=C.TOTAL_COST_PCT,
-        eligible_count=sum(bool(r.get("rank_eligible")) for r in payload["rows"]),
+        eligible_count=0 if policy["blocked"] else sum(bool(r.get("trade_eligible")) for r in payload["rows"]),
+        shrink_k=C.SHRINK_K,
         ov_min_r2=C.OVERSEAS_MIN_R2,
         plan_t1=C.PLAN_T1_ATR,
         plan_stop=C.PLAN_STOP_MAX_ATR,
