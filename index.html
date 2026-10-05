@@ -167,6 +167,7 @@ body{
   padding:12px;margin:2px 0 14px;border-radius:var(--radius);cursor:pointer;
   background:var(--panel);border:1px solid var(--line);color:#AEBAC7;
 }
+.more[hidden]{display:none}
 .more:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 /* 一張成本 */
 .lot{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px}
@@ -794,14 +795,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
       <div class="us-grid us-sub">
         <div><span>那斯達克期貨（此刻）</span>
-          <b class="down">-0.12%</b></div>
-        <div><span>S&P 500 期貨（此刻）</span>
           <b class="down">-0.06%</b></div>
+        <div><span>S&P 500 期貨（此刻）</span>
+          <b class="down">-0.01%</b></div>
       </div>
 
       <div class="us-fc">
-<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 +0.07%
-          · 區間 -1.31% ～ +1.46%
+<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 +0.11%
+          · 區間 -1.28% ～ +1.50%
           · R² 0.328 · N 250</div>
       </div>
       <p class="us-note">
@@ -820,7 +821,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="refresh-msg" id="refresh-msg" hidden></div>
     <div class="recalc-box" id="recalc-box" hidden></div>
     <div class="stamp">
-      <span id="freshness">更新時間 <b class="mono">2026-10-05 19:35</b></span>
+      <span id="freshness">更新時間 <b class="mono">2026-10-05 19:49</b></span>
       <span>行情資料日 <b class="mono">2026-10-05</b></span>
       <span class="apply">適用交易日 <b class="mono">2026-10-06</b></span>
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
@@ -852,7 +853,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     成本逐筆計算：每邊手續費 0.1425%（最低 20.0 元）、賣出稅一般股票 0.3%／ETF 0.1%、來回滑價 0.2%。費率為可調假設，未套用個別商品稅務優惠。
     單筆訊號統計以約 100,000 元為參考，資金回測依實際股數計算。<br>
     目前 <b>0</b> 檔通過研究門檻；<b>0</b> 檔允許配置。
-目前研究設定：收盤淨損達 3.0% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>    排名更新：2026-10-05 19:35:29。
+目前研究設定：收盤淨損達 3.0% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>    排名更新：2026-10-05 19:49:54。
     </div>
   </details>
   <details class="fold" id="validation-details">
@@ -39705,7 +39706,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
 
   <footer>
     台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
-    <span class="mono">2026-10-05 19:35</span>
+    <span class="mono">2026-10-05 19:49</span>
   </footer>
 </div>
 
@@ -39716,7 +39717,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
 (function () {
   "use strict";
 
-  var GENERATED = "2026-10-05T19:35:29+08:00";
+  var GENERATED = "2026-10-05T19:49:54+08:00";
   var TRADE_DATE = "2026-10-05";
 
   /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
@@ -39737,7 +39738,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
     else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
     else word = Math.floor(mins / 1440) + " 天前更新";
     freshness.innerHTML = '<b>' + word + '</b>';
-    freshness.title = "更新時間 2026-10-05 19:35";
+    freshness.title = "更新時間 2026-10-05 19:49";
   }
   renderFreshness();
   setInterval(renderFreshness, 60000);
@@ -39760,7 +39761,7 @@ data-trigger="189.97" data-stop="180.58" data-t1="194.66" data-t2="198.42" data-
      ---------------------------------------------------------------------- */
   var refreshBtn = document.getElementById("btn-refresh");
   var refreshMsg = document.getElementById("refresh-msg");
-  var CURRENT_STAMP = "2026-10-05 19:35";
+  var CURRENT_STAMP = "2026-10-05 19:49";
 
   function showMsg(text, isNew) {
     if (!refreshMsg) return;
