@@ -19,12 +19,14 @@ def row(code, ev, success=60.):
     return {"code": code, "name": code, "hist_samples": 200, "hist_expectancy": ev,
             "hist_success": success, "hist_success_lower": success - 10,
             "hist_pf": 2., "hist_ev_lower": ev - .5, "hist_signal_dates": 30,
+            "hist_risk_reward": ev, "hist_risk_reward_lower": ev - .5,
             "hist_losses": 40, "hist_loss_rate_upper": 30., "momentum_tier": 0}
 
 
 def valid_research():
     return {"strategy": strategy.contract(), "mode": "live",
             "walk_forward": {"available": True, "samples": 300, "ev_lower": .5,
+                             "risk_reward_lower": .3, "lift_risk_reward": .2,
                              "signal_dates": 50, "profit_factor": 1.5, "lift_ev": .4,
                              "positive_folds": 3, "rank_order": {"monotonic": True}}}
 
@@ -49,7 +51,7 @@ class ExpectedReturnTests(unittest.TestCase):
 
     def test_one_date_with_many_stocks_does_not_count_as_many_dates(self):
         signals = [{"date": "2026-01-01", "exit": {"net": 5.}} for _ in range(1000)]
-        self.assertEqual(risk_stats.expected_return_lower(signals), {"signal_dates": 1, "ev_lower": None})
+        self.assertEqual(risk_stats.expected_return_lower(signals), {"signal_dates": 1, "ev_lower": None, "risk_reward_lower": None})
 
     def test_constant_returns_preserved_by_block_bootstrap(self):
         signals = [{"date": f"2026-01-{i:02}", "exit": {"net": 3.}} for i in range(1, 31)]
@@ -91,6 +93,7 @@ class ExpectedReturnTests(unittest.TestCase):
 
 
 class CapitalPolicyTests(unittest.TestCase):
+    @patch.object(C, "REQUIRE_NO_LOSS", True)
     def test_zero_loss_requirement_blocks_even_validated_research(self):
         rows = ranking.sort([row("A", 4.)])
         policy = ranking.apply_policy(rows, valid_research())
@@ -101,8 +104,12 @@ class CapitalPolicyTests(unittest.TestCase):
         self.assertFalse(rows[0]["rank_eligible"])
 
     @patch.object(C, "REQUIRE_NO_LOSS", False)
-    def test_no_risk_budget_still_blocks_new_positions(self):
-        self.assertTrue(strategy.capital_policy()["blocked"])
+    def test_new_risk_policy_permits_validated_candidates_without_changing_exits(self):
+        self.assertFalse(strategy.capital_policy()["blocked"])
+        rows = ranking.sort([row("A", 4.)])
+        self.assertFalse(ranking.apply_policy(rows, valid_research())["blocked"])
+        self.assertTrue(rows[0]["trade_eligible"])
+        self.assertIsNone(C.STOP_LOSS_NET_PCT)
 
     @patch.object(C, "REQUIRE_NO_LOSS", False)
     @patch.object(C, "STOP_LOSS_NET_PCT", 2.)
@@ -123,7 +130,7 @@ class CapitalPolicyTests(unittest.TestCase):
         self.assertEqual(summary["trades"], 0)
         self.assertEqual(len(state["cancelled_pending"]), 1)
 
-    def test_paper_no_loss_gate_cannot_be_bypassed_by_row_flags(self):
+    def test_paper_validation_gate_cannot_be_bypassed_by_row_flags(self):
         rows = [dict(row("A", 4.), trade_eligible=True, rank_eligible=True)]
         state, _ = paper_target.update({}, rows, "2026-01-05", None, {})
         self.assertEqual(state["pending"], [])
@@ -147,7 +154,7 @@ class CapitalPolicyTests(unittest.TestCase):
         html = render.render_html(p)
         self.assertIn('data-eligible="0"', html)
         self.assertIn('disabled title="目前僅供研究，不允許配置"', html)
-        self.assertIn("零虧損要求", html)
+        self.assertIn("尚未通過樣本外驗證", html)
         self.assertIn("資金保留現金，不產生配置試算", html)
 
     def test_existing_loss_is_closed_on_day_ten_and_preserved(self):

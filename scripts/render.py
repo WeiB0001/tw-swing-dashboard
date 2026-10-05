@@ -80,9 +80,12 @@ def _groups(rows: list) -> list:
 
 
 def render_html(payload: dict) -> str:
+    import ranking
     policy = strategy.capital_policy()
     if not policy["blocked"]:
         policy = payload.get("capital_policy") or {"blocked": True, "reason": "尚未取得交易資格驗證"}
+        if not strategy.compatible(payload.get("meta")) or not ranking.research_validated(payload.get("backtest")):
+            policy = {"blocked": True, "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"}
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATE_DIR)),
         autoescape=select_autoescape(["html"]),
@@ -100,6 +103,7 @@ def render_html(payload: dict) -> str:
         portfolio=payload.get("portfolio") or None,
         capital_policy=policy,
         no_loss_required=C.REQUIRE_NO_LOSS,
+        loss_aversion=C.LOSS_AVERSION,
         stop_loss_pct=C.STOP_LOSS_NET_PCT,
         min_calibration_dates=C.MIN_CALIBRATION_DATES,
         research_count=sum(bool(r.get("research_eligible")) for r in payload["rows"]),

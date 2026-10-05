@@ -841,10 +841,28 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       （落差 {{ '%+.2f'|format(backtest.reliability.gap or 0) }}）
       {% endif %}
       <br>同日相對股票池平均報酬差：{{ backtest.walk_forward.lift_ev }} 個百分點。訊號筆數不等於獨立樣本數。
+      <br>綜合分數：{{ backtest.walk_forward.risk_reward_score }}，保守估計：{{ backtest.walk_forward.risk_reward_lower }}；
+      同日相對股票池綜合分數差：{{ backtest.walk_forward.lift_risk_reward }}。
       {% if backtest.reliability.reasons %}
       <ul>{% for x in backtest.reliability.reasons %}<li>{{ x }}</li>{% endfor %}</ul>
       {% endif %}
     </div>
+  </div>
+  {% endif %}
+
+  {% if backtest and backtest.walk_forward and backtest.walk_forward.ranking_comparison and backtest.walk_forward.samples %}
+  {% set wf = backtest.walk_forward %}
+  {% set old = wf.ranking_comparison.ev_only %}
+  <div class="decile">
+    <div class="decile-head">排序比較：同日期、同候選池、同選取檔數</div>
+    <table>
+      <tr><th>排序方式</th><th>N</th><th>綜合分數</th><th>平均淨報酬</th><th>達標率</th><th>虧損率</th></tr>
+      {% for label, d in [('綜合風險報酬', wf), ('僅看預估淨報酬', old)] %}
+      <tr><td>{{ label }}</td><td>{{ d.samples }}</td><td>{{ d.risk_reward_score }}</td><td>{{ d.expectancy }}%</td><td>{{ d.success_rate }}%</td><td>{{ d.loss_rate }}%</td></tr>
+      {% endfor %}
+    </table>
+    <div class="decile-note">新排序相對純 EV 排序的同日平均綜合分數差：{{ wf.ranking_comparison.matched_risk_reward_lift }}。
+      正值代表此項回溯比較較好，不代表未來必然較準；兩組都使用新版研究門檻。</div>
   </div>
   {% endif %}
 
@@ -883,11 +901,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <div class="decile">
     <div class="decile-head">研究排序的逐段樣本外驗證（包含所有虧損）</div>
     <table>
-      <tr><th>分組</th><th>N</th><th>平均淨報酬</th><th>達標率</th><th>虧損率</th><th>最差淨報酬</th></tr>
+      <tr><th>分組</th><th>N</th><th>綜合分數</th><th>平均淨報酬</th><th>達標率</th><th>虧損率</th><th>最差淨報酬</th></tr>
       {% for d in backtest.deciles_oos %}
       {% if d.samples %}
       <tr>
         <td>{{ d.label }}</td><td class="mono">{{ d.samples }}</td>
+        <td class="mono">{{ '%+.2f'|format(d.risk_reward_score or 0) }}</td>
         <td class="mono {{ 'up' if (d.expectancy or 0) > 0 else 'down' }}">
           {{ '%+.2f'|format(d.expectancy or 0) }}%</td>
         <td class="mono">{{ d.success_rate }}%</td>
@@ -1015,9 +1034,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="headline">{{ r.headline }}</div>
           {% if r.final_score is defined and r.final_score is not none %}
           {% if r.hist_success is not none %}
-          <div class="score mono">{{ '%+.2f'|format(r.hist_expectancy) }}<span class="pct">%</span><em>歷史估計淨報酬</em></div>
+          <div class="score mono">{{ '%+.2f'|format(r.hist_risk_reward) }}<span class="pct">分</span><em>風險報酬綜合分數</em></div>
           {% else %}
-          <div class="score mono">{{ '%.0f'|format(r.final_score) }}<span class="pct">/100</span><em>綜合分數</em></div>
+          <div class="score mono nodata">—<em>綜合排名資料不足</em></div>
           {% endif %}
           {% else %}
           <div class="score mono nodata">{{ '%.0f'|format(r.score) }}<em>技術分數</em></div>
@@ -1043,7 +1062,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         {% if r.final_score is defined and r.final_score is not none %}
         <div class="final">
-          <span>綜合 <b>{{ '%.0f'|format(r.final_score) }}/100</b></span>
+          <span>技術輔助 <b>{{ '%.0f'|format(r.final_score) }}/100</b></span>
           <span>證據 <b>{{ '%.0f'|format(r.evidence_quality) }}</b></span>
           <span>位置 <b>{{ '%.0f'|format(r.position_quality) }}</b></span>
           <span>動能 <b>{{ '%.0f'|format(r.momentum_quality) }}</b></span>
@@ -1061,7 +1080,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="swing">
           <span>技術目標距離 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
           {% if r.hist_success is not none %}
-          <span class="wr">歷史達標率 <b>{{ r.hist_success }}%</b>
+          <span class="wr">歷史達標率 <b>{{ r.hist_success_raw }}%</b>
+            · 達標平均淨利 <b>{{ '%+.2f'|format(r.hist_avg_target_gain) if r.hist_avg_target_gain is not none else '—' }}%</b>
+            · 虧損率 <b>{{ r.hist_loss_rate }}%</b>
+            · 平均虧損 <b>{{ '%.2f'|format(r.hist_avg_loss_magnitude) }}%</b><br>
             · 收縮 EV <b class="{{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.2f'|format(r.hist_expectancy or 0) }}%</b>
             · PF {{ r.hist_pf if r.hist_pf is not none else '—' }} · N={{ r.hist_samples }}</span>
           {% else %}<span class="wr nodata">目標統計待重算或樣本不足，不報達標率</span>{% endif %}
@@ -1073,15 +1095,18 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="why"><b>觀察依據</b>{{ r.edge or r.why }}</div>
         {% if r.spark %}<div class="spark" data-spark='{{ r.spark|tojson }}'></div>{% endif %}
         <div class="scoreline">
-          綜合分數＝歷史證據 {{ (w_evidence*100)|round|int }}%＋位置風報 {{ (w_position*100)|round|int }}%＋動能 {{ (w_momentum*100)|round|int }}%。
-          有足夠資料的標的依估計淨報酬由高到低排序；交易資格另外檢查，不因研究名次而自動取得。<br>
+          排名分數＝（達標機率 × 達標平均淨利 − {{ loss_aversion }} × 虧損機率 × 平均虧損幅度）× N / (N + {{ shrink_k }})。
+          機率以 0～1 代入；綜合分數不是預測報酬率。依分數由高到低排序，交易資格另外檢查。<br>
           {% if r.hist_success is not none %}
             歷史同類訊號 {{ r.hist_samples }} 筆；原始達標率 {{ r.hist_success_raw }}%，
             向訓練股票池基準收縮後 {{ r.hist_success }}%。
             原始平均淨報酬 {{ r.hist_expectancy_raw }}%，按樣本量收縮後 {{ r.hist_expectancy }}%。
             日期區塊重抽樣保守估計 {{ r.hist_ev_lower }}%，涵蓋 {{ r.hist_signal_dates }} 個訊號日；不是未來獲利保證。<br>
+            綜合分數使用同一組原始達標率與虧損率，達標貢獻 {{ r.hist_target_gain_component }}，
+            虧損貢獻 {{ r.hist_loss_component }} × {{ loss_aversion }}；原始分數 {{ r.hist_risk_reward_raw }}，
+            收縮後 {{ r.hist_risk_reward }}，重抽樣保守估計 {{ r.hist_risk_reward_lower }}。<br>
             第 {{ min_exit_days }}～{{ exit_days }} 日扣除 {{ cost_pct }}% 成本後，淨利至少 {{ profit_target }}% 才算達標。
-            未達標的小額獲利仍如實計入 EV 與 PF。<br>
+            未達標的小額獲利不替排名加分，但仍如實計入 EV 與 PF。<br>
             平均獲利 {{ r.hist_avg_win }}%、平均虧損 {{ r.hist_avg_loss }}%。
             虧損率 {{ r.hist_loss_rate }}%，虧損率不確定性上界 {{ r.hist_loss_rate_upper }}%；
             最差淨報酬 {{ r.hist_worst_net }}%，最差 5% 樣本平均 {{ r.hist_tail_mean }}%。
@@ -1330,15 +1355,17 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
 
   <!-- ===================== 方法說明 ===================== -->
-  <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
+  <div class="section-head"><h2>分數怎麼算的</h2><span>風險報酬綜合分數</span></div>
   <div class="note">
-    <h3>排序：估計淨報酬越高，研究名次越前</h3>
+    <h3>排序：達標收益與虧損風險綜合評估</h3>
     至少 {{ min_samples }} 筆、{{ min_calibration_dates }} 個訊號日才報估計值；
-    平均淨報酬按 N / (N + {{ shrink_k }}) 收縮，依收縮後數值由高到低排序。相同估計值不代表可區分優劣。<br>
+    排名分數＝（達標機率 × 達標平均淨利 − {{ loss_aversion }} × 虧損機率 × 平均虧損幅度）× N / (N + {{ shrink_k }})。
+    機率以 0～1 代入；分數可正可負，不是百分比報酬預測，也不是 0～100 分制。
+    {{ loss_aversion }} 倍是預先固定的避損偏好，沒有使用本次回測挑最佳權重。相同分數不代表可區分優劣。<br>
     研究門檻另要求日期區塊重抽樣保守估計 &gt; 0、獲利因子與技術風險過關；
-    資金配置還須通過樣本外分組報酬排序驗證及資金政策。零虧損要求開啟時保持空手。<br><br>
-    <b>綜合分數</b>＝歷史證據 {{ (w_evidence*100)|round|int }}%＋位置風報 {{ (w_position*100)|round|int }}%＋動能確認 {{ (w_momentum*100)|round|int }}%。
-    小額正報酬只計入真實報酬統計，不增加達標次數。
+    資金配置還須通過樣本外綜合分數排序驗證及資金政策。接受風險不代表已通過驗證。<br><br>
+    <b>技術輔助分數</b>＝歷史證據 {{ (w_evidence*100)|round|int }}%＋位置風報 {{ (w_position*100)|round|int }}%＋動能確認 {{ (w_momentum*100)|round|int }}%。
+    小額正報酬只計入真實報酬統計，不增加達標次數或綜合排名分數。
     達標率向同目標的訓練股票池基準收縮一次，作為輔助資訊；所有虧損均納入平均報酬。<br>
     <b>查表順序</b>：大盤狀態＋型態＋級距 → 型態＋級距 → 級距；仍不足就不報達標率。<br>
     <b>驗證</b>：以日期分段，排除尚未成熟的訓練結果；各段只以前期資料建表，再重播相同排序。

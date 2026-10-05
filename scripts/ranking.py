@@ -25,6 +25,8 @@ def attach(rows: list[dict], tables: dict, regime: str = "sideways") -> None:
                         and b.get("samples", 0) >= C.MIN_SAMPLES_SCORE
                         and b.get("signal_dates", 0) >= C.MIN_CALIBRATION_DATES
                         and b.get("ev_lower") is not None
+                        and b.get("risk_reward_lower") is not None
+                        and b.get("risk_reward_score") is not None
                         and (source == "bucket" or b.get("pattern") == r["kind"])
                         and (source != "regime" or b.get("regime") == r.get("regime", regime))), None)
             if hit is None:
@@ -40,6 +42,13 @@ def attach(rows: list[dict], tables: dict, regime: str = "sideways") -> None:
                      hist_calibrated=hit.get("calibrated_win_rate"), hist_raw=hit.get("win_rate"),
                      hist_expectancy=round(ev * n / (n + C.SHRINK_K), 3),
                      hist_ev_lower=round(float(hit["ev_lower"]) * n / (n + C.SHRINK_K), 3),
+                     hist_risk_reward=round(float(hit["risk_reward_score"]) * n / (n + C.SHRINK_K), 3),
+                     hist_risk_reward_raw=hit["risk_reward_score"],
+                     hist_risk_reward_lower=round(float(hit["risk_reward_lower"]) * n / (n + C.SHRINK_K), 3),
+                     hist_avg_target_gain=hit.get("avg_target_gain"),
+                     hist_avg_loss_magnitude=hit.get("avg_loss_magnitude"),
+                     hist_target_gain_component=hit.get("target_gain_component"),
+                     hist_loss_component=hit.get("loss_component"),
                      hist_signal_dates=hit.get("signal_dates"),
                      hist_losses=hit.get("losses"), hist_loss_rate=hit.get("loss_rate"),
                      hist_loss_rate_upper=hit.get("loss_rate_upper"),
@@ -56,11 +65,13 @@ def attach(rows: list[dict], tables: dict, regime: str = "sideways") -> None:
 def sort(rows: list[dict]) -> list[dict]:
     def key(r):
         n = int(r.get("hist_samples") or 0)
-        known = n >= C.MIN_SAMPLES_SCORE and r.get("hist_expectancy") is not None
+        known = n >= C.MIN_SAMPLES_SCORE and r.get("hist_risk_reward") is not None
+        score = float(r.get("hist_risk_reward") or 0)
         ev = float(r.get("hist_expectancy") or 0)
         pf = r.get("hist_pf")
         pf_ok = (pf is not None and pf > 1) or (r.get("hist_losses") == 0 and ev > 0)
-        quality = (known and ev > 0 and (r.get("hist_ev_lower") or 0) > 0
+        quality = (known and score > 0 and (r.get("hist_risk_reward_lower") or 0) > 0
+                   and ev > 0 and (r.get("hist_ev_lower") or 0) > 0
                    and (r.get("hist_signal_dates") or 0) >= C.MIN_CALIBRATION_DATES
                    and r.get("hist_loss_rate_upper") is not None and pf_ok)
         safe = r.get("momentum_tier", 2) < 2
@@ -70,16 +81,16 @@ def sort(rows: list[dict]) -> list[dict]:
         r["trade_eligible"] = False
         r["research_status"] = ("通過研究門檻" if eligible else
                             "樣本不足" if not known else
-                            "報酬不確定性或獲利因子未過門檻" if not quality else "技術風險偏高")
+                            "風險報酬或不確定性未過門檻" if not quality else "技術風險偏高")
         r["rank_status"] = r["research_status"] + " · 僅供研究"
         r["success_used"] = r.get("hist_success_lower")
-        r["rank_score"] = r.get("hist_expectancy")
+        r["rank_score"] = r.get("hist_risk_reward")
         r["top_fill"] = False  # Never fill the actionable list with failed candidates.
-        # All rows with estimates are monotone in estimated net return. Risk gates
-        # mark eligibility separately; they never promote a lower-EV row above one.
-        return (0 if known else 1, -ev,
-                -float(r.get("hist_ev_lower") or 0),
+        # Order by the published composite score. Eligibility remains separate.
+        return (0 if known else 1, -score,
+                -float(r.get("hist_risk_reward_lower") or 0),
                 float(r.get("hist_loss_rate_upper") if r.get("hist_loss_rate_upper") is not None else 100),
+                -ev,
                 -float(r.get("hist_success_lower") or 0),
                 -float(r.get("final_score") or 0), r.get("code", ""))
     out = sorted(rows, key=key)
@@ -94,18 +105,21 @@ def research_validated(bt: dict | None) -> bool:
     wf = bt.get("walk_forward") or {}
     return bool(wf.get("available") and (wf.get("samples") or 0) >= 100
                 and (wf.get("ev_lower") or 0) > 0
+                and (wf.get("risk_reward_lower") or 0) > 0
                 and (wf.get("signal_dates") or 0) >= C.MIN_CALIBRATION_DATES
                 and (wf.get("profit_factor") or 0) > 1
                 and (wf.get("lift_ev") or 0) > 0
+                and (wf.get("lift_risk_reward") or 0) > 0
                 and (wf.get("positive_folds") or 0) >= 2
                 and (wf.get("rank_order") or {}).get("monotonic"))
 
 
 def apply_policy(rows: list[dict], bt: dict | None, data_date: str | None = None) -> dict:
     policy = strategy.capital_policy()
+    policy["strategy"] = strategy.contract()
     policy["research_validated"] = research_validated(bt)
     if not policy["blocked"] and not policy["research_validated"]:
-        policy.update(blocked=True, reason="預期報酬排序尚未通過樣本外驗證，保持空手")
+        policy.update(blocked=True, reason="風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金")
     for r in rows:
         stale = bool(data_date and r.get("quote_date") != data_date)
         allowed = bool(not policy["blocked"] and r.get("research_eligible") and not stale)

@@ -90,6 +90,7 @@ def describe(nets: list[float], mdds: list[float]) -> dict:
     expectancy = wr * avg_win + (1 - wr) * avg_loss
     return {
         **risk_stats.losses(nets),
+        **risk_stats.risk_reward(nets),
         "expectancy": round(expectancy, 3) if n else None,
         "samples": n,
         "wins": int(len(wins)),
@@ -316,7 +317,7 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
 
 def _pack_hold(sub: list[dict], h: int) -> dict:
     if not sub:
-        return {**describe([], []), "signal_dates": 0, "ev_lower": None}
+        return {**describe([], []), "signal_dates": 0, "ev_lower": None, "risk_reward_lower": None}
     return describe([s["fwd"][h]["net"] for s in sub], [s["fwd"][h]["mdd"] for s in sub])
 
 
@@ -405,6 +406,7 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
     for r in signals:
         by_day.setdefault(r["date"], []).append(r)
     picked, tested, fold_stats, comparisons, success_comparisons = [], [], [], [], []
+    utility_comparisons, ev_sorted_picks, matched_rank_differences = [], [], []
     for i, test_dates in enumerate(folds[1:], 1):
         prior = training_before(calibration, test_dates[0])
         if len(prior) < C.MIN_SAMPLES_SCORE:
@@ -423,9 +425,19 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
             # Research replay remains measurable while capital policy blocks buys.
             eligible = [r for r in ranked if r["research_eligible"]][:C.WF_TOP_N]
             today = [lookup[r["code"]] for r in eligible]
+            # Counterfactual: the SAME research-eligible pool, sorted only by EV.
+            ev_ranked = sorted([r for r in ranked if r["research_eligible"]],
+                               key=lambda r: (-r["hist_expectancy"], -r["hist_ev_lower"],
+                                              r["hist_loss_rate_upper"], -r["hist_success_lower"],
+                                              -float(r.get("final_score") or 0), r["code"]))[:C.WF_TOP_N]
+            ev_today = [lookup[r["code"]] for r in ev_ranked]
+            ev_sorted_picks.extend(ev_today)
             picked.extend(today)
             fold_picked.extend(today)
             if today:
+                score_today = sum(strategy.utility(s["exit"]["net"]) for s in today) / len(today)
+                utility_comparisons.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in source) / len(source))
+                matched_rank_differences.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in ev_today) / len(ev_today))
                 comparisons.append(sum(s["exit"]["net"] for s in today) / len(today)
                                    - sum(s["exit"]["net"] for s in source) / len(source))
                 success_comparisons.append(100 * (sum(s["exit"]["success"] for s in today) / len(today)
@@ -436,6 +448,7 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
         fs = _pack(fold_picked)
         fold_stats.append({"fold": i, "samples": fs["samples"],
                            "expectancy": fs["expectancy"],
+                           "risk_reward_score": fs.get("risk_reward_score"),
                            "profit_factor": fs["profit_factor"],
                            "win_rate": fs["win_rate"],
                            "success_rate": fs.get("success_rate"),
@@ -444,7 +457,8 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
                            "test_start": test_dates[0]})
     if not tested:
         return {"available": False, "reason": "成熟訓練樣本不足"}
-    positive = sum(1 for f in fold_stats if (f["expectancy"] or 0) > 0)
+    positive = sum(1 for f in fold_stats if (f["expectancy"] or 0) > 0
+                   and (f.get("risk_reward_score") or 0) > 0)
     summary = _pack(picked)
     deciles = stats_by_decile(tested)
     return {"available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
@@ -453,7 +467,12 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
             "positive_folds": positive, "total_folds": len(fold_stats),
             "stability": positive / len(fold_stats) if fold_stats else 0,
             "period": f"{folds[1][0]} ～ {folds[-1][-1]}",
-            "deciles": deciles, "rank_order": risk_stats.rank_order_check(deciles), "baseline": _pack(tested),
+            "deciles": deciles, "rank_order": risk_stats.rank_order_check(deciles, "risk_reward_score"),
+            "return_rank_order": risk_stats.rank_order_check(deciles), "baseline": _pack(tested),
+            "lift_risk_reward": round(float(np.mean(utility_comparisons)), 4) if utility_comparisons else None,
+            "ranking_comparison": {"basis": "same_dates_same_eligible_pool_same_top_n",
+                "ev_only": _pack(ev_sorted_picks),
+                "matched_risk_reward_lift": round(float(np.mean(matched_rank_differences)), 4) if matched_rank_differences else None},
             "lift_ev": round(float(np.mean(comparisons)), 3) if comparisons else None,
             "lift_success_pp": round(float(np.mean(success_comparisons)), 3) if success_comparisons else None,
             "note": "同日跨股票與連續日結果相關；筆數不等於獨立樣本數。", **summary}

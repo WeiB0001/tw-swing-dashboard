@@ -146,7 +146,7 @@ def _blank_portfolio() -> dict:
 
 
 def update_portfolio(rows: list[dict], trade_date: str, index_close: float | None,
-                     hist_map: dict | None = None) -> dict:
+                     hist_map: dict | None = None, capital_policy: dict | None = None) -> dict:
     from paper_target import update
     previous = _load(C.PORTFOLIO_JSON, {})
     if previous and not strategy.compatible(previous):
@@ -154,7 +154,7 @@ def update_portfolio(rows: list[dict], trade_date: str, index_close: float | Non
         import hashlib
         old_id = hashlib.sha256(json.dumps(previous.get("strategy"), sort_keys=True).encode()).hexdigest()[:12]
         _save(f"data/portfolio_archive_{old_id}.json", previous)
-    pf, summary = update(previous, rows, trade_date, index_close, hist_map or {})
+    pf, summary = update(previous, rows, trade_date, index_close, hist_map or {}, capital_policy=capital_policy)
     _save(C.PORTFOLIO_JSON, pf)
     return summary
 

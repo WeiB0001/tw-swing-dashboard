@@ -202,11 +202,15 @@ def oos_reliability(bt: dict) -> dict:
     if (wf.get("ev_lower") or 0) <= 0:
         reasons.append("日期區塊重抽樣的平均報酬保守估計尚未轉正")
     if not (wf.get("rank_order") or {}).get("monotonic"):
-        reasons.append("各排名分組尚未呈現越前平均報酬越高")
+        reasons.append("各排名分組尚未呈現越前風險報酬綜合分數越高")
+    if (wf.get("risk_reward_lower") or 0) <= 0:
+        reasons.append("綜合分數的日期區塊重抽樣保守估計尚未轉正")
+    if (wf.get("lift_risk_reward") or 0) <= 0:
+        reasons.append("同日候選綜合分數尚未優於股票池平均")
     if (wf.get("losses") or 0) > 0:
-        reasons.append("研究回測仍有 %d 筆虧損，無法符合零虧損要求" % wf["losses"])
+        reasons.append("研究回測包含 %d 筆虧損，已納入綜合分數懲罰" % wf["losses"])
     if wf.get("total_folds"):
-        reasons.append("%d/%d 段為正 EV" % (wf.get("positive_folds", 0), wf["total_folds"]))
+        reasons.append("%d/%d 段的 EV 與綜合分數皆為正" % (wf.get("positive_folds", 0), wf["total_folds"]))
     return {"level": "中" if _oos_proven(bt) else "低" if n else "無",
             "n": n, "ev": ev, "pf": pf, "ins_ev": None, "gap": None,
             "stability": wf.get("stability", 0), "reasons": reasons}
@@ -334,7 +338,7 @@ def run_live() -> dict:
     signals = tracking.update_signals(rows, data_date, regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
-    portfolio = tracking.update_portfolio(rows, data_date, idx_close, hist_map)
+    portfolio = tracking.update_portfolio(rows, data_date, idx_close, hist_map, capital_policy)
     # 排名、訊號追蹤與模擬組合使用同一份排序
     top = rows[: C.RENDER_LIMIT] if C.RENDER_LIMIT else rows                 # final_rank 為主策略名次
     add_edges(rows[: C.INITIAL_VISIBLE * 2])   # 只有會被看到的前段需要這句話
@@ -991,6 +995,7 @@ def _backtest_summary(bt: dict | None) -> dict | None:
         return None
     return {
         "generated_at": bt.get("generated_at"),
+        "mode": bt.get("mode"),
         "period": bt.get("period"),
         "hold_days": bt.get("primary_hold_days"),
         "cost_pct": bt.get("cost_pct"),

@@ -30,6 +30,9 @@ def bucket(successes=60, n=100, ev=1.0, pf=2.):
             "success_rate": successes / n * 100, "expectancy": ev,
             "profit_factor": pf, "avg_mdd": -2., "win_rate": 80.,
             "signal_dates": 30, "ev_lower": ev - .5, "losses": 20,
+            "risk_reward_score": ev, "risk_reward_lower": ev - .5,
+            "avg_target_gain": 5., "avg_loss_magnitude": 3.,
+            "target_gain_component": 2.5, "loss_component": .6,
             "loss_rate": 20., "loss_rate_upper": 30., "worst_net": -5., "tail_mean_5pct": -4.}
 
 
@@ -156,20 +159,23 @@ class PublicationAndPaperTests(unittest.TestCase):
                            "published_at": "2026-01-02T16:00:00+08:00", "budget": 100000., "entry_approved": True}],
               "trades": [], "equity": [], "start_index": None, "last_date": None}
         state, summary = paper_target.update(pf, [], "2026-01-16", 100., {"A": h},
-                                             "2026-01-16T16:00:00+08:00")
+                                             "2026-01-16T16:00:00+08:00",
+                                             capital_policy={"strategy": strategy.contract(), "blocked": False, "research_validated": True})
         expected = strategy.outcome(h, 0)
         trade = state["trades"][0]
         self.assertAlmostEqual(trade["net_pct"], expected["net"])
         self.assertEqual(trade["held"], expected["days"])
         self.assertEqual(trade["success"], expected["success"])
         self.assertAlmostEqual(state["cash"] - 100000., trade["pnl"])
-        unchanged, _ = paper_target.update(copy.deepcopy(state), [], "2026-01-16", 100., {"A": h})
+        unchanged, _ = paper_target.update(copy.deepcopy(state), [], "2026-01-16", 100., {"A": h},
+                                             capital_policy={"strategy": strategy.contract(), "blocked": False, "research_validated": True})
         self.assertEqual(unchanged, state)
 
     def test_positive_ev_alone_does_not_prove_rank_order(self):
         wf = {"available": True, "samples": 500, "expectancy": 1.2,
               "profit_factor": 1.5, "lift_ev": .4, "positive_folds": 3,
               "ev_lower": .2, "signal_dates": 30, "rank_order": {"monotonic": False}}
+        wf.update(risk_reward_lower=.1, lift_risk_reward=.2)
         bt = {"strategy": strategy.contract(), "mode": "live", "walk_forward": wf}
         self.assertFalse(build._oos_proven(bt))
         wf["rank_order"]["monotonic"] = True

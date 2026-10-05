@@ -7,7 +7,7 @@ import config as C
 import strategy
 
 
-def update(pf, rows, trade_date, index_close, histories, published_at=None):
+def update(pf, rows, trade_date, index_close, histories, published_at=None, capital_policy=None):
     from tracking import _blank_portfolio, _summarize
     if not strategy.compatible(pf):
         cancelled = [{**order, "cancel_reason": "策略版本更換，舊待成交單撤銷"}
@@ -16,6 +16,12 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None):
         pf["strategy"] = strategy.contract()
         pf["cancelled_pending"] = cancelled[-100:]
     policy = strategy.capital_policy()
+    if not policy["blocked"]:
+        if (capital_policy and strategy.compatible(capital_policy)
+                and capital_policy.get("research_validated")):
+            policy = dict(capital_policy)
+        else:
+            policy.update(blocked=True, reason="風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金")
     pf["capital_policy"] = policy
     if policy["blocked"] and pf.get("pending"):
         pf.setdefault("cancelled_pending", []).extend(

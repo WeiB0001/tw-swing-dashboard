@@ -110,6 +110,7 @@ def pack(items: list[dict]) -> dict:
     gl = float(-nets[nets <= 0].sum())
     return {
         **risk_stats.losses(nets.tolist()),
+        **risk_stats.risk_reward(nets.tolist()),
         "n": len(items),
         "success_rate": round(wins / len(items) * 100, 1),
         "win_rate": round(float((nets > 0).mean()) * 100, 1),
