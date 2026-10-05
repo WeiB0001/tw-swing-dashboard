@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0E1116">
 <meta name="description" content="台股短線價差機會掃描：每日收盤後自動更新，僅供技術分析參考。">
-<title>台股淨利達標排行 · {{ meta.trade_date }}</title>
+<title>台股風險報酬綜合排行 · {{ meta.trade_date }}</title>
 
 <!-- ===== PWA：讓這頁可以「加到主畫面」，開起來像一個 app ===== -->
 <link rel="manifest" href="manifest.webmanifest">
@@ -700,7 +700,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <!-- ===================== 大盤 ===================== -->
   <header>
     <div class="eyebrow">TAIWAN SWING SCANNER</div>
-    <h1 class="title">{{ "預期淨報酬研究排行" if meta.has_winrate else "研究排行待驗證" }}
+    <h1 class="title">{{ "風險報酬綜合研究排行" if meta.has_winrate else "研究排行待驗證" }}
       {% if meta.regime == 'bull' %}<span class="regime bull">🟢 多頭</span>
       {% elif meta.regime == 'bear' %}<span class="regime bear">🔴 空頭</span>
       {% else %}<span class="regime side">🟡 震盪</span>{% endif %}
@@ -795,7 +795,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   <div class="oos-warn {{ 'bad' if capital_policy.blocked else 'ok' }}" id="capital-policy">
     <b>{{ capital_policy.reason }}</b><br>
     {% if capital_policy.blocked %}自動配置、手動配置試算與新增模擬買單已停用；個人交易記帳仍可如實記錄。{% endif %}
-    研究排名與回測不代表可保證獲利的交易。空手的零交易、零損益不是模型零虧損的證據。
+    已改採風險報酬綜合評估；研究排名與回測不保證獲利，未通過驗證時仍保留現金。
   </div>
   <div class="note" id="target-rule">
     <b>目標：扣成本後淨利至少 +{{ '%g'|format(profit_target) }}%</b><br>
@@ -803,7 +803,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     達標即模擬出場，未達標在第 {{ exit_days }} 日出場。買進日算第 1 日。
     來回成本含滑價 {{ cost_pct }}%；小賺但未達目標不算成功。收盤成交為模擬假設。<br>
     目前 <b>{{ research_count }}</b> 檔通過研究門檻；<b>{{ eligible_count }}</b> 檔允許配置。
-    {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發停損，可早於第 {{ min_exit_days }} 日；成交損失可能更大。{% else %}未授權停損幅度，研究回測到期仍如實計入虧損，不延長持有來掩蓋虧損。{% endif %}
+    {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發停損，可早於第 {{ min_exit_days }} 日；成交損失可能更大。{% else %}未另設價格停損；未達標在第 {{ exit_days }} 日出場，可能虧損，沒有保證損失上限。{% endif %}
     {% if not eligible_count %}<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>{% endif %}
     {% if not backtest %}<br>此目標的回測尚待重算，暫不顯示達標率。{% endif %}
   </div>
@@ -815,7 +815,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     EV {{ '%+.2f'|format(backtest.oos_overall.expectancy) }}%、
     PF {{ backtest.oos_overall.profit_factor }}、淨利達標率 {{ backtest.oos_overall.success_rate }}%。
     虧損率 {{ backtest.oos_overall.loss_rate }}%、最差淨報酬 {{ backtest.oos_overall.worst_net }}%。
-    驗證要求各排名分組平均報酬由前到後遞減、同日報酬優於基準、足夠樣本與跨期穩定性。
+    驗證要求各排名分組的風險報酬綜合分數由前到後遞減、同日表現優於基準、足夠樣本與跨期穩定性。
   </div>
   {% else %}
   <div class="oos-warn ok">
@@ -917,7 +917,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       {% endfor %}
     </table>
     <div class="decile-note">
-      訓練只用測試開始前已完整成熟的樣本，重播與首頁相同的排序。<b>前段應優於後段及同日基準</b>。
+      訓練只用測試開始前已完整成熟的樣本，重播與首頁相同的排序。<b>前段綜合分數應優於後段及同日基準</b>。
       若沒有，勝率再高也沒有意義。所有數字已扣除手續費、證交稅與滑價共
       {{ backtest.cost_pct }}%。
     </div>
@@ -925,7 +925,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   {% endif %}
 
   <div class="section-head">
-    <h2>{{ min_exit_days }}～{{ exit_days }} 日預期淨報酬研究排名</h2>
+    <h2>{{ min_exit_days }}～{{ exit_days }} 日風險報酬綜合研究排名</h2>
     <span>名次為全部標的的總排名</span>
   </div>
 
@@ -984,7 +984,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     <div class="band-note" id="band-count"></div>
     <p class="budget-note">
-      自動分配僅使用通過候選門檻的標的，按保守達標排序分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）；
+      自動分配僅使用通過候選門檻的標的，按正的風險報酬綜合分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）；
       自己挑則是在你選的標的之間平均分配。不是建議你買進，也沒有計入手續費與證交稅。
       台股一張＝1000 股，{% if allow_odd_lot %}一張買不起時會改用零股試算（需券商支援盤中零股交易）。{% endif %}
     </p>
@@ -992,7 +992,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   {% if rows %}
     {% for r in rows %}
-    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_expectancy or 0 }}"
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
         <div class="row1">
@@ -1033,7 +1033,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="row3">
           <div class="headline">{{ r.headline }}</div>
           {% if r.final_score is defined and r.final_score is not none %}
-          {% if r.hist_success is not none %}
+          {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
           <div class="score mono">{{ '%+.2f'|format(r.hist_risk_reward) }}<span class="pct">分</span><em>風險報酬綜合分數</em></div>
           {% else %}
           <div class="score mono nodata">—<em>綜合排名資料不足</em></div>
@@ -1079,7 +1079,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
         <div class="swing">
           <span>技術目標距離 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
-          {% if r.hist_success is not none %}
+          {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
           <span class="wr">歷史達標率 <b>{{ r.hist_success_raw }}%</b>
             · 達標平均淨利 <b>{{ '%+.2f'|format(r.hist_avg_target_gain) if r.hist_avg_target_gain is not none else '—' }}%</b>
             · 虧損率 <b>{{ r.hist_loss_rate }}%</b>
@@ -1097,7 +1097,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="scoreline">
           排名分數＝（達標機率 × 達標平均淨利 − {{ loss_aversion }} × 虧損機率 × 平均虧損幅度）× N / (N + {{ shrink_k }})。
           機率以 0～1 代入；綜合分數不是預測報酬率。依分數由高到低排序，交易資格另外檢查。<br>
-          {% if r.hist_success is not none %}
+          {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
             歷史同類訊號 {{ r.hist_samples }} 筆；原始達標率 {{ r.hist_success_raw }}%，
             向訓練股票池基準收縮後 {{ r.hist_success }}%。
             原始平均淨報酬 {{ r.hist_expectancy_raw }}%，按樣本量收縮後 {{ r.hist_expectancy }}%。
@@ -1309,7 +1309,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <p class="pf-note">
       規則：每日最多持有 {{ paper_max_positions }} 檔、等權配置、隔日開盤成交、
       第 {{ min_exit_days }}～{{ exit_days }} 日收盤淨利至少 {{ profit_target }}% 出場，否則第 {{ exit_days }} 日出場；來回扣 {{ cost_pct }}% 成本。
-      {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發提前停損，並非保證損失上限。{% else %}未授權提前停損額度，禁止新增模擬買單。{% endif %}
+      {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發提前停損，並非保證損失上限。{% else %}未另設價格停損；依達標或第 {{ exit_days }} 日到期規則出場，虧損如實記錄。{% endif %}
       完全依規則執行，沒有人為判斷，也沒有使用任何未來資料。這是紀錄，不是實際交易。
     </p>
   </div>
@@ -1911,7 +1911,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     if (st.mode === "pick") {
       targets = picks.map(function () { return st.budget / picks.length; });
     } else {
-      var scores = picks.map(function (c) { return Math.max(parseFloat(c.dataset.score) || 0, 1); });
+      var scores = picks.map(function (c) { return Math.max(parseFloat(c.dataset.score) || 0, 0.000001); });
       var total = scores.reduce(function (a, b) { return a + b; }, 0);
       var cap = st.budget * Math.max(MAX_POS, 1 / picks.length);
       targets = scores.map(function (x) { return st.budget * x / total; });
