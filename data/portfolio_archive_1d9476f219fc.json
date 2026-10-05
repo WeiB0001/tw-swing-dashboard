@@ -1,0 +1,39 @@
+{
+ "cash": 100000.0,
+ "positions": [],
+ "pending": [],
+ "trades": [],
+ "equity": [
+  {
+   "date": "2026-10-05",
+   "equity": 100000.0,
+   "index": 48475.74
+  }
+ ],
+ "start_index": 48475.74,
+ "last_date": "2026-10-05",
+ "forward_start": "2026-10-05",
+ "mode": "forward_test",
+ "strategy": {
+  "version": "risk-reward-v3",
+  "target_net_pct": 3.0,
+  "min_days": 2,
+  "max_days": 10,
+  "cost_pct": 0.5,
+  "exit_rule": "daily_close",
+  "stop_loss_net_pct": null,
+  "ranking": "target_gain_minus_weighted_loss",
+  "loss_aversion": 1.5,
+  "min_samples": 100,
+  "min_dates": 20,
+  "shrink_k": 50,
+  "bootstrap_block_days": 10,
+  "bootstrap_reps": 500
+ },
+ "cancelled_pending": [],
+ "capital_policy": {
+  "blocked": true,
+  "require_no_loss": false,
+  "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"
+ }
+}
