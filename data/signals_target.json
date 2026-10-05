@@ -1,6 +1,6 @@
 {
  "strategy": {
-  "version": "executable-risk-v4",
+  "version": "executable-risk-v4.1",
   "target_net_pct": 3.0,
   "min_days": 2,
   "max_days": 10,
