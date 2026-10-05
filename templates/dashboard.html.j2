@@ -1022,7 +1022,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <label>淨損觸發幅度（%）<input id="risk-stop" type="number" min="0.1" max="50" step="0.1" value="{{ stop_loss_pct or 3 }}" inputmode="decimal"></label>
       </div>
       <div class="plan-summary" id="risk-calculation" role="status" aria-live="polite"></div>
-      <p class="research-note">含買進手續費、最低費用及滑價。淨損幅度另加 {{ risk_settings.buffer }} 個百分點緩衝，並套用單一標的 {{ max_position_pct }}%、同產業 {{ risk_settings.sector }}% 上限。此處假設目前空手；既有持倉會減少可用額度。跳空、停牌時實際虧損可超過試算值。</p>
+      <p class="research-note">含買進手續費、最低費用及滑價。淨損幅度另加 {{ risk_settings.buffer }} 個百分點緩衝，並套用整體風險 {{ risk_settings.total }}%、單一標的 {{ max_position_pct }}%、同產業 {{ risk_settings.sector }}% 上限。此處假設目前空手；既有持倉會減少可用額度。跳空、停牌時實際虧損可超過試算值。</p>
     </details>
     {% set wf = backtest.walk_forward if backtest and backtest.walk_forward else none %}
     {% if wf and wf.exit_study %}
@@ -1030,8 +1030,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <summary>出場規則比較 <small>{{ wf.exit_study.signals }} 個相同進場訊號</small></summary>
       <p class="research-note">{{ wf.exit_study.basis }} {{ wf.exit_study.note }}</p>
       <div class="research-table"><table>
-        <thead><tr><th>研究方案</th><th>已結算</th><th>平均淨報酬</th><th>達標率</th><th>平均虧損</th><th>最差 5% 平均</th><th>未結算</th></tr></thead>
-        <tbody>{% for v in wf.exit_study.variants %}<tr><td>{{ v.label }}</td><td>{{ v.samples }}</td><td>{{ '%+.2f%%'|format(v.expectancy) if v.expectancy is not none else '—' }}</td><td>{{ v.success_rate if v.success_rate is defined else '—' }}%</td><td>{{ '%.2f%%'|format(v.avg_loss) }}</td><td>{{ '%.2f%%'|format(v.tail_mean_5pct) if v.tail_mean_5pct is not none else '—' }}</td><td>{{ v.unresolved }}</td></tr>{% endfor %}</tbody>
+        <thead><tr><th>研究方案</th><th>已結算</th><th>平均淨報酬</th><th>達標率</th><th>平均虧損</th><th>最差 5% 平均</th><th>未成交／未結算</th></tr></thead>
+        <tbody>{% for v in wf.exit_study.variants %}<tr><td>{{ v.label }}</td><td>{{ v.samples }}</td><td>{{ '%+.2f%%'|format(v.expectancy) if v.expectancy is not none else '—' }}</td><td>{{ v.success_rate if v.success_rate is defined else '—' }}%</td><td>{{ '%.2f%%'|format(v.avg_loss) }}</td><td>{{ '%.2f%%'|format(v.tail_mean_5pct) if v.tail_mean_5pct is not none else '—' }}</td><td>{{ v.unfilled }}／{{ v.unresolved }}</td></tr>{% endfor %}</tbody>
       </table></div>
       <p class="research-note">收盤訊號、次開盤成交；未成交進場與未結算交易不冒充零損失。3% 停損是事先固定的研究設定，尚未證明優於其他方案。</p>
     </details>
@@ -1318,7 +1318,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             <div><span>排序加減分</span><b>{{ '%+.1f'|format(-(r.crash_penalty or 0)) }}</b></div>
           </div>
           <div class="nd-note">
-            計算方式：排名出來的隔天開盤買進，持有 {{ hold_days }} 天後收盤賣出，跟你的做法一致。
+            此區為固定持有 {{ hold_days }} 天的技術輔助統計；主策略的成交與出場規則請見「交易計畫」。
             「隔夜低開」是持有過夜期間開盤跳空跌超過 1% 的比例，這是不做當沖必須承擔的風險。
             「進漲幅前段」隨機挑大約就是 20%，明顯高於 20% 才算真的有預測力。
             此資訊獨立展示，不影響淨利目標排序與驗證。

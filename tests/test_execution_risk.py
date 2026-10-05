@@ -96,6 +96,16 @@ class ExecutionRiskTests(unittest.TestCase):
         real,_=paper_target.update({},[candidate],"2026-01-05",None,{})
         self.assertFalse(real["pending"])
 
+    def test_forward_book_does_not_backfill_old_cash_history(self):
+        history=mature([100.])
+        state,summary=paper_target.update({},[],"2026-10-05",None,{"A":history},research=True)
+        self.assertEqual(len(state["equity"]),1)
+        self.assertEqual(state["equity"][0]["date"],"2026-10-05")
+        self.assertEqual(summary["days"],1)
+        state["equity"].insert(0,{"date":"2026-01-01","equity":100000})
+        state,summary=paper_target.update(state,[],"2026-10-05",None,{},research=True)
+        self.assertEqual(summary["days"],1)
+
     def test_cash_ledger_never_reuses_funds_or_buys_duplicate_stock(self):
         rows=[dict(row(c,4.),research_eligible=True,group="電子") for c in ["A","A","B","C","D"]]
         state,_=paper_target.update({},rows,"2026-01-02",None,{},"2026-01-02T16:00:00+08:00",research=True)

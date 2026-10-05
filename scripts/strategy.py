@@ -5,7 +5,7 @@ import math
 import config as C
 import execution
 
-VERSION = "executable-risk-v4"
+VERSION = "executable-risk-v4.1"
 
 
 def contract() -> dict:

@@ -86,6 +86,11 @@ def render_html(payload: dict) -> str:
         policy = payload.get("capital_policy") or {"blocked": True, "reason": "尚未取得交易資格驗證"}
         if not strategy.compatible(payload.get("meta")) or not ranking.research_validated(payload.get("backtest")):
             policy = {"blocked": True, "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"}
+            quality = (payload.get("backtest") or {}).get("data_quality") or {}
+            if quality.get("issue_count"):
+                policy["reason"] += "；行情異常或公司行動待核對"
+            if quality.get("unresolved_exits"):
+                policy["reason"] += "；仍有未結算出場"
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATE_DIR)),
         autoescape=select_autoescape(["html"]),

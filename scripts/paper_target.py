@@ -34,6 +34,11 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None, capi
     pf["mode"] = "research_forward" if research else "forward_test"
     pf.setdefault("skipped", [])
     pf.setdefault("cancelled_pending", [])
+    # A forward book starts when it was created, not at the beginning of the
+    # downloaded price history. Remove only pre-start cash marks from early v4
+    # runs; never change a trade, pending order or publication record.
+    if pf.get("forward_start"):
+        pf["equity"] = [e for e in pf["equity"] if e["date"] >= pf["forward_start"]]
     if policy["blocked"] and not research and pf.get("pending"):
         pf["cancelled_pending"].extend({**o, "cancel_reason": policy["reason"]} for o in pf["pending"])
         pf["pending"] = []
@@ -43,10 +48,14 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None, capi
     if now.tzinfo is None:
         now = now.tz_localize(C.TZ)
     dates = {pd.Timestamp(trade_date)}
+    start_date = pf.get("last_date")
+    if not start_date and (pf["positions"] or pf["pending"]):
+        first_known = min(p.get("entry_date") or p["signal_date"] for p in pf["positions"] + pf["pending"])
+        start_date = str(pd.Timestamp(first_known) - pd.Timedelta(days=1))[:10]
     for h in histories.values():
-        if h is not None:
+        if h is not None and start_date:
             dates.update(d for d in h.index if str(d)[:10] <= trade_date and
-                         (not pf.get("last_date") or str(d)[:10] > pf["last_date"]))
+                         str(d)[:10] > start_date)
     for date in sorted(dates):
         day = str(date)[:10]
         if pf.get("last_date") and day <= pf["last_date"]:
@@ -132,7 +141,7 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None, capi
                 p.update(exit_pending=reason, trigger_date=day)
         pf["equity"].append({"date": day, "equity": round(_mark(pf, histories, date), 4), "index": index_close})
     if not pf.get("forward_start"):
-        pf["forward_start"] = trade_date
+        pf["forward_start"] = min([trade_date] + [e["date"] for e in pf["equity"]])
     if pf.get("start_index") is None and index_close:
         pf["start_index"] = float(index_close)
     held_codes = {p["code"] for p in pf["positions"] + pf["pending"]}
