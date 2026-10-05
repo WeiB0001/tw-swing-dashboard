@@ -668,6 +668,57 @@ header{padding:20px 0 14px}
 }
 footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-height:1.8}
 
+/* 說明預設收起；原生 details 支援鍵盤，也不依賴 JavaScript。 */
+.fold{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:10px 0;min-width:0}
+.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+  min-height:46px;padding:11px 13px;font-size:13px;font-weight:700;color:var(--text)}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::after{content:"＋";margin-left:auto;color:var(--muted);font-size:17px;flex:0 0 auto}
+.fold[open]>summary::after{content:"−"}
+.fold>summary:focus-visible{outline:2px solid var(--signal);outline-offset:-3px;border-radius:10px}
+.fold>summary small{font-size:11.5px;font-weight:500;color:var(--muted)}
+.fold-body{padding:0 13px 13px;font-size:12.5px;line-height:1.7;color:#9FACBA;min-width:0}
+.fold-body p{margin:8px 0}
+.fold-body>.note,.fold-body>.us,.fold-body>.pf{border:0;padding:0;margin:0;background:none}
+.fold-inline{border:0;background:none;margin:5px 0}
+.fold-inline>summary{padding:8px 0;min-height:40px;font-size:12px;color:var(--muted)}
+.fold-inline>.fold-body{padding:0 0 10px}
+.status-fold{border-color:#5A2530;background:#2A1418}
+.status-fold>summary{color:#FF9E80}
+.status-fold.ready{border-color:#1E5138;background:#122A1E}
+.status-fold.ready>summary{color:#8FD9B0}
+.rule-strip{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 0;font-size:12px;color:var(--muted)}
+.rule-strip span{padding:5px 9px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
+.rule-strip b{color:var(--text);margin-left:4px}
+.research-overview{display:flex;flex-direction:column;gap:3px;min-width:0}
+.decile{overflow-x:auto}
+.decile table{min-width:430px}
+.key-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.key-metrics div{padding:8px;background:#11171E;border-radius:8px;min-width:0}
+.key-metrics dt{font-size:10.5px;color:var(--muted);margin-bottom:3px}
+.key-metrics dd{margin:0;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.rank-state{font-size:12px;color:var(--muted)}
+.card:not([open])>summary .summary-extra,.card:not([open])>summary .kind,
+.card:not([open])>summary .sector,.card:not([open])>summary .mark,.card:not([open])>summary .lot{display:none}
+.card .row3{margin-top:9px}
+.card .score em{font-size:10px;letter-spacing:0}
+.card .pickrow{align-items:center}
+.card-hint{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
+.card-hint .when-open,.card[open] .card-hint .when-closed{display:none}
+.card[open] .card-hint .when-open{display:inline}
+.key-empty{font-size:12px;color:var(--muted);margin:10px 0}
+@media (max-width:440px){
+  .key-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .key-metrics div{padding:7px 9px;display:flex;justify-content:space-between;align-items:center;gap:5px}
+  .key-metrics dt{font-size:10px;margin:0}.key-metrics dd{font-size:13px}
+  .title{font-size:19px}.market-close{font-size:25px}.market-chg{font-size:13px}
+  .section-head{gap:8px}.section-head h2{font-size:15px}.section-head span{font-size:11px}
+  .fold>summary{flex-wrap:wrap;gap:4px 8px}.fold>summary::after{margin-left:auto}
+  .rule-strip{gap:5px}.rule-strip span{padding:4px 7px;font-size:11px}
+  .card .mtier{font-size:10px}.card .code{font-size:12px}
+  .card .px .close{font-size:17px}.card>summary{padding:12px}
+}
+
 @media (max-width:360px){
   .name{font-size:16.5px} .px .close{font-size:17px} .score{font-size:20px}
 }
@@ -680,7 +731,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 <body>
 
 <!-- ===================== 頂部免責聲明 ===================== -->
-<div class="disclaimer-top">⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險</div>
+<div class="disclaimer-top">研究工具 · 非投資建議 · 投資有風險</div>
 
 <!-- 平常隱藏，只有斷網或有更新時才出現 -->
 <div class="toast offline" id="toast-offline">目前離線，顯示的是上次載入的資料</div>
@@ -726,6 +777,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% endif %}
 
     {% if us %}
+    <details class="fold" id="overseas-details">
+      <summary>海外市場 <small>{% if us.forecast and us.forecast.available %}{{ '偏多' if us.forecast.point > 0.25 else ('偏空' if us.forecast.point < -0.25 else '中性') }}{% else %}行情與影響{% endif %}</small></summary>
+      <div class="fold-body">
     <section class="us">
       <h3>美股連動</h3>
       {% if us.last_night %}
@@ -766,6 +820,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <p class="us-note">{{ us.forecast.reason }}</p>
       {% endif %}
     </section>
+      </div>
+    </details>
     {% endif %}
 
     {% if meta.mode == 'demo' %}
@@ -777,7 +833,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="stamp">
       <span id="freshness">更新時間 <b class="mono">{{ meta.generated_at }}</b></span>
       <span>行情資料日 <b class="mono">{{ meta.data_date or meta.trade_date }}</b></span>
-      <span>排名算出 <b class="mono">{{ meta.ranked_at or meta.close_run_at or meta.generated_at }}</b></span>
       {% if meta.applies_to %}
       <span class="apply">適用交易日 <b class="mono">{{ meta.applies_to }}</b></span>
       {% endif %}
@@ -785,19 +840,29 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <span class="pre">盤前海外更新 <b class="mono">{{ meta.premarket_at }}</b></span>
       {% endif %}
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
-      <button type="button" class="btn-refresh recalc" id="btn-recalc">⟳ 抓最新資料並重算排名</button>
+      <button type="button" class="btn-refresh recalc" id="btn-recalc" title="抓最新資料並重算排名">⟳ 重算排名</button>
       <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
     </div>
 
   </header>
 
   <!-- ===================== 排名 ===================== -->
-  <div class="oos-warn {{ 'bad' if capital_policy.blocked else 'ok' }}" id="capital-policy">
+  <details class="fold status-fold {{ 'ready' if not capital_policy.blocked else '' }}" id="capital-policy">
+    <summary>{{ '僅供研究 · 暫停配置' if capital_policy.blocked else '已通過驗證 · 可配置試算' }} <small>查看原因</small></summary>
+    <div class="fold-body">
     <b>{{ capital_policy.reason }}</b><br>
     {% if capital_policy.blocked %}自動配置、手動配置試算與新增模擬買單已停用；個人交易記帳仍可如實記錄。{% endif %}
     已改採風險報酬綜合評估；研究排名與回測不保證獲利，未通過驗證時仍保留現金。
+    </div>
+  </details>
+  <div class="rule-strip" aria-label="策略摘要">
+    <span>持有<b>{{ min_exit_days }}～{{ exit_days }} 日</b></span>
+    <span>淨利目標<b>+{{ '%g'|format(profit_target) }}%</b></span>
+    <span>可配置<b>{{ eligible_count }} 檔</b></span>
   </div>
-  <div class="note" id="target-rule">
+  <details class="fold fold-inline" id="target-rule">
+    <summary>交易規則與成本</summary>
+    <div class="fold-body">
     <b>目標：扣成本後淨利至少 +{{ '%g'|format(profit_target) }}%</b><br>
     訊號發布後下一個可交易日開盤買進，第 {{ min_exit_days }}～{{ exit_days }} 個交易日收盤檢查；
     達標即模擬出場，未達標在第 {{ exit_days }} 日出場。買進日算第 1 日。
@@ -806,7 +871,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發停損，可早於第 {{ min_exit_days }} 日；成交損失可能更大。{% else %}未另設價格停損；未達標在第 {{ exit_days }} 日出場，可能虧損，沒有保證損失上限。{% endif %}
     {% if not eligible_count %}<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>{% endif %}
     {% if not backtest %}<br>此目標的回測尚待重算，暫不顯示達標率。{% endif %}
-  </div>
+    排名更新：{{ meta.ranked_at or meta.close_run_at or meta.generated_at }}。
+    </div>
+  </details>
+  <details class="fold" id="validation-details">
+    <summary><span class="research-overview">回測與驗證
+      <small>{% if backtest and backtest.oos_overall %}{{ backtest.oos_overall.samples }} 筆 · 達標 {{ backtest.oos_overall.success_rate }}% · 虧損 {{ backtest.oos_overall.loss_rate }}%{% else %}資料尚待累積{% endif %}</small>
+    </span></summary>
+    <div class="fold-body">
   {% if backtest and backtest.oos_overall %}
   {% if not backtest.oos_proven %}
   <div class="oos-warn bad">
@@ -924,9 +996,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </div>
   {% endif %}
 
+    </div>
+  </details>
   <div class="section-head">
-    <h2>{{ min_exit_days }}～{{ exit_days }} 日風險報酬綜合研究排名</h2>
-    <span>名次為全部標的的總排名</span>
+    <h2>股票研究排名</h2>
+    <span>依綜合分數排序</span>
   </div>
 
   <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
@@ -940,6 +1014,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
     </div>
 
+    <details class="fold fold-inline" id="budget-options">
+      <summary>預算與配置 <small id="budget-summary">選填</small></summary>
+      <div class="fold-body">
     <div class="panel-row">
       <label for="budget-input">本週預算</label>
       <div class="budget-input">
@@ -972,6 +1049,16 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
 
     <div class="budget-result" id="budget-result"></div>
+    <details class="fold fold-inline">
+      <summary>配置試算方式</summary>
+      <div class="fold-body">
+      自動分配按綜合分數比例拆分；手動選股則平均分配。單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）。
+      試算不含手續費與證交稅，不代表買進建議。台股一張＝1000 股。
+      {% if allow_odd_lot %}預算不足一張時改以零股試算，需券商支援。{% endif %}
+      </div>
+    </details>
+      </div>
+    </details>
 
     <div class="panel-row scroll" role="group" aria-label="產業">
       <span class="lbl">產業</span>
@@ -983,11 +1070,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
 
     <div class="band-note" id="band-count"></div>
-    <p class="budget-note">
-      自動分配僅使用通過候選門檻的標的，按正的風險報酬綜合分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）；
-      自己挑則是在你選的標的之間平均分配。不是建議你買進，也沒有計入手續費與證交稅。
-      台股一張＝1000 股，{% if allow_odd_lot %}一張買不起時會改用零股試算（需券商支援盤中零股交易）。{% endif %}
-    </p>
   </section>
 
   {% if rows %}
@@ -1000,7 +1082,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <div class="ident">
             <div class="code mono">{{ r.code }}{% if r.momentum_icon %}<span class="mtier m{{ r.momentum_tier }}">{{ r.momentum_icon }} {{ r.momentum_label }}</span>{% endif %}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
               {% if r.mark and r.mark.badge %}<span class="mark" title="{{ r.mark.label }}">{{ r.mark.badge }}{% if r.mark.badge in ['🔥','↑','↓'] %}{{ r.mark.streak if r.mark.badge == '🔥' else (r.mark.rank_delta|abs) }}{% endif %}</span>{% endif %}</div>
-            <div class="name">{{ r.name }}</div><span class="{{ 'up' if r.rank_eligible else 'muted' }}">{{ r.rank_status or '僅供觀察' }}</span>
+            <div class="name">{{ r.name }}</div>
           </div>
           <div class="px">
             <div class="close mono">{{ '%.2f'|format(r.close) }}</div>
@@ -1016,6 +1098,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
+        <div class="summary-extra">
         <div class="meter" role="img"
              aria-label="機會分數組成：{% for k,l in segments %}{{ l }} {{ (r.breakdown[k].ratio*100)|round|int }}%{{ '，' if not loop.last }}{% endfor %}">
           {% for k, label in segments %}
@@ -1029,12 +1112,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <span style="flex:{{ r.breakdown[k].max }}">{{ label }}</span>
           {% endfor %}
         </div>
+        </div>
 
         <div class="row3">
-          <div class="headline">{{ r.headline }}</div>
+          <div class="rank-state">{{ '可配置試算' if r.trade_eligible else ('樣本不足' if not r.hist_samples else '僅供研究') }}</div>
           {% if r.final_score is defined and r.final_score is not none %}
           {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
-          <div class="score mono">{{ '%+.2f'|format(r.hist_risk_reward) }}<span class="pct">分</span><em>風險報酬綜合分數</em></div>
+          <div class="score mono">{{ '%+.2f'|format(r.hist_risk_reward) }}<span class="pct">分</span><em>綜合分數 · 非報酬率</em></div>
           {% else %}
           <div class="score mono nodata">—<em>綜合排名資料不足</em></div>
           {% endif %}
@@ -1043,6 +1127,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           {% endif %}
         </div>
 
+        {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
+        <dl class="key-metrics" aria-label="歷史風險報酬">
+          <div><dt>歷史達標率</dt><dd>{{ r.hist_success_raw }}%</dd></div>
+          <div><dt>達標平均淨利</dt><dd>{{ '%+.2f'|format(r.hist_avg_target_gain) if r.hist_avg_target_gain is not none else '—' }}%</dd></div>
+          <div><dt>歷史虧損率</dt><dd>{{ r.hist_loss_rate }}%</dd></div>
+          <div><dt>虧損時平均</dt><dd>−{{ '%.2f'|format(r.hist_avg_loss_magnitude) }}%</dd></div>
+        </dl>
+        {% else %}<p class="key-empty">資料不足，暫不提供機率估計。</p>{% endif %}
         <div class="pickrow">
           <button type="button" class="pick" data-pick data-code="{{ r.code }}" aria-pressed="false" {% if capital_policy.blocked or not r.trade_eligible %}disabled title="目前僅供研究，不允許配置"{% endif %}>
             ＋ 選入
@@ -1050,9 +1142,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           <button type="button" class="jbuy" data-jbuy data-code="{{ r.code }}"
                   data-name="{{ r.name }}" data-price="{{ r.close }}">＋加入我的持股</button>
           <div class="alloc" data-alloc hidden></div>
+          <span class="card-hint"><span class="when-closed">展開分析 ＋</span><span class="when-open">收起分析 −</span></span>
         </div>
 
         <!-- 星等：趨勢強不強、現在買位置好不好，分開看 -->
+        <div class="summary-extra">
+        <div class="headline">{{ r.headline }}</div>
         <dl class="stars">
           {% for k, label in star_rows %}
           <div><dt>{{ label }}</dt><dd>{{ r.stars[k] }}</dd></div>
@@ -1080,20 +1175,21 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="swing">
           <span>技術目標距離 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
           {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
-          <span class="wr">歷史達標率 <b>{{ r.hist_success_raw }}%</b>
-            · 達標平均淨利 <b>{{ '%+.2f'|format(r.hist_avg_target_gain) if r.hist_avg_target_gain is not none else '—' }}%</b>
-            · 虧損率 <b>{{ r.hist_loss_rate }}%</b>
-            · 平均虧損 <b>{{ '%.2f'|format(r.hist_avg_loss_magnitude) }}%</b><br>
-            · 收縮 EV <b class="{{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.2f'|format(r.hist_expectancy or 0) }}%</b>
+          <span class="wr">收縮 EV <b class="{{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.2f'|format(r.hist_expectancy or 0) }}%</b>
             · PF {{ r.hist_pf if r.hist_pf is not none else '—' }} · N={{ r.hist_samples }}</span>
           {% else %}<span class="wr nodata">目標統計待重算或樣本不足，不報達標率</span>{% endif %}
         </div>
         <div class="mainrisk">主要技術風險：{{ r.main_risk }}</div>
         {% for f in r.flags %}<span class="chip">{{ f }}</span>{% endfor %}
+        </div>
       </summary>
       <div class="detail">
+        <p class="mainrisk">研究狀態：{{ r.rank_status or '僅供觀察' }}</p>
         <div class="why"><b>觀察依據</b>{{ r.edge or r.why }}</div>
         {% if r.spark %}<div class="spark" data-spark='{{ r.spark|tojson }}'></div>{% endif %}
+        <details class="fold fold-inline">
+          <summary>分數與樣本細節 <small>{{ r.hist_samples or 0 }} 筆</small></summary>
+          <div class="fold-body">
         <div class="scoreline">
           排名分數＝（達標機率 × 達標平均淨利 − {{ loss_aversion }} × 虧損機率 × 平均虧損幅度）× N / (N + {{ shrink_k }})。
           機率以 0～1 代入；綜合分數不是預測報酬率。依分數由高到低排序，交易資格另外檢查。<br>
@@ -1116,6 +1212,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           {% endif %}
         </div>
 
+          </div>
+        </details>
         {% if r.momentum_icon %}
         <div class="mom mom{{ r.momentum_tier }}">
           <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
@@ -1267,8 +1365,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </div>
 
   {% if portfolio and portfolio.days %}
-  <div class="section-head"><h2>模擬投資組合</h2><span>本金 {{ '{:,.0f}'.format(portfolio.initial) }} · 規則自動執行</span></div>
+  <details class="fold" id="portfolio-details">
+    <summary>模擬投資組合 <small>{{ portfolio.trades }} 筆交易 · {{ ('持有 ' ~ (portfolio.positions|length) ~ ' 檔') if portfolio.positions else '目前空手' }}</small></summary>
+    <div class="fold-body">
   <div class="pf">
+    <p class="pf-note">本金 {{ '{:,.0f}'.format(portfolio.initial) }} · 規則自動執行</p>
     {% if portfolio.capital_policy and portfolio.capital_policy.blocked %}
     <p class="pf-note"><b>{{ portfolio.capital_policy.reason }}</b>。零交易不等於交易策略已證明零虧損。</p>
     {% endif %}
@@ -1306,13 +1407,18 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       {% endfor %}
     </div>
     {% endif %}
-    <p class="pf-note">
+    <details class="fold fold-inline">
+      <summary>模擬交易規則</summary>
+      <div class="fold-body">
       規則：每日最多持有 {{ paper_max_positions }} 檔、等權配置、隔日開盤成交、
       第 {{ min_exit_days }}～{{ exit_days }} 日收盤淨利至少 {{ profit_target }}% 出場，否則第 {{ exit_days }} 日出場；來回扣 {{ cost_pct }}% 成本。
       {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發提前停損，並非保證損失上限。{% else %}未另設價格停損；依達標或第 {{ exit_days }} 日到期規則出場，虧損如實記錄。{% endif %}
       完全依規則執行，沒有人為判斷，也沒有使用任何未來資料。這是紀錄，不是實際交易。
-    </p>
+      </div>
+    </details>
   </div>
+    </div>
+  </details>
   {% endif %}
 
   <!-- 記帳表單（買入 / 賣出 / 編輯共用一個） -->
@@ -1333,29 +1439,23 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </div>
 
   {% if signals and (signals.new_count or signals.hot_count or signals.dropped) %}
-  <div class="section-head"><h2>訊號追蹤</h2><span>近 {{ signals.history_days }} 日</span></div>
+  <details class="fold" id="signal-details">
+    <summary>訊號追蹤 <small>新增 {{ signals.new_count }} 檔 · 近 {{ signals.history_days }} 日</small></summary>
+    <div class="fold-body">
   <div class="note track">
     今日新訊號 <b>{{ signals.new_count }}</b> 檔 · 連續入榜 <b>{{ signals.hot_count }}</b> 檔
     {% if signals.dropped %}<br>❌ 已掉出榜單：
       {% for d in signals.dropped %}<span class="mono">{{ d.symbol }}</span>（原第 {{ d.prev_rank }} 名）{{ '、' if not loop.last }}{% endfor %}
     {% endif %}
   </div>
-  {% endif %}
-
-  {% if backtest and backtest.walk_forward %}
-  <div class="note wf">
-    {% if backtest.walk_forward.available %}
-    <b>Walk-forward</b>（out-of-sample）：EV {{ '%+.2f'|format(backtest.walk_forward.expectancy) }}% ·
-    PF {{ backtest.walk_forward.profit_factor }} · N {{ backtest.walk_forward.samples }}
-    <span class="muted">（{{ backtest.walk_forward.folds }} 段滾動校準，僅用前期資料建表再測後期）</span>
-    {% else %}
-    <b>Walk-forward</b>：{{ backtest.walk_forward.reason }}
-    {% endif %}
-  </div>
+    </div>
+  </details>
   {% endif %}
 
   <!-- ===================== 方法說明 ===================== -->
-  <div class="section-head"><h2>分數怎麼算的</h2><span>風險報酬綜合分數</span></div>
+  <details class="fold" id="method-details">
+    <summary>分數與資料說明 <small>計算方式、樣本與限制</small></summary>
+    <div class="fold-body">
   <div class="note">
     <h3>排序：達標收益與虧損風險綜合評估</h3>
     至少 {{ min_samples }} 筆、{{ min_calibration_dates }} 個訊號日才報估計值；
@@ -1405,16 +1505,20 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     股價低於 {{ thresholds.min_price }} 元或成交金額低於 {{ thresholds.min_turnover }} 的不納入。
     槓桿型（L）、反向型（R）、債券型（B）ETF 排除。<br>
     本週預算與類別只影響顯示與配置試算，<b>不影響排名</b>。<br>
-    要調整邏輯，改 <code>scripts/config.py</code>。
   </div>
+    </div>
+  </details>
 
   <!-- ===================== 底部免責聲明 ===================== -->
-  <div class="disclaimer-bottom">
+  <details class="fold" id="risk-details">
+    <summary>使用限制與風險提醒</summary>
+    <div class="fold-body">
     ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
     歷史達標率是過去相似訊號的統計結果，不是未來的成功機率；技術分數更只是型態描述。<br>
     分數高不代表會上漲，技術指標只描述過去的價量行為。<br>
     資料可能因來源延遲或錯誤而失真，下單前請自行以券商報價複核。
-  </div>
+    </div>
+  </details>
 
   <footer>
     台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
@@ -1882,7 +1986,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     if ({{ 'true' if capital_policy.blocked else 'false' }}) {
       resultEl.classList.add("show");
-      resultEl.textContent = {{ capital_policy.reason|tojson }} + "。資金保留現金，不產生配置試算。";
+      resultEl.textContent = "目前僅供研究，暫不配置資金。";
+      resultEl.title = {{ capital_policy.reason|tojson }} + "。資金保留現金，不產生配置試算。";
       return;
     }
 
@@ -1993,6 +2098,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   /* ---- 重畫全部 ---- */
   function render() {
+    var budgetSummary = document.getElementById("budget-summary");
+    if (budgetSummary) budgetSummary.textContent = st.budget ? money(st.budget) + (st.mode === "pick" ? " · 自己挑" : " · 自動分配") : "選填";
     press(modeBtns, "mode", st.mode);
     press(typeBtns, "type", st.type);
     press(splitBtns, "n", String(st.splits));
