@@ -39,6 +39,63 @@ STAR_ROWS = [
     ("reversal", "轉強"),
 ]
 
+# Display-only research rules, not optimized parameters or trading permission.
+STRONG_TECH_SCORE_MIN = 60.0
+LOW_LOSS_BADGE_MAX_PCT = 40.0
+
+
+def strength_marker(row: dict, data_date: str | None, validated: bool = False) -> dict:
+    def finite(key, source=None):
+        value = (row if source is None else source).get(key)
+        return value if isinstance(value, (int, float)) and math.isfinite(value) else None
+
+    score = finite("score")
+    o, h, l, c, volume = [finite(key) for key in ("day_open", "day_high", "day_low", "close", "volume")]
+    valid_quote = (all(v is not None and v > 0 for v in (o, h, l, c, volume))
+                   and l <= min(o, c) <= max(o, c) <= h)
+    fresh = bool(data_date and row.get("quote_date") == data_date)
+    technical = bool(fresh and valid_quote and score is not None
+                     and score >= STRONG_TECH_SCORE_MIN and row.get("momentum_tier") == 0)
+    cautions = []
+    chg, bias = finite("chg_pct"), finite("bias20")
+    if chg is None or bias is None:
+        cautions.append("追價資料不足")
+    else:
+        if chg > C.MOM_GOOD_CHG_HIGH:
+            cautions.append("今日漲多，留意追價")
+        if bias > C.MOM_BIAS_MAX:
+            cautions.append("均線乖離過大")
+    rsi = finite("rsi")
+    if rsi is None:
+        cautions.append("過熱指標不足")
+    elif rsi >= C.RSI_HOT:
+        cautions.append("RSI 偏熱")
+    entry = row.get("entry_plan") or {}
+    ceiling = finite("max_open_price", entry)
+    if not entry.get("available") or ceiling is None or ceiling <= 0:
+        cautions.append("進場上限未知")
+    elif c is not None and c > ceiling:
+        cautions.append("現價高於進場上限")
+    overseas = row.get("overseas_context") or {}
+    state = row.get("overseas_state")
+    if not overseas.get("available") or state not in ("tailwind", "headwind", "mixed"):
+        cautions.append("海外資料不足")
+    elif state == "headwind":
+        cautions.append("海外逆風")
+    elif state == "mixed":
+        cautions.append("海外走勢分歧")
+
+    upper, ev_lower = finite("hist_loss_rate_upper"), finite("hist_ev_lower")
+    samples, dates = finite("hist_samples"), finite("hist_signal_dates")
+    low_loss = bool(technical and validated and row.get("research_eligible") and not cautions
+                    and samples is not None and samples >= C.MIN_SAMPLES_SCORE
+                    and dates is not None and dates >= C.MIN_CALIBRATION_DATES
+                    and upper is not None and 0 <= upper <= LOW_LOSS_BADGE_MAX_PCT
+                    and ev_lower is not None and ev_lower > 0)
+    return {"technical": technical, "low_loss": low_loss, "cautions": cautions,
+            "label": "強勢・較低虧損條件" if low_loss else "技術強勢",
+            "note": "符合研究條件，仍可能虧損" if low_loss else "低虧損獲利能力待驗證"}
+
 
 def _format_twd(amount: int) -> str:
     """把金額轉成台灣人習慣的說法：1.2 億 / 3,500 萬 / 8,000 元。"""
@@ -80,7 +137,7 @@ def _groups(rows: list) -> list:
     return [{"name": g, "count": n} for g, n in head + tail]
 
 
-def reference_rows(rows: list[dict], data_date: str | None = None) -> list[dict]:
+def reference_rows(rows: list[dict], data_date: str | None = None, validated: bool = False) -> list[dict]:
     """Prepare an unfiltered reference view without changing strategy records."""
     result = [dict(row) for row in rows]
 
@@ -92,6 +149,7 @@ def reference_rows(rows: list[dict], data_date: str | None = None) -> list[dict]
     for rank, row in enumerate(sorted(result, key=technical_key), 1):
         row["technical_rank"] = rank
     for row in result:
+        row["strength"] = strength_marker(row, data_date, validated)
         warnings = []
         if data_date and row.get("quote_date") != data_date:
             warnings.append("行情日期不一致，價格需更新確認")
@@ -136,7 +194,8 @@ def render_html(payload: dict) -> str:
         lstrip_blocks=True,
     )
     tpl = env.get_template("dashboard.html.j2")
-    rows = reference_rows(payload["rows"], payload["meta"].get("data_date"))
+    rows = reference_rows(payload["rows"], payload["meta"].get("data_date"),
+                          ranking.research_validated(payload.get("backtest")))
     return tpl.render(
         meta=payload["meta"],
         index=payload.get("index") or None,
@@ -187,6 +246,10 @@ def render_html(payload: dict) -> str:
         smooth_n=C.SMOOTH_N,
         rows=rows,
         positive_risk_reward_count=sum(r.get("hist_risk_reward") is not None and r["hist_risk_reward"] > 0 for r in rows),
+        strong_count=sum(r["strength"]["technical"] for r in rows),
+        strong_low_loss_count=sum(r["strength"]["low_loss"] for r in rows),
+        strong_score_min=STRONG_TECH_SCORE_MIN,
+        low_loss_badge_max=LOW_LOSS_BADGE_MAX_PCT,
         segments=SEGMENTS,
         star_rows=STAR_ROWS,
         hide_unaffordable=C.HIDE_UNAFFORDABLE,

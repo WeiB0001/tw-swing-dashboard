@@ -109,18 +109,18 @@ body{
 .budget-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .budget-input button{background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
 
-.preset,.split,.mode-btn,.type-btn,.rank-sort{
+.preset,.split,.mode-btn,.type-btn,.rank-sort,.strong-filter{
   flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;
   padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
   background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
 }
 .split{padding:6px 11px;min-width:34px;text-align:center}
-.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"],.rank-sort[aria-pressed="true"]{
+.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"],.rank-sort[aria-pressed="true"],.strong-filter[aria-pressed="true"]{
   background:var(--signal);border-color:var(--signal);color:#161105;
 }
 .preset:active{background:#2A333F}
 .preset:focus-visible,.split:focus-visible,.mode-btn:focus-visible,
-.type-btn:focus-visible,.rank-sort:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
+.type-btn:focus-visible,.rank-sort:focus-visible,.strong-filter:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
   outline:2px solid var(--signal);outline-offset:2px}
 .ghost-btn{
   flex:0 0 auto;font:inherit;font-size:12px;font-weight:600;padding:5px 10px;
@@ -703,6 +703,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 .score-pair .score{font-size:23px}
 .reference-risk{margin:9px 0 0;color:#D9AF83;font-size:12px;line-height:1.6}
 .rank-explainer{margin:0 0 10px}
+.strength-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:9px;font-size:11px}
+.strength-badge{border:1px solid #8F6C31;border-radius:6px;padding:4px 7px;background:#332713;color:#FFD17C;font-weight:700}
+.strength-badge.evidence{border-color:#367650;background:#163122;color:#ADE3BE}
+.strength-note{color:var(--muted)}
+.strength-caution{color:#E2AF8F;border:1px solid #654535;border-radius:6px;padding:3px 6px}
+.card[data-strong="1"]{border-color:#665432}
 .card:not([open])>summary .summary-extra,.card:not([open])>summary .kind,
 .card:not([open])>summary .sector,.card:not([open])>summary .mark,.card:not([open])>summary .lot{display:none}
 .card .row3{margin-top:9px;flex-wrap:wrap}
@@ -1089,10 +1095,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <span>{{ rows|length }} 檔 · {{ meta.applies_to or meta.trade_date }}</span>
   </div>
   <details class="fold fold-inline rank-explainer">
-    <summary>分數怎麼看？ <small>未過門檻仍列入</small></summary>
+    <summary>分數與強勢標註 <small>技術強勢 {{ strong_count }} 檔 · 未過門檻仍列入</small></summary>
     <div class="fold-body">
       風險報酬分綜合達標率、達標淨利與虧損風險；目前 {{ positive_risk_reward_count }} 檔大於 0。負分仍照常排名，不代表遭到排除。<br>
       技術機會分為 0～100 分，衡量位置、趨勢、轉強、量價與技術風險；正分不等於正的預期報酬，也不是成功率。兩種排序都保留全榜，未通過條件改以風險提示揭露。
+      <p><b>★ 技術強勢</b>：技術分至少 {{ '%g'|format(strong_score_min) }}、動能已確認、當日有效行情。這是走勢標記，不代表低虧損率；漲多、進場上限與海外逆風另行提示，詳見個股。</p>
+      <p><b>強勢・較低虧損條件</b>：另外要求同類樣本至少 {{ min_samples }} 筆／{{ min_calibration_dates }} 個訊號日、虧損率保守上界不超過 {{ '%g'|format(low_loss_badge_max) }}%、淨報酬保守估計大於 0、通過整體樣本外驗證，且沒有追價或海外警示。目前 {{ strong_low_loss_count }} 檔；這些是研究設定，尚非最佳參數，也不保證未來表現。</p>
     </div>
   </details>
 
@@ -1102,6 +1110,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <span class="lbl">排序</span>
       <button type="button" class="rank-sort" data-sort="risk" aria-pressed="true">風險報酬</button>
       <button type="button" class="rank-sort" data-sort="technical" aria-pressed="false">技術機會</button>
+      <button type="button" class="strong-filter" id="strong-only" aria-pressed="false">只看強勢（{{ strong_count }}）</button>
     </div>
     <div class="panel-row">
       <div class="find">
@@ -1171,13 +1180,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </section>
 
   {% macro stock_card(r) %}
-    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-research-rank="{{ r.final_rank or r.rank }}" data-technical-rank="{{ r.technical_rank }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-research-rank="{{ r.final_rank or r.rank }}" data-technical-rank="{{ r.technical_rank }}" data-strong="{{ 1 if r.strength.technical else 0 }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
         <div class="row1">
           <div class="rank {{ 'top' if (r.final_rank or r.rank) <= 3 }}">{{ r.final_rank or r.rank }}</div>
           <div class="ident">
-            <div class="code mono">{{ r.code }}{% if r.momentum_icon %}<span class="mtier m{{ r.momentum_tier }}">{{ r.momentum_icon }} {{ r.momentum_label }}</span>{% endif %}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
+            <div class="code mono">{{ r.code }}{% if r.momentum_icon %}<span class="mtier m{{ r.momentum_tier }}">{{ r.momentum_icon }} {{ '動能確認' if r.momentum_tier == 0 else r.momentum_label }}</span>{% endif %}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
               {% if r.mark and r.mark.badge %}<span class="mark" title="{{ r.mark.label }}">{{ r.mark.badge }}{% if r.mark.badge in ['🔥','↑','↓'] %}{{ r.mark.streak if r.mark.badge == '🔥' else (r.mark.rank_delta|abs) }}{% endif %}</span>{% endif %}</div>
             <div class="name">{{ r.name }}</div>
           </div>
@@ -1193,6 +1202,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             {% endif %}
           </div>
         </div>
+
+        {% if r.strength.technical %}
+        <div class="strength-line" aria-label="強勢標註">
+          <span class="strength-badge {{ 'evidence' if r.strength.low_loss else '' }}">★ {{ r.strength.label }}</span>
+          <span class="strength-note">{{ r.strength.note }}</span>
+          {% for caution in r.strength.cautions %}<span class="strength-caution">{{ caution }}</span>{% endfor %}
+        </div>
+        {% endif %}
 
         <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
         <div class="summary-extra">
@@ -2023,12 +2040,13 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var modeBtns = Array.prototype.slice.call(document.querySelectorAll(".mode-btn"));
   var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
   var rankSortBtns = Array.prototype.slice.call(document.querySelectorAll(".rank-sort"));
+  var strongOnlyBtn = document.getElementById("strong-only");
   var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
 
   var INITIAL_VISIBLE = {{ initial_visible }};
   var moreBtn = document.getElementById("show-more");
   var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all",
-             picks: [], limit: INITIAL_VISIBLE, q: "", sort: "risk" };
+             picks: [], limit: INITIAL_VISIBLE, q: "", sort: "risk", strongOnly: false };
   var orderedBy = null;
 
   function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
@@ -2065,6 +2083,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     var matched = [], shown = [];
     cards.forEach(function (c) {
       var okType = st.type === "all" || c.dataset.type === st.type;
+      var okStrength = !st.strongOnly || c.dataset.strong === "1";
       var lot = parseInt(c.dataset.lot, 10) || 0;
       var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
       // 搜尋：比對代號、名稱與產業標籤
@@ -2075,7 +2094,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
                    (sec ? sec.textContent : "")).toLowerCase();
         okFind = hay.indexOf(st.q) >= 0;
       }
-      if (okType && okBudget && okFind) matched.push(c);
+      if (okType && okStrength && okBudget && okFind) matched.push(c);
       else { c.style.display = "none"; c.open = false; }
     });
     matched.forEach(function (c, i) {
@@ -2164,6 +2183,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   function render() {
     orderReferenceCards();
     press(rankSortBtns, "sort", st.sort);
+    if (strongOnlyBtn) strongOnlyBtn.setAttribute("aria-pressed", st.strongOnly ? "true" : "false");
     var budgetSummary = document.getElementById("budget-summary");
     if (budgetSummary) budgetSummary.textContent = st.budget ? money(st.budget) + (st.mode === "pick" ? " · 自己挑" : " · 自動分配") : "選填";
     press(modeBtns, "mode", st.mode);
@@ -2186,6 +2206,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     var v = visible();
     if (countEl) {
       var bits = [];
+      if (st.strongOnly) bits.push("僅技術強勢");
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
@@ -2195,7 +2216,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
       countEl.textContent = head + tail + best;
     }
-    if (emptyEl) emptyEl.style.display = v.matched.length || (!st.q && !st.budget && st.type === "all") ? "none" : "block";
+    if (emptyEl) {
+      emptyEl.style.display = v.matched.length || (!st.q && !st.budget && st.type === "all" && !st.strongOnly) ? "none" : "block";
+      emptyEl.textContent = st.strongOnly ? "目前篩選範圍內沒有技術強勢標的；再點「只看強勢」可恢復完整排名。" : "目前篩選條件下沒有符合的標的。";
+    }
 
     allocate(v.matched);
 
@@ -2257,6 +2281,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       st.limit = st.q ? cards.length : INITIAL_VISIBLE;
       render();
     });
+  });
+  if (strongOnlyBtn) strongOnlyBtn.addEventListener("click",function(){
+    st.strongOnly = !st.strongOnly;
+    st.limit = st.q ? cards.length : INITIAL_VISIBLE;
+    render();
   });
   pickClearBtn.addEventListener("click", function () {
     st.picks = []; st.mode = "auto"; render();
