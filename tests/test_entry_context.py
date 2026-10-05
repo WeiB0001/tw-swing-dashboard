@@ -154,21 +154,31 @@ class OverseasContextTests(unittest.TestCase):
         self.assertFalse(result["available"])
         self.assertIsNone(result["paired_ev_lift"])
 
-    def test_main_research_list_is_collapsed_and_all_cards_preserved(self):
+    def test_main_ranking_visible_even_when_allocation_blocked(self):
         payload=json.loads((Path(__file__).resolve().parents[1]/"data/latest.json").read_text())
         payload["rows"]=payload["rows"][:2]
+        for row in payload["rows"]:
+            row["trade_eligible"]=False
         html=render.render_html(payload)
         from html.parser import HTMLParser
         class Tags(HTMLParser):
-            def __init__(self): super().__init__();self.cards=[];self.fold=None
+            def __init__(self):
+                super().__init__();self.cards=[];self.rank_tag=None;self.details=[];self.hidden_cards=[]
             def handle_starttag(self,tag,attrs):
                 a=dict(attrs)
-                if tag=="details" and a.get("class")=="card": self.cards.append(a["data-code"])
-                if a.get("id")=="research-rank": self.fold=a
+                if tag=="details" and a.get("class")=="card":
+                    self.cards.append(a["data-code"])
+                    if any(not opened for opened in self.details): self.hidden_cards.append(a["data-code"])
+                if tag=="details": self.details.append("open" in a)
+                if a.get("id")=="research-rank": self.rank_tag=tag
+            def handle_endtag(self,tag):
+                if tag=="details": self.details.pop()
         tags=Tags();tags.feed(html)
-        self.assertEqual(len(tags.cards),2)
-        self.assertNotIn("open",tags.fold)
-        self.assertIn('id="candidate-empty"',html)
+        self.assertEqual(tags.cards,[row["code"] for row in payload["rows"]])
+        self.assertEqual(tags.rank_tag,"section")
+        self.assertEqual(tags.hidden_cards,[])
+        self.assertNotIn('id="candidate-empty"',html)
+        self.assertNotIn("okScope",html)
 
 
 if __name__=="__main__": unittest.main()

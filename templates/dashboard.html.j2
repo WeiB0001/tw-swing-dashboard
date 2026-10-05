@@ -1081,8 +1081,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
   </details>
   <div class="section-head">
-    <h2>可進場候選</h2>
-    <span>{{ eligible_count }} 檔 · 依綜合分數排序</span>
+    <h2>股票研究排名</h2>
+    <span>{{ rows|length }} 檔 · 符合配置條件 {{ eligible_count }} 檔</span>
   </div>
 
   <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
@@ -1442,21 +1442,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
     </details>
   {% endmacro %}
-  <section id="candidate-list" aria-label="可進場候選">
-    {% for r in rows if r.trade_eligible and not capital_policy.blocked %}{{ stock_card(r) }}{% endfor %}
-    {% if not eligible_count %}
-    <div class="empty" id="candidate-empty"><b>目前沒有可進場候選</b>
-      {{ capital_policy.reason if capital_policy.blocked else '目前沒有同時通過統計、技術風險與行情日期檢查的標的。' }}
-    </div>
-    {% endif %}
+  <section id="research-rank" aria-label="股票研究排名">
+    {% for r in rows %}{{ stock_card(r) }}{% endfor %}
   </section>
-  <details class="fold" id="research-rank">
-    <summary>展開其餘研究排名 <small>{{ rows|length - eligible_count }} 檔 · 僅供觀察</small></summary>
-    <div class="fold-body">
-      <p class="research-note">保留全榜原始名次；排名靠前仍可能追高或未通過驗證。展開卡片查看進場上限與海外研究。</p>
-      {% for r in rows if not r.trade_eligible or capital_policy.blocked %}{{ stock_card(r) }}{% endfor %}
-    </div>
-  </details>
   <button type="button" class="more" id="show-more" hidden></button>
   <div class="empty" id="band-empty" style="display:none">目前篩選條件下沒有符合的標的。</div>
 
@@ -2004,7 +1992,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var ODD_LOT = {{ 'true' if allow_odd_lot else 'false' }};
   var HIDE_UNAFFORDABLE = {{ 'true' if hide_unaffordable else 'false' }};
 
-  var researchFold = document.getElementById("research-rank");
   var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
   var budgetInput = document.getElementById("budget-input");
   var clearBtn = document.getElementById("budget-clear");
@@ -2020,7 +2007,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
   var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
 
-  if (researchFold) researchFold.addEventListener("toggle", function () { st.limit = st.q ? cards.length : INITIAL_VISIBLE; render(); });
   var INITIAL_VISIBLE = {{ initial_visible }};
   var moreBtn = document.getElementById("show-more");
   var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all",
@@ -2044,7 +2030,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   function visible() {
     var matched = [], shown = [];
     cards.forEach(function (c) {
-      var okScope = c.dataset.eligible === "1" || (researchFold && researchFold.open);
       var okType = st.type === "all" || c.dataset.type === st.type;
       var lot = parseInt(c.dataset.lot, 10) || 0;
       var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
@@ -2056,7 +2041,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
                    (sec ? sec.textContent : "")).toLowerCase();
         okFind = hay.indexOf(st.q) >= 0;
       }
-      if (okScope && okType && okBudget && okFind) matched.push(c);
+      if (okType && okBudget && okFind) matched.push(c);
       else { c.style.display = "none"; c.open = false; }
     });
     matched.forEach(function (c, i) {
@@ -2166,7 +2151,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
-      var head = bits.length ? bits.join("、") + "：" : (researchFold && researchFold.open ? "候選與研究：" : "可進場候選：");
+      var head = bits.length ? bits.join("、") + "：" : "研究排名：";
       var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
       countEl.textContent = head + tail + best;
@@ -2213,7 +2198,6 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var findClear = document.getElementById("find-clear");
   if (findEl) findEl.addEventListener("input", function () {
     st.q = findEl.value.trim().toLowerCase();
-    if (st.q && researchFold) researchFold.open = true;
     st.limit = st.q ? cards.length : INITIAL_VISIBLE;   // 搜尋時一次找完，不用按「顯示更多」
     render();
   });
