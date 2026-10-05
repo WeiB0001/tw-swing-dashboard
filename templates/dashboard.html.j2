@@ -1072,7 +1072,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <summary>發布後研究追蹤 <small>原始排名、買價上限與海外時間固定保存</small></summary>
       <p class="research-note">從 {{ research_forward.books.composite.forward_start }} 開始，取有足夠歷史統計的前 3 名作研究模擬，包含未過交易資格者，不開放配置。第一份發布紀錄不因重跑而覆寫，沒有事後補進場。<a href="{{ research_forward.snapshot }}">查看本次原始紀錄</a></p>
       <div class="research-table"><table><thead><tr><th>研究組</th><th>帳戶報酬</th><th>最大回落</th><th>已平倉</th><th>待進場</th><th>持倉</th></tr></thead><tbody>
-      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬'),('overseas','海外分組研究')] %}{% set book = research_forward.books.get(key) or research_forward.books.composite %}<tr><td>{{ label }}</td><td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.pending }}</td><td>{{ book.positions|length }}</td></tr>{% endfor %}
+      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬'),('overseas','海外分組研究')] %}{% set book = research_forward.books.get(key) %}<tr><td>{{ label }}</td>{% if book %}<td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.pending }}</td><td>{{ book.positions|length }}</td>{% else %}<td colspan="5">尚未建立此研究帳本</td>{% endif %}</tr>{% endfor %}
       </tbody></table></div>
       <p class="research-note">尚無交易或短期獲利均不代表策略有效；持續累積新資料，並保留虧損、未成交與策略版本。</p>
     </details>
