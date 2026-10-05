@@ -67,6 +67,15 @@ def load_archives(days: int) -> list[dict]:
         except (OSError, ValueError, TypeError) as e:
             log.warning("%s 讀取失敗：%s", f.name, e)
     out = [by_date[k] for k in sorted(by_date)]
+    for f in sorted((ROOT / "data/research_snapshots").glob("*.json")):
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+            if strategy.compatible(d):
+                by_date[d["data_date"]] = {"date": d["data_date"], "published_at": d["published_at"],
+                                           "rows": d["rows"], "file": f.name}
+        except (OSError, ValueError, KeyError):
+            continue
+    out = [by_date[k] for k in sorted(by_date)]
     return out[-days:] if days > 0 else out
 
 
@@ -87,7 +96,7 @@ def load_prices() -> dict[str, pd.DataFrame]:
 
 
 def outcome(df: pd.DataFrame, sig_date: str, cost: float,
-            published_at: str | None = None) -> dict | None:
+            published_at: str | None = None, code="") -> dict | None:
     idx = int(df.index.searchsorted(pd.Timestamp(sig_date), side="right"))
     if published_at:
         published = pd.Timestamp(published_at)
@@ -98,7 +107,7 @@ def outcome(df: pd.DataFrame, sig_date: str, cost: float,
             if market_open > published:
                 break
             idx += 1
-    return strategy.outcome(df, idx, cost)
+    return strategy.outcome(df, idx, code=code)
 
 
 def pack(items: list[dict]) -> dict:
@@ -145,7 +154,7 @@ def run(days: int) -> dict:
             df = prices.get(r.get("code"))
             if df is None:
                 continue
-            o = outcome(df, a["date"], C.TOTAL_COST_PCT, a["published_at"])
+            o = outcome(df, a["date"], C.TOTAL_COST_PCT, a["published_at"], r.get("code", ""))
             if o is None:
                 continue
             if not o["closed"]:

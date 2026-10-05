@@ -524,15 +524,26 @@ WF_TOP_N = 3                  # 每日取前幾名進行 out-of-sample 檢驗
 # 回測設定（scripts/backtest.py 使用）
 # ---------------------------------------------------------------------------
 # ---------------------------------------------------------------------------
-# 研究策略：訊號發布後下一個可交易日開盤買，第 2～10 個交易日收盤檢查。
-# 淨利（已扣 TOTAL_COST_PCT）至少達標才算成功；未達標第 10 日出場。
+# 研究策略：發布後下一開盤買；收盤觸發後，下一開盤退出（最早第 2 日）。
+# 淨利按實際金額逐筆扣費；第 10 日開盤預定離場，無法成交則延後揭露。
 # 買進日算第 1 日。若希望更早接受達標，可調整 EXIT_MIN_DAYS 並重跑回測。
 EXIT_MIN_DAYS = 2
 EXIT_MAX_DAYS = 10
 EXIT_MIN_PROFIT = 3.0          # 淨利門檻（百分比），可改為 5.0；會使舊統計失效
 REQUIRE_NO_LOSS = False       # 使用者改採成功率、達標報酬與虧損風險的綜合排序
 LOSS_AVERSION = 1.5          # 虧損項加重；固定研究設定，不由本次回測挑最佳權重
-STOP_LOSS_NET_PCT = None      # 保留原出場規則：達標或第 10 日；不另外設定價格停損
+STOP_LOSS_NET_PCT = 3.0       # 事先固定的研究方案：收盤淨損觸發，下一開盤成交；不是虧損上限
+EXIT_FILL_GRACE_DAYS = 5      # 跌停/停牌無法退出時延後，完整保留未成交紀錄
+BROKER_FEE_PCT = 0.1425       # 每邊手續費假設；可依自己的券商費率修改
+MIN_BROKER_FEE_TWD = 20.0     # 每筆最低手續費假設（非所有券商統一規定）
+STOCK_SELL_TAX_PCT = 0.3
+ETF_SELL_TAX_PCT = 0.1        # ETF 採一般稅率；未套用特定商品租稅優惠
+REFERENCE_NOTIONAL_TWD = 100_000  # 單筆訊號統計使用的參考成交金額
+RISK_PER_TRADE_PCT = 0.5      # 本金百分比；計畫風險，跳空時可能超過
+MAX_TOTAL_RISK_PCT = 1.5
+MAX_SECTOR_POSITION_PCT = 40.0
+RISK_GAP_BUFFER_PCT = 1.0     # 停損之外的部位試算緩衝，仍非最壞虧損上限
+RESEARCH_FORWARD_JSON = "data/research_forward.json"
 MIN_CALIBRATION_DATES = 20    # 不把同一天的很多股票當成很多獨立日期
 EV_BOOTSTRAP_BLOCK_DAYS = 10  # 以連續日期區塊估計報酬不確定性
 EV_BOOTSTRAP_REPS = 500
@@ -544,11 +555,11 @@ BACKTEST_TOP_K = [1, 3, 5, 10]         # 檢查前幾名
 BACKTEST_MIN_SCORE = 0               # 回測統計全部級距（含低分區），否則低分標的查不到表
 BACKTEST_SCORE_BUCKETS = [(0, 30), (30, 45), (45, 55), (55, 65), (65, 75), (75, 101)]
 # --- 交易假設 ---
-TRADE_COST_PCT = 0.3          # 來回交易成本（手續費＋證交稅），單位 %
+TRADE_COST_PCT = 2 * BROKER_FEE_PCT + STOCK_SELL_TAX_PCT  # 一般股票名目成本；實際依金額逐筆算
 SLIPPAGE_PCT = 0.2            # 來回滑價假設，單位 %
                               # 隔日開盤買、收盤賣都不會剛好成交在那個價位，
                               # 不扣滑價的回測一定過度樂觀
-TOTAL_COST_PCT = TRADE_COST_PCT + SLIPPAGE_PCT   # 所有績效統一扣這個
+TOTAL_COST_PCT = round(TRADE_COST_PCT + SLIPPAGE_PCT, 6)  # 顯示名目成本；逐筆績效用 execution 現金模型
                               # 台股實務約 0.4～0.6%，想更保守就調高
 SIGNAL_COOLDOWN_DAYS = 10      # 同一檔股票出訊號後幾個交易日內不重複採樣
                               # 避免連續多天的同一段行情被算成好幾個獨立樣本

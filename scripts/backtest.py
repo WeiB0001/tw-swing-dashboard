@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 backtest.py — 與首頁共用排序程式的淨利目標回測。
-訊號日收盤後選股，次日開盤進場，第 2～10 日收盤淨利達標才成功，
-未達標第 10 日出場；小幅正報酬仍納入 EV，但不計入達標次數。
+訊號日收盤後選股，次日開盤進場；收盤觸發後下一開盤退出，
+第 10 日開盤預定離場，無法成交則延後揭露。小額獲利納入 EV，但不算達標。
 同股校準樣本間隔 10 日，逐段驗證剔除尚未成熟的訓練結果。
 目前股票池回溯存在選樣限制，跨股與連續日樣本亦非互相獨立。
 
@@ -30,6 +30,7 @@ import scoring
 import strategy
 import ranking
 import risk_stats
+import execution
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -62,9 +63,9 @@ def load_universe_history(demo: bool) -> dict[str, pd.DataFrame]:
 # ---------------------------------------------------------------------------
 # 勝率平滑
 # ---------------------------------------------------------------------------
-def first_profitable_exit(df, pos: int, cost: float) -> dict | None:
+def first_profitable_exit(df, pos: int, cost: float | None = None, code="") -> dict | None:
     """Shared net-target outcome; only fully matured cohorts."""
-    result = strategy.outcome(df, pos + 1, cost)
+    result = strategy.outcome(df, pos + 1, code=code)
     return result if result and result.get("closed") else None
 
 
@@ -128,7 +129,7 @@ def load_regimes(demo: bool) -> pd.Series | None:
 
 def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
                  regimes: pd.Series | None = None) -> dict:
-    max_hold = max(C.BACKTEST_HOLD_DAYS)
+    max_hold = max(max(C.BACKTEST_HOLD_DAYS), C.EXIT_MAX_DAYS + C.EXIT_FILL_GRACE_DAYS)
     cost = C.TOTAL_COST_PCT   # 手續費＋證交稅＋滑價
     cooldown = C.SIGNAL_COOLDOWN_DAYS
 
@@ -145,6 +146,9 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     log.info("回測標的：%d 檔", len(frames))
 
     all_dates = sorted(set().union(*[set(df.index) for df in frames.values()]))
+    # Preserve market sessions missing from an individual security's history;
+    # never turn a suspension/data gap into a shorter holding period.
+    frames = {code: df.reindex(all_dates) for code, df in frames.items()}
     # 尾端要留 max_hold + 1 根（+1 是因為進場價用的是隔日開盤）
     usable = all_dates[C.MIN_BARS: len(all_dates) - max(max_hold, C.EXIT_MAX_DAYS) - 1]
     if lookback_days > 0:
@@ -154,6 +158,9 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     log.info("回測期間：%s ～ %s（%d 個交易日）",
              str(usable[0])[:10], str(usable[-1])[:10], len(usable))
 
+    audit = execution.audit(hist_map)
+    audit.update(unfilled_entries=0, unresolved_exits=0)
+    audit["market_regime_available"] = regimes is not None
     import build as build_mod
     signals, all_signals = [], []
     last_signal_day = {}          # code -> 上次採樣是第幾個交易日（用來做冷卻）
@@ -164,6 +171,8 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
             pos = df.index.get_indexer([day])[0]
             if pos < C.MIN_BARS - 1 or pos + max(max_hold, C.EXIT_MAX_DAYS) + 1 >= len(df):
                 continue
+            if not np.isfinite(df["close"].iloc[pos - 1]) or not np.isfinite(df["low"].iloc[pos - 1]):
+                continue
             f = indicators.features_at(df, pos)
             if not f:
                 continue
@@ -173,14 +182,14 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
 
             # --- 進場價：隔日開盤。收盤後才產生的訊號，當日收盤價已經買不到 ---
             entry = float(df["open"].iloc[pos + 1])
-            if not entry or entry <= 0:
+            if not np.isfinite(entry) or entry <= 0:
                 continue
 
             fwd = {}
             for h in C.BACKTEST_HOLD_DAYS:
                 exit_px = float(df["close"].iloc[pos + h])
                 gross = (exit_px / entry - 1) * 100
-                net = gross - cost                      # 扣掉來回交易成本
+                net = execution.net_return(entry, exit_px, code=code)
                 trough = float(df["low"].iloc[pos + 1: pos + h + 1].min())
                 fwd[h] = {
                     "net": net,
@@ -196,9 +205,14 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
                 except Exception:
                     pass
 
-            ex = first_profitable_exit(df, pos, cost)
-            if ex is None:
-                continue
+            ex = strategy.outcome(df, pos + 1, code=code)
+            if not ex or not ex.get("closed"):
+                if ex and ex.get("entered") is False:
+                    audit["unfilled_entries"] += 1
+                else:
+                    audit["unresolved_exits"] += 1
+                ex = ex or {"closed": False, "reason": "資料不足"}
+                ex["label_end"] = str(df.index[pos + max_hold])[:10]
 
             replay = build_mod.build_row(code, code, f, res)
             replay["prev_low"] = float(df["low"].iloc[pos - 1])
@@ -231,6 +245,8 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
             r["rank"] = rank
             r["pct"] = (rank - 1) / max(1, n_day)
             all_signals.append(r)
+            if not r["exit"].get("closed"):
+                continue  # Retain these candidates in replay; never train on an unresolved outcome.
             # --- 冷卻：同一檔在 N 個交易日內只採樣一次 ---
             prev = last_signal_day.get(r["code"])
             if prev is not None and n - prev < cooldown:
@@ -248,7 +264,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     cut_date = dates[min(len(dates) - 1, int(len(dates) * C.OOS_SPLIT))]
     ins = [r for r in signals if r["exit"]["label_end"] < cut_date]
     oos = [r for r in signals if r["date"] >= cut_date]
-    wf = walk_forward(all_signals, signals)
+    wf = walk_forward(all_signals, signals, frames)
     tables = calibration_tables(signals)
 
     return {
@@ -256,6 +272,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "research_only": True,
         "capital_policy": strategy.capital_policy(),
         "calibration": tables,
+        "data_quality": audit,
         "in_sample_overall": _pack(ins),
         "generated_at": datetime.now(C.TZ).strftime("%Y-%m-%d %H:%M"),
         "oos_period": (f"{oos[0]['date']} ～ {oos[-1]['date']}" if oos else ""),
@@ -272,11 +289,12 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "total_signals": len(signals),
         "primary_hold_days": C.PRIMARY_HOLD_DAYS,
         "cost_pct": cost,
-        "cost_detail": {"fee_tax": C.TRADE_COST_PCT, "slippage": C.SLIPPAGE_PCT},
+        "cost_detail": {"fee_tax": C.TRADE_COST_PCT, "slippage": C.SLIPPAGE_PCT,
+                        "broker_fee_each": C.BROKER_FEE_PCT, "minimum_fee": C.MIN_BROKER_FEE_TWD,
+                        "stock_sell_tax": C.STOCK_SELL_TAX_PCT, "etf_sell_tax": C.ETF_SELL_TAX_PCT,
+                        "reference_notional": C.REFERENCE_NOTIONAL_TWD},
         "cooldown_days": cooldown,
-        "entry_rule": ("訊號日 t 收盤後產生，t+1 開盤進場；之後每天收盤檢查，"
-                       "第 %d～%d 個交易日淨利至少 %.1f%% 才算達標；未達標第 %d 日出場（收盤成交模擬）"
-                       % (C.EXIT_MIN_DAYS, C.EXIT_MAX_DAYS, C.EXIT_MIN_PROFIT, C.EXIT_MAX_DAYS)),
+        "entry_rule": "發布後下一開盤進場；收盤達獲利或停損條件，下一開盤退出。第 10 日開盤預定離場；無法成交則延後並揭露。達標依實現淨利判定。",
         "exit_max_days": C.EXIT_MAX_DAYS,
         "topk": stats_by_topk(signals),
         "score_buckets": stats_by_bucket(signals),
@@ -284,7 +302,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "pattern_buckets": stats_by_pattern_bucket(signals),
         "walk_forward": wf,
         "patterns": stats_by_pattern(signals),
-        "note": "歷史模擬結果，不代表未來績效。已扣 %.1f%% 來回成本（手續費稅 %.1f%% ＋ 滑價 %.1f%%）。"
+        "note": "歷史模擬結果，不代表未來績效。一般股票名目成本約 %.3f%%（手續費稅 %.3f%% ＋ 滑價 %.1f%%）；逐筆依金額、最低手續費及商品稅率計算。"
                 % (cost, C.TRADE_COST_PCT, C.SLIPPAGE_PCT),
     }
 
@@ -297,7 +315,7 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
     統計一組樣本。**主指標是「N 天內獲利出場的成功率」**，
     h 參數保留是為了相容舊呼叫，實際已不使用固定持有期。
     """
-    ex = [s["exit"] for s in sub if s.get("exit")]
+    ex = [s["exit"] for s in sub if s.get("exit") and s["exit"].get("closed", True)]
     if ex:
         nets = [e["net"] for e in ex]
         mdds = [e["mdd"] for e in ex]
@@ -312,10 +330,12 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
         d["avg_days_win"] = (round(sum(e["days"] for e in ex if e["success"])
                                    / max(1, wins), 1) if wins else None)
         return d
-    return _pack_hold(sub, h or C.PRIMARY_HOLD_DAYS)
+    return _pack_hold([], h or C.PRIMARY_HOLD_DAYS)
 
 
 def _pack_hold(sub: list[dict], h: int) -> dict:
+    sub = [s for s in sub if h in s.get("fwd", {}) and np.isfinite(s["fwd"][h]["net"])
+           and np.isfinite(s["fwd"][h]["mdd"])]
     if not sub:
         return {**describe([], []), "signal_dates": 0, "ev_lower": None, "risk_reward_lower": None}
     return describe([s["fwd"][h]["net"] for s in sub], [s["fwd"][h]["mdd"] for s in sub])
@@ -388,7 +408,7 @@ def training_before(signals: list[dict], test_start: str) -> list[dict]:
             and r["exit"]["label_end"] < test_start]
 
 
-def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> dict:
+def walk_forward(signals: list[dict], calibration: list[dict] | None = None, histories=None) -> dict:
     """Frozen chronological folds replay the same attach/momentum/rank functions.
 
     No overseas or next-day model adjustment is applied to the live target rank,
@@ -407,6 +427,7 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
         by_day.setdefault(r["date"], []).append(r)
     picked, tested, fold_stats, comparisons, success_comparisons = [], [], [], [], []
     utility_comparisons, ev_sorted_picks, matched_rank_differences = [], [], []
+    observation_picks, observation_ev = [], []
     for i, test_dates in enumerate(folds[1:], 1):
         prior = training_before(calibration, test_dates[0])
         if len(prior) < C.MIN_SAMPLES_SCORE:
@@ -421,6 +442,9 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
             build_mod.add_final_score(rows)
             ranked = ranking.sort(rows)
             lookup = {s["code"]: s for s in source}
+            known = [r for r in ranked if r.get("hist_risk_reward") is not None]
+            observation_picks.extend(lookup[r["code"]] for r in known[:C.WF_TOP_N])
+            observation_ev.extend(lookup[r["code"]] for r in sorted(known, key=lambda r: -r["hist_expectancy"])[:C.WF_TOP_N])
             n = len(ranked)
             # Research replay remains measurable while capital policy blocks buys.
             eligible = [r for r in ranked if r["research_eligible"]][:C.WF_TOP_N]
@@ -434,14 +458,17 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
             ev_sorted_picks.extend(ev_today)
             picked.extend(today)
             fold_picked.extend(today)
-            if today:
-                score_today = sum(strategy.utility(s["exit"]["net"]) for s in today) / len(today)
-                utility_comparisons.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in source) / len(source))
-                matched_rank_differences.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in ev_today) / len(ev_today))
-                comparisons.append(sum(s["exit"]["net"] for s in today) / len(today)
-                                   - sum(s["exit"]["net"] for s in source) / len(source))
-                success_comparisons.append(100 * (sum(s["exit"]["success"] for s in today) / len(today)
-                                           - sum(s["exit"]["success"] for s in source) / len(source)))
+            filled = [s for s in today if s["exit"].get("closed")]
+            base_filled = [s for s in source if s["exit"].get("closed")]
+            ev_filled = [s for s in ev_today if s["exit"].get("closed")]
+            if filled and base_filled and ev_filled:
+                score_today = sum(strategy.utility(s["exit"]["net"]) for s in filled) / len(filled)
+                utility_comparisons.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in base_filled) / len(base_filled))
+                matched_rank_differences.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in ev_filled) / len(ev_filled))
+                comparisons.append(sum(s["exit"]["net"] for s in filled) / len(filled)
+                                   - sum(s["exit"]["net"] for s in base_filled) / len(base_filled))
+                success_comparisons.append(100 * (sum(s["exit"]["success"] for s in filled) / len(filled)
+                                           - sum(s["exit"]["success"] for s in base_filled) / len(base_filled)))
             for rank, r in enumerate(ranked, 1):
                 tested.append({**lookup[r["code"]], "rank": rank,
                                "pct": (rank - 1) / max(n, 1)})
@@ -461,7 +488,17 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None) -> 
                    and (f.get("risk_reward_score") or 0) > 0)
     summary = _pack(picked)
     deciles = stats_by_decile(tested)
-    return {"available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
+    experiments = {}
+    if histories is not None:
+        import research
+        experiments = {"exit_study": research.exit_study(observation_picks, histories),
+                       "portfolio_replay": {"composite": research.historical_book(observation_picks, histories),
+                                            "ev_only": research.historical_book(observation_ev, histories)},
+                       "observation_note": "研究比較取有足夠歷史統計的前 3 名，包含未通過交易資格的標的；不可視為配置建議。"}
+    return {**experiments, "available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
+            "selected_signals": len(picked),
+            "unfilled_entries": sum(s["exit"].get("entered") is False for s in picked),
+            "unresolved_exits": sum(not s["exit"].get("closed") and s["exit"].get("entered") is not False for s in picked),
             "selection": "research_candidates", "research_only": True,
             "folds": k, "top_n": C.WF_TOP_N, "fold_stats": fold_stats,
             "positive_folds": positive, "total_folds": len(fold_stats),

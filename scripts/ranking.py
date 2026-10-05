@@ -103,6 +103,9 @@ def research_validated(bt: dict | None) -> bool:
     if not strategy.compatible(bt) or bt.get("mode") != "live":
         return False
     wf = bt.get("walk_forward") or {}
+    quality = bt.get("data_quality") or {}
+    if quality.get("issue_count", 0) or quality.get("unresolved_exits", 0) or quality.get("market_regime_available") is False:
+        return False
     return bool(wf.get("available") and (wf.get("samples") or 0) >= 100
                 and (wf.get("ev_lower") or 0) > 0
                 and (wf.get("risk_reward_lower") or 0) > 0
@@ -120,6 +123,8 @@ def apply_policy(rows: list[dict], bt: dict | None, data_date: str | None = None
     policy["research_validated"] = research_validated(bt)
     if not policy["blocked"] and not policy["research_validated"]:
         policy.update(blocked=True, reason="風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金")
+        if (bt or {}).get("data_quality", {}).get("issue_count"):
+            policy["reason"] += "；行情異常或公司行動待核對"
     for r in rows:
         stale = bool(data_date and r.get("quote_date") != data_date)
         allowed = bool(not policy["blocked"] and r.get("research_eligible") and not stale)

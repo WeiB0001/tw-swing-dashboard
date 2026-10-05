@@ -707,6 +707,14 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 .card-hint .when-open,.card[open] .card-hint .when-closed{display:none}
 .card[open] .card-hint .when-open{display:inline}
 .key-empty{font-size:12px;color:var(--muted);margin:10px 0}
+.risk-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.risk-form label{font-size:12px;color:var(--muted)}
+.risk-form input{display:block;box-sizing:border-box;width:100%;margin-top:5px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}
+.research-table{overflow-x:auto}.research-table table{width:100%;min-width:510px;border-collapse:collapse;font-size:12px}
+.research-table td,.research-table th{padding:9px 7px;text-align:right;border-bottom:1px solid var(--line)}
+.research-table td:first-child,.research-table th:first-child{text-align:left}
+.research-note{font-size:12px;color:var(--muted);line-height:1.75}
+.plan-summary{padding:12px;background:#11171E;border-radius:8px;margin:10px 0}
 @media (max-width:440px){
   .key-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .key-metrics div{padding:7px 9px;display:flex;justify-content:space-between;align-items:center;gap:5px}
@@ -856,7 +864,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </div>
   </details>
   <div class="rule-strip" aria-label="策略摘要">
-    <span>持有<b>{{ min_exit_days }}～{{ exit_days }} 日</b></span>
+    <span>預計持有<b>{{ min_exit_days }}～{{ exit_days }} 日</b></span>
     <span>淨利目標<b>+{{ '%g'|format(profit_target) }}%</b></span>
     <span>可配置<b>{{ eligible_count }} 檔</b></span>
   </div>
@@ -864,11 +872,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <summary>交易規則與成本</summary>
     <div class="fold-body">
     <b>目標：扣成本後淨利至少 +{{ '%g'|format(profit_target) }}%</b><br>
-    訊號發布後下一個可交易日開盤買進，第 {{ min_exit_days }}～{{ exit_days }} 個交易日收盤檢查；
-    達標即模擬出場，未達標在第 {{ exit_days }} 日出場。買進日算第 1 日。
-    來回成本含滑價 {{ cost_pct }}%；小賺但未達目標不算成功。收盤成交為模擬假設。<br>
+    發布後下一開盤進場；買進日算第 1 日。收盤觸發獲利或停損，下一開盤退出，最早第 {{ min_exit_days }} 日；第 {{ exit_days }} 日開盤預定離場。
+    停牌或無法成交時延後並記錄。<b>3% 是獲利觸發目標，實現淨利可能較低；達標率只計實際淨利至少 3% 的交易。</b><br>
+    成本逐筆計算：每邊手續費 {{ risk_settings.fee }}%（最低 {{ risk_settings.minimum_fee }} 元）、賣出稅一般股票 {{ risk_settings.stock_tax }}%／ETF {{ risk_settings.etf_tax }}%、來回滑價 {{ risk_settings.slippage }}%。費率為可調假設，未套用個別商品稅務優惠。
+    單筆訊號統計以約 {{ '{:,.0f}'.format(risk_settings.reference) }} 元為參考，資金回測依實際股數計算。<br>
     目前 <b>{{ research_count }}</b> 檔通過研究門檻；<b>{{ eligible_count }}</b> 檔允許配置。
-    {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發停損，可早於第 {{ min_exit_days }} 日；成交損失可能更大。{% else %}未另設價格停損；未達標在第 {{ exit_days }} 日出場，可能虧損，沒有保證損失上限。{% endif %}
+    {% if stop_loss_pct is not none %}目前研究設定：收盤淨損達 {{ stop_loss_pct }}% 觸發停損，次開盤模擬成交；跳空損失可能更大。此設定尚非經驗證的最佳方案。{% endif %}
     {% if not eligible_count %}<b>今日沒有符合候選條件的標的；下方僅供觀察。</b>{% endif %}
     {% if not backtest %}<br>此目標的回測尚待重算，暫不顯示達標率。{% endif %}
     排名更新：{{ meta.ranked_at or meta.close_run_at or meta.generated_at }}。
@@ -878,6 +887,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <summary><span class="research-overview">回測與驗證
       <small>{% if backtest and backtest.oos_overall %}{{ backtest.oos_overall.samples }} 筆 · 達標 {{ backtest.oos_overall.success_rate }}% · 虧損 {{ backtest.oos_overall.loss_rate }}%{% else %}資料尚待累積{% endif %}</small>
     </span></summary>
+    {% if backtest and backtest.data_quality %}
+    <div class="fold-body research-note"><b>資料檢查：{{ backtest.data_quality.issue_count }} 筆待核對</b> · 未成交進場 {{ backtest.data_quality.unfilled_entries }} 筆 · 未結算出場 {{ backtest.data_quality.unresolved_exits }} 筆。{% if backtest.data_quality.market_regime_available is defined and not backtest.data_quality.market_regime_available %}<br><b>歷史大盤狀態缺漏，這次回測不能通過配置驗證。</b>{% endif %}<br>{{ backtest.data_quality.note }}
+    {% if backtest.data_quality.issues %}<details class="fold fold-inline"><summary>查看異常紀錄（最多 100 筆）</summary><ul>{% for issue in backtest.data_quality.issues %}<li>{{ issue.date }} · {{ issue.code }} · {{ issue.reason }}</li>{% endfor %}</ul></details>{% endif %}</div>
+    {% endif %}
     <div class="fold-body">
   {% if backtest and backtest.oos_overall %}
   {% if not backtest.oos_proven %}
@@ -990,12 +1003,58 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     </table>
     <div class="decile-note">
       訓練只用測試開始前已完整成熟的樣本，重播與首頁相同的排序。<b>前段綜合分數應優於後段及同日基準</b>。
-      若沒有，勝率再高也沒有意義。所有數字已扣除手續費、證交稅與滑價共
-      {{ backtest.cost_pct }}%。
+      若沒有，勝率再高也沒有意義。所有數字依參考金額扣除手續費、證交稅與滑價；尚未成交的出場另外揭露。
     </div>
   </div>
   {% endif %}
 
+    </div>
+  </details>
+  <details class="fold" id="risk-research">
+    <summary>風險與策略研究 <small>部位試算 · 出場比較 · 資金績效</small></summary>
+    <div class="fold-body">
+    <details class="fold fold-inline" id="risk-calculator">
+      <summary>風險部位試算 <small>假設情境，不產生配置或委託</small></summary>
+      <div class="risk-form">
+        <label>本金（元）<input id="risk-capital" type="number" min="1" value="100000" inputmode="decimal"></label>
+        <label>參考股價（元）<input id="risk-price" type="number" min="0.01" step="0.01" value="100" inputmode="decimal"></label>
+        <label>單筆計畫風險（本金 %）<input id="risk-percent" type="number" min="0.01" max="100" step="0.1" value="{{ risk_settings.per_trade }}" inputmode="decimal"></label>
+        <label>淨損觸發幅度（%）<input id="risk-stop" type="number" min="0.1" max="50" step="0.1" value="{{ stop_loss_pct or 3 }}" inputmode="decimal"></label>
+      </div>
+      <div class="plan-summary" id="risk-calculation" role="status" aria-live="polite"></div>
+      <p class="research-note">含買進手續費、最低費用及滑價。淨損幅度另加 {{ risk_settings.buffer }} 個百分點緩衝，並套用單一標的 {{ max_position_pct }}%、同產業 {{ risk_settings.sector }}% 上限。此處假設目前空手；既有持倉會減少可用額度。跳空、停牌時實際虧損可超過試算值。</p>
+    </details>
+    {% set wf = backtest.walk_forward if backtest and backtest.walk_forward else none %}
+    {% if wf and wf.exit_study %}
+    <details class="fold fold-inline" id="exit-comparison">
+      <summary>出場規則比較 <small>{{ wf.exit_study.signals }} 個相同進場訊號</small></summary>
+      <p class="research-note">{{ wf.exit_study.basis }} {{ wf.exit_study.note }}</p>
+      <div class="research-table"><table>
+        <thead><tr><th>研究方案</th><th>已結算</th><th>平均淨報酬</th><th>達標率</th><th>平均虧損</th><th>最差 5% 平均</th><th>未結算</th></tr></thead>
+        <tbody>{% for v in wf.exit_study.variants %}<tr><td>{{ v.label }}</td><td>{{ v.samples }}</td><td>{{ '%+.2f%%'|format(v.expectancy) if v.expectancy is not none else '—' }}</td><td>{{ v.success_rate if v.success_rate is defined else '—' }}%</td><td>{{ '%.2f%%'|format(v.avg_loss) }}</td><td>{{ '%.2f%%'|format(v.tail_mean_5pct) if v.tail_mean_5pct is not none else '—' }}</td><td>{{ v.unresolved }}</td></tr>{% endfor %}</tbody>
+      </table></div>
+      <p class="research-note">收盤訊號、次開盤成交；未成交進場與未結算交易不冒充零損失。3% 停損是事先固定的研究設定，尚未證明優於其他方案。</p>
+    </details>
+    {% endif %}
+    {% if wf and wf.portfolio_replay %}
+    <details class="fold fold-inline" id="capital-replay">
+      <summary>歷史資金回測 <small>本金 {{ '{:,.0f}'.format(risk_settings.reference) }} 元 · 有限持倉</small></summary>
+      <div class="research-table"><table><thead><tr><th>排序方式</th><th>帳戶報酬</th><th>最大回落</th><th>已平倉</th><th>未平倉</th><th>未成交／額度不足</th></tr></thead><tbody>
+      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬')] %}{% set book = wf.portfolio_replay[key] %}<tr><td>{{ label }}</td>{% if book.available %}<td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.positions|length }}</td><td>{{ book.skipped }}</td>{% else %}<td colspan="5">{{ book.reason }}</td>{% endif %}</tr>{% endfor %}
+      </tbody></table></div>
+      <p class="research-note">{{ wf.observation_note }} 每筆風險 {{ risk_settings.per_trade }}%、整體 {{ risk_settings.total }}%、最多 {{ paper_max_positions }} 檔；現金不足不買、同股不重複買。報酬含未平倉估值，與單筆訊號平均報酬不同。這是歷史研究，不是實際投資績效。</p>
+    </details>
+    {% endif %}
+    {% if research_forward %}
+    <details class="fold fold-inline" id="forward-research">
+      <summary>發布後研究追蹤 <small>原始排名固定保存</small></summary>
+      <p class="research-note">從 {{ research_forward.books.composite.forward_start }} 開始，取有足夠歷史統計的前 3 名作研究模擬，包含未過交易資格者，不開放配置。第一份發布紀錄不因重跑而覆寫，沒有事後補進場。<a href="{{ research_forward.snapshot }}">查看本次原始紀錄</a></p>
+      <div class="research-table"><table><thead><tr><th>研究組</th><th>帳戶報酬</th><th>最大回落</th><th>已平倉</th><th>待進場</th><th>持倉</th></tr></thead><tbody>
+      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬')] %}{% set book = research_forward.books[key] %}<tr><td>{{ label }}</td><td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.pending }}</td><td>{{ book.positions|length }}</td></tr>{% endfor %}
+      </tbody></table></div>
+      <p class="research-note">尚無交易或短期獲利均不代表策略有效；持續累積新資料，並保留虧損、未成交與策略版本。</p>
+    </details>
+    {% endif %}
     </div>
   </details>
   <div class="section-head">
@@ -1052,8 +1111,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <details class="fold fold-inline">
       <summary>配置試算方式</summary>
       <div class="fold-body">
-      自動分配按綜合分數比例拆分；手動選股則平均分配。單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）。
-      試算不含手續費與證交稅，不代表買進建議。台股一張＝1000 股。
+      依名次順序，在每筆 {{ risk_settings.per_trade }}%、整體 {{ risk_settings.total }}% 的計畫風險額度內試算；單一標的上限 {{ max_position_pct }}%、同產業 {{ risk_settings.sector }}%，不因只選一檔而放寬。
+      部位以淨損觸發幅度加 {{ risk_settings.buffer }} 個百分點跳空緩衝估算，已含買進手續費與滑價；退出成本含在淨損定義內。計畫風險不是損失上限。
       {% if allow_odd_lot %}預算不足一張時改以零股試算，需券商支援。{% endif %}
       </div>
     </details>
@@ -1185,6 +1244,12 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </summary>
       <div class="detail">
         <p class="mainrisk">研究狀態：{{ r.rank_status or '僅供觀察' }}</p>
+        {% if r.trade_plan %}
+        <details class="fold fold-inline"><summary>交易計畫 <small>{{ r.trade_plan.status }}</small></summary>
+          <div class="plan-summary">以 {{ r.trade_plan.reference_price }} 元參考進場：獲利觸發價約 <b>{{ r.trade_plan.target_trigger }}</b> 元；停損觸發價約 <b>{{ r.trade_plan.stop_trigger }}</b> 元。預定最晚第 {{ r.trade_plan.max_days }} 日開盤退出，無法成交時延後。</div>
+          <p class="research-note">{{ r.trade_plan.note }} 單筆計畫風險為本金 {{ r.trade_plan.risk_per_trade_pct }}%，另含 {{ r.trade_plan.gap_buffer_pct }} 個百分點緩衝；可在上方「風險部位試算」帶入自己的金額。</p>
+        </details>
+        {% endif %}
         <div class="why"><b>觀察依據</b>{{ r.edge or r.why }}</div>
         {% if r.spark %}<div class="spark" data-spark='{{ r.spark|tojson }}'></div>{% endif %}
         <details class="fold fold-inline">
@@ -1201,7 +1266,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             綜合分數使用同一組原始達標率與虧損率，達標貢獻 {{ r.hist_target_gain_component }}，
             虧損貢獻 {{ r.hist_loss_component }} × {{ loss_aversion }}；原始分數 {{ r.hist_risk_reward_raw }}，
             收縮後 {{ r.hist_risk_reward }}，重抽樣保守估計 {{ r.hist_risk_reward_lower }}。<br>
-            第 {{ min_exit_days }}～{{ exit_days }} 日扣除 {{ cost_pct }}% 成本後，淨利至少 {{ profit_target }}% 才算達標。
+            按成交金額扣手續費、交易稅與滑價後，實現淨利至少 {{ profit_target }}% 才算達標；收盤觸發、次開盤退出。
             未達標的小額獲利不替排名加分，但仍如實計入 EV 與 PF。<br>
             平均獲利 {{ r.hist_avg_win }}%、平均虧損 {{ r.hist_avg_loss }}%。
             虧損率 {{ r.hist_loss_rate }}%，虧損率不確定性上界 {{ r.hist_loss_rate_upper }}%；
@@ -1411,7 +1476,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <summary>模擬交易規則</summary>
       <div class="fold-body">
       規則：每日最多持有 {{ paper_max_positions }} 檔、等權配置、隔日開盤成交、
-      第 {{ min_exit_days }}～{{ exit_days }} 日收盤淨利至少 {{ profit_target }}% 出場，否則第 {{ exit_days }} 日出場；來回扣 {{ cost_pct }}% 成本。
+      收盤觸發、次開盤退出；第 {{ exit_days }} 日開盤預定離場。成本依實際成交金額與股數計算；無法成交保留持倉，不虛構平倉。
       {% if stop_loss_pct is not none %}收盤淨損達 {{ stop_loss_pct }}% 觸發提前停損，並非保證損失上限。{% else %}未另設價格停損；依達標或第 {{ exit_days }} 日到期規則出場，虧損如實記錄。{% endif %}
       完全依規則執行，沒有人為判斷，也沒有使用任何未來資料。這是紀錄，不是實際交易。
       </div>
@@ -1486,7 +1551,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     {% if backtest %}
     <h3>回測條件</h3>
     期間 {{ backtest.period }}，共 {{ backtest.samples }} 筆有效樣本。
-    {{ backtest.entry_rule }}；淨報酬已扣 {{ backtest.cost_pct }}% 來回交易成本，
+    {{ backtest.entry_rule }}；淨報酬已逐筆扣除手續費、交易稅與滑價，一般股票名目來回約 {{ backtest.cost_pct }}%，
     <b>淨報酬至少 {{ profit_target }}% 才算達標；正報酬率另行統計</b>；同一檔出訊號後 {{ backtest.cooldown_days }} 個交易日內不重複採樣。
     以第 {{ min_exit_days }}～{{ exit_days }} 日達標出場為主。歷史結果不代表未來績效。<br><br>
     {% else %}
@@ -1977,123 +2042,67 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   }
 
   /* ---- 計算每檔要投入多少 ---- */
+  var RISK = {{ risk_settings|tojson }};
+  function cashFor(price, qty) {
+    if (!qty) return 0;
+    var value = price * (1 + RISK.slippage / 200) * qty;
+    return value + Math.max(RISK.minimum_fee, value * RISK.fee / 100);
+  }
+  function riskSize(capital, cash, price, stop, riskPercent, usedRisk, sectorCash, oddLots) {
+    var riskRoom = Math.min(capital * riskPercent / 100, Math.max(0, capital * RISK.total / 100 - usedRisk));
+    var cashRoom = Math.min(cash, capital * MAX_POS, Math.max(0, capital * RISK.sector / 100 - sectorCash));
+    var unit = oddLots ? 1 : 1000;
+    var lo = 0, hi = Math.max(0, Math.floor(cashRoom / price / unit));
+    while (lo < hi) {
+      var mid = Math.floor((lo + hi + 1) / 2), paid = cashFor(price, mid * unit);
+      if (paid <= cashRoom && paid * (stop + RISK.buffer) / 100 <= riskRoom) lo = mid;
+      else hi = mid - 1;
+    }
+    var qty = lo * unit, paid = cashFor(price, qty);
+    return {qty: qty, cash: paid, risk: paid * (stop + RISK.buffer) / 100};
+  }
+  function updateRiskCalculator() {
+    var out = document.getElementById("risk-calculation");
+    if (!out) return;
+    var capital = Number(document.getElementById("risk-capital").value);
+    var price = Number(document.getElementById("risk-price").value);
+    var risk = Number(document.getElementById("risk-percent").value);
+    var stop = Number(document.getElementById("risk-stop").value);
+    if (![capital, price, risk, stop].every(function(v){return Number.isFinite(v) && v > 0;}) || risk > 100 || stop > 50) {
+      out.textContent = "請輸入有效金額與幅度（單筆風險至多 100%、淨損幅度至多 50%）。"; return;
+    }
+    var plan = riskSize(capital, capital, price, stop, risk, 0, 0, true);
+    out.textContent = "試算 " + plan.qty.toLocaleString() + " 股 · 買進含費用 " + money(plan.cash) +
+      " · 計畫風險 " + money(plan.risk) + " · 保留現金 " + money(capital-plan.cash) + "。";
+  }
+  ["risk-capital","risk-price","risk-percent","risk-stop"].forEach(function(id){
+    var input=document.getElementById(id); if(input) input.addEventListener("input",updateRiskCalculator);
+  });
+  updateRiskCalculator();
   function allocate(shown) {
-    // 先清空所有配置欄位
-    cards.forEach(function (c) {
-      var el = c.querySelector("[data-alloc]");
-      if (el) { el.hidden = true; el.innerHTML = ""; }
-    });
-
+    cards.forEach(function(c){var el=c.querySelector("[data-alloc]");if(el){el.hidden=true;el.innerHTML="";}});
+    resultEl.classList.add("show");
     if ({{ 'true' if capital_policy.blocked else 'false' }}) {
-      resultEl.classList.add("show");
       resultEl.textContent = "目前僅供研究，暫不配置資金。";
       resultEl.title = {{ capital_policy.reason|tojson }} + "。資金保留現金，不產生配置試算。";
       return;
     }
-
-    var picks;
-    if (st.mode === "pick") {
-      picks = shown.filter(function (c) { return c.dataset.eligible === "1" && st.picks.indexOf(c.dataset.code) >= 0; });
-    } else {
-      picks = shown.filter(function (c) { return c.dataset.eligible === "1"; }).slice(0, st.splits);
-    }
-
-    if (!st.budget || st.budget <= 0) {
-      resultEl.classList.add("show");
-      resultEl.innerHTML = "填入本週預算，就會算出每一檔要投入多少，並自動隱藏買不起的標的。";
-      return;
-    }
-    if (!picks.length) {
-      resultEl.classList.add("show");
-      resultEl.innerHTML = st.mode === "pick"
-        ? "還沒挑任何標的。點卡片上的「＋ 選入」把想買的加進來。"
-        : "目前的條件下沒有標的可以配置。";
-      return;
-    }
-
-    // 自動：按分數比例並套上限；自己挑：平均分配（你既然自己選了，就等權對待）
-    var targets;
-    if (st.mode === "pick") {
-      targets = picks.map(function () { return st.budget / picks.length; });
-    } else {
-      var scores = picks.map(function (c) { return Math.max(parseFloat(c.dataset.score) || 0, 0.000001); });
-      var total = scores.reduce(function (a, b) { return a + b; }, 0);
-      var cap = st.budget * Math.max(MAX_POS, 1 / picks.length);
-      targets = scores.map(function (x) { return st.budget * x / total; });
-
-      var overflow = 0, room = [];
-      targets.forEach(function (t, i) {
-        if (t > cap) { overflow += t - cap; targets[i] = cap; } else { room.push(i); }
-      });
-      while (overflow > 1 && room.length) {   // 超過上限的部分退回去分給其他檔
-        var share = overflow / room.length, next = [];
-        overflow = 0;
-        room.forEach(function (i) {
-          var t = targets[i] + share;
-          if (t > cap) { overflow += t - cap; targets[i] = cap; } else { targets[i] = t; next.push(i); }
-        });
-        room = next;
-      }
-    }
-
-    var used = 0, filled = 0;
-    picks.forEach(function (c, i) {
-      var price = parseFloat(c.dataset.price) || 0;
-      var lotCost = parseFloat(c.dataset.lot) || price * 1000;
-      var target = targets[i];
-      var lots = Math.floor(target / lotCost);
-      var amount = 0, unit = "", qty = 0;
-
-      if (lots >= 1) {
-        amount = lots * lotCost;
-        unit = lots + " 張";
-        qty = lots * 1000;                       // 台股 1 張 = 1000 股
-      } else if (ODD_LOT) {
-        var shares = Math.floor(target / price);
-        if (shares >= 1) { amount = shares * price; unit = "零股 " + shares + " 股"; qty = shares; }
-      }
-
-      var el = c.querySelector("[data-alloc]");
-      if (!el) return;
-      el.hidden = false;
-      if (amount > 0) {
-        used += amount; filled++;
-        el.innerHTML = "本週配置 <b>" + money(amount) + "</b> · " + unit +
-          ' <span class="sub">（目標 ' + money(target) + "）</span>" +
-          pnlLine(c, qty);
-      } else {
-        el.innerHTML = '<span class="sub">分到的 ' + money(target) +
-          " 不夠買進最小單位（一股 " + money(price) + "）</span>";
-      }
+    var picks=shown.filter(function(c){return c.dataset.eligible === "1" && (st.mode !== "pick" || st.picks.indexOf(c.dataset.code)>=0);});
+    picks=picks.slice(0,Math.min(st.mode === "pick" ? {{ paper_max_positions }} : st.splits,{{ paper_max_positions }}));
+    if (!st.budget || st.budget<=0) {resultEl.textContent="填入預算，依計畫風險額度試算部位。";return;}
+    if (!picks.length) {resultEl.textContent="目前沒有符合條件的可配置標的。";return;}
+    var used=0, usedRisk=0, sectors={}, filled=0;
+    picks.forEach(function(c){
+      var price=Number(c.dataset.price), group=c.dataset.type || "其他";
+      if (!(price>0)) return;
+      var plan=riskSize(st.budget,st.budget-used,price,{{ stop_loss_pct or 3 }},RISK.per_trade,usedRisk,sectors[group]||0,ODD_LOT);
+      var el=c.querySelector("[data-alloc]");if(!el)return;el.hidden=false;
+      if(plan.qty){
+        used+=plan.cash;usedRisk+=plan.risk;sectors[group]=(sectors[group]||0)+plan.cash;filled++;
+        el.textContent="風險部位試算："+plan.qty+" 股 · 買進含費用 "+money(plan.cash)+" · 計畫風險 "+money(plan.risk)+"（非損失上限）";
+      }else el.textContent="資金、產業或總風險額度不足，保留現金。";
     });
-
-    resultEl.classList.add("show");
-    resultEl.innerHTML =
-      (st.mode === "pick" ? "自己挑的 " : "自動分配到前 ") + picks.length + " 檔，" +
-      "預算 <b>" + money(st.budget) + "</b>，實際可投入 <b>" + money(used) + "</b>" +
-      (filled < picks.length ? "（其中 " + (picks.length - filled) + " 檔金額不足）" : "") +
-      "，剩餘現金 " + money(st.budget - used) + "。";
-  }
-
-  /* ---- 依建議張數換算風險與目標金額（只是把價差乘上股數，不動任何計算邏輯）---- */
-  function pnlLine(card, qty) {
-    if (!qty || qty <= 0) return "";
-    var trig = parseFloat(card.dataset.trigger);
-    var stop = parseFloat(card.dataset.stop);
-    var t1 = parseFloat(card.dataset.t1);
-    var t2 = parseFloat(card.dataset.t2);
-    // 價格資料不齊就整段不顯示，不要秀出半套數字
-    if (![trig, stop, t1, t2].every(function (v) { return isFinite(v) && v > 0; })) return "";
-
-    var risk = (trig - stop) * qty;
-    var g1 = (t1 - trig) * qty;
-    var g2 = (t2 - trig) * qty;
-    if (!(risk > 0) || !(g1 > 0) || !(g2 > 0)) return "";
-
-    return '<div class="pnl-line">' +
-           '<i>風險 <b class="down">' + money(risk) + "</b></i>" +
-           '<i>目標① <b class="up">+' + money(g1) + "</b></i>" +
-           '<i>目標② <b class="up">+' + money(g2) + "</b></i></div>";
+    resultEl.textContent="試算 "+filled+" 檔 · 使用 "+money(used)+" · 計畫風險 "+money(usedRisk)+" · 保留現金 "+money(st.budget-used)+"。假設目前空手，實際成交後須重算。";
   }
 
   /* ---- 重畫全部 ---- */

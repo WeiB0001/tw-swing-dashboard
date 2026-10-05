@@ -213,4 +213,8 @@ def _summarize(pf: dict, index_close: float | None) -> dict:
         "pending": len(pf.get("pending", [])),
         "recent": trades[-5:][::-1],
         "days": len(eq),
+        "cash": round(pf.get("cash", 0), 2),
+        "skipped": len(pf.get("skipped", [])),
+        "planned_risk": round(sum(p.get("planned_risk",0) for p in pf.get("positions", [])), 2),
+        "unresolved_exits": sum(bool(p.get("exit_pending")) for p in pf.get("positions", [])),
     }

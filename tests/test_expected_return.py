@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 
-from test_target_strategy import bars, bucket
+from test_target_strategy import bars, bucket, mature
 import config as C
 import strategy
 import ranking
@@ -13,6 +13,7 @@ import backtest
 import paper_target
 import tracking
 import render
+import execution
 
 
 def row(code, ev, success=60.):
@@ -109,7 +110,7 @@ class CapitalPolicyTests(unittest.TestCase):
         rows = ranking.sort([row("A", 4.)])
         self.assertFalse(ranking.apply_policy(rows, valid_research())["blocked"])
         self.assertTrue(rows[0]["trade_eligible"])
-        self.assertIsNone(C.STOP_LOSS_NET_PCT)
+        self.assertEqual(C.STOP_LOSS_NET_PCT, 3.)
 
     @patch.object(C, "REQUIRE_NO_LOSS", False)
     @patch.object(C, "STOP_LOSS_NET_PCT", 2.)
@@ -157,7 +158,7 @@ class CapitalPolicyTests(unittest.TestCase):
         self.assertIn("尚未通過樣本外驗證", html)
         self.assertIn("資金保留現金，不產生配置試算", html)
 
-    def test_existing_loss_is_closed_on_day_ten_and_preserved(self):
+    def test_existing_loss_is_closed_at_next_open_and_preserved(self):
         pf = tracking._blank_portfolio()
         pf["strategy"] = strategy.contract()
         pf["positions"] = [{"code": "A", "name": "A", "shares": 10, "entry": 100.,
@@ -165,23 +166,23 @@ class CapitalPolicyTests(unittest.TestCase):
                             "target1": 103.5, "stop": None}]
         state, summary = paper_target.update(pf, [], "2026-01-16", None, {"A": bars([90.] * 10)})
         self.assertEqual(state["positions"], [])
-        self.assertEqual(state["trades"][0]["net_pct"], -10.5)
+        self.assertAlmostEqual(state["trades"][0]["net_pct"], execution.net_return(100.,90.,10,"A"), places=5)
         self.assertEqual(summary["loss_trades"], 1)
-        self.assertEqual(state["trades"][0]["held"], 10)
+        self.assertEqual(state["trades"][0]["held"], 2)
 
     @patch.object(C, "STOP_LOSS_NET_PCT", 2.)
     def test_stop_trigger_never_clamps_gap_loss_to_threshold(self):
-        result = strategy.outcome(bars([90.] * 10), 0)
+        result = strategy.outcome(mature([90.]), 0)
         self.assertEqual(result["reason"], "風險停損")
-        self.assertAlmostEqual(result["net"], -10.5)
-        self.assertEqual(result["days"], 1)
-
-    def test_day_two_exact_target_exits_and_day_one_does_not(self):
-        result = strategy.outcome(bars([103.5] * 10), 0)
+        self.assertLess(result["net"], -10.)
         self.assertEqual(result["days"], 2)
-        result = strategy.outcome(bars([110.] + [100.] * 9), 0)
+
+    def test_target_trigger_is_filled_at_next_open(self):
+        result = strategy.outcome(mature([104.]),0)
+        self.assertEqual(result["days"],2)
+        result = strategy.outcome(mature([110.,100.],opens=[100.]*15),0)
         self.assertFalse(result["success"])
-        self.assertEqual(result["days"], 10)
+        self.assertEqual(result["days"],2)
 
 
 if __name__ == "__main__":

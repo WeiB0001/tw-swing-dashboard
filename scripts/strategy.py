@@ -3,8 +3,9 @@ from __future__ import annotations
 
 import math
 import config as C
+import execution
 
-VERSION = "risk-reward-v3"
+VERSION = "executable-risk-v4"
 
 
 def contract() -> dict:
@@ -16,7 +17,14 @@ def contract() -> dict:
         raise ValueError("虧損加權須為至少 1 的有限數值")
     return {"version": VERSION, "target_net_pct": float(C.EXIT_MIN_PROFIT),
             "min_days": int(C.EXIT_MIN_DAYS), "max_days": int(C.EXIT_MAX_DAYS),
-            "cost_pct": float(C.TOTAL_COST_PCT), "exit_rule": "daily_close",
+            "cost_pct": float(C.TOTAL_COST_PCT), "exit_rule": "close_signal_next_open_day10_open",
+            "fill_grace_days": C.EXIT_FILL_GRACE_DAYS,
+            "execution": {"fee_pct": C.BROKER_FEE_PCT, "minimum_fee": C.MIN_BROKER_FEE_TWD,
+                          "stock_tax_pct": C.STOCK_SELL_TAX_PCT, "etf_tax_pct": C.ETF_SELL_TAX_PCT,
+                          "slippage_pct": C.SLIPPAGE_PCT, "reference_notional": C.REFERENCE_NOTIONAL_TWD},
+            "risk_budget": {"per_trade_pct": C.RISK_PER_TRADE_PCT, "total_pct": C.MAX_TOTAL_RISK_PCT,
+                            "position_pct": C.MAX_POSITION_PCT, "sector_pct": C.MAX_SECTOR_POSITION_PCT,
+                            "gap_buffer_pct": C.RISK_GAP_BUFFER_PCT, "slots": C.PAPER_MAX_POSITIONS},
             "stop_loss_net_pct": C.STOP_LOSS_NET_PCT,
             "ranking": "target_gain_minus_weighted_loss", "loss_aversion": C.LOSS_AVERSION,
             "min_samples": C.MIN_SAMPLES_SCORE,
@@ -30,7 +38,8 @@ def compatible(data: dict | None) -> bool:
 
 
 def net_return(entry: float, exit_price: float, cost: float | None = None) -> float:
-    return (exit_price / entry - 1) * 100 - (C.TOTAL_COST_PCT if cost is None else cost)
+    # Explicit legacy flat costs remain available only for fixed-horizon reports.
+    return execution.net_return(entry, exit_price) if cost is None else (exit_price / entry - 1) * 100 - cost
 
 
 def target_met(net: float) -> bool:
@@ -63,33 +72,13 @@ def utility(net: float) -> float:
     return net if target_met(net) else C.LOSS_AVERSION * min(net, 0.0)
 
 
-def outcome(df, entry_pos: int, cost: float | None = None) -> dict | None:
-    """Require a fully matured cohort, including trades that hit the target early.
+def outcome(df, entry_pos: int, cost: float | None = None, code="") -> dict | None:
+    """Compatibility entry point; costs now come from the versioned cash model.
 
-    Entry day counts as day 1. Closing-price fills are a simulation assumption;
-    actual execution can differ. Never score an incomplete winning cohort.
+    The old positional cost argument is deliberately not used for target trades.
+    Backtests, published outcomes and paper books share execution.simulate.
     """
-    if entry_pos < 0 or entry_pos >= len(df):
-        return None
-    end = entry_pos + C.EXIT_MAX_DAYS
-    if end > len(df):
-        return {"closed": False}
-    window = df.iloc[entry_pos:end]
-    entry = float(window["open"].iloc[0])
-    values = [entry] + [float(x) for key in ("close", "low") for x in window[key]]
-    if any(not math.isfinite(x) or x <= 0 for x in values):
-        return None
-    worst = 0.0
-    for d, (date, row) in enumerate(window.iterrows(), 1):
-        worst = min(worst, (float(row["low"]) / entry - 1) * 100)
-        net = net_return(entry, float(row["close"]), cost)
-        reason = exit_reason(net, d)
-        if reason:
-            return {"success": target_met(net), "days": d, "net": net,
-                    "mdd": worst, "closed": True, "reason": reason,
-                    "exit_date": str(date)[:10],
-                    "label_end": str(window.index[-1])[:10]}
-    return None
+    return execution.simulate(df, entry_pos, code)
 
 
 def wilson_lower(successes: int, samples: int, z: float = 1.6448536269514722) -> float:

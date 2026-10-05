@@ -269,6 +269,9 @@ def run_live() -> dict:
     # 台股歷史日線一律走 FinMind + data/history 快取（與回測共用同一份）
     paper = tracking._load(C.PORTFOLIO_JSON, {})
     held_codes = [x["code"] for x in paper.get("positions", []) + paper.get("pending", [])]
+    shadow = tracking._load(C.RESEARCH_FORWARD_JSON, {})
+    for book in shadow.get("books", {}).values():
+        held_codes.extend(x["code"] for x in book.get("positions", []) + book.get("pending", []))
     hist_map = fetch.fetch_history(list(dict.fromkeys(codes + held_codes)))
     if not hist_map:
         raise DataUnavailable("歷史日線全部取不到（FinMind 暫時異常或額度用盡）")
@@ -335,6 +338,10 @@ def run_live() -> dict:
     add_final_score(rows)                      # 綜合分數：只是重新加權既有數字
     rows = sort_by_final(rows)
     capital_policy = ranking.apply_policy(rows, bt, data_date)
+    import risk_budget
+    import research
+    risk_budget.attach_plans(rows)
+    research_forward = research.update_forward(rows, data_date, now.isoformat(), hist_map, idx_close)
     signals = tracking.update_signals(rows, data_date, regime)
     for r in rows:
         r["mark"] = signals["marks"].get(r["code"], {})
@@ -416,6 +423,7 @@ def run_live() -> dict:
         "us": us_data,
         "signals": signals,
         "portfolio": portfolio,
+        "research_forward": research_forward,
         "capital_policy": capital_policy,
         "backtest": _backtest_summary(bt),
         "livecheck": _load_livecheck(),
@@ -1004,6 +1012,7 @@ def _backtest_summary(bt: dict | None) -> dict | None:
         "samples": bt.get("total_signals"),
         "walk_forward": bt.get("walk_forward"),
         "cost_detail": bt.get("cost_detail"),
+        "data_quality": bt.get("data_quality"),
         "oos_period": (bt.get("walk_forward") or {}).get("period"),
         "oos_overall": bt.get("walk_forward") if (bt.get("walk_forward") or {}).get("available") else None,
         "strategy": bt.get("strategy"),

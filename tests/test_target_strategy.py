@@ -16,13 +16,21 @@ import build
 import livecheck
 import paper_target
 import render
+import execution
 
 
-def bars(closes, start="2026-01-05"):
-    return pd.DataFrame({"open": [100.] * len(closes), "close": closes,
-                         "low": [min(99., c) for c in closes],
-                         "high": [max(101., c) for c in closes]},
+def bars(closes, start="2026-01-05", opens=None):
+    opens = opens or [100.] + list(closes[:-1])
+    return pd.DataFrame({"open": opens, "close": closes,
+                         "low": [min(99., o, c) for o,c in zip(opens,closes)],
+                         "high": [max(101., o, c) for o,c in zip(opens,closes)]},
                         index=pd.bdate_range(start, periods=len(closes)))
+
+
+def mature(closes, opens=None):
+    closes = list(closes)
+    closes += [closes[-1]] * (15-len(closes))
+    return bars(closes, opens=opens)
 
 
 def bucket(successes=60, n=100, ev=1.0, pf=2.):
@@ -38,58 +46,64 @@ def bucket(successes=60, n=100, ev=1.0, pf=2.):
 
 class TargetOutcomeTests(unittest.TestCase):
     def test_tiny_profit_is_not_target_success(self):
-        result = strategy.outcome(bars([100.51] * 10), 0)
-        self.assertGreater(result["net"], 0)
-        self.assertFalse(result["success"])
-        self.assertEqual(result["days"], 10)
+        r = strategy.outcome(mature([101.]), 0)
+        self.assertGreater(r["net"], 0)
+        self.assertFalse(r["success"])
+        self.assertEqual(r["days"], 10)
 
     def test_target_is_net_of_cost(self):
-        self.assertFalse(strategy.outcome(bars([103.] * 10), 0)["success"])
+        self.assertFalse(strategy.outcome(mature([103.]), 0)["success"])
 
     def test_exact_three_percent_is_inclusive(self):
-        result = strategy.outcome(bars([103.5] * 10), 0)
-        self.assertTrue(result["success"])
-        self.assertEqual(result["days"], 2)
-        self.assertAlmostEqual(result["net"], 3.)
+        px = execution.price_for_net(100., 3., 1000)
+        r = strategy.outcome(mature([px]), 0)
+        self.assertTrue(r["success"])
+        self.assertEqual(r["days"], 2)
+        self.assertAlmostEqual(r["net"], 3.)
 
-    def test_pre_second_day_hit_does_not_qualify(self):
-        result = strategy.outcome(bars([104.] + [101.] * 9), 0)
-        self.assertFalse(result["success"])
+    def test_close_trigger_does_not_guarantee_next_open_profit(self):
+        h = mature([105.,100.], opens=[100.]*15)
+        r = strategy.outcome(h,0)
+        self.assertEqual(r["reason"],"淨利觸發")
+        self.assertFalse(r["success"])
+        self.assertLess(r["net"],0)
+        self.assertEqual(r["days"],2)
 
-    def test_day_ten_success_counts(self):
-        result = strategy.outcome(bars([100.] * 9 + [103.5]), 0)
-        self.assertTrue(result["success"])
-        self.assertEqual(result["days"], 10)
+    def test_time_exit_does_not_use_future_day_ten_close(self):
+        h = mature([100.]*9+[130.])
+        r = strategy.outcome(h,0)
+        self.assertEqual(r["days"],10)
+        self.assertEqual(r["exit_price"],100.)
+        self.assertFalse(r["success"])
 
     def test_incomplete_winners_and_losers_are_both_pending(self):
-        for px in [90., 110.]:
-            self.assertEqual(strategy.outcome(bars([px] * 8), 0), {"closed": False})
+        for px in [90.,110.]:
+            self.assertEqual(strategy.outcome(bars([px]*8),0),{"closed":False})
 
     def test_five_percent_setting_and_version_invalidation(self):
-        old = {"strategy": strategy.contract()}
-        with patch.object(C, "EXIT_MIN_PROFIT", 5.):
+        old={"strategy":strategy.contract()}
+        with patch.object(C,"EXIT_MIN_PROFIT",5.):
             self.assertFalse(strategy.compatible(old))
-            self.assertFalse(strategy.outcome(bars([103.5] * 10), 0)["success"])
-            self.assertTrue(strategy.outcome(bars([105.5] * 10), 0)["success"])
+            self.assertFalse(strategy.outcome(mature([104.]),0)["success"])
+            self.assertTrue(strategy.outcome(mature([106.]),0)["success"])
 
-    def test_invalid_prices_are_not_scored(self):
-        h = bars([103.5] * 10)
-        h.iloc[2, h.columns.get_loc("close")] = float("nan")
-        self.assertIsNone(strategy.outcome(h, 0))
+    def test_invalid_held_prices_are_not_scored(self):
+        h=mature([100.]);h.iloc[0,h.columns.get_loc("close")]=float("nan")
+        self.assertFalse(strategy.outcome(h,0)["closed"])
 
     def test_backtest_and_published_result_agree(self):
-        h = bars([100.] + [103.5] * 10)
-        a = backtest.first_profitable_exit(h, 0, C.TOTAL_COST_PCT)
-        b = livecheck.outcome(h, str(h.index[0])[:10], C.TOTAL_COST_PCT)
-        self.assertEqual(a, b)
+        h=mature([100.,104.]);h.loc[h.index[-1]+pd.Timedelta(days=1)]=h.iloc[-1]
+        a=backtest.first_profitable_exit(h,0,C.TOTAL_COST_PCT)
+        b=livecheck.outcome(h,str(h.index[0])[:10],C.TOTAL_COST_PCT)
+        self.assertEqual(a,b)
 
     def test_small_positive_return_kept_in_ev_but_not_success_rate(self):
-        a = strategy.outcome(bars([101.5] * 10), 0)
-        b = strategy.outcome(bars([104.5] * 10), 0)
-        stats = backtest._pack([{"exit": a}, {"exit": b}])
-        self.assertEqual(stats["win_rate"], 100)
-        self.assertEqual(stats["success_rate"], 50)
-        self.assertAlmostEqual(stats["expectancy"], 2.5)
+        a=strategy.outcome(mature([101.5]),0)
+        b=strategy.outcome(mature([104.5]),0)
+        stats=backtest._pack([{"exit":a},{"exit":b}])
+        self.assertEqual(stats["win_rate"],100)
+        self.assertEqual(stats["success_rate"],50)
+        self.assertAlmostEqual(stats["expectancy"],(a["net"]+b["net"])/2,places=3)
 
 
 class RankingTests(unittest.TestCase):
@@ -140,20 +154,20 @@ class PublicationAndPaperTests(unittest.TestCase):
                         "ranked_at": f"2026-01-05 {hour}:00:00"}
                 Path(folder, f"2026-01-0{i+5}.json").write_text(json.dumps({"meta": meta, "rows": [{"code": "A"}]}))
             Path(folder, "2026-01-04.json").write_text(json.dumps({"meta": {}, "rows": [{"code": "A"}]}))
-            with patch.object(livecheck, "ARCHIVE", Path(folder)):
+            with patch.object(livecheck, "ARCHIVE", Path(folder)), patch.object(livecheck, "ROOT", Path(folder)):
                 records = livecheck.load_archives(0)
             self.assertEqual(len(records), 1)
             self.assertIn("16:00", records[0]["published_at"])
 
     def test_late_publication_does_not_buy_an_already_passed_open(self):
-        h = bars([100., 103.5] + [103.5] * 9)
+        h = bars([100., 105.] + [105.] * 14)
         result = livecheck.outcome(h, "2026-01-04", .5, "2026-01-05T10:00:00+08:00")
         self.assertEqual(result["exit_date"], "2026-01-07")
 
     @patch.object(C, "REQUIRE_NO_LOSS", False)
     @patch.object(C, "STOP_LOSS_NET_PCT", 2.0)
     def test_paper_matches_outcome_and_cost_ledger(self):
-        h = bars([103.5] * 10)
+        h = mature([104.])
         pf = {"strategy": strategy.contract(), "cash": 100000., "positions": [],
               "pending": [{"code": "A", "name": "A", "signal_date": "2026-01-02",
                            "published_at": "2026-01-02T16:00:00+08:00", "budget": 100000., "entry_approved": True}],
@@ -163,10 +177,10 @@ class PublicationAndPaperTests(unittest.TestCase):
                                              capital_policy={"strategy": strategy.contract(), "blocked": False, "research_validated": True})
         expected = strategy.outcome(h, 0)
         trade = state["trades"][0]
-        self.assertAlmostEqual(trade["net_pct"], expected["net"])
+        self.assertAlmostEqual(trade["net_pct"], execution.net_return(trade["entry"], trade["exit"], trade["shares"], "A"), places=5)
         self.assertEqual(trade["held"], expected["days"])
         self.assertEqual(trade["success"], expected["success"])
-        self.assertAlmostEqual(state["cash"] - 100000., trade["pnl"])
+        self.assertAlmostEqual(state["cash"] - 100000., trade["pnl"], places=5)
         unchanged, _ = paper_target.update(copy.deepcopy(state), [], "2026-01-16", 100., {"A": h},
                                              capital_policy={"strategy": strategy.contract(), "blocked": False, "research_validated": True})
         self.assertEqual(unchanged, state)
