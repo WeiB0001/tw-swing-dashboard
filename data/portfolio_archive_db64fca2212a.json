@@ -5,26 +5,28 @@
  "trades": [],
  "equity": [
   {
+   "date": "2026-10-05",
+   "equity": 100000.0,
+   "index": 48475.74
+  },
+  {
    "date": "2026-10-06",
    "equity": 100000.0,
    "index": 49712.04
   }
  ],
- "start_index": 49712.04,
+ "start_index": 48475.74,
  "last_date": "2026-10-06",
- "forward_start": "2026-10-06",
+ "forward_start": "2026-10-05",
  "mode": "forward_test",
  "strategy": {
-  "version": "strict-horizon-v6",
+  "version": "entry-context-v5",
   "target_net_pct": 3.0,
   "min_days": 2,
   "max_days": 10,
   "cost_pct": 0.785,
   "exit_rule": "close_signal_next_open_day10_open",
   "fill_grace_days": 5,
-  "success_rule": "realized_net_target_and_actual_exit_in_day_2_to_10",
-  "prediction_research_version": 1,
-  "history_months": 36,
   "entry_guard": {
    "max_premium_pct": 2.0,
    "max_ma20_bias_pct": 8.0,
