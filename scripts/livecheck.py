@@ -117,12 +117,14 @@ def pack(items: list[dict]) -> dict:
     if not items:
         return {"n": 0}
     nets = np.array([x["net"] for x in items])
-    wins = sum(1 for x in items if x["success"])
+    flags = [strategy.outcome_success(x) for x in items]
+    wins = sum(flags)
     gw = float(nets[nets > 0].sum())
     gl = float(-nets[nets <= 0].sum())
     return {
         **risk_stats.losses(nets.tolist()),
-        **risk_stats.risk_reward(nets.tolist()),
+        **risk_stats.risk_reward(nets.tolist(), flags),
+        "late_exits": sum(x.get("days", 0) > C.EXIT_MAX_DAYS for x in items),
         "n": len(items),
         "success_rate": round(wins / len(items) * 100, 1),
         "win_rate": round(float((nets > 0).mean()) * 100, 1),

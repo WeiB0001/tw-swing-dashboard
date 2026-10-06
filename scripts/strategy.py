@@ -5,7 +5,7 @@ import math
 import config as C
 import execution
 
-VERSION = "entry-context-v5"
+VERSION = "strict-horizon-v6"
 
 
 def contract() -> dict:
@@ -19,6 +19,9 @@ def contract() -> dict:
             "min_days": int(C.EXIT_MIN_DAYS), "max_days": int(C.EXIT_MAX_DAYS),
             "cost_pct": float(C.TOTAL_COST_PCT), "exit_rule": "close_signal_next_open_day10_open",
             "fill_grace_days": C.EXIT_FILL_GRACE_DAYS,
+            "success_rule": "realized_net_target_and_actual_exit_in_day_2_to_10",
+            "prediction_research_version": 1,
+            "history_months": C.HISTORY_MONTHS,
             "entry_guard": {"max_premium_pct": C.ENTRY_MAX_PREMIUM_PCT,
                             "max_ma20_bias_pct": C.ENTRY_MAX_MA20_BIAS_PCT,
                             "rule": "signal_price_ceiling_including_buy_slippage_skip_once"},
@@ -54,6 +57,21 @@ def target_met(net: float) -> bool:
     return math.isfinite(net) and net >= C.EXIT_MIN_PROFIT - 1e-9
 
 
+def success(net: float, days: int | None) -> bool:
+    """Late fills keep their real P&L, but cannot satisfy the target horizon."""
+    return bool(days is not None and C.EXIT_MIN_DAYS <= days <= C.EXIT_MAX_DAYS
+                and target_met(net))
+
+
+def outcome_success(ex: dict) -> bool:
+    return bool(ex.get("closed", True) and ex.get("entered", True)
+                and success(ex["net"], ex.get("days", ex.get("held"))))
+
+
+def outcome_utility(ex: dict) -> float:
+    return utility(ex["net"], achieved=outcome_success(ex))
+
+
 def exit_reason(net: float, days: int) -> str | None:
     # A stop is a trigger, not a cap: record the actual closing loss, including gaps.
     if C.STOP_LOSS_NET_PCT is not None and net <= -C.STOP_LOSS_NET_PCT:
@@ -71,12 +89,12 @@ def capital_policy() -> dict:
             "reason": "採用風險報酬綜合排名；僅通過研究與樣本外驗證的標的可配置試算，仍可能虧損"}
 
 
-def utility(net: float) -> float:
+def utility(net: float, achieved: bool | None = None) -> float:
     """Target gains earn credit, sub-target gains earn zero, losses count fully.
 
     This is a preference score in percentage points, not a forecast return.
     """
-    return net if target_met(net) else C.LOSS_AVERSION * min(net, 0.0)
+    return net if (target_met(net) if achieved is None else achieved) else C.LOSS_AVERSION * min(net, 0.0)
 
 
 def outcome(df, entry_pos: int, cost: float | None = None, code="", entry_plan=None) -> dict | None:
@@ -103,9 +121,10 @@ if __name__ == "__main__":
     from pathlib import Path
     import sys
     import stock_history
+    import prediction
     try:
         saved = json.loads((Path(__file__).resolve().parents[1] / C.BACKTEST_JSON).read_text())
-        valid = compatible(saved) and saved.get("mode") == "live" and stock_history.available(saved)
+        valid = compatible(saved) and saved.get("mode") == "live" and stock_history.available(saved) and saved.get("prediction_model", {}).get("version") == prediction.VERSION
     except (OSError, ValueError):
         valid = False
     print("回測口徑與個股統計完整" if valid else "回測需重算：策略口徑不同或缺少個股統計")

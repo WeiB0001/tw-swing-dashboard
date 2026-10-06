@@ -31,7 +31,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45   # 首次要補跑回測，時間放寬
+    timeout-minutes: 60   # 首次要補跑回測，時間放寬
     steps:
       - name: 取得原始碼
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
       - name: 安裝套件
         run: pip install -r requirements.txt
 
-      # 還原 data/history 的 CSV 快取，避免每次都重抓 14 個月
+      # 還原 data/history 的 CSV 快取，避免每次都重抓 36 個月
       # key 每天換一次，restore-keys 讓它接續前一天的快取往下增量更新
       - name: 還原歷史資料快取
         uses: actions/cache@v4
@@ -70,7 +70,7 @@ jobs:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
         run: |
           if ! python scripts/strategy.py; then
-            python scripts/backtest.py --days 250
+            python scripts/backtest.py --days 650
           fi
 
       # 依觸發時間決定要跑哪一種：

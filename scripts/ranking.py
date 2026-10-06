@@ -14,6 +14,8 @@ def attach(rows: list[dict], tables: dict, regime: str = "sideways", use_oversea
         r["hist_confidence"] = 0
         r["hist_samples"] = 0
         r["oos_reliability"] = None
+        if not r.get("feature_quality_ok", True):
+            continue
         candidates = [
             ("regime", tables.get("regime_buckets", [])),
             ("pattern", tables.get("pattern_buckets", [])),

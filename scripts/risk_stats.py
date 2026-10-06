@@ -7,9 +7,12 @@ import config as C
 import strategy
 
 
-def risk_reward(nets: list[float]) -> dict:
+def risk_reward(nets: list[float], successes: list[bool] | None = None) -> dict:
     n = len(nets)
-    gains = [x for x in nets if strategy.target_met(x)]
+    if successes is not None and len(successes) != n:
+        raise ValueError("Outcome flags must match returns")
+    flags = successes if successes is not None else [strategy.target_met(x) for x in nets]
+    gains = [x for x, achieved in zip(nets, flags) if achieved]
     negative = [x for x in nets if x < 0]
     gain_component = sum(gains) / n if n else 0
     loss_component = -sum(negative) / n if n else 0
@@ -50,7 +53,7 @@ def expected_return_lower(signals: list[dict]) -> dict:
         net = float(s["exit"]["net"])
         row[0] += net
         row[1] += 1
-        row[2] += strategy.utility(net)
+        row[2] += strategy.outcome_utility(s["exit"])
     n = len(daily)
     if n < C.MIN_CALIBRATION_DATES:
         return {"signal_dates": n, "ev_lower": None, "risk_reward_lower": None}

@@ -83,6 +83,7 @@ def build_row(code: str, name: str, f: dict, result: dict) -> dict:
     """
     return {
         "code": code,
+        "feature_quality_ok": f.get("feature_quality_ok", True),
         "name": name,
         "sector": C.sector_of(code),        # 產業分類（卡片上顯示）
         "group": C.group_of(C.sector_of(code), C.asset_type(code)),   # Tab 用的產業大類
@@ -233,6 +234,8 @@ def shrink(ev, n) -> float:
 def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
     """Never reuse statistics produced for a different target, horizon or cost."""
     import stock_history
+    import prediction
+    prediction.attach(rows, None)
     ranking.attach(rows, {}, regime)
     stock_history.attach(rows, None)
     try:
@@ -244,6 +247,7 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
         return None
     ranking.attach(rows, bt.get("calibration") or {}, regime)
     stock_history.attach(rows, bt)
+    prediction.attach(rows, bt.get("prediction_model"), regime)
     bt["_reliability"] = oos_reliability(bt)
     return bt
 

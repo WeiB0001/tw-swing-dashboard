@@ -83,7 +83,8 @@ def update(pf, rows, trade_date, index_close, histories, published_at=None, capi
                     "entry_date": p["entry_date"], "exit_date": day, "entry": p["entry"], "exit": px,
                     "shares": p["shares"], "entry_cash": paid, "exit_cash": proceeds,
                     "net_pct": round(net, 6), "pnl": round(proceeds-paid, 6),
-                    "success": strategy.target_met(net), "reason": p["exit_pending"],
+                    "success": strategy.success(net, p["held"]), "reason": p["exit_pending"],
+                    "late_exit": p["held"] > C.EXIT_MAX_DAYS,
                     "held": p["held"], "delayed_days": p.get("delayed_days", 0),
                     "planned_risk": p.get("planned_risk"), "trigger_date": p.get("trigger_date")})
             else:

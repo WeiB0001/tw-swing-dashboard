@@ -24,7 +24,7 @@ def freeze(rows, day, published_at):
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
     keys = ("code", "name", "group", "close", "quote_date", "final_rank", "hist_risk_reward",
-            "hist_expectancy", "hist_samples", "hist_signal_dates", "research_eligible", "trade_eligible",
+            "prediction", "prediction_rank", "hist_expectancy", "hist_samples", "hist_signal_dates", "research_eligible", "trade_eligible",
             "ma20", "entry_plan", "overseas_context", "overseas_rank", "overseas_hist_score", "overseas_hist_source")
     record = {"strategy": strategy.contract(), "data_date": day, "published_at": published_at,
               "rows": [{k:r.get(k) for k in keys} for r in rows]}
@@ -47,7 +47,8 @@ def update_forward(rows, day, published_at, histories, index_close=None):
                "snapshot": f"data/research_snapshots/{day}_{strategy_id()}.json", "books": {}}
     candidates = [{**r, "research_eligible": True} for r in record["rows"]
                   if r.get("hist_risk_reward") is not None and r.get("quote_date") == day]
-    streams = {"composite": candidates,
+    streams = {"individual": sorted([{**r, "research_eligible": True} for r in record["rows"] if r.get("prediction") and r.get("quote_date") == day], key=lambda r: r["prediction_rank"]),
+               "composite": candidates,
                "ev_only": sorted(candidates, key=lambda r: -(r.get("hist_expectancy") or 0)),
                "overseas": sorted([r for r in candidates if r.get("overseas_rank") is not None],
                                   key=lambda r: r["overseas_rank"])}

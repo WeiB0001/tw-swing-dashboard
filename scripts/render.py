@@ -54,7 +54,7 @@ def strength_marker(row: dict, data_date: str | None, validated: bool = False) -
     valid_quote = (all(v is not None and v > 0 for v in (o, h, l, c, volume))
                    and l <= min(o, c) <= max(o, c) <= h)
     fresh = bool(data_date and row.get("quote_date") == data_date)
-    technical = bool(fresh and valid_quote and score is not None
+    technical = bool(fresh and valid_quote and row.get("feature_quality_ok", True) and score is not None
                      and score >= STRONG_TECH_SCORE_MIN and row.get("momentum_tier") == 0)
     cautions = []
     chg, bias = finite("chg_pct"), finite("bias20")
@@ -157,6 +157,8 @@ def reference_rows(rows: list[dict], data_date: str | None = None, validated: bo
                                       "bucket": "僅分數區間", "overseas": "海外＋分數"}.get(source, "同類訊號")
         row["strength"] = strength_marker(row, data_date, validated)
         warnings = []
+        if not row.get("feature_quality_ok", True):
+            warnings.append("近期行情不完整或不一致，估計暫停；技術分僅供觀察")
         if data_date and row.get("quote_date") != data_date:
             warnings.append("行情日期不一致，價格需更新確認")
         if row.get("hist_risk_reward") is None:

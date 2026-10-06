@@ -57,7 +57,7 @@ class RiskRewardTests(unittest.TestCase):
         signals = []
         for day in range(1, 31):
             for net in [4., -2., 1.]:
-                signals.append({"date": f"2026-01-{day:02}", "exit": {"net": net}})
+                signals.append({"date": f"2026-01-{day:02}", "exit": {"net": net, "days": 10}})
         d = risk_stats.expected_return_lower(signals)
         self.assertAlmostEqual(d["ev_lower"], 1.)
         self.assertAlmostEqual(d["risk_reward_lower"], 1 / 3, places=4)

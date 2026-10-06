@@ -626,7 +626,7 @@ HTTP_TIMEOUT = 25
 
 # --- 台股歷史日線：FinMind + 本機 CSV 快取（不再使用 yfinance）---
 HISTORY_CACHE_DIR = "data/history"   # 每檔一個 {股票代號}.csv
-HISTORY_MONTHS = 14                  # 第一次抓多久的日線
+HISTORY_MONTHS = 36                  # 第一次抓多久的日線
 FINMIND_MIN_INTERVAL = 0.2           # 每次請求之間至少間隔幾秒
 FINMIND_MAX_INTERVAL = 0.5
 FINMIND_MAX_RETRY = 5                # 遇 429／5xx 的重試次數（指數退避）

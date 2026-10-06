@@ -14,7 +14,7 @@ import config as C
 import risk_stats
 import strategy
 
-VERSION = 1
+VERSION = 2
 
 
 def build(signals: list[dict]) -> dict:
@@ -30,14 +30,16 @@ def build(signals: list[dict]) -> dict:
     for code, rows in groups.items():
         nets = [s["exit"]["net"] for s in rows]
         n = len(nets)
-        successes = sum(strategy.target_met(net) for net in nets)
-        stats = {**risk_stats.losses(nets), **risk_stats.risk_reward(nets)}
+        flags = [strategy.outcome_success(s["exit"]) for s in rows]
+        successes = sum(flags)
+        stats = {**risk_stats.losses(nets), **risk_stats.risk_reward(nets, flags)}
         # No losing observations means no observed conditional loss magnitude,
         # not a proven zero-size future loss.
         if not stats["losses"]:
             stats["avg_loss_magnitude"] = None
         by_code[code] = dict(stats, code=code, samples=n, successes=successes,
                             success_rate=round(100 * successes / n, 1),
+                            late_exits=sum(s["exit"].get("days", 0) > C.EXIT_MAX_DAYS for s in rows),
                             expectancy=round(sum(nets) / n, 3),
                             signal_dates=len({s["date"] for s in rows}),
                             first_signal=min(s["date"] for s in rows),

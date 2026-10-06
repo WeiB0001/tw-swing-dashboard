@@ -700,6 +700,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 .key-metrics dd{margin:0;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
 .history-source{font-size:11px;color:var(--muted);margin:10px 0 5px;line-height:1.5}
 .history-source b{color:var(--text)}
+.prediction-summary{display:none;font-size:12px;color:var(--text);line-height:1.6;margin:8px 0}
+#research-rank[data-sort="individual"] .prediction-summary{display:block}
 .rank-state{font-size:12px;color:var(--muted)}
 .score-pair{display:flex;justify-content:flex-end;gap:22px;flex-wrap:wrap;margin-left:auto}
 .score-pair .score{font-size:23px}
@@ -887,7 +889,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="fold-body">
     <b>目標：扣成本後淨利至少 +{{ '%g'|format(profit_target) }}%</b><br>
     發布後下一開盤進場；買進日算第 1 日。收盤觸發獲利或停損，下一開盤退出，最早第 {{ min_exit_days }} 日；第 {{ exit_days }} 日開盤預定離場。
-    停牌或無法成交時延後並記錄。<b>3% 是獲利觸發目標，實現淨利可能較低；達標率只計實際淨利至少 3% 的交易。</b><br>
+    停牌或無法成交時延後並記錄。<b>達標須在第 2～10 個交易日實際離場，且扣成本後淨利至少 3%；逾期獲利仍計入損益，但不計達標。</b><br>
     成本逐筆計算：每邊手續費 {{ risk_settings.fee }}%（最低 {{ risk_settings.minimum_fee }} 元）、賣出稅一般股票 {{ risk_settings.stock_tax }}%／ETF {{ risk_settings.etf_tax }}%、來回滑價 {{ risk_settings.slippage }}%。費率為可調假設，未套用個別商品稅務優惠。
     單筆訊號統計以約 {{ '{:,.0f}'.format(risk_settings.reference) }} 元為參考，資金回測依實際股數計算。<br>
     目前 <b>{{ research_count }}</b> 檔通過研究門檻；<b>{{ eligible_count }}</b> 檔允許配置。
@@ -902,10 +904,31 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <small>{% if backtest and backtest.oos_overall %}{{ backtest.oos_overall.samples }} 筆 · 達標 {{ backtest.oos_overall.success_rate }}% · 虧損 {{ backtest.oos_overall.loss_rate }}%{% else %}資料尚待累積{% endif %}</small>
     </span></summary>
     {% if backtest and backtest.data_quality %}
-    <div class="fold-body research-note"><b>資料檢查：{{ backtest.data_quality.issue_count }} 筆待核對</b> · 未成交進場 {{ backtest.data_quality.unfilled_entries }} 筆 · 未結算出場 {{ backtest.data_quality.unresolved_exits }} 筆。{% if backtest.data_quality.market_regime_available is defined and not backtest.data_quality.market_regime_available %}<br><b>歷史大盤狀態缺漏，這次回測不能通過配置驗證。</b>{% endif %}<br>{{ backtest.data_quality.note }}
+    <div class="fold-body research-note"><b>資料檢查：{{ backtest.data_quality.issue_count }} 筆待核對</b> · 未成交進場 {{ backtest.data_quality.unfilled_entries }} 筆 · 未結算出場 {{ backtest.data_quality.unresolved_exits }} 筆。{% if backtest.data_quality.invalid_feature_windows is defined %}<br>已隔離 {{ backtest.data_quality.invalid_feature_windows }} 個含缺漏／無效行情的特徵視窗；歷史資料目標 {{ backtest.data_quality.requested_history_months }} 個月，實際期間 {{ backtest.period }}。{% endif %}{% if backtest.data_quality.market_regime_available is defined and not backtest.data_quality.market_regime_available %}<br><b>歷史大盤狀態缺漏，這次回測不能通過配置驗證。</b>{% endif %}<br>{{ backtest.data_quality.note }}
     {% if backtest.data_quality.issues %}<details class="fold fold-inline"><summary>查看異常紀錄（最多 100 筆）</summary><ul>{% for issue in backtest.data_quality.issues %}<li>{{ issue.date }} · {{ issue.code }} · {{ issue.reason }}</li>{% endfor %}</ul></details>{% endif %}</div>
     {% endif %}
     <div class="fold-body">
+  {% set study = backtest.walk_forward.prediction_study if backtest and backtest.walk_forward and backtest.walk_forward.prediction_study is defined else none %}
+  {% if study and study.available %}
+  <details class="fold fold-inline" id="prediction-validation">
+    <summary>個股估計與前 5／10 名驗證 <small>同日期比較 · 研究中</small></summary>
+    <p class="research-note">以每段開始前已完整結算的資料建立估計，整段不重訓；共同候選池包含未通過交易門檻的標的。數字是扣成本後的歷史模擬，不能當成未來機率保證。</p>
+    <div class="research-table"><table><thead><tr><th>排序／名次</th><th>已結算</th><th>2～10 日達標</th><th>平均淨利</th><th>虧損率</th><th>最差 5% 平均</th><th>未成交／未結算</th></tr></thead><tbody>
+    {% for key,label in [('current','原風險報酬'),('individual','個股估計'),('technical','技術機會')] %}
+    {% for top in [5,10] %}{% set d = study.comparisons.get(key ~ '_top' ~ top) %}{% if d %}
+      <tr><td>{{ label }}／前 {{ top }}</td><td>{{ d.samples }}</td><td>{{ d.success_rate if d.success_rate is defined else '—' }}%</td><td>{{ '%+.2f%%'|format(d.expectancy) if d.expectancy is not none else '—' }}</td><td>{{ d.loss_rate if d.loss_rate is not none else '—' }}%</td><td>{{ '%.2f%%'|format(d.tail_mean_5pct) if d.tail_mean_5pct is not none else '—' }}</td><td>{{ d.unfilled }}／{{ d.unresolved }}</td></tr>
+    {% endif %}{% endfor %}{% endfor %}</tbody></table></div>
+    <details class="fold fold-inline"><summary>機率可靠度與各時段結果</summary>
+    {% for key,label in [('target_calibration','期限內達標'),('loss_calibration','虧損')] %}{% set d = study[key] %}
+      <p class="research-note"><b>{{ label }}</b>：Brier {{ d.brier }}；訓練基準 {{ d.baseline_brier }}（越低越好）。{{ d.samples }} 筆／{{ d.signal_dates }} 個訊號日。</p>
+      <div class="research-table"><table><thead><tr><th>估計區間</th><th>筆數</th><th>平均估計</th><th>實際比例</th></tr></thead><tbody>{% for b in d.bins %}<tr><td>{{ b.lo }}～{{ b.hi }}%</td><td>{{ b.samples }}</td><td>{{ b.predicted_pct }}%</td><td>{{ b.observed_pct }}%</td></tr>{% endfor %}</tbody></table></div>
+    {% endfor %}
+    <div class="research-table"><table><thead><tr><th>排序／前 5 名</th><th>時段</th><th>已結算</th><th>平均淨利</th><th>虧損率</th></tr></thead><tbody>
+    {% for key,label in [('current_top5','原風險報酬'),('individual_top5','個股估計'),('technical_top5','技術機會')] %}{% set d = study.comparisons.get(key) %}{% if d %}{% for f in d.folds %}<tr><td>{{ label }}</td><td>{{ f.fold }}</td><td>{{ f.samples }}</td><td>{{ f.expectancy }}%</td><td>{{ f.loss_rate }}%</td></tr>{% endfor %}{% endif %}{% endfor %}</tbody></table></div>
+    <p class="research-note">{{ study.note }} 新估計不自動取代主排序；完整公司行動與歷史股票池仍待補齊。</p>
+    </details>
+  </details>
+  {% endif %}
   {% if backtest and backtest.oos_overall %}
   {% if not backtest.oos_proven %}
   <div class="oos-warn bad">
@@ -1085,7 +1108,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <summary>發布後研究追蹤 <small>原始排名、買價上限與海外時間固定保存</small></summary>
       <p class="research-note">從 {{ research_forward.books.composite.forward_start }} 開始，取有足夠歷史統計的前 3 名作研究模擬，包含未過交易資格者，不開放配置。第一份發布紀錄不因重跑而覆寫，沒有事後補進場。<a href="{{ research_forward.snapshot }}">查看本次原始紀錄</a></p>
       <div class="research-table"><table><thead><tr><th>研究組</th><th>帳戶報酬</th><th>最大回落</th><th>已平倉</th><th>待進場</th><th>持倉</th></tr></thead><tbody>
-      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬'),('overseas','海外分組研究')] %}{% set book = research_forward.books.get(key) %}<tr><td>{{ label }}</td>{% if book %}<td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.pending }}</td><td>{{ book.positions|length }}</td>{% else %}<td colspan="5">尚未建立此研究帳本</td>{% endif %}</tr>{% endfor %}
+      {% for key,label in [('composite','綜合分數'),('ev_only','預期淨報酬'),('overseas','海外分組研究'),('individual','個股估計研究')] %}{% set book = research_forward.books.get(key) %}<tr><td>{{ label }}</td>{% if book %}<td>{{ '%+.2f'|format(book.total_return) }}%</td><td>{{ '%.2f'|format(book.mdd) }}%</td><td>{{ book.trades }}</td><td>{{ book.pending }}</td><td>{{ book.positions|length }}</td>{% else %}<td colspan="5">尚未建立此研究帳本</td>{% endif %}</tr>{% endfor %}
       </tbody></table></div>
       <p class="research-note">尚無交易或短期獲利均不代表策略有效；持續累積新資料，並保留虧損、未成交與策略版本。</p>
     </details>
@@ -1100,7 +1123,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <summary>分數與強勢標註 <small>技術強勢 {{ strong_count }} 檔 · 未過門檻仍列入</small></summary>
     <div class="fold-body">
       風險報酬分綜合達標率、達標淨利與虧損風險；目前 {{ positive_risk_reward_count }} 檔大於 0。負分仍照常排名，不代表遭到排除。<br>
-      技術機會分為 0～100 分，衡量位置、趨勢、轉強、量價與技術風險；正分不等於正的預期報酬，也不是成功率。兩種排序都保留全榜，未通過條件改以風險提示揭露。
+      技術機會分為 0～100 分，衡量位置、趨勢、轉強、量價與技術風險；正分不等於正的預期報酬，也不是成功率。所有排序都保留全榜，未通過條件改以風險提示揭露。
+      <p>「個股估計」結合個股與相似股票的紀錄，小樣本向同類資料收縮。估計尚待驗證，不影響交易資格；比較結果收在上方「回測與驗證」。</p>
       <p>卡片四項數字是<b>該股票自己的已結算回測</b>，涵蓋所有歷史型態，不等於今天訊號的預測。風險報酬排名仍使用達到樣本門檻的<b>同類分組統計</b>；同組數字相同是共用估計，同組內再依個股綜合分、代號排序，不代表獲利能力有統計差異。個股小樣本不直接替換排名模型。</p>
       <p><b>★ 技術強勢</b>：技術分至少 {{ '%g'|format(strong_score_min) }}、動能已確認、當日有效行情。這是走勢標記，不代表低虧損率；漲多、進場上限與海外逆風另行提示，詳見個股。</p>
       <p><b>強勢・較低虧損條件</b>：另外要求同類樣本至少 {{ min_samples }} 筆／{{ min_calibration_dates }} 個訊號日、虧損率保守上界不超過 {{ '%g'|format(low_loss_badge_max) }}%、淨報酬保守估計大於 0、通過整體樣本外驗證，且沒有追價或海外警示。目前 {{ strong_low_loss_count }} 檔；這些是研究設定，尚非最佳參數，也不保證未來表現。</p>
@@ -1113,6 +1137,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <span class="lbl">排序</span>
       <button type="button" class="rank-sort" data-sort="risk" aria-pressed="true">風險報酬</button>
       <button type="button" class="rank-sort" data-sort="technical" aria-pressed="false">技術機會</button>
+      <button type="button" class="rank-sort" data-sort="individual" aria-pressed="false">個股估計（研究）</button>
       <button type="button" class="strong-filter" id="strong-only" aria-pressed="false">只看強勢（{{ strong_count }}）</button>
     </div>
     <div class="panel-row">
@@ -1183,7 +1208,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </section>
 
   {% macro stock_card(r) %}
-    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-research-rank="{{ r.final_rank or r.rank }}" data-technical-rank="{{ r.technical_rank }}" data-strong="{{ 1 if r.strength.technical else 0 }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.final_rank or r.rank }}" data-research-rank="{{ r.final_rank or r.rank }}" data-technical-rank="{{ r.technical_rank }}" data-prediction-rank="{{ r.prediction_rank or r.final_rank or r.rank }}" data-strong="{{ 1 if r.strength.technical else 0 }}" data-eligible="{{ 1 if r.trade_eligible and not capital_policy.blocked else 0 }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.hist_risk_reward or 0 }}"
              {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.group or '其他' }}">
       <summary>
         <div class="row1">
@@ -1243,6 +1268,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
           </div>
         </div>
         <p class="reference-risk">風險：{{ r.reference_risk }}</p>
+        <p class="prediction-summary">{% if r.prediction %}<b>研究估計</b> · 2～10 日達標 {{ r.prediction.target_pct }}% · 虧損 {{ r.prediction.loss_pct }}% · 綜合分 {{ '%+.2f'|format(r.prediction.score) }}<br><small>尚未校準；樣本與估計方式可展開查看。</small>{% else %}個股估計資料不足，仍保留參考名次。{% endif %}</p>
 
         {% set own = r.stock_history if r.stock_history is defined else none %}
         {% if own %}
@@ -1303,6 +1329,11 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
       </summary>
       <div class="detail">
+        {% if r.prediction %}{% set pred = r.prediction %}
+        <details class="fold fold-inline"><summary>個股估計依據 <small>研究名次 {{ r.prediction_rank }} · 未校準</small></summary>
+          <p class="research-note">已成交且結算條件下，2～10 日淨利至少 3% 的估計 {{ pred.target_pct }}%；虧損估計 {{ pred.loss_pct }}%。達標時平均淨利 {{ pred.avg_target_gain if pred.avg_target_gain is not none else '未知' }}%；虧損時平均幅度 {{ pred.avg_loss if pred.avg_loss is not none else '未知' }}%。綜合分＝達標貢獻 − {{ loss_aversion }} × 虧損貢獻，並非預測報酬率。</p>
+          <p class="research-note">個股 {{ pred.own_samples }} 筆，權重 {{ pred.own_weight_pct }}%；其餘來自排除本股的 {{ pred.peer_samples }} 筆／{{ pred.peer_dates }} 個日期的同類紀錄。分組層級：{{ {'asset_regime_pattern_vol':'商品類別＋大盤＋型態＋波動','asset_regime_pattern':'商品類別＋大盤＋型態','asset_regime':'商品類別＋大盤','asset':'商品類別'}.get(pred.peer_level) }}。樣本不足時回退較廣分組，個股權重最多 25%。卡片原有四項數字仍是個股的實際歷史比例。</p>
+        </details>{% endif %}
         <p class="mainrisk">風險說明：{{ r.reference_warnings|join('；') if r.reference_warnings else '仍可能虧損，依自身風險承受度評估。' }}</p>
         <details class="fold fold-inline"><summary>配置試算資格 <small>{{ '通過' if r.trade_eligible and not capital_policy.blocked else '尚未通過 · 不影響排名' }}</small></summary>
           <p class="research-note">{{ r.rank_status or '僅供觀察' }}。{{ capital_policy.reason }}</p>
@@ -1344,7 +1375,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
             綜合分數使用同一組原始達標率與虧損率，達標貢獻 {{ r.hist_target_gain_component }}，
             虧損貢獻 {{ r.hist_loss_component }} × {{ loss_aversion }}；原始分數 {{ r.hist_risk_reward_raw }}，
             收縮後 {{ r.hist_risk_reward }}，重抽樣保守估計 {{ r.hist_risk_reward_lower }}。<br>
-            按成交金額扣手續費、交易稅與滑價後，實現淨利至少 {{ profit_target }}% 才算達標；收盤觸發、次開盤退出。
+            按成交金額扣手續費、交易稅與滑價後，實際在第 {{ min_exit_days }}～{{ exit_days }} 個交易日出場且淨利至少 {{ profit_target }}% 才算達標；收盤觸發、次開盤退出。
             未達標的小額獲利不替排名加分，但仍如實計入 EV 與 PF。<br>
             平均獲利 {{ r.hist_avg_win }}%、平均虧損 {{ r.hist_avg_loss }}%。
             虧損率 {{ r.hist_loss_rate }}%，虧損率不確定性上界 {{ r.hist_loss_rate_upper }}%；
@@ -2081,8 +2112,9 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
   function orderReferenceCards() {
     if (orderedBy === st.sort) return;
-    var key = st.sort === "technical" ? "technicalRank" : "researchRank";
+    var key = st.sort === "technical" ? "technicalRank" : st.sort === "individual" ? "predictionRank" : "researchRank";
     var list = document.getElementById("research-rank");
+    list.dataset.sort = st.sort;
     cards.sort(function(a,b){return Number(a.dataset[key])-Number(b.dataset[key]);});
     cards.forEach(function(c){
       c.dataset.rank = c.dataset[key];
@@ -2230,7 +2262,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
       if (st.type !== "all") bits.push(st.type);
       if (st.q) bits.push("搜尋「" + st.q + "」");
-      var orderLabel = st.sort === "technical" ? "技術機會排名" : "風險報酬排名";
+      var orderLabel = st.sort === "technical" ? "技術機會排名" : st.sort === "individual" ? "個股估計排名（研究）" : "風險報酬排名";
       var head = orderLabel + (bits.length ? " · " + bits.join("、") : "") + "：";
       var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
       var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
@@ -2340,7 +2372,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   var savedType = load("type");
   if (savedType) st.type = savedType;
   var savedSort = load("reference-sort-v1");
-  if (savedSort === "technical") st.sort = savedSort;
+  if (savedSort === "technical" || savedSort === "individual") st.sort = savedSort;
   try {
     var pk = JSON.parse(load("picks") || "{}");
     // 只還原同一個交易日的選擇，換一天就重來

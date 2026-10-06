@@ -153,7 +153,9 @@ def simulate(df, entry_pos, code="", stop_pct="default", require_mature=True,
                 px = float(bar["open"])
                 net = net_return(entry, px, shares, code)
                 worst = min(worst, (px / entry - 1) * 100)
-                return {"closed": True, "entered": True, "success": net >= C.EXIT_MIN_PROFIT - 1e-9,
+                import strategy
+                return {"closed": True, "entered": True, "success": strategy.success(net, held),
+                        "late_exit": held > C.EXIT_MAX_DAYS,
                         "days": held, "net": net, "mdd": worst, "reason": pending,
                         "entry_date": str(window.index[0])[:10], "entry": entry,
                         "exit_price": px, "shares": shares, "trigger_date": trigger_date,

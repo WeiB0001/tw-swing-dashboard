@@ -16,6 +16,7 @@ import os
 import random
 import time
 import logging
+import json
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -222,7 +223,7 @@ def fetch_stock_info() -> pd.DataFrame | None:
         return cached
 
 
-def fetch_twii_history(period: str = "3y") -> pd.DataFrame | None:
+def fetch_twii_history(period: str = "5y") -> pd.DataFrame | None:
     """
     加權指數日線，供大盤狀態（regime）判定與回測分層使用。
     只抓一次、失敗回 None，不讓主流程中斷。
@@ -342,7 +343,14 @@ def _finmind_get(params: dict) -> list | None:
             r = requests.get(C.FINMIND_API, params=q, timeout=C.HTTP_TIMEOUT)
             if r.status_code == 200:
                 try:
-                    return r.json().get("data", []) or []
+                    payload = r.json()
+                    # Some API failures use HTTP 200. Never mark an error as a
+                    # successful, empty history backfill (or log credentials).
+                    if (not isinstance(payload, dict) or payload.get("status", 200) != 200
+                            or not isinstance(payload.get("data"), list)):
+                        log.warning("FinMind 資料回應不完整或服務狀態失敗")
+                        return None
+                    return payload["data"]
                 except ValueError:
                     return None
             if r.status_code == 429 or r.status_code >= 500:
@@ -351,10 +359,10 @@ def _finmind_get(params: dict) -> list | None:
                 time.sleep(delay)
                 delay = min(delay * 2, C.FINMIND_BACKOFF_MAX)
                 continue
-            log.warning("FinMind 回應 %s：%s", r.status_code, r.text[:120])
+            log.warning("FinMind 回應 %s", r.status_code)
             return None
-        except requests.RequestException as e:
-            log.warning("FinMind 連線失敗（第 %d 次）：%s", attempt, e)
+        except requests.RequestException:
+            log.warning("FinMind 連線失敗（第 %d 次）", attempt)
             time.sleep(delay)
             delay = min(delay * 2, C.FINMIND_BACKOFF_MAX)
     return None
@@ -413,6 +421,11 @@ def fetch_history(codes: list[str]) -> dict[str, pd.DataFrame]:
     now = datetime.now(C.TZ)
     expected = _last_expected_trading_day(now)
     full_start = (now.date() - timedelta(days=int(C.HISTORY_MONTHS * 30.5))).strftime("%Y-%m-%d")
+    coverage_path = _CACHE_DIR / "_coverage.json"
+    try:
+        coverage = json.loads(coverage_path.read_text())
+    except (OSError, ValueError):
+        coverage = {}
 
     out: dict[str, pd.DataFrame] = {}
     n_cached = n_updated = n_full = 0
@@ -420,13 +433,16 @@ def fetch_history(codes: list[str]) -> dict[str, pd.DataFrame]:
 
     for i, code in enumerate(codes, 1):
         cached = load_cache(code)
+        backfill = (cached is not None and len(cached)
+                    and cached.index[0] > pd.Timestamp(full_start) + pd.Timedelta(days=7)
+                    and coverage.get(code, {}).get("requested_start", "9999") > full_start)
 
-        if cached is not None and len(cached) and cached.index[-1] >= expected:
+        if cached is not None and len(cached) and cached.index[-1] >= expected and not backfill:
             out[code] = cached                       # 已是最新，完全不打 API
             n_cached += 1
             continue
 
-        if cached is not None and len(cached):
+        if cached is not None and len(cached) and not backfill:
             start = (cached.index[-1] + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
             incremental = True
         else:
@@ -444,6 +460,14 @@ def fetch_history(codes: list[str]) -> dict[str, pd.DataFrame]:
             continue
 
         new = _finmind_to_frame(rows)
+        if rows and new is None:
+            failed.append(code)
+            if cached is not None and len(cached):
+                out[code] = cached
+            continue
+        if not incremental:
+            coverage[code] = {"requested_start": full_start, "fetched_at": now.isoformat()}
+            coverage_path.write_text(json.dumps(coverage, ensure_ascii=False), encoding="utf-8")
         if new is None and cached is None:
             empty.append(code)                       # 查無資料，記錄後跳過
             continue
@@ -502,10 +526,12 @@ def merge_today_bar(hist: pd.DataFrame, row: pd.Series, trade_date: pd.Timestamp
     hist.index = idx.normalize()
     today = pd.Timestamp(trade_date).normalize()
 
+    # Missing OHLC is not a fabricated one-price bar. Preserve it for the
+    # feature-quality gate and execution checks to disclose.
     bar = {
-        "open": row.get("open") or row["close"],
-        "high": row.get("high") or row["close"],
-        "low": row.get("low") or row["close"],
+        "open": row.get("open"),
+        "high": row.get("high"),
+        "low": row.get("low"),
         "close": row["close"],
         "volume": row["volume"],
     }

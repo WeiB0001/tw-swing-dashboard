@@ -94,6 +94,11 @@ def compute_frame(hist: pd.DataFrame) -> pd.DataFrame:
     df = hist.copy()
     c, h, l, o, v = df["close"], df["high"], df["low"], df["open"], df["volume"]
 
+    valid = (np.isfinite(df[["open", "high", "low", "close", "volume"]]).all(axis=1)
+             & (df[["open", "high", "low", "close"]] > 0).all(axis=1)
+             & (v >= 0) & (l <= np.minimum(o, c)) & (h >= np.maximum(o, c)))
+    df["feature_quality_ok"] = valid.rolling(C.MIN_BARS, min_periods=C.MIN_BARS).min().fillna(0).astype(bool)
+
     # --- 動能 ---
     df["rsi"] = rsi(c, C.RSI_PERIOD)
     df["rsi_prev"] = df["rsi"].shift(1)
@@ -267,6 +272,7 @@ def features_at(df: pd.DataFrame, i: int = -1) -> dict | None:
         val = row.get(k, np.nan)
         f[k] = float(val) if not pd.isna(val) else 0.0
 
+    f["feature_quality_ok"] = bool(row.get("feature_quality_ok", False))
     f["close"] = float(row["close"])
     f["open"] = float(row["open"])
     f["high"] = float(row["high"])

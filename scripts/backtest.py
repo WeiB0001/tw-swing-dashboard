@@ -33,6 +33,7 @@ import risk_stats
 import execution
 import overseas_research
 import stock_history
+import prediction
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -140,7 +141,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     for code, hist in hist_map.items():
         if hist is None or len(hist) < C.MIN_BARS + max_hold + 10:
             continue
-        df = indicators.compute_frame(hist)
+        df = hist.copy()
         df.index = pd.to_datetime(df.index)
         frames[code] = df
     if not frames:
@@ -150,7 +151,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
     all_dates = sorted(set().union(*[set(df.index) for df in frames.values()]))
     # Preserve market sessions missing from an individual security's history;
     # never turn a suspension/data gap into a shorter holding period.
-    frames = {code: df.reindex(all_dates) for code, df in frames.items()}
+    frames = {code: indicators.compute_frame(df.reindex(all_dates)) for code, df in frames.items()}
     # 尾端要留 max_hold + 1 根（+1 是因為進場價用的是隔日開盤）
     usable = all_dates[C.MIN_BARS: len(all_dates) - max(max_hold, C.EXIT_MAX_DAYS) - 1]
     if lookback_days > 0:
@@ -161,7 +162,9 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
              str(usable[0])[:10], str(usable[-1])[:10], len(usable))
 
     audit = execution.audit(hist_map)
-    audit.update(unfilled_entries=0, unresolved_exits=0, price_guard_skips=0)
+    audit.update(unfilled_entries=0, unresolved_exits=0, price_guard_skips=0, invalid_feature_windows=0)
+    audit["history_coverage"] = {code: {"first": str(df.index[0])[:10], "last": str(df.index[-1])[:10], "bars": len(df)} for code, df in hist_map.items() if df is not None and len(df)}
+    audit["requested_history_months"] = C.HISTORY_MONTHS
     audit["market_regime_available"] = regimes is not None
     import build as build_mod
     signals, all_signals = [], []
@@ -178,6 +181,9 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
                 continue
             f = indicators.features_at(df, pos)
             if not f:
+                continue
+            if not f.get("feature_quality_ok", True):
+                audit["invalid_feature_windows"] += 1
                 continue
             res = scoring.score_stock(f)
             if res["score"] < C.BACKTEST_MIN_SCORE:
@@ -278,6 +284,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "capital_policy": strategy.capital_policy(),
         "calibration": tables,
         "stock_history": stock_history.build(signals),
+        "prediction_model": prediction.fit(signals),
         "data_quality": audit,
         "in_sample_overall": _pack(ins),
         "generated_at": datetime.now(C.TZ).strftime("%Y-%m-%d %H:%M"),
@@ -300,7 +307,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
                         "stock_sell_tax": C.STOCK_SELL_TAX_PCT, "etf_sell_tax": C.ETF_SELL_TAX_PCT,
                         "reference_notional": C.REFERENCE_NOTIONAL_TWD},
         "cooldown_days": cooldown,
-        "entry_rule": f"發布後下一開盤進場；買進滑價後不得超過訊號收盤 +{C.ENTRY_MAX_PREMIUM_PCT:g}% 與訊號 MA20 +{C.ENTRY_MAX_MA20_BIAS_PCT:g}% 的較低者，超價跳過。收盤觸發、次開盤退出，第 {C.EXIT_MAX_DAYS} 日開盤預定離場。達標依實現淨利判定。",
+        "entry_rule": f"發布後下一開盤進場；買進滑價後不得超過訊號收盤 +{C.ENTRY_MAX_PREMIUM_PCT:g}% 與訊號 MA20 +{C.ENTRY_MAX_MA20_BIAS_PCT:g}% 的較低者，超價跳過。收盤觸發、次開盤退出，第 {C.EXIT_MAX_DAYS} 日開盤預定離場。達標必須實際在第 2～10 個交易日離場且淨利至少 3%；延後出場保留真實損益，但不算期限內達標。",
         "exit_max_days": C.EXIT_MAX_DAYS,
         "topk": stats_by_topk(signals),
         "score_buckets": stats_by_bucket(signals),
@@ -327,13 +334,16 @@ def _pack(sub: list[dict], h: int = 0) -> dict:
         mdds = [e["mdd"] for e in ex]
         d = describe(nets, mdds)
         d.update(risk_stats.expected_return_lower(sub))
-        wins = sum(1 for e in ex if e["success"])
+        flags = [strategy.outcome_success(e) for e in ex]
+        d.update(risk_stats.risk_reward(nets, flags))
+        d["late_exits"] = sum(e["days"] > C.EXIT_MAX_DAYS for e in ex)
+        wins = sum(flags)
         d["successes"] = wins
         d["success_rate"] = round(wins / len(ex) * 100, 1)
         d["calibrated_success"] = round(calibrate(wins, len(ex)) * 100, 1)
         d["success_lower"] = round(strategy.wilson_lower(wins, len(ex)), 2)
         d["avg_days"] = round(sum(e["days"] for e in ex) / len(ex), 1)
-        d["avg_days_win"] = (round(sum(e["days"] for e in ex if e["success"])
+        d["avg_days_win"] = (round(sum(e["days"] for e in ex if strategy.outcome_success(e))
                                    / max(1, wins), 1) if wins else None)
         return d
     return _pack_hold([], h or C.PRIMARY_HOLD_DAYS)
@@ -435,12 +445,14 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None, his
     picked, tested, fold_stats, comparisons, success_comparisons = [], [], [], [], []
     utility_comparisons, ev_sorted_picks, matched_rank_differences = [], [], []
     observation_picks, observation_ev = [], []
-    overseas_study = {}
+    overseas_study, prediction_study = {}, {}
     for i, test_dates in enumerate(folds[1:], 1):
         prior = training_before(calibration, test_dates[0])
         if len(prior) < C.MIN_SAMPLES_SCORE:
             continue
         tables = calibration_tables(prior)
+        model = prediction.fit(prior)
+        baseline = {"target_pct": tables["overall"]["success_rate"], "loss_pct": tables["overall"]["loss_rate"]}
         fold_picked = []
         for day in test_dates:
             source = by_day[day]
@@ -450,6 +462,8 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None, his
             build_mod.add_final_score(rows)
             ranked = ranking.sort(rows)
             lookup = {s["code"]: s for s in source}
+            prediction.attach(ranked, model)
+            prediction.evaluate_day(prediction_study, ranked, lookup, baseline, i)
             overseas_research.compare_day(overseas_study, ranked, tables, lookup, i)
             known = [r for r in ranked if r.get("hist_risk_reward") is not None]
             observation_picks.extend(lookup[r["code"]] for r in known[:C.WF_TOP_N])
@@ -471,13 +485,13 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None, his
             base_filled = [s for s in source if s["exit"].get("closed")]
             ev_filled = [s for s in ev_today if s["exit"].get("closed")]
             if filled and base_filled and ev_filled:
-                score_today = sum(strategy.utility(s["exit"]["net"]) for s in filled) / len(filled)
-                utility_comparisons.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in base_filled) / len(base_filled))
-                matched_rank_differences.append(score_today - sum(strategy.utility(s["exit"]["net"]) for s in ev_filled) / len(ev_filled))
+                score_today = sum(strategy.outcome_utility(s["exit"]) for s in filled) / len(filled)
+                utility_comparisons.append(score_today - sum(strategy.outcome_utility(s["exit"]) for s in base_filled) / len(base_filled))
+                matched_rank_differences.append(score_today - sum(strategy.outcome_utility(s["exit"]) for s in ev_filled) / len(ev_filled))
                 comparisons.append(sum(s["exit"]["net"] for s in filled) / len(filled)
                                    - sum(s["exit"]["net"] for s in base_filled) / len(base_filled))
-                success_comparisons.append(100 * (sum(s["exit"]["success"] for s in filled) / len(filled)
-                                           - sum(s["exit"]["success"] for s in base_filled) / len(base_filled)))
+                success_comparisons.append(100 * (sum(strategy.outcome_success(s["exit"]) for s in filled) / len(filled)
+                                           - sum(strategy.outcome_success(s["exit"]) for s in base_filled) / len(base_filled)))
             for rank, r in enumerate(ranked, 1):
                 tested.append({**lookup[r["code"]], "rank": rank,
                                "pct": (rank - 1) / max(n, 1)})
@@ -505,7 +519,7 @@ def walk_forward(signals: list[dict], calibration: list[dict] | None = None, his
                        "portfolio_replay": {"composite": research.historical_book(observation_picks, histories),
                                             "ev_only": research.historical_book(observation_ev, histories)},
                        "observation_note": "研究比較取有足夠歷史統計的前 3 名，包含未通過交易資格的標的；不可視為配置建議。"}
-    return {**experiments, "overseas_study": overseas_research.summarize(overseas_study),
+    return {**experiments, "prediction_study": prediction.summarize(prediction_study, _pack), "overseas_study": overseas_research.summarize(overseas_study),
             "available": bool(picked), "reason": "沒有通過候選條件的訊號" if not picked else "",
             "selected_signals": len(picked),
             "unfilled_entries": sum(s["exit"].get("entered") is False for s in picked),

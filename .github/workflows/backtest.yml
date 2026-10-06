@@ -13,15 +13,20 @@ permissions:
   id-token: write
 
 concurrency:
-  group: backtest
+  group: build-dashboard
   cancel-in-progress: false
 
 jobs:
   backtest:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+
+      - name: 同步最新主分支與研究紀錄
+        run: |
+          git fetch origin main
+          git merge --ff-only origin/main
 
       - uses: actions/setup-python@v5
         with:
@@ -30,7 +35,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      # 還原 data/history 的 CSV 快取，避免每次都重抓 14 個月
+      # 還原 data/history 的 CSV 快取，避免每次都重抓 36 個月
       # key 每天換一次，restore-keys 讓它接續前一天的快取往下增量更新
       - name: 還原歷史資料快取
         uses: actions/cache@v4
@@ -46,7 +51,7 @@ jobs:
       - name: 執行回測
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
-        run: python scripts/backtest.py --days 250
+        run: python scripts/backtest.py --days 650
 
       # 回測完立刻用新的勝率重建頁面，不必等隔天的日更
       # 用網站實際發布過的排名做驗證，資料來自 data/history 的每日存檔
@@ -56,7 +61,7 @@ jobs:
       - name: 以新回測結果重建儀表板
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
-        run: python scripts/build.py || echo "重建失敗，保留既有 index.html"
+        run: python scripts/build.py
 
       - name: 提交結果
         run: |
@@ -68,12 +73,14 @@ jobs:
           else
             git commit -m "更新回測結果 $(TZ=Asia/Taipei date '+%Y-%m-%d')"
             # 多個排程可能同時推送，直接 push 會因為 non-fast-forward 失敗。
-            # 先 rebase 再推，失敗重試幾次，還是不行才放棄，不讓流程變紅。
+            # 衝突或未成功保存時停止，不發布未同步的研究紀錄。
+            PUSHED=0
             for i in 1 2 3; do
-              git pull --rebase --autostash origin "$(git rev-parse --abbrev-ref HEAD)" || true
-              if git push; then echo "已推送"; break; fi
+              git pull --rebase --autostash origin main || exit 1
+              if git push; then echo "已推送"; PUSHED=1; break; fi
               echo "第 $i 次推送失敗，10 秒後重試"; sleep 10
             done
+            test "$PUSHED" = 1
           fi
 
       - name: 打包網站檔案
