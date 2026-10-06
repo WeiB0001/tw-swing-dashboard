@@ -232,7 +232,9 @@ def shrink(ev, n) -> float:
 
 def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
     """Never reuse statistics produced for a different target, horizon or cost."""
+    import stock_history
     ranking.attach(rows, {}, regime)
+    stock_history.attach(rows, None)
     try:
         bt = json.loads((ROOT / C.BACKTEST_JSON).read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -241,6 +243,7 @@ def attach_backtest(rows: list[dict], regime: str = "sideways") -> dict | None:
         log.warning("回測口徑已變更或非真實資料，需重跑；不沿用舊成功率")
         return None
     ranking.attach(rows, bt.get("calibration") or {}, regime)
+    stock_history.attach(rows, bt)
     bt["_reliability"] = oos_reliability(bt)
     return bt
 

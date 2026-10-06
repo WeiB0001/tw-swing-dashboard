@@ -38,6 +38,15 @@ def attach(rows: list[dict], tables: dict, regime: str = "sideways", use_oversea
                 continue
             n = int(hit["samples"])
             successes = int(hit.get("successes", 0))
+            # Preserve exact cohort provenance; many securities can intentionally
+            # share this estimate. It is not an individual security's history.
+            group_parts = [source, str(hit["lo"]), str(hit["hi"])]
+            group_parts += [str(hit.get(k, "")) for k in
+                            ("pattern", "regime", "overseas_group", "overseas_state")]
+            r["hist_group_id"] = "|".join(group_parts)
+            r["hist_group_lo"], r["hist_group_hi"] = hit["lo"], hit["hi"]
+            r["hist_group_pattern"] = hit.get("pattern")
+            r["hist_group_regime"] = hit.get("regime")
             # Shrink once toward the training-pool target rate, never a fixed 50%.
             rate = 100 * (successes + C.SHRINK_K * baseline / 100) / (n + C.SHRINK_K)
             ev = float(hit.get("expectancy") or 0)

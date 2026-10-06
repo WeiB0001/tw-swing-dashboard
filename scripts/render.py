@@ -140,6 +140,8 @@ def _groups(rows: list) -> list:
 def reference_rows(rows: list[dict], data_date: str | None = None, validated: bool = False) -> list[dict]:
     """Prepare an unfiltered reference view without changing strategy records."""
     result = [dict(row) for row in rows]
+    from collections import Counter
+    cohorts = Counter(r.get("hist_group_id") for r in result if r.get("hist_group_id"))
 
     def technical_key(row):
         value = row.get("score")
@@ -149,6 +151,10 @@ def reference_rows(rows: list[dict], data_date: str | None = None, validated: bo
     for rank, row in enumerate(sorted(result, key=technical_key), 1):
         row["technical_rank"] = rank
     for row in result:
+        row["history_group_peers"] = cohorts.get(row.get("hist_group_id"), 0)
+        source = row.get("hist_source")
+        row["history_group_label"] = {"regime": "大盤＋型態＋分數", "pattern": "型態＋分數",
+                                      "bucket": "僅分數區間", "overseas": "海外＋分數"}.get(source, "同類訊號")
         row["strength"] = strength_marker(row, data_date, validated)
         warnings = []
         if data_date and row.get("quote_date") != data_date:

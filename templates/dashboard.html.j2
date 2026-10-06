@@ -698,6 +698,8 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 .key-metrics div{padding:8px;background:#11171E;border-radius:8px;min-width:0}
 .key-metrics dt{font-size:10.5px;color:var(--muted);margin-bottom:3px}
 .key-metrics dd{margin:0;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.history-source{font-size:11px;color:var(--muted);margin:10px 0 5px;line-height:1.5}
+.history-source b{color:var(--text)}
 .rank-state{font-size:12px;color:var(--muted)}
 .score-pair{display:flex;justify-content:flex-end;gap:22px;flex-wrap:wrap;margin-left:auto}
 .score-pair .score{font-size:23px}
@@ -1099,6 +1101,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <div class="fold-body">
       風險報酬分綜合達標率、達標淨利與虧損風險；目前 {{ positive_risk_reward_count }} 檔大於 0。負分仍照常排名，不代表遭到排除。<br>
       技術機會分為 0～100 分，衡量位置、趨勢、轉強、量價與技術風險；正分不等於正的預期報酬，也不是成功率。兩種排序都保留全榜，未通過條件改以風險提示揭露。
+      <p>卡片四項數字是<b>該股票自己的已結算回測</b>，涵蓋所有歷史型態，不等於今天訊號的預測。風險報酬排名仍使用達到樣本門檻的<b>同類分組統計</b>；同組數字相同是共用估計，同組內再依個股綜合分、代號排序，不代表獲利能力有統計差異。個股小樣本不直接替換排名模型。</p>
       <p><b>★ 技術強勢</b>：技術分至少 {{ '%g'|format(strong_score_min) }}、動能已確認、當日有效行情。這是走勢標記，不代表低虧損率；漲多、進場上限與海外逆風另行提示，詳見個股。</p>
       <p><b>強勢・較低虧損條件</b>：另外要求同類樣本至少 {{ min_samples }} 筆／{{ min_calibration_dates }} 個訊號日、虧損率保守上界不超過 {{ '%g'|format(low_loss_badge_max) }}%、淨報酬保守估計大於 0、通過整體樣本外驗證，且沒有追價或海外警示。目前 {{ strong_low_loss_count }} 檔；這些是研究設定，尚非最佳參數，也不保證未來表現。</p>
     </div>
@@ -1241,14 +1244,19 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         </div>
         <p class="reference-risk">風險：{{ r.reference_risk }}</p>
 
-        {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
-        <dl class="key-metrics" aria-label="歷史風險報酬">
-          <div><dt>歷史達標率</dt><dd>{{ r.hist_success_raw }}%</dd></div>
-          <div><dt>達標平均淨利</dt><dd>{{ '%+.2f'|format(r.hist_avg_target_gain) if r.hist_avg_target_gain is not none else '—' }}%</dd></div>
-          <div><dt>歷史虧損率</dt><dd>{{ r.hist_loss_rate }}%</dd></div>
-          <div><dt>虧損時平均</dt><dd>−{{ '%.2f'|format(r.hist_avg_loss_magnitude) }}%</dd></div>
+        {% set own = r.stock_history if r.stock_history is defined else none %}
+        {% if own %}
+        <p class="history-source"><b>個股回測 · {{ own.samples }} 筆</b> · 全型態已結算{% if own.samples < min_samples %} · 小樣本，僅供觀察{% endif %}</p>
+        <dl class="key-metrics" aria-label="個股歷史結果">
+          <div><dt>歷史達標率</dt><dd>{{ own.success_rate }}%</dd></div>
+          <div><dt>達標平均淨利</dt><dd>{% if own.avg_target_gain is not none %}{{ '%+.2f'|format(own.avg_target_gain) }}%{% else %}—{% endif %}</dd></div>
+          <div><dt>歷史虧損率</dt><dd>{{ own.loss_rate }}%</dd></div>
+          <div><dt>虧損時平均</dt><dd>{% if own.avg_loss_magnitude is not none %}−{{ '%.2f'|format(own.avg_loss_magnitude) }}%{% else %}—{% endif %}</dd></div>
         </dl>
-        {% else %}<p class="key-empty">資料不足，暫不提供機率估計。</p>{% endif %}
+        {% else %}<p class="key-empty">個股回測資料不足；不以其他股票統計代填。</p>{% endif %}
+        {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
+        <p class="history-source">排名依據：{{ r.history_group_label }} · {{ r.hist_samples }} 筆{% if r.history_group_peers > 1 %} · 同組 {{ r.history_group_peers }} 檔共用{% endif %}</p>
+        {% endif %}
         <div class="pickrow">
           <button type="button" class="jbuy" data-jbuy data-code="{{ r.code }}"
                   data-name="{{ r.name }}" data-price="{{ r.close }}">＋加入我的持股</button>
@@ -1311,12 +1319,24 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
         <div class="why"><b>觀察依據</b>{{ r.edge or r.why }}</div>
         {% if r.spark %}<div class="spark" data-spark='{{ r.spark|tojson }}'></div>{% endif %}
         <details class="fold fold-inline">
-          <summary>分數與樣本細節 <small>{{ r.hist_samples or 0 }} 筆</small></summary>
+          <summary>分數與樣本細節 <small>個股／分組分開列示</small></summary>
           <div class="fold-body">
+        {% if own %}
+        <p class="research-note"><b>{{ r.code }} 個股回測（未用於排名）</b><br>
+          訊號期間 {{ own.first_signal }}～{{ own.last_signal }}；結果結算至 {{ own.outcomes_through }}。
+          {{ own.samples }} 筆中達標 {{ own.successes }} 筆、虧損 {{ own.losses }} 筆；全部樣本平均淨報酬 {{ '%+.3f'|format(own.expectancy) }}%。
+          「達標平均淨利」只平均達標交易；沒有達標或虧損交易時，對應平均值顯示「—」。
+          沿用回測冷卻採樣，只含已成交且已結算的交易；未成交與未結算不算成功，也不納入此分母，詳見整體資料品質。
+          跨所有歷史型態，並非僅今日型態；觀察比例不是未來成功機率，小樣本也不能證明低風險。</p>
+        {% endif %}
         <div class="scoreline">
-          排名分數＝（達標機率 × 達標平均淨利 − {{ loss_aversion }} × 虧損機率 × 平均虧損幅度）× N / (N + {{ shrink_k }})。
+          <b>排名使用的同類分組統計</b><br>
+          排名分數＝（分組達標比例 × 分組達標平均淨利 − {{ loss_aversion }} × 分組虧損比例 × 分組平均虧損幅度）× N / (N + {{ shrink_k }})。
           機率以 0～1 代入；綜合分數不是預測報酬率。依分數由高到低排序，交易資格另外檢查。<br>
           {% if r.hist_risk_reward is defined and r.hist_risk_reward is not none %}
+            分組：{{ r.history_group_label }}{% if r.hist_group_lo is defined and r.hist_group_lo is not none %}，{{ r.hist_group_lo }} ≤ 技術分數 &lt; {{ r.hist_group_hi }}{% endif %}{% if r.hist_group_pattern %}，型態 {{ r.hist_group_pattern }}{% endif %}{% if r.hist_group_regime %}，大盤 {{ r.hist_group_regime }}{% endif %}。
+            {% if r.history_group_peers > 1 %}目前 {{ r.history_group_peers }} 檔共用此統計，同組名次依個股綜合分、代號區分，不能解讀為個股成功率不同。{% endif %}<br>
+            分組達標平均淨利 {{ r.hist_avg_target_gain }}%，分組虧損時平均 −{{ r.hist_avg_loss_magnitude }}%；與卡片的個股數字口徑不同。<br>
             歷史同類訊號 {{ r.hist_samples }} 筆；原始達標率 {{ r.hist_success_raw }}%，
             向訓練股票池基準收縮後 {{ r.hist_success }}%。
             原始平均淨報酬 {{ r.hist_expectancy_raw }}%，按樣本量收縮後 {{ r.hist_expectancy }}%。
@@ -1632,7 +1652,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
     <summary>使用限制與風險提醒</summary>
     <div class="fold-body">
     ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
-    歷史達標率是過去相似訊號的統計結果，不是未來的成功機率；技術分數更只是型態描述。<br>
+    個股歷史達標率是該股過去已結算回測的比例；排名分組統計是相似訊號的共用估計。兩者都不是未來的成功機率；技術分數更只是型態描述。<br>
     分數高不代表會上漲，技術指標只描述過去的價量行為。<br>
     資料可能因來源延遲或錯誤而失真，下單前請自行以券商報價複核。
     </div>

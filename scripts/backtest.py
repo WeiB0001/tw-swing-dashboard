@@ -32,6 +32,7 @@ import ranking
 import risk_stats
 import execution
 import overseas_research
+import stock_history
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -276,6 +277,7 @@ def run_backtest(hist_map: dict[str, pd.DataFrame], lookback_days: int,
         "research_only": True,
         "capital_policy": strategy.capital_policy(),
         "calibration": tables,
+        "stock_history": stock_history.build(signals),
         "data_quality": audit,
         "in_sample_overall": _pack(ins),
         "generated_at": datetime.now(C.TZ).strftime("%Y-%m-%d %H:%M"),

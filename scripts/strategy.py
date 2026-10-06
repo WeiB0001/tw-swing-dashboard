@@ -102,10 +102,11 @@ if __name__ == "__main__":
     import json
     from pathlib import Path
     import sys
+    import stock_history
     try:
         saved = json.loads((Path(__file__).resolve().parents[1] / C.BACKTEST_JSON).read_text())
-        valid = compatible(saved) and saved.get("mode") == "live"
+        valid = compatible(saved) and saved.get("mode") == "live" and stock_history.available(saved)
     except (OSError, ValueError):
         valid = False
-    print("回測口徑相符" if valid else "回測需重算：目標、期間、成本或策略版本不同")
+    print("回測口徑與個股統計完整" if valid else "回測需重算：策略口徑不同或缺少個股統計")
     sys.exit(0 if valid else 1)
