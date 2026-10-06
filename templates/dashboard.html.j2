@@ -901,7 +901,7 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
   </details>
   <details class="fold" id="validation-details">
     <summary><span class="research-overview">回測與驗證
-      <small>{% if backtest and backtest.oos_overall %}{{ backtest.oos_overall.samples }} 筆 · 達標 {{ backtest.oos_overall.success_rate }}% · 虧損 {{ backtest.oos_overall.loss_rate }}%{% else %}資料尚待累積{% endif %}</small>
+      <small>{% if backtest and backtest.oos_overall %}{{ backtest.oos_overall.samples }} 筆 · 達標 {{ backtest.oos_overall.success_rate }}% · 虧損 {{ backtest.oos_overall.loss_rate }}%{% elif backtest and backtest.walk_forward and backtest.walk_forward.prediction_study is defined and backtest.walk_forward.prediction_study.available %}前 5／10 名比較已更新 · 個股估計研究{% else %}資料尚待累積{% endif %}</small>
     </span></summary>
     {% if backtest and backtest.data_quality %}
     <div class="fold-body research-note"><b>資料檢查：{{ backtest.data_quality.issue_count }} 筆待核對</b> · 未成交進場 {{ backtest.data_quality.unfilled_entries }} 筆 · 未結算出場 {{ backtest.data_quality.unresolved_exits }} 筆。{% if backtest.data_quality.invalid_feature_windows is defined %}<br>已隔離 {{ backtest.data_quality.invalid_feature_windows }} 個含缺漏／無效行情的特徵視窗；歷史資料目標 {{ backtest.data_quality.requested_history_months }} 個月，實際期間 {{ backtest.period }}。{% endif %}{% if backtest.data_quality.market_regime_available is defined and not backtest.data_quality.market_regime_available %}<br><b>歷史大盤狀態缺漏，這次回測不能通過配置驗證。</b>{% endif %}<br>{{ backtest.data_quality.note }}
