@@ -48,71 +48,67 @@
  },
  "books": {
   "individual": {
-   "cash": 100000.0,
-   "positions": [],
-   "pending": [
+   "cash": 62556.3537,
+   "positions": [
     {
      "code": "0052",
      "name": "富邦科技",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 67.95,
-      "ma20": 64.36500000000001,
-      "max_fill_price": 69.309,
-      "max_open_price": 69.23976023976024,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 184,
+     "entry": 67.75,
+     "entry_cash": 12498.465999999999,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 499.9386,
+     "stop_pct": 3.0,
+     "target1": 70.21329104270741,
+     "stop": 66.12954088701575
     },
     {
      "code": "00406A",
      "name": "主動中信台灣收益",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 10.33,
-      "ma20": 9.745,
-      "max_fill_price": 10.5246,
-      "max_open_price": 10.514085914085914,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 1210,
+     "entry": 10.3,
+     "entry_cash": 12495.463,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 499.8185,
+     "stop_pct": 3.0,
+     "target1": 10.674501046600419,
+     "stop": 10.053650230281406
     },
     {
      "code": "00850",
      "name": "元大臺灣ESG永續",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 99.4,
-      "ma20": 94.71000000000001,
-      "max_fill_price": 101.388,
-      "max_open_price": 101.28671328671331,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 126,
+     "entry": 98.55,
+     "entry_cash": 12449.717299999998,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 497.9887,
+     "stop_pct": 3.0,
+     "target1": 102.13439537858402,
+     "stop": 96.19408388638728
     }
    ],
+   "pending": [],
    "trades": [],
    "equity": [
     {
      "date": "2026-10-06",
      "equity": 100000.0,
      "index": 49712.04
+    },
+    {
+     "date": "2026-10-07",
+     "equity": 99733.767,
+     "index": 49822.55
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-06",
+   "last_date": "2026-10-07",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -171,71 +167,67 @@
    "skipped": []
   },
   "composite": {
-   "cash": 100000.0,
-   "positions": [],
-   "pending": [
+   "cash": 62887.83485,
+   "positions": [
     {
      "code": "0053",
      "name": "元大電子",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 263.1,
-      "ma20": 249.0375,
-      "max_fill_price": 268.362,
-      "max_open_price": 268.0939060939061,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 47,
+     "entry": 263.1,
+     "entry_cash": 12398.0657,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 495.9226,
+     "stop_pct": 3.0,
+     "target1": 272.6728959061505,
+     "stop": 256.81387581008477
     },
     {
      "code": "00922",
      "name": "國泰台灣領袖50",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 45.29,
-      "ma20": 43.065999999999995,
-      "max_fill_price": 46.1958,
-      "max_open_price": 46.14965034965035,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 275,
+     "entry": 45.19,
+     "entry_cash": 12459.677249999999,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 498.3871,
+     "stop_pct": 3.0,
+     "target1": 46.83350223460334,
+     "stop": 44.10958208185435
     },
     {
      "code": "006208",
      "name": "富邦台50",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 265.9,
-      "ma20": 253.1275,
-      "max_fill_price": 271.21799999999996,
-      "max_open_price": 270.94705294705295,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 46,
+     "entry": 265.7,
+     "entry_cash": 12254.422199999999,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 490.1769,
+     "stop_pct": 3.0,
+     "target1": 275.37775983756745,
+     "stop": 259.36171480702967
     }
    ],
+   "pending": [],
    "trades": [],
    "equity": [
     {
      "date": "2026-10-06",
      "equity": 100000.0,
      "index": 49712.04
+    },
+    {
+     "date": "2026-10-07",
+     "equity": 99701.8261,
+     "index": 49822.55
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-06",
+   "last_date": "2026-10-07",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -294,71 +286,67 @@
    "skipped": []
   },
   "ev_only": {
-   "cash": 100000.0,
-   "positions": [],
-   "pending": [
+   "cash": 62887.83485,
+   "positions": [
     {
      "code": "0053",
      "name": "元大電子",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 263.1,
-      "ma20": 249.0375,
-      "max_fill_price": 268.362,
-      "max_open_price": 268.0939060939061,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 47,
+     "entry": 263.1,
+     "entry_cash": 12398.0657,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 495.9226,
+     "stop_pct": 3.0,
+     "target1": 272.6728959061505,
+     "stop": 256.81387581008477
     },
     {
      "code": "00922",
      "name": "國泰台灣領袖50",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 45.29,
-      "ma20": 43.065999999999995,
-      "max_fill_price": 46.1958,
-      "max_open_price": 46.14965034965035,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 275,
+     "entry": 45.19,
+     "entry_cash": 12459.677249999999,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 498.3871,
+     "stop_pct": 3.0,
+     "target1": 46.83350223460334,
+     "stop": 44.10958208185435
     },
     {
      "code": "006208",
      "name": "富邦台50",
      "group": "ETF",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 265.9,
-      "ma20": 253.1275,
-      "max_fill_price": 271.21799999999996,
-      "max_open_price": 270.94705294705295,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 46,
+     "entry": 265.7,
+     "entry_cash": 12254.422199999999,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 490.1769,
+     "stop_pct": 3.0,
+     "target1": 275.37775983756745,
+     "stop": 259.36171480702967
     }
    ],
+   "pending": [],
    "trades": [],
    "equity": [
     {
      "date": "2026-10-06",
      "equity": 100000.0,
      "index": 49712.04
+    },
+    {
+     "date": "2026-10-07",
+     "equity": 99701.8261,
+     "index": 49822.55
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-06",
+   "last_date": "2026-10-07",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -417,71 +405,67 @@
    "skipped": []
   },
   "overseas": {
-   "cash": 100000.0,
-   "positions": [],
-   "pending": [
+   "cash": 63383.48000000001,
+   "positions": [
     {
      "code": "1727",
      "name": "中華化",
      "group": "其他",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 106.0,
-      "ma20": 103.22999999999999,
-      "max_fill_price": 108.12,
-      "max_open_price": 108.01198801198802,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 118,
+     "entry": 105.5,
+     "entry_cash": 12481.448999999999,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 499.258,
+     "stop_pct": 3.0,
+     "target1": 109.55562663627536,
+     "stop": 103.1836583876602
     },
     {
      "code": "3665",
      "name": "貿聯-KY",
      "group": "其他",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 2325.0,
-      "ma20": 2205.25,
-      "max_fill_price": 2371.5,
-      "max_open_price": 2369.1308691308695,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 5,
+     "entry": 2325.0,
+     "entry_cash": 11656.625,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 466.265,
+     "stop_pct": 3.0,
+     "target1": 2414.917173944255,
+     "stop": 2274.476331898599
     },
     {
      "code": "2317",
      "name": "鴻海",
      "group": "電腦週邊",
-     "signal_date": "2026-10-06",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 256.0,
-      "ma20": 251.45,
-      "max_fill_price": 261.12,
-      "max_open_price": 260.8591408591409,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-06T18:25:12.245349+08:00"
+     "shares": 49,
+     "entry": 254.0,
+     "entry_cash": 12478.445999999998,
+     "entry_date": "2026-10-07",
+     "held": 1,
+     "planned_risk": 499.1378,
+     "stop_pct": 3.0,
+     "target1": 263.76445796706577,
+     "stop": 248.42341000243272
     }
    ],
+   "pending": [],
    "trades": [],
    "equity": [
     {
      "date": "2026-10-06",
      "equity": 100000.0,
      "index": 49712.04
+    },
+    {
+     "date": "2026-10-07",
+     "equity": 99608.8653,
+     "index": 49822.55
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-06",
+   "last_date": "2026-10-07",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {

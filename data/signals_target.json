@@ -214,6 +214,174 @@
      "regime": "bull"
     }
    ]
+  },
+  {
+   "date": "2026-10-07",
+   "regime": "bull",
+   "entries": [
+    {
+     "symbol": "0056",
+     "date": "2026-10-07",
+     "rank": 1,
+     "ref_price": 58.45,
+     "score": 31.5,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "00940",
+     "date": "2026-10-07",
+     "rank": 2,
+     "ref_price": 13.28,
+     "score": 32.8,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "2330",
+     "date": "2026-10-07",
+     "rank": 3,
+     "ref_price": 2585.0,
+     "score": 35.0,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "2492",
+     "date": "2026-10-07",
+     "rank": 4,
+     "ref_price": 428.0,
+     "score": 35.6,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "3532",
+     "date": "2026-10-07",
+     "rank": 5,
+     "ref_price": 513.0,
+     "score": 42.1,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "00929",
+     "date": "2026-10-07",
+     "rank": 6,
+     "ref_price": 30.14,
+     "score": 33.6,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "0052",
+     "date": "2026-10-07",
+     "rank": 7,
+     "ref_price": 67.65,
+     "score": 34.3,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "00922",
+     "date": "2026-10-07",
+     "rank": 8,
+     "ref_price": 45.15,
+     "score": 33.7,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "3702",
+     "date": "2026-10-07",
+     "rank": 9,
+     "ref_price": 120.0,
+     "score": 42.1,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "3044",
+     "date": "2026-10-07",
+     "rank": 10,
+     "ref_price": 582.0,
+     "score": 37.1,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "1303",
+     "date": "2026-10-07",
+     "rank": 11,
+     "ref_price": 314.0,
+     "score": 42.8,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "6505",
+     "date": "2026-10-07",
+     "rank": 12,
+     "ref_price": 107.0,
+     "score": 40.2,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "00692",
+     "date": "2026-10-07",
+     "rank": 13,
+     "ref_price": 99.9,
+     "score": 32.4,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "006208",
+     "date": "2026-10-07",
+     "rank": 14,
+     "ref_price": 265.6,
+     "score": 32.2,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "0050",
+     "date": "2026-10-07",
+     "rank": 15,
+     "ref_price": 116.05,
+     "score": 33.1,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "00923",
+     "date": "2026-10-07",
+     "rank": 16,
+     "ref_price": 42.79,
+     "score": 33.6,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "00403A",
+     "date": "2026-10-07",
+     "rank": 17,
+     "ref_price": 11.36,
+     "score": 34.1,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "3008",
+     "date": "2026-10-07",
+     "rank": 18,
+     "ref_price": 6845.0,
+     "score": 31.9,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    }
+   ]
   }
  ]
 }
