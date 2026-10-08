@@ -301,18 +301,36 @@
      "regime": "bull"
     },
     {
-     "symbol": "3044",
+     "symbol": "8996",
      "date": "2026-10-07",
      "rank": 10,
+     "ref_price": 1645.0,
+     "score": 35.7,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
+     "symbol": "3044",
+     "date": "2026-10-07",
+     "rank": 11,
      "ref_price": 582.0,
      "score": 37.1,
      "pattern": "強勢但已漲多",
      "regime": "bull"
     },
     {
+     "symbol": "2466",
+     "date": "2026-10-07",
+     "rank": 12,
+     "ref_price": 180.5,
+     "score": 35.6,
+     "pattern": "強勢但已漲多",
+     "regime": "bull"
+    },
+    {
      "symbol": "1303",
      "date": "2026-10-07",
-     "rank": 11,
+     "rank": 13,
      "ref_price": 314.0,
      "score": 42.8,
      "pattern": "強勢但已漲多",
@@ -321,7 +339,7 @@
     {
      "symbol": "6505",
      "date": "2026-10-07",
-     "rank": 12,
+     "rank": 14,
      "ref_price": 107.0,
      "score": 40.2,
      "pattern": "強勢但已漲多",
@@ -330,7 +348,7 @@
     {
      "symbol": "00692",
      "date": "2026-10-07",
-     "rank": 13,
+     "rank": 15,
      "ref_price": 99.9,
      "score": 32.4,
      "pattern": "強勢但已漲多",
@@ -339,7 +357,7 @@
     {
      "symbol": "006208",
      "date": "2026-10-07",
-     "rank": 14,
+     "rank": 16,
      "ref_price": 265.6,
      "score": 32.2,
      "pattern": "強勢但已漲多",
@@ -348,7 +366,7 @@
     {
      "symbol": "0050",
      "date": "2026-10-07",
-     "rank": 15,
+     "rank": 17,
      "ref_price": 116.05,
      "score": 33.1,
      "pattern": "強勢但已漲多",
@@ -357,27 +375,9 @@
     {
      "symbol": "00923",
      "date": "2026-10-07",
-     "rank": 16,
+     "rank": 18,
      "ref_price": 42.79,
      "score": 33.6,
-     "pattern": "強勢但已漲多",
-     "regime": "bull"
-    },
-    {
-     "symbol": "00403A",
-     "date": "2026-10-07",
-     "rank": 17,
-     "ref_price": 11.36,
-     "score": 34.1,
-     "pattern": "強勢但已漲多",
-     "regime": "bull"
-    },
-    {
-     "symbol": "3008",
-     "date": "2026-10-07",
-     "rank": 18,
-     "ref_price": 6845.0,
-     "score": 31.9,
      "pattern": "強勢但已漲多",
      "regime": "bull"
     }
