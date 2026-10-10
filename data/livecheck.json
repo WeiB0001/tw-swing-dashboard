@@ -1,59 +1,72 @@
 {
-  "days": 38,
-  "period": "2026-08-21 ～ 2026-10-02",
-  "pending": 977,
-  "cost_pct": 0.5,
+  "strategy": {
+    "version": "strict-horizon-v6",
+    "target_net_pct": 3.0,
+    "min_days": 2,
+    "max_days": 10,
+    "cost_pct": 0.785,
+    "exit_rule": "close_signal_next_open_day10_open",
+    "fill_grace_days": 5,
+    "success_rule": "realized_net_target_and_actual_exit_in_day_2_to_10",
+    "prediction_research_version": 1,
+    "history_months": 36,
+    "entry_guard": {
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0,
+      "rule": "signal_price_ceiling_including_buy_slippage_skip_once"
+    },
+    "overseas_research": {
+      "version": "asof-close-regime-v1",
+      "max_age_days": 4,
+      "vix_risk_level": 25.0,
+      "active_in_main_rank": false
+    },
+    "execution": {
+      "fee_pct": 0.1425,
+      "minimum_fee": 20.0,
+      "stock_tax_pct": 0.3,
+      "etf_tax_pct": 0.1,
+      "slippage_pct": 0.2,
+      "reference_notional": 100000
+    },
+    "risk_budget": {
+      "per_trade_pct": 0.5,
+      "total_pct": 1.5,
+      "position_pct": 45,
+      "sector_pct": 40.0,
+      "gap_buffer_pct": 1.0,
+      "slots": 3
+    },
+    "stop_loss_net_pct": 3.0,
+    "ranking": "target_gain_minus_weighted_loss",
+    "loss_aversion": 1.5,
+    "min_samples": 100,
+    "min_dates": 20,
+    "shrink_k": 50,
+    "bootstrap_block_days": 10,
+    "bootstrap_reps": 500
+  },
+  "days": 3,
+  "period": "2026-10-06 ～ 2026-10-08",
+  "pending": 355,
+  "unfilled": 0,
+  "cost_pct": 0.785,
   "exit_max_days": 10,
   "groups": {
     "Top 3": {
-      "n": 90,
-      "success_rate": 84.4,
-      "avg_days": 3.4,
-      "ev": 1.07,
-      "median": 0.76,
-      "pf": 2.57,
-      "avg_mdd": -2.76,
-      "worst": -10.03
+      "n": 0
     },
     "Top 10": {
-      "n": 320,
-      "success_rate": 85.3,
-      "avg_days": 3.4,
-      "ev": 0.7,
-      "median": 0.83,
-      "pf": 1.8,
-      "avg_mdd": -2.74,
-      "worst": -17.35
+      "n": 0
     },
     "11–30": {
-      "n": 650,
-      "success_rate": 90.5,
-      "avg_days": 3.1,
-      "ev": 1.06,
-      "median": 0.73,
-      "pf": 3.19,
-      "avg_mdd": -2.29,
-      "worst": -17.13
+      "n": 0
     },
     "31 名以後": {
-      "n": 4302,
-      "success_rate": 88.3,
-      "avg_days": 3.1,
-      "ev": 1.07,
-      "median": 1.14,
-      "pf": 2.3,
-      "avg_mdd": -2.94,
-      "worst": -27.06
+      "n": 0
     }
   },
   "all": {
-    "n": 5272,
-    "success_rate": 88.4,
-    "avg_days": 3.1,
-    "ev": 1.04,
-    "median": 1.08,
-    "pf": 2.33,
-    "avg_mdd": -2.85,
-    "worst": -27.06
+    "n": 0
   }
 }

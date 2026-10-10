@@ -451,20 +451,20 @@
      "regime": "bull"
     },
     {
-     "symbol": "0056",
+     "symbol": "8996",
      "date": "2026-10-08",
      "rank": 8,
-     "ref_price": 58.3,
-     "score": 33.3,
+     "ref_price": 1710.0,
+     "score": 36.2,
      "pattern": "強勢但已漲多",
      "regime": "bull"
     },
     {
-     "symbol": "8996",
+     "symbol": "0056",
      "date": "2026-10-08",
      "rank": 9,
-     "ref_price": 1710.0,
-     "score": 36.2,
+     "ref_price": 58.3,
+     "score": 33.3,
      "pattern": "強勢但已漲多",
      "regime": "bull"
     },
