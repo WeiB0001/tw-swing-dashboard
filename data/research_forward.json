@@ -58,7 +58,7 @@
      "entry": 67.75,
      "entry_cash": 12498.465999999999,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 499.9386,
      "stop_pct": 3.0,
      "target1": 70.21329104270741,
@@ -72,7 +72,7 @@
      "entry": 10.3,
      "entry_cash": 12495.463,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 499.8185,
      "stop_pct": 3.0,
      "target1": 10.674501046600419,
@@ -86,7 +86,7 @@
      "entry": 98.55,
      "entry_cash": 12449.717299999998,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 497.9887,
      "stop_pct": 3.0,
      "target1": 102.13439537858402,
@@ -110,10 +110,15 @@
      "date": "2026-10-08",
      "equity": 99404.6263,
      "index": 49806.37
+    },
+    {
+     "date": "2026-10-12",
+     "equity": 99429.7759,
+     "index": 49313.44
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-08",
+   "last_date": "2026-10-12",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -182,7 +187,7 @@
      "entry": 263.1,
      "entry_cash": 12398.0657,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 495.9226,
      "stop_pct": 3.0,
      "target1": 272.6728959061505,
@@ -196,7 +201,7 @@
      "entry": 45.19,
      "entry_cash": 12459.677249999999,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 498.3871,
      "stop_pct": 3.0,
      "target1": 46.83350223460334,
@@ -210,7 +215,7 @@
      "entry": 265.7,
      "entry_cash": 12254.422199999999,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 490.1769,
      "stop_pct": 3.0,
      "target1": 275.37775983756745,
@@ -234,10 +239,15 @@
      "date": "2026-10-08",
      "equity": 99364.7014,
      "index": 49806.37
+    },
+    {
+     "date": "2026-10-12",
+     "equity": 99312.6057,
+     "index": 49313.44
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-08",
+   "last_date": "2026-10-12",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -306,7 +316,7 @@
      "entry": 263.1,
      "entry_cash": 12398.0657,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 495.9226,
      "stop_pct": 3.0,
      "target1": 272.6728959061505,
@@ -320,7 +330,7 @@
      "entry": 45.19,
      "entry_cash": 12459.677249999999,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 498.3871,
      "stop_pct": 3.0,
      "target1": 46.83350223460334,
@@ -334,7 +344,7 @@
      "entry": 265.7,
      "entry_cash": 12254.422199999999,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 490.1769,
      "stop_pct": 3.0,
      "target1": 275.37775983756745,
@@ -358,10 +368,15 @@
      "date": "2026-10-08",
      "equity": 99364.7014,
      "index": 49806.37
+    },
+    {
+     "date": "2026-10-12",
+     "equity": 99312.6057,
+     "index": 49313.44
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-08",
+   "last_date": "2026-10-12",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -430,7 +445,7 @@
      "entry": 105.5,
      "entry_cash": 12481.448999999999,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 499.258,
      "stop_pct": 3.0,
      "target1": 109.55562663627536,
@@ -444,7 +459,7 @@
      "entry": 2325.0,
      "entry_cash": 11656.625,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 466.265,
      "stop_pct": 3.0,
      "target1": 2414.917173944255,
@@ -458,11 +473,13 @@
      "entry": 254.0,
      "entry_cash": 12478.445999999998,
      "entry_date": "2026-10-07",
-     "held": 2,
+     "held": 3,
      "planned_risk": 499.1378,
      "stop_pct": 3.0,
      "target1": 263.76445796706577,
-     "stop": 248.42341000243272
+     "stop": 248.42341000243272,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-10-12"
     }
    ],
    "pending": [],
@@ -482,10 +499,15 @@
      "date": "2026-10-08",
      "equity": 99804.0819,
      "index": 49806.37
+    },
+    {
+     "date": "2026-10-12",
+     "equity": 99148.2139,
+     "index": 49313.44
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-08",
+   "last_date": "2026-10-12",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
