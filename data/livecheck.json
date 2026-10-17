@@ -46,9 +46,9 @@
     "bootstrap_block_days": 10,
     "bootstrap_reps": 500
   },
-  "days": 3,
-  "period": "2026-10-06 ～ 2026-10-08",
-  "pending": 355,
+  "days": 8,
+  "period": "2026-10-06 ～ 2026-10-16",
+  "pending": 1225,
   "unfilled": 0,
   "cost_pct": 0.785,
   "exit_max_days": 10,
