@@ -1390,6 +1390,174 @@
      "regime": "sideways"
     }
    ]
+  },
+  {
+   "date": "2026-10-19",
+   "regime": "sideways",
+   "entries": [
+    {
+     "symbol": "2834",
+     "date": "2026-10-19",
+     "rank": 1,
+     "ref_price": 17.9,
+     "score": 60.0,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "3037",
+     "date": "2026-10-19",
+     "rank": 2,
+     "ref_price": 1120.0,
+     "score": 58.1,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "6257",
+     "date": "2026-10-19",
+     "rank": 3,
+     "ref_price": 247.0,
+     "score": 55.6,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "3008",
+     "date": "2026-10-19",
+     "rank": 4,
+     "ref_price": 6245.0,
+     "score": 55.9,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2883",
+     "date": "2026-10-19",
+     "rank": 5,
+     "ref_price": 38.2,
+     "score": 58.9,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "3189",
+     "date": "2026-10-19",
+     "rank": 6,
+     "ref_price": 982.0,
+     "score": 55.4,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "6456",
+     "date": "2026-10-19",
+     "rank": 7,
+     "ref_price": 84.4,
+     "score": 55.0,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "1709",
+     "date": "2026-10-19",
+     "rank": 8,
+     "ref_price": 51.4,
+     "score": 56.4,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "3533",
+     "date": "2026-10-19",
+     "rank": 9,
+     "ref_price": 1815.0,
+     "score": 56.8,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2478",
+     "date": "2026-10-19",
+     "rank": 10,
+     "ref_price": 122.0,
+     "score": 55.7,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2409",
+     "date": "2026-10-19",
+     "rank": 11,
+     "ref_price": 36.7,
+     "score": 64.3,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2851",
+     "date": "2026-10-19",
+     "rank": 12,
+     "ref_price": 51.1,
+     "score": 59.5,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2887",
+     "date": "2026-10-19",
+     "rank": 13,
+     "ref_price": 42.35,
+     "score": 55.4,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2377",
+     "date": "2026-10-19",
+     "rank": 14,
+     "ref_price": 159.5,
+     "score": 57.9,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "4977",
+     "date": "2026-10-19",
+     "rank": 15,
+     "ref_price": 175.0,
+     "score": 62.2,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "00918",
+     "date": "2026-10-19",
+     "rank": 16,
+     "ref_price": 34.3,
+     "score": 62.4,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "8039",
+     "date": "2026-10-19",
+     "rank": 17,
+     "ref_price": 299.0,
+     "score": 59.4,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2492",
+     "date": "2026-10-19",
+     "rank": 18,
+     "ref_price": 364.0,
+     "score": 61.3,
+     "pattern": "多頭回檔",
+     "regime": "sideways"
+    }
+   ]
   }
  ]
 }
