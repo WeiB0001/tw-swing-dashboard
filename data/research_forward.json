@@ -58,7 +58,7 @@
      "entry": 33.61,
      "entry_cash": 12198.986819999998,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 487.9595,
      "stop_pct": 3.0,
      "target1": 34.834707576578175,
@@ -72,7 +72,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -86,7 +86,7 @@
      "entry": 1450.0,
      "entry_cash": 11631.599999999999,
      "entry_date": "2026-10-19",
-     "held": 1,
+     "held": 2,
      "planned_risk": 465.264,
      "stop_pct": 3.0,
      "target1": 1506.0883350752958,
@@ -201,10 +201,15 @@
      "date": "2026-10-19",
      "equity": 97651.1282,
      "index": 47111.26
+    },
+    {
+     "date": "2026-10-20",
+     "equity": 97107.6275,
+     "index": 46822.08
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-19",
+   "last_date": "2026-10-20",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -273,7 +278,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -287,11 +292,13 @@
      "entry": 546.0,
      "entry_cash": 12044.011999999999,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 481.7605,
      "stop_pct": 3.0,
      "target1": 567.0543507855442,
-     "stop": 534.0752277763311
+     "stop": 534.0752277763311,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-10-20"
     },
     {
      "code": "00939",
@@ -301,7 +308,7 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
@@ -416,10 +423,15 @@
      "date": "2026-10-19",
      "equity": 97503.9475,
      "index": 47111.26
+    },
+    {
+     "date": "2026-10-20",
+     "equity": 97081.496,
+     "index": 46822.08
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-19",
+   "last_date": "2026-10-20",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -488,7 +500,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -502,11 +514,13 @@
      "entry": 546.0,
      "entry_cash": 12044.011999999999,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 481.7605,
      "stop_pct": 3.0,
      "target1": 567.0543507855442,
-     "stop": 534.0752277763311
+     "stop": 534.0752277763311,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-10-20"
     },
     {
      "code": "00939",
@@ -516,7 +530,7 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
@@ -631,10 +645,15 @@
      "date": "2026-10-19",
      "equity": 97503.9475,
      "index": 47111.26
+    },
+    {
+     "date": "2026-10-20",
+     "equity": 97081.496,
+     "index": 46822.08
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-19",
+   "last_date": "2026-10-20",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -693,7 +712,7 @@
    "skipped": []
   },
   "overseas": {
-   "cash": 60271.90770680005,
+   "cash": 71759.72636880005,
    "positions": [
     {
      "code": "9910",
@@ -703,27 +722,11 @@
      "entry": 68.6,
      "entry_cash": 11968.336399999997,
      "entry_date": "2026-10-16",
-     "held": 2,
+     "held": 3,
      "planned_risk": 478.7335,
      "stop_pct": 3.0,
      "target1": 71.24676465164595,
      "stop": 67.10319023297036
-    },
-    {
-     "code": "5871",
-     "name": "中租-KY",
-     "group": "金融",
-     "shares": 109,
-     "entry": 109.0,
-     "entry_cash": 11912.881,
-     "entry_date": "2026-10-16",
-     "held": 2,
-     "planned_risk": 476.5152,
-     "stop_pct": 3.0,
-     "target1": 113.20723638806328,
-     "stop": 106.623371505817,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-10-19"
     },
     {
      "code": "2845",
@@ -733,14 +736,32 @@
      "entry": 13.45,
      "entry_cash": 12002.470499999998,
      "entry_date": "2026-10-19",
-     "held": 1,
+     "held": 2,
      "planned_risk": 480.0988,
      "stop_pct": 3.0,
      "target1": 13.968804790274817,
      "stop": 13.156402302926143
     }
    ],
-   "pending": [],
+   "pending": [
+    {
+     "code": "2889",
+     "name": "國票金",
+     "group": "其他",
+     "signal_date": "2026-10-20",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 16.95,
+      "ma20": 16.6025,
+      "max_fill_price": 17.288999999999998,
+      "max_open_price": 17.27172827172827,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-21T00:20:23.027990+08:00"
+    }
+   ],
    "trades": [
     {
      "code": "2317",
@@ -821,6 +842,26 @@
      "delayed_days": 0,
      "planned_risk": 452.251,
      "trigger_date": "2026-10-15"
+    },
+    {
+     "code": "5871",
+     "name": "中租-KY",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-10-20",
+     "entry": 109.0,
+     "exit": 106.0,
+     "shares": 109,
+     "entry_cash": 11912.881,
+     "exit_cash": 11487.818662,
+     "net_pct": -3.56809,
+     "pnl": -425.062338,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 3,
+     "delayed_days": 0,
+     "planned_risk": 476.5152,
+     "trigger_date": "2026-10-19"
     }
    ],
    "equity": [
@@ -868,10 +909,15 @@
      "date": "2026-10-19",
      "equity": 95400.3949,
      "index": 47111.26
+    },
+    {
+     "date": "2026-10-20",
+     "equity": 95326.7903,
+     "index": 46822.08
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-19",
+   "last_date": "2026-10-20",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
