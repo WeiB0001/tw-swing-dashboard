@@ -1636,9 +1636,18 @@
      "regime": "sideways"
     },
     {
-     "symbol": "2409",
+     "symbol": "3016",
      "date": "2026-10-20",
      "rank": 9,
+     "ref_price": 151.0,
+     "score": 57.1,
+     "pattern": "區間整理",
+     "regime": "sideways"
+    },
+    {
+     "symbol": "2409",
+     "date": "2026-10-20",
+     "rank": 10,
      "ref_price": 35.75,
      "score": 59.4,
      "pattern": "區間整理",
@@ -1647,7 +1656,7 @@
     {
      "symbol": "8996",
      "date": "2026-10-20",
-     "rank": 10,
+     "rank": 11,
      "ref_price": 1545.0,
      "score": 55.3,
      "pattern": "區間整理",
@@ -1656,7 +1665,7 @@
     {
      "symbol": "2883",
      "date": "2026-10-20",
-     "rank": 11,
+     "rank": 12,
      "ref_price": 37.25,
      "score": 55.8,
      "pattern": "區間整理",
@@ -1665,7 +1674,7 @@
     {
      "symbol": "3037",
      "date": "2026-10-20",
-     "rank": 12,
+     "rank": 13,
      "ref_price": 1055.0,
      "score": 56.5,
      "pattern": "區間整理",
@@ -1674,7 +1683,7 @@
     {
      "symbol": "6257",
      "date": "2026-10-20",
-     "rank": 13,
+     "rank": 14,
      "ref_price": 238.0,
      "score": 57.1,
      "pattern": "區間整理",
@@ -1683,7 +1692,7 @@
     {
      "symbol": "2889",
      "date": "2026-10-20",
-     "rank": 14,
+     "rank": 15,
      "ref_price": 16.95,
      "score": 56.3,
      "pattern": "多頭回檔",
@@ -1692,36 +1701,27 @@
     {
      "symbol": "2377",
      "date": "2026-10-20",
-     "rank": 15,
+     "rank": 16,
      "ref_price": 164.5,
      "score": 57.8,
      "pattern": "多頭回檔",
      "regime": "sideways"
     },
     {
-     "symbol": "1802",
-     "date": "2026-10-20",
-     "rank": 16,
-     "ref_price": 67.4,
-     "score": 58.7,
-     "pattern": "多頭回檔",
-     "regime": "sideways"
-    },
-    {
-     "symbol": "2881",
+     "symbol": "6526",
      "date": "2026-10-20",
      "rank": 17,
-     "ref_price": 153.5,
-     "score": 59.8,
+     "ref_price": 801.0,
+     "score": 56.5,
      "pattern": "多頭回檔",
      "regime": "sideways"
     },
     {
-     "symbol": "6285",
+     "symbol": "1802",
      "date": "2026-10-20",
      "rank": 18,
-     "ref_price": 247.5,
-     "score": 61.7,
+     "ref_price": 67.4,
+     "score": 58.7,
      "pattern": "多頭回檔",
      "regime": "sideways"
     }
