@@ -58,7 +58,7 @@
      "entry": 33.61,
      "entry_cash": 12198.986819999998,
      "entry_date": "2026-10-16",
-     "held": 3,
+     "held": 4,
      "planned_risk": 487.9595,
      "stop_pct": 3.0,
      "target1": 34.834707576578175,
@@ -72,7 +72,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 3,
+     "held": 4,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -86,7 +86,7 @@
      "entry": 1450.0,
      "entry_cash": 11631.599999999999,
      "entry_date": "2026-10-19",
-     "held": 2,
+     "held": 3,
      "planned_risk": 465.264,
      "stop_pct": 3.0,
      "target1": 1506.0883350752958,
@@ -206,10 +206,15 @@
      "date": "2026-10-20",
      "equity": 97107.6275,
      "index": 46822.08
+    },
+    {
+     "date": "2026-10-21",
+     "equity": 97701.0082,
+     "index": 46292.93
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-20",
+   "last_date": "2026-10-21",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -268,7 +273,7 @@
    "skipped": []
   },
   "composite": {
-   "cash": 61456.65435369998,
+   "cash": 73115.78553169998,
    "positions": [
     {
      "code": "00713",
@@ -278,27 +283,11 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 3,
+     "held": 4,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
      "stop": 64.08525990752813
-    },
-    {
-     "code": "2207",
-     "name": "和泰車",
-     "group": "汽車",
-     "shares": 22,
-     "entry": 546.0,
-     "entry_cash": 12044.011999999999,
-     "entry_date": "2026-10-16",
-     "held": 3,
-     "planned_risk": 481.7605,
-     "stop_pct": 3.0,
-     "target1": 567.0543507855442,
-     "stop": 534.0752277763311,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-10-20"
     },
     {
      "code": "00939",
@@ -308,14 +297,32 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 3,
+     "held": 4,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
      "stop": 24.306149155427004
     }
    ],
-   "pending": [],
+   "pending": [
+    {
+     "code": "8021",
+     "name": "尖點",
+     "group": "其他",
+     "signal_date": "2026-10-21",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 506.0,
+      "ma20": 515.3,
+      "max_fill_price": 516.12,
+      "max_open_price": 515.6043956043957,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-22T00:36:07.614031+08:00"
+    }
+   ],
    "trades": [
     {
      "code": "0053",
@@ -376,6 +383,26 @@
      "delayed_days": 0,
      "planned_risk": 490.1769,
      "trigger_date": "2026-10-14"
+    },
+    {
+     "code": "2207",
+     "name": "和泰車",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-10-21",
+     "entry": 546.0,
+     "exit": 533.0,
+     "shares": 22,
+     "entry_cash": 12044.011999999999,
+     "exit_cash": 11659.131178,
+     "net_pct": -3.19562,
+     "pnl": -384.880822,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 4,
+     "delayed_days": 0,
+     "planned_risk": 481.7605,
+     "trigger_date": "2026-10-20"
     }
    ],
    "equity": [
@@ -428,10 +455,15 @@
      "date": "2026-10-20",
      "equity": 97081.496,
      "index": 46822.08
+    },
+    {
+     "date": "2026-10-21",
+     "equity": 97347.8685,
+     "index": 46292.93
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-20",
+   "last_date": "2026-10-21",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -490,7 +522,7 @@
    "skipped": []
   },
   "ev_only": {
-   "cash": 61456.65435369998,
+   "cash": 73115.78553169998,
    "positions": [
     {
      "code": "00713",
@@ -500,27 +532,11 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 3,
+     "held": 4,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
      "stop": 64.08525990752813
-    },
-    {
-     "code": "2207",
-     "name": "和泰車",
-     "group": "汽車",
-     "shares": 22,
-     "entry": 546.0,
-     "entry_cash": 12044.011999999999,
-     "entry_date": "2026-10-16",
-     "held": 3,
-     "planned_risk": 481.7605,
-     "stop_pct": 3.0,
-     "target1": 567.0543507855442,
-     "stop": 534.0752277763311,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-10-20"
     },
     {
      "code": "00939",
@@ -530,14 +546,32 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 3,
+     "held": 4,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
      "stop": 24.306149155427004
     }
    ],
-   "pending": [],
+   "pending": [
+    {
+     "code": "8021",
+     "name": "尖點",
+     "group": "其他",
+     "signal_date": "2026-10-21",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 506.0,
+      "ma20": 515.3,
+      "max_fill_price": 516.12,
+      "max_open_price": 515.6043956043957,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-22T00:36:07.614031+08:00"
+    }
+   ],
    "trades": [
     {
      "code": "0053",
@@ -598,6 +632,26 @@
      "delayed_days": 0,
      "planned_risk": 490.1769,
      "trigger_date": "2026-10-14"
+    },
+    {
+     "code": "2207",
+     "name": "和泰車",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-10-21",
+     "entry": 546.0,
+     "exit": 533.0,
+     "shares": 22,
+     "entry_cash": 12044.011999999999,
+     "exit_cash": 11659.131178,
+     "net_pct": -3.19562,
+     "pnl": -384.880822,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 4,
+     "delayed_days": 0,
+     "planned_risk": 481.7605,
+     "trigger_date": "2026-10-20"
     }
    ],
    "equity": [
@@ -650,10 +704,15 @@
      "date": "2026-10-20",
      "equity": 97081.496,
      "index": 46822.08
+    },
+    {
+     "date": "2026-10-21",
+     "equity": 97347.8685,
+     "index": 46292.93
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-20",
+   "last_date": "2026-10-21",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -712,7 +771,7 @@
    "skipped": []
   },
   "overseas": {
-   "cash": 71759.72636880005,
+   "cash": 59997.59596880006,
    "positions": [
     {
      "code": "9910",
@@ -722,7 +781,7 @@
      "entry": 68.6,
      "entry_cash": 11968.336399999997,
      "entry_date": "2026-10-16",
-     "held": 3,
+     "held": 4,
      "planned_risk": 478.7335,
      "stop_pct": 3.0,
      "target1": 71.24676465164595,
@@ -736,32 +795,28 @@
      "entry": 13.45,
      "entry_cash": 12002.470499999998,
      "entry_date": "2026-10-19",
-     "held": 2,
+     "held": 3,
      "planned_risk": 480.0988,
      "stop_pct": 3.0,
      "target1": 13.968804790274817,
      "stop": 13.156402302926143
-    }
-   ],
-   "pending": [
+    },
     {
      "code": "2889",
      "name": "國票金",
      "group": "其他",
-     "signal_date": "2026-10-20",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 16.95,
-      "ma20": 16.6025,
-      "max_fill_price": 17.288999999999998,
-      "max_open_price": 17.27172827172827,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-21T00:20:23.027990+08:00"
+     "shares": 688,
+     "entry": 17.05,
+     "entry_cash": 11762.130399999998,
+     "entry_date": "2026-10-21",
+     "held": 1,
+     "planned_risk": 470.4852,
+     "stop_pct": 3.0,
+     "target1": 17.708855423032837,
+     "stop": 16.67897179211354
     }
    ],
+   "pending": [],
    "trades": [
     {
      "code": "2317",
@@ -914,10 +969,15 @@
      "date": "2026-10-20",
      "equity": 95326.7903,
      "index": 46822.08
+    },
+    {
+     "date": "2026-10-21",
+     "equity": 95048.3949,
+     "index": 46292.93
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-20",
+   "last_date": "2026-10-21",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
