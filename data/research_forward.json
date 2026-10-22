@@ -58,7 +58,7 @@
      "entry": 33.61,
      "entry_cash": 12198.986819999998,
      "entry_date": "2026-10-16",
-     "held": 4,
+     "held": 5,
      "planned_risk": 487.9595,
      "stop_pct": 3.0,
      "target1": 34.834707576578175,
@@ -72,7 +72,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 4,
+     "held": 5,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -86,11 +86,13 @@
      "entry": 1450.0,
      "entry_cash": 11631.599999999999,
      "entry_date": "2026-10-19",
-     "held": 3,
+     "held": 4,
      "planned_risk": 465.264,
      "stop_pct": 3.0,
      "target1": 1506.0883350752958,
-     "stop": 1418.5012494942282
+     "stop": 1418.5012494942282,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-10-22"
     }
    ],
    "pending": [],
@@ -211,10 +213,15 @@
      "date": "2026-10-21",
      "equity": 97701.0082,
      "index": 46292.93
+    },
+    {
+     "date": "2026-10-22",
+     "equity": 97112.728,
+     "index": 46887.77
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-21",
+   "last_date": "2026-10-22",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -283,7 +290,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 4,
+     "held": 5,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -297,7 +304,7 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 4,
+     "held": 5,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
@@ -306,21 +313,21 @@
    ],
    "pending": [
     {
-     "code": "8021",
-     "name": "尖點",
-     "group": "其他",
-     "signal_date": "2026-10-21",
+     "code": "3189",
+     "name": "景碩",
+     "group": "電子零件",
+     "signal_date": "2026-10-22",
      "entry_plan": {
       "available": true,
-      "reference_price": 506.0,
-      "ma20": 515.3,
-      "max_fill_price": 516.12,
-      "max_open_price": 515.6043956043957,
+      "reference_price": 986.0,
+      "ma20": 1007.7,
+      "max_fill_price": 1005.72,
+      "max_open_price": 1004.7152847152848,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-10-22T00:36:07.614031+08:00"
+     "published_at": "2026-10-23T00:37:05.839874+08:00"
     }
    ],
    "trades": [
@@ -460,10 +467,15 @@
      "date": "2026-10-21",
      "equity": 97347.8685,
      "index": 46292.93
+    },
+    {
+     "date": "2026-10-22",
+     "equity": 97497.7682,
+     "index": 46887.77
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-21",
+   "last_date": "2026-10-22",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -519,7 +531,23 @@
     "require_no_loss": false,
     "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"
    },
-   "skipped": []
+   "skipped": [
+    {
+     "code": "8021",
+     "date": "2026-10-22",
+     "reason": "超過進場上限，不追價",
+     "open": 521.0,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 506.0,
+      "ma20": 515.3,
+      "max_fill_price": 516.12,
+      "max_open_price": 515.6043956043957,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
+    }
+   ]
   },
   "ev_only": {
    "cash": 73115.78553169998,
@@ -532,7 +560,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 4,
+     "held": 5,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -546,7 +574,7 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 4,
+     "held": 5,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
@@ -555,21 +583,21 @@
    ],
    "pending": [
     {
-     "code": "8021",
-     "name": "尖點",
-     "group": "其他",
-     "signal_date": "2026-10-21",
+     "code": "3189",
+     "name": "景碩",
+     "group": "電子零件",
+     "signal_date": "2026-10-22",
      "entry_plan": {
       "available": true,
-      "reference_price": 506.0,
-      "ma20": 515.3,
-      "max_fill_price": 516.12,
-      "max_open_price": 515.6043956043957,
+      "reference_price": 986.0,
+      "ma20": 1007.7,
+      "max_fill_price": 1005.72,
+      "max_open_price": 1004.7152847152848,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-10-22T00:36:07.614031+08:00"
+     "published_at": "2026-10-23T00:37:05.839874+08:00"
     }
    ],
    "trades": [
@@ -709,10 +737,15 @@
      "date": "2026-10-21",
      "equity": 97347.8685,
      "index": 46292.93
+    },
+    {
+     "date": "2026-10-22",
+     "equity": 97497.7682,
+     "index": 46887.77
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-21",
+   "last_date": "2026-10-22",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -768,7 +801,23 @@
     "require_no_loss": false,
     "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"
    },
-   "skipped": []
+   "skipped": [
+    {
+     "code": "8021",
+     "date": "2026-10-22",
+     "reason": "超過進場上限，不追價",
+     "open": 521.0,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 506.0,
+      "ma20": 515.3,
+      "max_fill_price": 516.12,
+      "max_open_price": 515.6043956043957,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
+    }
+   ]
   },
   "overseas": {
    "cash": 59997.59596880006,
@@ -781,7 +830,7 @@
      "entry": 68.6,
      "entry_cash": 11968.336399999997,
      "entry_date": "2026-10-16",
-     "held": 4,
+     "held": 5,
      "planned_risk": 478.7335,
      "stop_pct": 3.0,
      "target1": 71.24676465164595,
@@ -795,7 +844,7 @@
      "entry": 13.45,
      "entry_cash": 12002.470499999998,
      "entry_date": "2026-10-19",
-     "held": 3,
+     "held": 4,
      "planned_risk": 480.0988,
      "stop_pct": 3.0,
      "target1": 13.968804790274817,
@@ -809,7 +858,7 @@
      "entry": 17.05,
      "entry_cash": 11762.130399999998,
      "entry_date": "2026-10-21",
-     "held": 1,
+     "held": 2,
      "planned_risk": 470.4852,
      "stop_pct": 3.0,
      "target1": 17.708855423032837,
@@ -974,10 +1023,15 @@
      "date": "2026-10-21",
      "equity": 95048.3949,
      "index": 46292.93
+    },
+    {
+     "date": "2026-10-22",
+     "equity": 95074.9882,
+     "index": 46887.77
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-21",
+   "last_date": "2026-10-22",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
