@@ -47,12 +47,12 @@
       "bootstrap_block_days": 10,
       "bootstrap_reps": 500
     },
-    "generated_at": "2026-10-23 08:23",
-    "generated_iso": "2026-10-23T08:23:00+08:00",
-    "trade_date": "2026-10-23",
+    "generated_at": "2026-10-24 00:27",
+    "generated_iso": "2026-10-24T00:27:06+08:00",
+    "trade_date": "2026-10-24",
     "run_type": "close",
-    "close_run_at": "2026-10-23 08:23",
-    "ranked_at": "2026-10-23 08:23:00",
+    "close_run_at": "2026-10-24 00:27",
+    "ranked_at": "2026-10-24 00:27:06",
     "applies_to": "2026-10-23",
     "premarket_at": null,
     "data_date": "2026-10-22",
@@ -79,50 +79,50 @@
     "last_night": [
       {
         "label": "那斯達克",
-        "chg_pct": -2.6,
-        "date": "2026-10-22"
+        "chg_pct": 0.05,
+        "date": "2026-10-23"
       },
       {
         "label": "費城半導體",
-        "chg_pct": -6.72,
-        "date": "2026-10-22"
+        "chg_pct": 1.05,
+        "date": "2026-10-23"
       },
       {
         "label": "S&P 500",
-        "chg_pct": -1.21,
-        "date": "2026-10-22"
+        "chg_pct": -0.28,
+        "date": "2026-10-23"
       },
       {
         "label": "道瓊",
-        "chg_pct": 0.02,
-        "date": "2026-10-22"
+        "chg_pct": -1.01,
+        "date": "2026-10-23"
       }
     ],
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": -3.03
+        "chg_pct": 0.36
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": -1.23
+        "chg_pct": -0.25
       }
     ],
     "forecast": {
       "available": true,
-      "point": -1.74,
-      "low": -3.13,
-      "high": -0.35,
-      "basis": "以那斯達克期貨 -3.03% 代入",
-      "r2": 0.34,
+      "point": 0.36,
+      "low": -1.05,
+      "high": 1.76,
+      "basis": "以那斯達克期貨 +0.36% 代入",
+      "r2": 0.333,
       "samples": 250
     },
     "model": {
       "samples": 250,
-      "r2": 0.34,
-      "beta_nasdaq": 0.326,
+      "r2": 0.333,
+      "beta_nasdaq": 0.317,
       "beta_sox": 0.229,
-      "resid_sd": 1.39
+      "resid_sd": 1.4
     }
   },
   "signals": {
