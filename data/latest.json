@@ -47,12 +47,12 @@
       "bootstrap_block_days": 10,
       "bootstrap_reps": 500
     },
-    "generated_at": "2026-10-26 07:46",
-    "generated_iso": "2026-10-26T07:46:52+08:00",
-    "trade_date": "2026-10-26",
+    "generated_at": "2026-10-27 02:13",
+    "generated_iso": "2026-10-27T02:13:30+08:00",
+    "trade_date": "2026-10-27",
     "run_type": "close",
-    "close_run_at": "2026-10-26 07:46",
-    "ranked_at": "2026-10-26 07:46:52",
+    "close_run_at": "2026-10-27 02:13",
+    "ranked_at": "2026-10-27 02:13:30",
     "applies_to": "2026-10-23",
     "premarket_at": null,
     "data_date": "2026-10-22",
@@ -79,41 +79,41 @@
     "last_night": [
       {
         "label": "那斯達克",
-        "chg_pct": -0.21,
-        "date": "2026-10-23"
+        "chg_pct": 1.02,
+        "date": "2026-10-26"
       },
       {
         "label": "費城半導體",
-        "chg_pct": 0.44,
-        "date": "2026-10-23"
+        "chg_pct": 3.57,
+        "date": "2026-10-26"
       },
       {
         "label": "S&P 500",
-        "chg_pct": -0.52,
-        "date": "2026-10-23"
+        "chg_pct": 0.76,
+        "date": "2026-10-26"
       },
       {
         "label": "道瓊",
-        "chg_pct": -1.23,
-        "date": "2026-10-23"
+        "chg_pct": 0.22,
+        "date": "2026-10-26"
       }
     ],
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": 0.17
+        "chg_pct": 1.37
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": 0.12
+        "chg_pct": 0.8
       }
     ],
     "forecast": {
       "available": true,
-      "point": 0.24,
-      "low": -1.17,
-      "high": 1.64,
-      "basis": "以那斯達克期貨 +0.17% 代入",
+      "point": 0.98,
+      "low": -0.43,
+      "high": 2.38,
+      "basis": "以那斯達克期貨 +1.37% 代入",
       "r2": 0.333,
       "samples": 250
     },
