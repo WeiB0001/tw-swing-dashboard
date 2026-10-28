@@ -58,7 +58,7 @@
      "entry": 33.61,
      "entry_cash": 12198.986819999998,
      "entry_date": "2026-10-16",
-     "held": 6,
+     "held": 7,
      "planned_risk": 487.9595,
      "stop_pct": 3.0,
      "target1": 34.834707576578175,
@@ -72,7 +72,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 6,
+     "held": 7,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -81,21 +81,21 @@
    ],
    "pending": [
     {
-     "code": "3715",
-     "name": "定穎投控",
-     "group": "其他",
-     "signal_date": "2026-10-27",
+     "code": "0052",
+     "name": "富邦科技",
+     "group": "ETF",
+     "signal_date": "2026-10-28",
      "entry_plan": {
       "available": true,
-      "reference_price": 125.5,
-      "ma20": 131.725,
-      "max_fill_price": 128.01,
-      "max_open_price": 127.88211788211788,
+      "reference_price": 63.15,
+      "ma20": 64.84,
+      "max_fill_price": 64.413,
+      "max_open_price": 64.34865134865136,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-10-28T01:27:33.952035+08:00"
+     "published_at": "2026-10-29T01:53:03.342200+08:00"
     }
    ],
    "trades": [
@@ -245,10 +245,15 @@
      "date": "2026-10-27",
      "equity": 97695.3702,
      "index": 46041.43
+    },
+    {
+     "date": "2026-10-28",
+     "equity": 97608.6738,
+     "index": 46096.23
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-27",
+   "last_date": "2026-10-28",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -304,10 +309,26 @@
     "require_no_loss": false,
     "reason": "風險報酬綜合排名尚未通過樣本外驗證，暫不配置資金"
    },
-   "skipped": []
+   "skipped": [
+    {
+     "code": "3715",
+     "date": "2026-10-28",
+     "reason": "超過進場上限，不追價",
+     "open": 128.5,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 125.5,
+      "ma20": 131.725,
+      "max_fill_price": 128.01,
+      "max_open_price": 127.88211788211788,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
+    }
+   ]
   },
   "composite": {
-   "cash": 73115.78553169998,
+   "cash": 61123.82553169998,
    "positions": [
     {
      "code": "00713",
@@ -317,7 +338,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 6,
+     "held": 7,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -331,32 +352,28 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 6,
+     "held": 7,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
      "stop": 24.306149155427004
-    }
-   ],
-   "pending": [
+    },
     {
      "code": "5269",
      "name": "祥碩",
      "group": "半導體",
-     "signal_date": "2026-10-27",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 1495.0,
-      "ma20": 1486.0,
-      "max_fill_price": 1524.9,
-      "max_open_price": 1523.3766233766237,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-28T01:27:33.952035+08:00"
+     "shares": 8,
+     "entry": 1495.0,
+     "entry_cash": 11991.96,
+     "entry_date": "2026-10-28",
+     "held": 1,
+     "planned_risk": 479.6784,
+     "stop_pct": 3.0,
+     "target1": 1552.6708754893307,
+     "stop": 1462.3702438647274
     }
    ],
+   "pending": [],
    "trades": [
     {
      "code": "0053",
@@ -504,10 +521,15 @@
      "date": "2026-10-27",
      "equity": 97693.3265,
      "index": 46041.43
+    },
+    {
+     "date": "2026-10-28",
+     "equity": 97565.708,
+     "index": 46096.23
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-27",
+   "last_date": "2026-10-28",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -597,7 +619,7 @@
    ]
   },
   "ev_only": {
-   "cash": 73115.78553169998,
+   "cash": 61123.82553169998,
    "positions": [
     {
      "code": "00713",
@@ -607,7 +629,7 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 6,
+     "held": 7,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
@@ -621,32 +643,28 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 6,
+     "held": 7,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
      "stop": 24.306149155427004
-    }
-   ],
-   "pending": [
+    },
     {
      "code": "5269",
      "name": "祥碩",
      "group": "半導體",
-     "signal_date": "2026-10-27",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 1495.0,
-      "ma20": 1486.0,
-      "max_fill_price": 1524.9,
-      "max_open_price": 1523.3766233766237,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-28T01:27:33.952035+08:00"
+     "shares": 8,
+     "entry": 1495.0,
+     "entry_cash": 11991.96,
+     "entry_date": "2026-10-28",
+     "held": 1,
+     "planned_risk": 479.6784,
+     "stop_pct": 3.0,
+     "target1": 1552.6708754893307,
+     "stop": 1462.3702438647274
     }
    ],
+   "pending": [],
    "trades": [
     {
      "code": "0053",
@@ -794,10 +812,15 @@
      "date": "2026-10-27",
      "equity": 97693.3265,
      "index": 46041.43
+    },
+    {
+     "date": "2026-10-28",
+     "equity": 97565.708,
+     "index": 46096.23
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-27",
+   "last_date": "2026-10-28",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -887,24 +910,8 @@
    ]
   },
   "overseas": {
-   "cash": 59997.59596880006,
+   "cash": 72195.56476980005,
    "positions": [
-    {
-     "code": "9910",
-     "name": "豐泰",
-     "group": "紡織",
-     "shares": 174,
-     "entry": 68.6,
-     "entry_cash": 11968.336399999997,
-     "entry_date": "2026-10-16",
-     "held": 6,
-     "planned_risk": 478.7335,
-     "stop_pct": 3.0,
-     "target1": 71.24676465164595,
-     "stop": 67.10319023297036,
-     "exit_pending": "淨利觸發",
-     "trigger_date": "2026-10-27"
-    },
     {
      "code": "2845",
      "name": "遠東銀",
@@ -913,11 +920,13 @@
      "entry": 13.45,
      "entry_cash": 12002.470499999998,
      "entry_date": "2026-10-19",
-     "held": 5,
+     "held": 6,
      "planned_risk": 480.0988,
      "stop_pct": 3.0,
      "target1": 13.968804790274817,
-     "stop": 13.156402302926143
+     "stop": 13.156402302926143,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-10-28"
     },
     {
      "code": "2889",
@@ -927,14 +936,32 @@
      "entry": 17.05,
      "entry_cash": 11762.130399999998,
      "entry_date": "2026-10-21",
-     "held": 3,
+     "held": 4,
      "planned_risk": 470.4852,
      "stop_pct": 3.0,
      "target1": 17.708855423032837,
      "stop": 16.67897179211354
     }
    ],
-   "pending": [],
+   "pending": [
+    {
+     "code": "6770",
+     "name": "力積電",
+     "group": "其他",
+     "signal_date": "2026-10-28",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 71.3,
+      "ma20": 70.58,
+      "max_fill_price": 72.726,
+      "max_open_price": 72.65334665334666,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-10-29T01:53:03.342200+08:00"
+    }
+   ],
    "trades": [
     {
      "code": "2317",
@@ -1035,6 +1062,26 @@
      "delayed_days": 0,
      "planned_risk": 476.5152,
      "trigger_date": "2026-10-19"
+    },
+    {
+     "code": "9910",
+     "name": "豐泰",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-10-28",
+     "entry": 68.6,
+     "exit": 70.5,
+     "shares": 174,
+     "entry_cash": 11968.336399999997,
+     "exit_cash": 12197.968801,
+     "net_pct": 1.918666,
+     "pnl": 229.632401,
+     "success": false,
+     "reason": "淨利觸發",
+     "late_exit": false,
+     "held": 7,
+     "delayed_days": 0,
+     "planned_risk": 478.7335,
+     "trigger_date": "2026-10-27"
     }
    ],
    "equity": [
@@ -1102,10 +1149,15 @@
      "date": "2026-10-27",
      "equity": 96012.0278,
      "index": 46041.43
+    },
+    {
+     "date": "2026-10-28",
+     "equity": 95530.062,
+     "index": 46096.23
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-27",
+   "last_date": "2026-10-28",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
