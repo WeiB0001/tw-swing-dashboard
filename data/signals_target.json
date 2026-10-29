@@ -2380,20 +2380,20 @@
      "regime": "bear"
     },
     {
-     "symbol": "00850",
+     "symbol": "009816",
      "date": "2026-10-28",
      "rank": 17,
-     "ref_price": 93.6,
-     "score": 58.1,
+     "ref_price": 16.17,
+     "score": 58.4,
      "pattern": "低檔止跌轉強",
      "regime": "bear"
     },
     {
-     "symbol": "009816",
+     "symbol": "2395",
      "date": "2026-10-28",
      "rank": 18,
-     "ref_price": 16.17,
-     "score": 58.4,
+     "ref_price": 689.0,
+     "score": 58.5,
      "pattern": "低檔止跌轉強",
      "regime": "bear"
     }
