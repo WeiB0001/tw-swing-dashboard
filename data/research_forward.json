@@ -58,11 +58,13 @@
      "entry": 33.61,
      "entry_cash": 12198.986819999998,
      "entry_date": "2026-10-16",
-     "held": 8,
+     "held": 9,
      "planned_risk": 487.9595,
      "stop_pct": 3.0,
      "target1": 34.834707576578175,
-     "stop": 32.80872612252445
+     "stop": 32.80872612252445,
+     "exit_pending": "持有到期",
+     "trigger_date": "2026-10-30"
     },
     {
      "code": "00713",
@@ -72,11 +74,13 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 8,
+     "held": 9,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
-     "stop": 64.08525990752813
+     "stop": 64.08525990752813,
+     "exit_pending": "持有到期",
+     "trigger_date": "2026-10-30"
     },
     {
      "code": "0052",
@@ -86,11 +90,13 @@
      "entry": 62.95,
      "entry_cash": 12181.49935,
      "entry_date": "2026-10-29",
-     "held": 1,
+     "held": 2,
      "planned_risk": 487.26,
      "stop_pct": 3.0,
      "target1": 65.24412419857347,
-     "stop": 61.4495442166092
+     "stop": 61.4495442166092,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-10-30"
     }
    ],
    "pending": [],
@@ -251,10 +257,15 @@
      "date": "2026-10-29",
      "equity": 97311.51,
      "index": 47035.58
+    },
+    {
+     "date": "2026-10-30",
+     "equity": 96907.7787,
+     "index": 46368.33
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-29",
+   "last_date": "2026-10-30",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -339,11 +350,13 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 8,
+     "held": 9,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
-     "stop": 64.08525990752813
+     "stop": 64.08525990752813,
+     "exit_pending": "持有到期",
+     "trigger_date": "2026-10-30"
     },
     {
      "code": "00939",
@@ -353,11 +366,13 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 8,
+     "held": 9,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
-     "stop": 24.306149155427004
+     "stop": 24.306149155427004,
+     "exit_pending": "持有到期",
+     "trigger_date": "2026-10-30"
     },
     {
      "code": "5269",
@@ -367,7 +382,7 @@
      "entry": 1495.0,
      "entry_cash": 11991.96,
      "entry_date": "2026-10-28",
-     "held": 2,
+     "held": 3,
      "planned_risk": 479.6784,
      "stop_pct": 3.0,
      "target1": 1552.6708754893307,
@@ -532,10 +547,15 @@
      "date": "2026-10-29",
      "equity": 97300.2304,
      "index": 47035.58
+    },
+    {
+     "date": "2026-10-30",
+     "equity": 97200.2806,
+     "index": 46368.33
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-29",
+   "last_date": "2026-10-30",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -635,11 +655,13 @@
      "entry": 65.65,
      "entry_cash": 12177.39525,
      "entry_date": "2026-10-16",
-     "held": 8,
+     "held": 9,
      "planned_risk": 487.0958,
      "stop_pct": 3.0,
      "target1": 68.04259610908152,
-     "stop": 64.08525990752813
+     "stop": 64.08525990752813,
+     "exit_pending": "持有到期",
+     "trigger_date": "2026-10-30"
     },
     {
      "code": "00939",
@@ -649,11 +671,13 @@
      "entry": 24.9,
      "entry_cash": 12233.201,
      "entry_date": "2026-10-16",
-     "held": 8,
+     "held": 9,
      "planned_risk": 489.328,
      "stop_pct": 3.0,
      "target1": 25.807092520806236,
-     "stop": 24.306149155427004
+     "stop": 24.306149155427004,
+     "exit_pending": "持有到期",
+     "trigger_date": "2026-10-30"
     },
     {
      "code": "5269",
@@ -663,7 +687,7 @@
      "entry": 1495.0,
      "entry_cash": 11991.96,
      "entry_date": "2026-10-28",
-     "held": 2,
+     "held": 3,
      "planned_risk": 479.6784,
      "stop_pct": 3.0,
      "target1": 1552.6708754893307,
@@ -828,10 +852,15 @@
      "date": "2026-10-29",
      "equity": 97300.2304,
      "index": 47035.58
+    },
+    {
+     "date": "2026-10-30",
+     "equity": 97200.2806,
+     "index": 46368.33
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-29",
+   "last_date": "2026-10-30",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -921,7 +950,7 @@
    ]
   },
   "overseas": {
-   "cash": 71997.76101380006,
+   "cash": 71075.76983230005,
    "positions": [
     {
      "code": "2889",
@@ -931,46 +960,44 @@
      "entry": 17.05,
      "entry_cash": 11762.130399999998,
      "entry_date": "2026-10-21",
-     "held": 5,
+     "held": 6,
      "planned_risk": 470.4852,
      "stop_pct": 3.0,
      "target1": 17.708855423032837,
      "stop": 16.67897179211354
     },
     {
-     "code": "6770",
-     "name": "力積電",
+     "code": "2855",
+     "name": "統一證",
      "group": "其他",
-     "shares": 165,
-     "entry": 71.8,
-     "entry_cash": 11878.847,
-     "entry_date": "2026-10-29",
+     "shares": 212,
+     "entry": 55.5,
+     "entry_cash": 11797.766,
+     "entry_date": "2026-10-30",
      "held": 1,
-     "planned_risk": 475.1539,
+     "planned_risk": 471.9106,
      "stop_pct": 3.0,
-     "target1": 74.57207920664959,
-     "stop": 70.23516382861084,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-10-29"
+     "target1": 57.64407781298074,
+     "stop": 54.29168793327306
     }
    ],
    "pending": [
     {
-     "code": "2855",
-     "name": "統一證",
-     "group": "其他",
-     "signal_date": "2026-10-29",
+     "code": "4938",
+     "name": "和碩",
+     "group": "電腦週邊",
+     "signal_date": "2026-10-30",
      "entry_plan": {
       "available": true,
-      "reference_price": 56.0,
-      "ma20": 57.1,
-      "max_fill_price": 57.120000000000005,
-      "max_open_price": 57.062937062937074,
+      "reference_price": 102.5,
+      "ma20": 98.215,
+      "max_fill_price": 104.55,
+      "max_open_price": 104.44555444555445,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-10-30T02:00:41.919634+08:00"
+     "published_at": "2026-10-31T01:42:28.757311+08:00"
     }
    ],
    "trades": [
@@ -1113,6 +1140,26 @@
      "delayed_days": 0,
      "planned_risk": 480.0988,
      "trigger_date": "2026-10-28"
+    },
+    {
+     "code": "6770",
+     "name": "力積電",
+     "entry_date": "2026-10-29",
+     "exit_date": "2026-10-30",
+     "entry": 71.8,
+     "exit": 66.3,
+     "shares": 165,
+     "entry_cash": 11878.847,
+     "exit_cash": 10875.7748185,
+     "net_pct": -8.444188,
+     "pnl": -1003.072181,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 2,
+     "delayed_days": 0,
+     "planned_risk": 475.1539,
+     "trigger_date": "2026-10-29"
     }
    ],
    "equity": [
@@ -1190,10 +1237,15 @@
      "date": "2026-10-29",
      "equity": 95165.7265,
      "index": 47035.58
+    },
+    {
+     "date": "2026-10-30",
+     "equity": 94274.5118,
+     "index": 46368.33
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-29",
+   "last_date": "2026-10-30",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
