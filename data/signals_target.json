@@ -2431,9 +2431,18 @@
      "regime": "bear"
     },
     {
-     "symbol": "3653",
+     "symbol": "2426",
      "date": "2026-10-29",
      "rank": 4,
+     "ref_price": 97.0,
+     "score": 64.5,
+     "pattern": "低檔止跌轉強",
+     "regime": "bear"
+    },
+    {
+     "symbol": "3653",
+     "date": "2026-10-29",
+     "rank": 5,
      "ref_price": 6405.0,
      "score": 58.1,
      "pattern": "低檔止跌轉強",
@@ -2442,19 +2451,10 @@
     {
      "symbol": "2855",
      "date": "2026-10-29",
-     "rank": 5,
+     "rank": 6,
      "ref_price": 56.0,
      "score": 55.8,
      "pattern": "低檔止跌轉強",
-     "regime": "bear"
-    },
-    {
-     "symbol": "1560",
-     "date": "2026-10-29",
-     "rank": 6,
-     "ref_price": 888.0,
-     "score": 57.0,
-     "pattern": "區間整理",
      "regime": "bear"
     },
     {
