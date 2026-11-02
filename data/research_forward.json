@@ -48,58 +48,61 @@
  },
  "books": {
   "individual": {
-   "cash": 61078.06594829999,
-   "positions": [
-    {
-     "code": "00915",
-     "name": "凱基優選高股息30",
-     "group": "ETF",
-     "shares": 362,
-     "entry": 33.61,
-     "entry_cash": 12198.986819999998,
-     "entry_date": "2026-10-16",
-     "held": 9,
-     "planned_risk": 487.9595,
-     "stop_pct": 3.0,
-     "target1": 34.834707576578175,
-     "stop": 32.80872612252445,
-     "exit_pending": "持有到期",
-     "trigger_date": "2026-10-30"
-    },
-    {
-     "code": "00713",
-     "name": "元大台灣高息低波",
-     "group": "ETF",
-     "shares": 185,
-     "entry": 65.65,
-     "entry_cash": 12177.39525,
-     "entry_date": "2026-10-16",
-     "held": 9,
-     "planned_risk": 487.0958,
-     "stop_pct": 3.0,
-     "target1": 68.04259610908152,
-     "stop": 64.08525990752813,
-     "exit_pending": "持有到期",
-     "trigger_date": "2026-10-30"
-    },
+   "cash": 96762.51966435,
+   "positions": [],
+   "pending": [
     {
      "code": "0052",
      "name": "富邦科技",
      "group": "ETF",
-     "shares": 193,
-     "entry": 62.95,
-     "entry_cash": 12181.49935,
-     "entry_date": "2026-10-29",
-     "held": 2,
-     "planned_risk": 487.26,
-     "stop_pct": 3.0,
-     "target1": 65.24412419857347,
-     "stop": 61.4495442166092,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-10-30"
+     "signal_date": "2026-11-02",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 60.3,
+      "ma20": 64.2125,
+      "max_fill_price": 61.506,
+      "max_open_price": 61.444555444555455,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T05:23:28.854568+08:00"
+    },
+    {
+     "code": "00923",
+     "name": "群益台ESG低碳50",
+     "group": "ETF",
+     "signal_date": "2026-11-02",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 37.92,
+      "ma20": 40.5635,
+      "max_fill_price": 38.6784,
+      "max_open_price": 38.63976023976025,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T05:23:28.854568+08:00"
+    },
+    {
+     "code": "00922",
+     "name": "國泰台灣領袖50",
+     "group": "ETF",
+     "signal_date": "2026-11-02",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 38.33,
+      "ma20": 41.997,
+      "max_fill_price": 39.0966,
+      "max_open_price": 39.05754245754246,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T05:23:28.854568+08:00"
     }
    ],
-   "pending": [],
    "trades": [
     {
      "code": "0052",
@@ -180,6 +183,66 @@
      "delayed_days": 0,
      "planned_risk": 465.264,
      "trigger_date": "2026-10-22"
+    },
+    {
+     "code": "00915",
+     "name": "凱基優選高股息30",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-11-02",
+     "entry": 33.61,
+     "exit": 33.35,
+     "shares": 362,
+     "entry_cash": 12198.986819999998,
+     "exit_cash": 12028.5666727,
+     "net_pct": -1.397002,
+     "pnl": -170.420147,
+     "success": false,
+     "reason": "持有到期",
+     "late_exit": false,
+     "held": 10,
+     "delayed_days": 0,
+     "planned_risk": 487.9595,
+     "trigger_date": "2026-10-30"
+    },
+    {
+     "code": "00713",
+     "name": "元大台灣高息低波",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-11-02",
+     "entry": 65.65,
+     "exit": 65.8,
+     "shares": 185,
+     "entry_cash": 12177.39525,
+     "exit_cash": 12128.666173000001,
+     "net_pct": -0.40016,
+     "pnl": -48.729077,
+     "success": false,
+     "reason": "持有到期",
+     "late_exit": false,
+     "held": 10,
+     "delayed_days": 0,
+     "planned_risk": 487.0958,
+     "trigger_date": "2026-10-30"
+    },
+    {
+     "code": "0052",
+     "name": "富邦科技",
+     "entry_date": "2026-10-29",
+     "exit_date": "2026-11-02",
+     "entry": 62.95,
+     "exit": 59.95,
+     "shares": 193,
+     "entry_cash": 12181.49935,
+     "exit_cash": 11527.22087035,
+     "net_pct": -5.371083,
+     "pnl": -654.27848,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 3,
+     "delayed_days": 0,
+     "planned_risk": 487.26,
+     "trigger_date": "2026-10-30"
     }
    ],
    "equity": [
@@ -262,10 +325,15 @@
      "date": "2026-10-30",
      "equity": 96907.7787,
      "index": 46368.33
+    },
+    {
+     "date": "2026-11-02",
+     "equity": 96762.5197,
+     "index": 45211.83
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-30",
+   "last_date": "2026-11-02",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -340,40 +408,8 @@
    ]
   },
   "composite": {
-   "cash": 61123.82553169998,
+   "cash": 85555.80805269997,
    "positions": [
-    {
-     "code": "00713",
-     "name": "元大台灣高息低波",
-     "group": "ETF",
-     "shares": 185,
-     "entry": 65.65,
-     "entry_cash": 12177.39525,
-     "entry_date": "2026-10-16",
-     "held": 9,
-     "planned_risk": 487.0958,
-     "stop_pct": 3.0,
-     "target1": 68.04259610908152,
-     "stop": 64.08525990752813,
-     "exit_pending": "持有到期",
-     "trigger_date": "2026-10-30"
-    },
-    {
-     "code": "00939",
-     "name": "統一台灣高息動能",
-     "group": "ETF",
-     "shares": 490,
-     "entry": 24.9,
-     "entry_cash": 12233.201,
-     "entry_date": "2026-10-16",
-     "held": 9,
-     "planned_risk": 489.328,
-     "stop_pct": 3.0,
-     "target1": 25.807092520806236,
-     "stop": 24.306149155427004,
-     "exit_pending": "持有到期",
-     "trigger_date": "2026-10-30"
-    },
     {
      "code": "5269",
      "name": "祥碩",
@@ -382,14 +418,51 @@
      "entry": 1495.0,
      "entry_cash": 11991.96,
      "entry_date": "2026-10-28",
-     "held": 3,
+     "held": 4,
      "planned_risk": 479.6784,
      "stop_pct": 3.0,
      "target1": 1552.6708754893307,
-     "stop": 1462.3702438647274
+     "stop": 1462.3702438647274,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-11-02"
     }
    ],
-   "pending": [],
+   "pending": [
+    {
+     "code": "2408",
+     "name": "南亞科",
+     "group": "半導體",
+     "signal_date": "2026-11-02",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 456.5,
+      "ma20": 477.15,
+      "max_fill_price": 465.63,
+      "max_open_price": 465.1648351648352,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T05:23:28.854568+08:00"
+    },
+    {
+     "code": "2603",
+     "name": "長榮",
+     "group": "航運",
+     "signal_date": "2026-11-02",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 274.5,
+      "ma20": 254.475,
+      "max_fill_price": 274.833,
+      "max_open_price": 274.55844155844164,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T05:23:28.854568+08:00"
+    }
+   ],
    "trades": [
     {
      "code": "0053",
@@ -470,6 +543,46 @@
      "delayed_days": 0,
      "planned_risk": 481.7605,
      "trigger_date": "2026-10-20"
+    },
+    {
+     "code": "00713",
+     "name": "元大台灣高息低波",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-11-02",
+     "entry": 65.65,
+     "exit": 65.8,
+     "shares": 185,
+     "entry_cash": 12177.39525,
+     "exit_cash": 12128.666173000001,
+     "net_pct": -0.40016,
+     "pnl": -48.729077,
+     "success": false,
+     "reason": "持有到期",
+     "late_exit": false,
+     "held": 10,
+     "delayed_days": 0,
+     "planned_risk": 487.0958,
+     "trigger_date": "2026-10-30"
+    },
+    {
+     "code": "00939",
+     "name": "統一台灣高息動能",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-11-02",
+     "entry": 24.9,
+     "exit": 25.2,
+     "shares": 490,
+     "entry_cash": 12233.201,
+     "exit_cash": 12303.316347999998,
+     "net_pct": 0.573156,
+     "pnl": 70.115348,
+     "success": false,
+     "reason": "持有到期",
+     "late_exit": false,
+     "held": 10,
+     "delayed_days": 0,
+     "planned_risk": 489.328,
+     "trigger_date": "2026-10-30"
     }
    ],
    "equity": [
@@ -552,10 +665,15 @@
      "date": "2026-10-30",
      "equity": 97200.2806,
      "index": 46368.33
+    },
+    {
+     "date": "2026-11-02",
+     "equity": 96691.0417,
+     "index": 45211.83
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-30",
+   "last_date": "2026-11-02",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -645,40 +763,8 @@
    ]
   },
   "ev_only": {
-   "cash": 61123.82553169998,
+   "cash": 85555.80805269997,
    "positions": [
-    {
-     "code": "00713",
-     "name": "元大台灣高息低波",
-     "group": "ETF",
-     "shares": 185,
-     "entry": 65.65,
-     "entry_cash": 12177.39525,
-     "entry_date": "2026-10-16",
-     "held": 9,
-     "planned_risk": 487.0958,
-     "stop_pct": 3.0,
-     "target1": 68.04259610908152,
-     "stop": 64.08525990752813,
-     "exit_pending": "持有到期",
-     "trigger_date": "2026-10-30"
-    },
-    {
-     "code": "00939",
-     "name": "統一台灣高息動能",
-     "group": "ETF",
-     "shares": 490,
-     "entry": 24.9,
-     "entry_cash": 12233.201,
-     "entry_date": "2026-10-16",
-     "held": 9,
-     "planned_risk": 489.328,
-     "stop_pct": 3.0,
-     "target1": 25.807092520806236,
-     "stop": 24.306149155427004,
-     "exit_pending": "持有到期",
-     "trigger_date": "2026-10-30"
-    },
     {
      "code": "5269",
      "name": "祥碩",
@@ -687,14 +773,51 @@
      "entry": 1495.0,
      "entry_cash": 11991.96,
      "entry_date": "2026-10-28",
-     "held": 3,
+     "held": 4,
      "planned_risk": 479.6784,
      "stop_pct": 3.0,
      "target1": 1552.6708754893307,
-     "stop": 1462.3702438647274
+     "stop": 1462.3702438647274,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-11-02"
     }
    ],
-   "pending": [],
+   "pending": [
+    {
+     "code": "6442",
+     "name": "光聖",
+     "group": "其他",
+     "signal_date": "2026-11-02",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 1265.0,
+      "ma20": 1527.25,
+      "max_fill_price": 1290.3,
+      "max_open_price": 1289.010989010989,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T05:23:28.854568+08:00"
+    },
+    {
+     "code": "3413",
+     "name": "京鼎",
+     "group": "半導體",
+     "signal_date": "2026-11-02",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 267.5,
+      "ma20": 282.2,
+      "max_fill_price": 272.85,
+      "max_open_price": 272.5774225774226,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T05:23:28.854568+08:00"
+    }
+   ],
    "trades": [
     {
      "code": "0053",
@@ -775,6 +898,46 @@
      "delayed_days": 0,
      "planned_risk": 481.7605,
      "trigger_date": "2026-10-20"
+    },
+    {
+     "code": "00713",
+     "name": "元大台灣高息低波",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-11-02",
+     "entry": 65.65,
+     "exit": 65.8,
+     "shares": 185,
+     "entry_cash": 12177.39525,
+     "exit_cash": 12128.666173000001,
+     "net_pct": -0.40016,
+     "pnl": -48.729077,
+     "success": false,
+     "reason": "持有到期",
+     "late_exit": false,
+     "held": 10,
+     "delayed_days": 0,
+     "planned_risk": 487.0958,
+     "trigger_date": "2026-10-30"
+    },
+    {
+     "code": "00939",
+     "name": "統一台灣高息動能",
+     "entry_date": "2026-10-16",
+     "exit_date": "2026-11-02",
+     "entry": 24.9,
+     "exit": 25.2,
+     "shares": 490,
+     "entry_cash": 12233.201,
+     "exit_cash": 12303.316347999998,
+     "net_pct": 0.573156,
+     "pnl": 70.115348,
+     "success": false,
+     "reason": "持有到期",
+     "late_exit": false,
+     "held": 10,
+     "delayed_days": 0,
+     "planned_risk": 489.328,
+     "trigger_date": "2026-10-30"
     }
    ],
    "equity": [
@@ -857,10 +1020,15 @@
      "date": "2026-10-30",
      "equity": 97200.2806,
      "index": 46368.33
+    },
+    {
+     "date": "2026-11-02",
+     "equity": 96691.0417,
+     "index": 45211.83
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-30",
+   "last_date": "2026-11-02",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -950,7 +1118,7 @@
    ]
   },
   "overseas": {
-   "cash": 71075.76983230005,
+   "cash": 59302.02783230005,
    "positions": [
     {
      "code": "2889",
@@ -960,7 +1128,7 @@
      "entry": 17.05,
      "entry_cash": 11762.130399999998,
      "entry_date": "2026-10-21",
-     "held": 6,
+     "held": 7,
      "planned_risk": 470.4852,
      "stop_pct": 3.0,
      "target1": 17.708855423032837,
@@ -974,32 +1142,30 @@
      "entry": 55.5,
      "entry_cash": 11797.766,
      "entry_date": "2026-10-30",
-     "held": 1,
+     "held": 2,
      "planned_risk": 471.9106,
      "stop_pct": 3.0,
      "target1": 57.64407781298074,
-     "stop": 54.29168793327306
-    }
-   ],
-   "pending": [
+     "stop": 54.29168793327306,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-11-02"
+    },
     {
      "code": "4938",
      "name": "和碩",
      "group": "電腦週邊",
-     "signal_date": "2026-10-30",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 102.5,
-      "ma20": 98.215,
-      "max_fill_price": 104.55,
-      "max_open_price": 104.44555444555445,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-10-31T01:42:28.757311+08:00"
+     "shares": 114,
+     "entry": 103.0,
+     "entry_cash": 11773.742,
+     "entry_date": "2026-11-02",
+     "held": 1,
+     "planned_risk": 470.9497,
+     "stop_pct": 3.0,
+     "target1": 106.9798287262962,
+     "stop": 100.75825477944115
     }
    ],
+   "pending": [],
    "trades": [
     {
      "code": "2317",
@@ -1242,10 +1408,15 @@
      "date": "2026-10-30",
      "equity": 94274.5118,
      "index": 46368.33
+    },
+    {
+     "date": "2026-11-02",
+     "equity": 93681.222,
+     "index": 45211.83
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-10-30",
+   "last_date": "2026-11-02",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
