@@ -48,61 +48,52 @@
  },
  "books": {
   "individual": {
-   "cash": 96762.51966435,
-   "positions": [],
-   "pending": [
+   "cash": 60516.01931434999,
+   "positions": [
     {
      "code": "0052",
      "name": "富邦科技",
      "group": "ETF",
-     "signal_date": "2026-11-02",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 60.3,
-      "ma20": 64.2125,
-      "max_fill_price": 61.506,
-      "max_open_price": 61.444555444555455,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-03T05:23:28.854568+08:00"
+     "shares": 201,
+     "entry": 59.95,
+     "entry_cash": 12081.99995,
+     "entry_date": "2026-11-03",
+     "held": 1,
+     "planned_risk": 483.28,
+     "stop_pct": 3.0,
+     "target1": 62.13644931192578,
+     "stop": 58.522658194227766
     },
     {
      "code": "00923",
      "name": "群益台ESG低碳50",
      "group": "ETF",
-     "signal_date": "2026-11-02",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 37.92,
-      "ma20": 40.5635,
-      "max_fill_price": 38.6784,
-      "max_open_price": 38.63976023976025,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-03T05:23:28.854568+08:00"
+     "shares": 320,
+     "entry": 37.67,
+     "entry_cash": 12086.4544,
+     "entry_date": "2026-11-03",
+     "held": 1,
+     "planned_risk": 483.4582,
+     "stop_pct": 3.0,
+     "target1": 39.04382370358346,
+     "stop": 36.77307427547668
     },
     {
      "code": "00922",
      "name": "國泰台灣領袖50",
      "group": "ETF",
-     "signal_date": "2026-11-02",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 38.33,
-      "ma20": 41.997,
-      "max_fill_price": 39.0966,
-      "max_open_price": 39.05754245754246,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-03T05:23:28.854568+08:00"
+     "shares": 317,
+     "entry": 38.0,
+     "entry_cash": 12078.045999999998,
+     "entry_date": "2026-11-03",
+     "held": 1,
+     "planned_risk": 483.1218,
+     "stop_pct": 3.0,
+     "target1": 39.3859482202715,
+     "stop": 37.095303732982416
     }
    ],
+   "pending": [],
    "trades": [
     {
      "code": "0052",
@@ -330,10 +321,15 @@
      "date": "2026-11-02",
      "equity": 96762.5197,
      "index": 45211.83
+    },
+    {
+     "date": "2026-11-03",
+     "equity": 96788.5551,
+     "index": 44214.03125
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-02",
+   "last_date": "2026-11-03",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -408,59 +404,56 @@
    ]
   },
   "composite": {
-   "cash": 85555.80805269997,
+   "cash": 73490.50809269998,
    "positions": [
-    {
-     "code": "5269",
-     "name": "祥碩",
-     "group": "半導體",
-     "shares": 8,
-     "entry": 1495.0,
-     "entry_cash": 11991.96,
-     "entry_date": "2026-10-28",
-     "held": 4,
-     "planned_risk": 479.6784,
-     "stop_pct": 3.0,
-     "target1": 1552.6708754893307,
-     "stop": 1462.3702438647274,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-11-02"
-    }
-   ],
-   "pending": [
     {
      "code": "2408",
      "name": "南亞科",
      "group": "半導體",
-     "signal_date": "2026-11-02",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 456.5,
-      "ma20": 477.15,
-      "max_fill_price": 465.63,
-      "max_open_price": 465.1648351648352,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-03T05:23:28.854568+08:00"
+     "shares": 27,
+     "entry": 433.0,
+     "entry_cash": 11722.690999999999,
+     "entry_date": "2026-11-03",
+     "held": 1,
+     "planned_risk": 468.9076,
+     "stop_pct": 3.0,
+     "target1": 449.73729366648865,
+     "stop": 423.58232782357004,
+     "exit_pending": "淨利觸發",
+     "trigger_date": "2026-11-03"
     },
     {
      "code": "2603",
      "name": "長榮",
      "group": "航運",
-     "signal_date": "2026-11-02",
+     "shares": 44,
+     "entry": 271.0,
+     "entry_cash": 11955.923999999999,
+     "entry_date": "2026-11-03",
+     "held": 1,
+     "planned_risk": 478.237,
+     "stop_pct": 3.0,
+     "target1": 281.4568402632595,
+     "stop": 265.0878808050322
+    }
+   ],
+   "pending": [
+    {
+     "code": "2468",
+     "name": "華經",
+     "group": "其他",
+     "signal_date": "2026-11-03",
      "entry_plan": {
       "available": true,
-      "reference_price": 274.5,
-      "ma20": 254.475,
-      "max_fill_price": 274.833,
-      "max_open_price": 274.55844155844164,
+      "reference_price": 58.5,
+      "ma20": 49.045,
+      "max_fill_price": 52.9686,
+      "max_open_price": 52.915684315684324,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-03T05:23:28.854568+08:00"
+     "published_at": "2026-11-03T11:17:53.881287+08:00"
     }
    ],
    "trades": [
@@ -583,6 +576,26 @@
      "delayed_days": 0,
      "planned_risk": 489.328,
      "trigger_date": "2026-10-30"
+    },
+    {
+     "code": "5269",
+     "name": "祥碩",
+     "entry_date": "2026-10-28",
+     "exit_date": "2026-11-03",
+     "entry": 1495.0,
+     "exit": 1460.0,
+     "shares": 8,
+     "entry_cash": 11991.96,
+     "exit_cash": 11613.31504,
+     "net_pct": -3.15749,
+     "pnl": -378.64496,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 5,
+     "delayed_days": 0,
+     "planned_risk": 479.6784,
+     "trigger_date": "2026-11-02"
     }
    ],
    "equity": [
@@ -670,10 +683,15 @@
      "date": "2026-11-02",
      "equity": 96691.0417,
      "index": 45211.83
+    },
+    {
+     "date": "2026-11-03",
+     "equity": 97756.4673,
+     "index": 44214.03125
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-02",
+   "last_date": "2026-11-03",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -763,59 +781,56 @@
    ]
   },
   "ev_only": {
-   "cash": 85555.80805269997,
+   "cash": 73195.21309269997,
    "positions": [
-    {
-     "code": "5269",
-     "name": "祥碩",
-     "group": "半導體",
-     "shares": 8,
-     "entry": 1495.0,
-     "entry_cash": 11991.96,
-     "entry_date": "2026-10-28",
-     "held": 4,
-     "planned_risk": 479.6784,
-     "stop_pct": 3.0,
-     "target1": 1552.6708754893307,
-     "stop": 1462.3702438647274,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-11-02"
-    }
-   ],
-   "pending": [
     {
      "code": "6442",
      "name": "光聖",
      "group": "其他",
-     "signal_date": "2026-11-02",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 1265.0,
-      "ma20": 1527.25,
-      "max_fill_price": 1290.3,
-      "max_open_price": 1289.010989010989,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-03T05:23:28.854568+08:00"
+     "shares": 10,
+     "entry": 1195.0,
+     "entry_cash": 11981.949999999999,
+     "entry_date": "2026-11-03",
+     "held": 1,
+     "planned_risk": 479.278,
+     "stop_pct": 3.0,
+     "target1": 1241.1015328267083,
+     "stop": 1168.921328550215,
+     "exit_pending": "淨利觸發",
+     "trigger_date": "2026-11-03"
     },
     {
      "code": "3413",
      "name": "京鼎",
      "group": "半導體",
-     "signal_date": "2026-11-02",
+     "shares": 46,
+     "entry": 260.0,
+     "entry_cash": 11991.96,
+     "entry_date": "2026-11-03",
+     "held": 1,
+     "planned_risk": 479.6784,
+     "stop_pct": 3.0,
+     "target1": 270.0297174764053,
+     "stop": 254.32525980256125
+    }
+   ],
+   "pending": [
+    {
+     "code": "3481",
+     "name": "群創",
+     "group": "光電",
+     "signal_date": "2026-11-03",
      "entry_plan": {
       "available": true,
-      "reference_price": 267.5,
-      "ma20": 282.2,
-      "max_fill_price": 272.85,
-      "max_open_price": 272.5774225774226,
+      "reference_price": 44.55,
+      "ma20": 48.49,
+      "max_fill_price": 45.440999999999995,
+      "max_open_price": 45.395604395604394,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-03T05:23:28.854568+08:00"
+     "published_at": "2026-11-03T11:17:53.881287+08:00"
     }
    ],
    "trades": [
@@ -938,6 +953,26 @@
      "delayed_days": 0,
      "planned_risk": 489.328,
      "trigger_date": "2026-10-30"
+    },
+    {
+     "code": "5269",
+     "name": "祥碩",
+     "entry_date": "2026-10-28",
+     "exit_date": "2026-11-03",
+     "entry": 1495.0,
+     "exit": 1460.0,
+     "shares": 8,
+     "entry_cash": 11991.96,
+     "exit_cash": 11613.31504,
+     "net_pct": -3.15749,
+     "pnl": -378.64496,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 5,
+     "delayed_days": 0,
+     "planned_risk": 479.6784,
+     "trigger_date": "2026-11-02"
     }
    ],
    "equity": [
@@ -1025,10 +1060,15 @@
      "date": "2026-11-02",
      "equity": 96691.0417,
      "index": 45211.83
+    },
+    {
+     "date": "2026-11-03",
+     "equity": 98010.468,
+     "index": 44214.03125
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-02",
+   "last_date": "2026-11-03",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -1118,7 +1158,7 @@
    ]
   },
   "overseas": {
-   "cash": 59302.02783230005,
+   "cash": 70536.46333110005,
    "positions": [
     {
      "code": "2889",
@@ -1128,27 +1168,11 @@
      "entry": 17.05,
      "entry_cash": 11762.130399999998,
      "entry_date": "2026-10-21",
-     "held": 7,
+     "held": 8,
      "planned_risk": 470.4852,
      "stop_pct": 3.0,
      "target1": 17.708855423032837,
      "stop": 16.67897179211354
-    },
-    {
-     "code": "2855",
-     "name": "統一證",
-     "group": "其他",
-     "shares": 212,
-     "entry": 55.5,
-     "entry_cash": 11797.766,
-     "entry_date": "2026-10-30",
-     "held": 2,
-     "planned_risk": 471.9106,
-     "stop_pct": 3.0,
-     "target1": 57.64407781298074,
-     "stop": 54.29168793327306,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-11-02"
     },
     {
      "code": "4938",
@@ -1158,14 +1182,32 @@
      "entry": 103.0,
      "entry_cash": 11773.742,
      "entry_date": "2026-11-02",
-     "held": 1,
+     "held": 2,
      "planned_risk": 470.9497,
      "stop_pct": 3.0,
      "target1": 106.9798287262962,
      "stop": 100.75825477944115
     }
    ],
-   "pending": [],
+   "pending": [
+    {
+     "code": "4977",
+     "name": "眾達-KY",
+     "group": "其他",
+     "signal_date": "2026-11-03",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 183.0,
+      "ma20": 178.175,
+      "max_fill_price": 186.66,
+      "max_open_price": 186.4735264735265,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-03T11:17:53.881287+08:00"
+    }
+   ],
    "trades": [
     {
      "code": "2317",
@@ -1326,6 +1368,26 @@
      "delayed_days": 0,
      "planned_risk": 475.1539,
      "trigger_date": "2026-10-29"
+    },
+    {
+     "code": "2855",
+     "name": "統一證",
+     "entry_date": "2026-10-30",
+     "exit_date": "2026-11-03",
+     "entry": 55.5,
+     "exit": 53.3,
+     "shares": 212,
+     "entry_cash": 11797.766,
+     "exit_cash": 11234.4354988,
+     "net_pct": -4.774891,
+     "pnl": -563.330501,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 3,
+     "delayed_days": 0,
+     "planned_risk": 471.9106,
+     "trigger_date": "2026-11-02"
     }
    ],
    "equity": [
@@ -1413,10 +1475,15 @@
      "date": "2026-11-02",
      "equity": 93681.222,
      "index": 45211.83
+    },
+    {
+     "date": "2026-11-03",
+     "equity": 93681.222,
+     "index": 44214.03125
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-02",
+   "last_date": "2026-11-03",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
