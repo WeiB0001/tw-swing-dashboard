@@ -52,55 +52,55 @@
    "positions": [],
    "pending": [
     {
+     "code": "3167",
+     "name": "大量",
+     "group": "其他",
+     "signal_date": "2026-11-18",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 627.0,
+      "ma20": 850.35,
+      "max_fill_price": 639.54,
+      "max_open_price": 638.901098901099,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-19T03:57:50.347955+08:00"
+    },
+    {
      "code": "3189",
      "name": "景碩",
      "group": "電子零件",
-     "signal_date": "2026-11-17",
+     "signal_date": "2026-11-18",
      "entry_plan": {
       "available": true,
-      "reference_price": 542.0,
-      "ma20": 820.35,
-      "max_fill_price": 552.84,
-      "max_open_price": 552.2877122877123,
+      "reference_price": 579.0,
+      "ma20": 800.2,
+      "max_fill_price": 590.58,
+      "max_open_price": 589.9900099900101,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
+     "published_at": "2026-11-19T03:57:50.347955+08:00"
     },
     {
-     "code": "3037",
-     "name": "欣興",
-     "group": "電子零件",
-     "signal_date": "2026-11-17",
+     "code": "2360",
+     "name": "致茂",
+     "group": "半導體",
+     "signal_date": "2026-11-18",
      "entry_plan": {
       "available": true,
-      "reference_price": 637.0,
-      "ma20": 911.65,
-      "max_fill_price": 649.74,
-      "max_open_price": 649.0909090909091,
+      "reference_price": 1140.0,
+      "ma20": 1561.75,
+      "max_fill_price": 1162.8,
+      "max_open_price": 1161.6383616383616,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
-    },
-    {
-     "code": "6442",
-     "name": "光聖",
-     "group": "其他",
-     "signal_date": "2026-11-17",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 969.0,
-      "ma20": 1223.7,
-      "max_fill_price": 988.38,
-      "max_open_price": 987.3926073926075,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
+     "published_at": "2026-11-19T03:57:50.347955+08:00"
     }
    ],
    "trades": [
@@ -625,10 +625,15 @@
      "date": "2026-11-17",
      "equity": 92916.8833,
      "index": 41040.08
+    },
+    {
+     "date": "2026-11-18",
+     "equity": 92916.8833,
+     "index": 40092.11
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-17",
+   "last_date": "2026-11-18",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -759,63 +764,106 @@
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      }
+    },
+    {
+     "code": "3189",
+     "date": "2026-11-18",
+     "reason": "超過進場上限，不追價",
+     "open": 596.0,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 542.0,
+      "ma20": 820.35,
+      "max_fill_price": 552.84,
+      "max_open_price": 552.2877122877123,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
+    },
+    {
+     "code": "3037",
+     "date": "2026-11-18",
+     "reason": "超過進場上限，不追價",
+     "open": 690.0,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 637.0,
+      "ma20": 911.65,
+      "max_fill_price": 649.74,
+      "max_open_price": 649.0909090909091,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
+    },
+    {
+     "code": "6442",
+     "date": "2026-11-18",
+     "reason": "超過進場上限，不追價",
+     "open": 1005.0,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 969.0,
+      "ma20": 1223.7,
+      "max_fill_price": 988.38,
+      "max_open_price": 987.3926073926075,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
     }
    ]
   },
   "composite": {
-   "cash": 81995.5346938,
+   "cash": 82354.96601280001,
    "positions": [
-    {
-     "code": "2412",
-     "name": "中華電",
-     "group": "電信",
-     "shares": 74,
-     "entry": 162.0,
-     "entry_cash": 12019.987999999998,
-     "entry_date": "2026-11-05",
-     "held": 9,
-     "planned_risk": 480.7995,
-     "stop_pct": 3.0,
-     "target1": 168.2479958882138,
-     "stop": 158.46294883894166,
-     "exit_pending": "持有到期",
-     "trigger_date": "2026-11-17"
-    }
-   ],
-   "pending": [
-    {
-     "code": "6285",
-     "name": "啟碁",
-     "group": "網通",
-     "signal_date": "2026-11-17",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 184.0,
-      "ma20": 207.85,
-      "max_fill_price": 187.68,
-      "max_open_price": 187.4925074925075,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
-    },
     {
      "code": "6505",
      "name": "台塑化",
      "group": "塑化",
-     "signal_date": "2026-11-17",
+     "shares": 129,
+     "entry": 90.8,
+     "entry_cash": 11744.913199999997,
+     "entry_date": "2026-11-18",
+     "held": 1,
+     "planned_risk": 469.7965,
+     "stop_pct": 3.0,
+     "target1": 94.30920658087429,
+     "stop": 88.82453401906331
+    }
+   ],
+   "pending": [
+    {
+     "code": "3017",
+     "name": "奇鋐",
+     "group": "電子零件",
+     "signal_date": "2026-11-18",
      "entry_plan": {
       "available": true,
-      "reference_price": 89.6,
-      "ma20": 97.22999999999999,
-      "max_fill_price": 91.392,
-      "max_open_price": 91.3006993006993,
+      "reference_price": 2715.0,
+      "ma20": 2902.5,
+      "max_fill_price": 2769.3,
+      "max_open_price": 2766.533466533467,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
+     "published_at": "2026-11-19T03:57:50.347955+08:00"
+    },
+    {
+     "code": "2313",
+     "name": "華通",
+     "group": "電子零件",
+     "signal_date": "2026-11-18",
+     "entry_plan": {
+      "available": true,
+      "reference_price": 187.5,
+      "ma20": 198.9,
+      "max_fill_price": 191.25,
+      "max_open_price": 191.0589410589411,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     },
+     "entry_approved": true,
+     "published_at": "2026-11-19T03:57:50.347955+08:00"
     }
    ],
    "trades": [
@@ -1078,6 +1126,26 @@
      "delayed_days": 0,
      "planned_risk": 475.3509,
      "trigger_date": "2026-11-16"
+    },
+    {
+     "code": "2412",
+     "name": "中華電",
+     "entry_date": "2026-11-05",
+     "exit_date": "2026-11-18",
+     "entry": 162.0,
+     "exit": 164.5,
+     "shares": 74,
+     "entry_cash": 12019.987999999998,
+     "exit_cash": 12104.344519,
+     "net_pct": 0.701802,
+     "pnl": 84.356519,
+     "success": false,
+     "reason": "持有到期",
+     "late_exit": false,
+     "held": 10,
+     "delayed_days": 0,
+     "planned_risk": 480.7995,
+     "trigger_date": "2026-11-17"
     }
    ],
    "equity": [
@@ -1220,10 +1288,15 @@
      "date": "2026-11-17",
      "equity": 94099.8792,
      "index": 41040.08
+    },
+    {
+     "date": "2026-11-18",
+     "equity": 93872.864,
+     "index": 40092.11
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-17",
+   "last_date": "2026-11-18",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -1324,6 +1397,21 @@
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      }
+    },
+    {
+     "code": "6285",
+     "date": "2026-11-18",
+     "reason": "超過進場上限，不追價",
+     "open": 187.5,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 184.0,
+      "ma20": 207.85,
+      "max_fill_price": 187.68,
+      "max_open_price": 187.4925074925075,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
     }
    ]
   },
@@ -1338,11 +1426,13 @@
      "entry": 12.65,
      "entry_cash": 11656.975349999999,
      "entry_date": "2026-11-09",
-     "held": 7,
+     "held": 8,
      "planned_risk": 466.279,
      "stop_pct": 3.0,
      "target1": 13.139225438921589,
-     "stop": 12.375106488337911
+     "stop": 12.375106488337911,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-11-18"
     },
     {
      "code": "2603",
@@ -1352,7 +1442,7 @@
      "entry": 248.0,
      "entry_cash": 11439.407999999998,
      "entry_date": "2026-11-10",
-     "held": 6,
+     "held": 7,
      "planned_risk": 457.5763,
      "stop_pct": 3.0,
      "target1": 257.60770669932936,
@@ -1361,21 +1451,21 @@
    ],
    "pending": [
     {
-     "code": "6285",
-     "name": "啟碁",
-     "group": "網通",
-     "signal_date": "2026-11-17",
+     "code": "3017",
+     "name": "奇鋐",
+     "group": "電子零件",
+     "signal_date": "2026-11-18",
      "entry_plan": {
       "available": true,
-      "reference_price": 184.0,
-      "ma20": 207.85,
-      "max_fill_price": 187.68,
-      "max_open_price": 187.4925074925075,
+      "reference_price": 2715.0,
+      "ma20": 2902.5,
+      "max_fill_price": 2769.3,
+      "max_open_price": 2766.533466533467,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
+     "published_at": "2026-11-19T03:57:50.347955+08:00"
     }
    ],
    "trades": [
@@ -1800,10 +1890,15 @@
      "date": "2026-11-17",
      "equity": 92334.4841,
      "index": 41040.08
+    },
+    {
+     "date": "2026-11-18",
+     "equity": 92334.5339,
+     "index": 40092.11
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-17",
+   "last_date": "2026-11-18",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -1889,63 +1984,75 @@
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      }
+    },
+    {
+     "code": "6285",
+     "date": "2026-11-18",
+     "reason": "超過進場上限，不追價",
+     "open": 187.5,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 184.0,
+      "ma20": 207.85,
+      "max_fill_price": 187.68,
+      "max_open_price": 187.4925074925075,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
     }
    ]
   },
   "overseas": {
-   "cash": 78542.76609160008,
+   "cash": 67099.57387640009,
    "positions": [
-    {
-     "code": "1709",
-     "name": "和益",
-     "group": "其他",
-     "shares": 221,
-     "entry": 52.1,
-     "entry_cash": 11545.614099999999,
-     "entry_date": "2026-11-16",
-     "held": 2,
-     "planned_risk": 461.8246,
-     "stop_pct": 3.0,
-     "target1": 54.11667776827962,
-     "stop": 50.969542805580325,
-     "exit_pending": "風險停損",
-     "trigger_date": "2026-11-17"
-    }
-   ],
-   "pending": [
     {
      "code": "5876",
      "name": "上海商銀",
      "group": "其他",
-     "signal_date": "2026-11-17",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 53.3,
-      "ma20": 53.120000000000005,
-      "max_fill_price": 54.366,
-      "max_open_price": 54.311688311688314,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
+     "shares": 209,
+     "entry": 53.3,
+     "entry_cash": 11170.839699999999,
+     "entry_date": "2026-11-18",
+     "held": 1,
+     "planned_risk": 446.8336,
+     "stop_pct": 3.0,
+     "target1": 55.369469141363766,
+     "stop": 52.14965993718038
     },
     {
      "code": "2801",
      "name": "彰銀",
      "group": "金融",
-     "signal_date": "2026-11-17",
+     "shares": 395,
+     "entry": 28.2,
+     "entry_cash": 11170.139,
+     "entry_date": "2026-11-18",
+     "held": 1,
+     "planned_risk": 446.8056,
+     "stop_pct": 3.0,
+     "target1": 29.294922615822024,
+     "stop": 27.591383595674948,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-11-18"
+    }
+   ],
+   "pending": [
+    {
+     "code": "3665",
+     "name": "貿聯-KY",
+     "group": "其他",
+     "signal_date": "2026-11-18",
      "entry_plan": {
       "available": true,
-      "reference_price": 28.15,
-      "ma20": 29.175,
-      "max_fill_price": 28.712999999999997,
-      "max_open_price": 28.684315684315685,
+      "reference_price": 1550.0,
+      "ma20": 1609.25,
+      "max_fill_price": 1581.0,
+      "max_open_price": 1579.4205794205795,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-18T04:27:31.024209+08:00"
+     "published_at": "2026-11-19T03:57:50.347955+08:00"
     }
    ],
    "trades": [
@@ -2328,6 +2435,26 @@
      "delayed_days": 0,
      "planned_risk": 460.259,
      "trigger_date": "2026-11-16"
+    },
+    {
+     "code": "1709",
+     "name": "和益",
+     "entry_date": "2026-11-16",
+     "exit_date": "2026-11-18",
+     "entry": 52.1,
+     "exit": 49.6,
+     "shares": 221,
+     "entry_cash": 11545.614099999999,
+     "exit_cash": 10897.7864848,
+     "net_pct": -5.611028,
+     "pnl": -647.827615,
+     "success": false,
+     "reason": "風險停損",
+     "late_exit": false,
+     "held": 3,
+     "delayed_days": 0,
+     "planned_risk": 461.8246,
+     "trigger_date": "2026-11-17"
     }
    ],
    "equity": [
@@ -2470,10 +2597,15 @@
      "date": "2026-11-17",
      "equity": 89143.3951,
      "index": 41040.08
+    },
+    {
+     "date": "2026-11-18",
+     "equity": 88910.2363,
+     "index": 40092.11
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-17",
+   "last_date": "2026-11-18",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
