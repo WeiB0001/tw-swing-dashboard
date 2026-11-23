@@ -158,10 +158,15 @@
    "date": "2026-11-20",
    "equity": 100000.0,
    "index": 38426.89
+  },
+  {
+   "date": "2026-11-23",
+   "equity": 100000.0,
+   "index": 36811.89
   }
  ],
  "start_index": 49712.04,
- "last_date": "2026-11-20",
+ "last_date": "2026-11-23",
  "forward_start": "2026-10-06",
  "mode": "forward_test",
  "strategy": {
