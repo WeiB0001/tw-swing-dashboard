@@ -48,59 +48,56 @@
  },
  "books": {
   "individual": {
-   "cash": 86493.16892679001,
-   "positions": [],
-   "pending": [
+   "cash": 71628.35892679001,
+   "positions": [
     {
      "code": "2454",
      "name": "聯發科",
      "group": "半導體",
-     "signal_date": "2026-11-26",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 3705.0,
-      "ma20": 3768.5,
-      "max_fill_price": 3779.1,
-      "max_open_price": 3775.324675324676,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-27T04:54:45.158119+08:00"
-    },
-    {
-     "code": "7788",
-     "name": "松川精密",
-     "group": "其他",
-     "signal_date": "2026-11-26",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 223.0,
-      "ma20": 206.45,
-      "max_fill_price": 222.966,
-      "max_open_price": 222.74325674325678,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-27T04:54:45.158119+08:00"
+     "shares": 2,
+     "entry": 3725.0,
+     "entry_cash": 7477.449999999999,
+     "entry_date": "2026-11-27",
+     "held": 1,
+     "planned_risk": 299.098,
+     "stop_pct": 3.0,
+     "target1": 3876.3806434317967,
+     "stop": 3651.156924226131
     },
     {
      "code": "2383",
      "name": "台光電",
      "group": "其他",
-     "signal_date": "2026-11-26",
+     "shares": 2,
+     "entry": 3680.0,
+     "entry_cash": 7387.359999999999,
+     "entry_date": "2026-11-27",
+     "held": 1,
+     "planned_risk": 295.4944,
+     "stop_pct": 3.0,
+     "target1": 3829.7981030177616,
+     "stop": 3607.2879298556322,
+     "exit_pending": "風險停損",
+     "trigger_date": "2026-11-27"
+    }
+   ],
+   "pending": [
+    {
+     "code": "3665",
+     "name": "貿聯-KY",
+     "group": "其他",
+     "signal_date": "2026-11-27",
      "entry_plan": {
       "available": true,
-      "reference_price": 3660.0,
-      "ma20": 3886.75,
-      "max_fill_price": 3733.2000000000003,
-      "max_open_price": 3729.47052947053,
+      "reference_price": 1680.0,
+      "ma20": 1520.0,
+      "max_fill_price": 1641.6000000000001,
+      "max_open_price": 1639.9600399600404,
       "max_premium_pct": 2.0,
       "max_ma20_bias_pct": 8.0
      },
      "entry_approved": true,
-     "published_at": "2026-11-27T04:54:45.158119+08:00"
+     "published_at": "2026-11-28T04:40:43.082211+08:00"
     }
    ],
    "trades": [
@@ -800,10 +797,15 @@
      "date": "2026-11-26",
      "equity": 86493.1689,
      "index": 38195.43
+    },
+    {
+     "date": "2026-11-27",
+     "equity": 86100.1226,
+     "index": 39151.81
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-26",
+   "last_date": "2026-11-27",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -989,11 +991,26 @@
      "code": "3189",
      "date": "2026-11-24",
      "reason": "進場無法成交，不追價補買"
+    },
+    {
+     "code": "7788",
+     "date": "2026-11-27",
+     "reason": "超過進場上限，不追價",
+     "open": 235.5,
+     "entry_plan": {
+      "available": true,
+      "reference_price": 223.0,
+      "ma20": 206.45,
+      "max_fill_price": 222.966,
+      "max_open_price": 222.74325674325678,
+      "max_premium_pct": 2.0,
+      "max_ma20_bias_pct": 8.0
+     }
     }
    ]
   },
   "composite": {
-   "cash": 67484.79085650001,
+   "cash": 56299.636856500016,
    "positions": [
     {
      "code": "00918",
@@ -1003,7 +1020,7 @@
      "entry": 30.11,
      "entry_cash": 11232.12092,
      "entry_date": "2026-11-25",
-     "held": 2,
+     "held": 3,
      "planned_risk": 449.2848,
      "stop_pct": 3.0,
      "target1": 31.215853576245152,
@@ -1017,32 +1034,28 @@
      "entry": 79.2,
      "entry_cash": 11198.367199999999,
      "entry_date": "2026-11-26",
-     "held": 1,
+     "held": 2,
      "planned_risk": 447.9347,
      "stop_pct": 3.0,
      "target1": 82.2743699189775,
      "stop": 77.48998409052328
-    }
-   ],
-   "pending": [
+    },
     {
      "code": "2603",
      "name": "長榮",
      "group": "航運",
-     "signal_date": "2026-11-26",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 254.0,
-      "ma20": 255.125,
-      "max_fill_price": 259.08,
-      "max_open_price": 258.8211788211788,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-27T04:54:45.158119+08:00"
+     "shares": 44,
+     "entry": 253.5,
+     "entry_cash": 11185.153999999999,
+     "entry_date": "2026-11-27",
+     "held": 1,
+     "planned_risk": 447.4062,
+     "stop_pct": 3.0,
+     "target1": 263.3414078800237,
+     "stop": 248.027716327616
     }
    ],
+   "pending": [],
    "trades": [
     {
      "code": "0053",
@@ -1600,10 +1613,15 @@
      "date": "2026-11-26",
      "equity": 89718.1181,
      "index": 38195.43
+    },
+    {
+     "date": "2026-11-27",
+     "equity": 89296.3604,
+     "index": 39151.81
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-26",
+   "last_date": "2026-11-27",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -1758,7 +1776,7 @@
    ]
   },
   "ev_only": {
-   "cash": 66491.17128964998,
+   "cash": 55559.77078964998,
    "positions": [
     {
      "code": "1216",
@@ -1768,7 +1786,7 @@
      "entry": 76.3,
      "entry_cash": 10941.810899999999,
      "entry_date": "2026-11-24",
-     "held": 3,
+     "held": 4,
      "planned_risk": 437.6724,
      "stop_pct": 3.0,
      "target1": 79.26834064146,
@@ -1782,32 +1800,28 @@
      "entry": 30.11,
      "entry_cash": 11051.28026,
      "entry_date": "2026-11-25",
-     "held": 2,
+     "held": 3,
      "planned_risk": 442.0512,
      "stop_pct": 3.0,
      "target1": 31.217646336775847,
      "stop": 29.402332235362532
-    }
-   ],
-   "pending": [
+    },
     {
      "code": "2603",
      "name": "長榮",
      "group": "航運",
-     "signal_date": "2026-11-26",
-     "entry_plan": {
-      "available": true,
-      "reference_price": 254.0,
-      "ma20": 255.125,
-      "max_fill_price": 259.08,
-      "max_open_price": 258.8211788211788,
-      "max_premium_pct": 2.0,
-      "max_ma20_bias_pct": 8.0
-     },
-     "entry_approved": true,
-     "published_at": "2026-11-27T04:54:45.158119+08:00"
+     "shares": 43,
+     "entry": 253.5,
+     "entry_cash": 10931.4005,
+     "entry_date": "2026-11-27",
+     "held": 1,
+     "planned_risk": 437.256,
+     "stop_pct": 3.0,
+     "target1": 263.36295276872823,
+     "stop": 248.04862442158046
     }
    ],
+   "pending": [],
    "trades": [
     {
      "code": "0053",
@@ -2365,10 +2379,15 @@
      "date": "2026-11-26",
      "equity": 88699.4345,
      "index": 38195.43
+    },
+    {
+     "date": "2026-11-27",
+     "equity": 88282.9488,
+     "index": 39151.81
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-26",
+   "last_date": "2026-11-27",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
@@ -2503,7 +2522,7 @@
      "entry": 202.5,
      "entry_cash": 10763.2325,
      "entry_date": "2026-11-25",
-     "held": 2,
+     "held": 3,
      "planned_risk": 430.5293,
      "stop_pct": 3.0,
      "target1": 210.39054373917455,
@@ -2517,7 +2536,7 @@
      "entry": 100.5,
      "entry_cash": 10884.853999999998,
      "entry_date": "2026-11-26",
-     "held": 1,
+     "held": 2,
      "planned_risk": 435.3942,
      "stop_pct": 3.0,
      "target1": 104.41177478976059,
@@ -2531,7 +2550,7 @@
      "entry": 79.2,
      "entry_cash": 10960.529599999998,
      "entry_date": "2026-11-26",
-     "held": 1,
+     "held": 2,
      "planned_risk": 438.4212,
      "stop_pct": 3.0,
      "target1": 82.28065467528783,
@@ -3216,10 +3235,15 @@
      "date": "2026-11-26",
      "equity": 87518.3902,
      "index": 38195.43
+    },
+    {
+     "date": "2026-11-27",
+     "equity": 87328.3528,
+     "index": 39151.81
     }
    ],
    "start_index": 49712.04,
-   "last_date": "2026-11-26",
+   "last_date": "2026-11-27",
    "forward_start": "2026-10-06",
    "mode": "research_forward",
    "strategy": {
