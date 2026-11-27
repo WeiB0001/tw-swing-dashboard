@@ -5827,9 +5827,18 @@
      "regime": "bear"
     },
     {
-     "symbol": "0053",
+     "symbol": "2466",
      "date": "2026-11-26",
      "rank": 8,
+     "ref_price": 329.0,
+     "score": 55.0,
+     "pattern": "區間整理",
+     "regime": "bear"
+    },
+    {
+     "symbol": "0053",
+     "date": "2026-11-26",
+     "rank": 9,
      "ref_price": 200.7,
      "score": 52.1,
      "pattern": "低檔止跌轉強",
@@ -5838,7 +5847,7 @@
     {
      "symbol": "00981A",
      "date": "2026-11-26",
-     "rank": 9,
+     "rank": 10,
      "ref_price": 21.89,
      "score": 51.6,
      "pattern": "低檔止跌轉強",
@@ -5847,7 +5856,7 @@
     {
      "symbol": "2313",
      "date": "2026-11-26",
-     "rank": 10,
+     "rank": 11,
      "ref_price": 168.0,
      "score": 52.7,
      "pattern": "低檔止跌轉強",
@@ -5856,7 +5865,7 @@
     {
      "symbol": "2367",
      "date": "2026-11-26",
-     "rank": 11,
+     "rank": 12,
      "ref_price": 33.95,
      "score": 51.8,
      "pattern": "低檔止跌轉強",
@@ -5865,7 +5874,7 @@
     {
      "symbol": "3533",
      "date": "2026-11-26",
-     "rank": 12,
+     "rank": 13,
      "ref_price": 1575.0,
      "score": 51.4,
      "pattern": "低檔止跌轉強",
@@ -5874,7 +5883,7 @@
     {
      "symbol": "3037",
      "date": "2026-11-26",
-     "rank": 13,
+     "rank": 14,
      "ref_price": 643.0,
      "score": 53.5,
      "pattern": "低檔止跌轉強",
@@ -5883,7 +5892,7 @@
     {
      "symbol": "2301",
      "date": "2026-11-26",
-     "rank": 14,
+     "rank": 15,
      "ref_price": 198.5,
      "score": 51.4,
      "pattern": "低檔止跌轉強",
@@ -5892,7 +5901,7 @@
     {
      "symbol": "7769",
      "date": "2026-11-26",
-     "rank": 15,
+     "rank": 16,
      "ref_price": 3150.0,
      "score": 51.7,
      "pattern": "低檔止跌轉強",
@@ -5901,7 +5910,7 @@
     {
      "symbol": "2317",
      "date": "2026-11-26",
-     "rank": 16,
+     "rank": 17,
      "ref_price": 216.5,
      "score": 54.5,
      "pattern": "低檔止跌轉強",
@@ -5910,18 +5919,9 @@
     {
      "symbol": "6531",
      "date": "2026-11-26",
-     "rank": 17,
+     "rank": 18,
      "ref_price": 533.0,
      "score": 50.5,
-     "pattern": "低檔止跌轉強",
-     "regime": "bear"
-    },
-    {
-     "symbol": "2451",
-     "date": "2026-11-26",
-     "rank": 18,
-     "ref_price": 237.0,
-     "score": 51.0,
      "pattern": "低檔止跌轉強",
      "regime": "bear"
     }
